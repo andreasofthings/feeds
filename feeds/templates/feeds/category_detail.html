@@ -1,0 +1,56 @@
+{%extends 'feeds/index.html'%}
+
+{%block breadcrumb %}
+          <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li><a href="{% url "planet:feed-home" %}">Feeds</a> <span class="divider">/</span></li>
+            <li><a href="{% url "planet:category-home" %}">Categories</a> <span class="divider">/</span></li>
+            {% if object %}<li><a href="{% url "planet:category-view" object.slug %}">{{ object.title }}</a> <span class="divider">/</span></li>{% endif %}
+            <li class="active">You are here</li>
+          </ul>
+{%endblock%}
+
+{%block content%}
+<div class="row">
+    <div class="span4">
+        <h3>
+            {{object}}
+            {% if user.is_authenticated %}
+              {% if perms.feeds.change_category %}<a href="{{object.get_absolute_url}}update" class="btn btn-mini category-tooltip" title="edit category"><i class="icon-edit"></i></a>{% endif %}
+              {% if perms.feeds.delete_category %}<a href="{{object.get_absolute_url}}delete" class="btn btn-mini category-tooltip" title="delete category"><i class="icon-trash"></i></a>{% endif %}
+            {% endif %}
+        </h3>
+    </div>
+    <div class="span7">
+        <table class="table table-condensed table-hover">
+            <tr>
+                <td>Feed</td>
+                <td>Posts</td>
+                {% if user.is_authenticated %}
+                <td>Options</td>
+                {% endif %}
+            </tr>
+            {% for feed in object.feeds %}
+            <tr>
+                <td><a href="{{ feed.get_absolute_url }}">{{ feed }}</a></td>
+                <td>{{ feed.posts.count }}</td>
+                {% if user.is_authenticated %}
+                <td>
+                  <a href="{{ feed.get_absolute_url }}" class="btn btn-mini category-tooltip" title="Go to feed"><i class="icon-step-forward"></i></a>
+                    {% if perms.feeds.change_feed %}<a href="{{o.get_absolute_url}}update" class="btn btn-mini category-tooltip" title="edit feed"><i class="icon-edit"></i></a>{% endif %}
+                    {% if perms.feeds.delete_feed %}<a href="{{o.get_absolute_url}}delete" class="btn btn-mini category-tooltip" title="delete feed"><i class="icon-trash"></i></a>{% endif %}
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{%endblock%}
+
+
+{% block additional_scripts_end %}
+    <script defer src="{{ STATIC_URL }}feeds/category_detail.js"> </script>
+{% endblock %}
+
+

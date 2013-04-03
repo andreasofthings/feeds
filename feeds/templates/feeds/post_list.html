@@ -1,0 +1,83 @@
+{% extends "index.html" %}
+{% load comments %}
+
+
+{% block content %}
+
+{% if paginator %}
+<div class="pagination"> <span class="step-links">
+        {% if paginator.has_previous %}
+            <a href="?p={{ paginator.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ paginator.page_number }} of {{ paginator.num_pages }}.
+        </span>
+        {% if paginator.has_next %}
+            <a href="?p={{ paginator.next_page_number }}">next</a>
+        {% endif %}
+</span></div>
+{% endif %}
+
+<div class="headermessage">
+  <div>
+    angry planet ist h&auml;sslich und versucht das web zu filtern. haupts&auml;chlich ist es ein experiment. ausserdem ist es meistens kaputt.
+  </div>
+  <div>
+  Posts in den letzten paar Tagen:
+    <ul>
+    {% for feed in feeds %}
+      <li><a href="{{ feed.get_absolute_url }}">{{ feed.shortname }}</a> {{ feed.post_set.count }}</li>
+    {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% for node in object_list %}
+  <div class="node">
+    <div>
+      <h3>
+        <a href="{{node.post.feed.link}}" alt="{{node.post.feed.title}}">{{node.post.feed.title}}</a>
+      </h3>
+      <h1>
+        <a href="{{node.get_absolute_url }}">{{ node.title }}</a>
+      </h1>
+      <h5>{{ node.created }}</h5>
+    </div>
+
+    <div class="trackbacks">
+    </div><!-- trackbacks -->
+
+    <!--
+    <div class="comments">
+      {% get_comment_count for node as comment_count %}
+      <a href="{{node.get_absolute_url }}">{{ comment_count }} Comment(s)</a>
+    </div>
+
+    <div class="commentformsection" id="commentsectionnode{{node.id}}">
+      Leave Comment
+      <div class="commentform" id="commentformnode{{forloop.counter}}">
+        {% render_comment_form for node %}
+      </div>
+    </div>
+  -->
+  </div>
+  <!-- node -->
+
+{% endfor %}
+
+{% if nodes.paginator %}
+<div class="pagination"> <span class="step-links">
+        {% if nodes.has_previous %}
+            <a href="?p={{ nodes.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ nodes.number }} of {{ nodes.paginator.num_pages }}.
+        </span>
+        {% if nodes.has_next %}
+            <a href="?p={{ nodes.next_page_number }}">next</a>
+        {% endif %}
+</span> </div>
+{% endif %}
+
+{% endblock %}
+

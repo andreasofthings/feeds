@@ -1,0 +1,52 @@
+{%extends 'feeds/index.html'%}
+
+{% block additional_scripts_start %}
+  <link rel="stylesheet" type="text/css" hrf="{{ STATIC_URL }}jqplot/jquery.jqplot.min.css" />
+{% endblock %}
+            
+{%block breadcrumb %}
+          <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li><a href="{% url "planet:feed-home" %}">Feeds</a> <span class="divider">/</span></li>
+            {% if object %}<li><a href="{% url "planet:feed-view" object.id %}">{{ object.shortname }}</a> <span class="divider">/</span></li>{% endif %}
+            <li class="active">You are here</li>
+          </ul>
+{%endblock%}
+
+{%block content%}
+<div class="hero-unit">
+<h3>
+{{object}}
+{% if user.is_authenticated %}
+  {% if perms.feeds.can_refresh_feed %}<a href="{{object.get_absolute_url}}refresh" class="btn btn-mini feeds-tooltip" title="refresh feed"><i class="icon-refresh"></i></a>{% endif %}
+  {% if perms.feeds.change_feed %}<a href="{{object.get_absolute_url}}update" class="btn btn-mini feeds-tooltip" title="edit feed"><i class="icon-edit"></i></a>{% endif %}
+  {% if perms.feeds.delete_feed %}<a href="{{object.get_absolute_url}}delete" class="btn btn-mini feeds-tooltip"  title="trash feed"><i class="icon-trash"></i></a>{% endif %}
+{% endif %}
+</h3>
+</div>
+<div class="row">
+    <div class="span7">
+        <canvas id="chart"  width="600" height="240"></canvas>
+    </div>
+    <div class="span5">
+    <table class="table table-condensed table-hover">
+    {% for post in top5 %}
+    <tr><td><a href="{{ post.get_absolute_url }}">{{ post }}</a></td></tr>
+    {% endfor %}
+    </table>
+    </div>
+</div>
+{%endblock%}
+
+
+  {% block additional_scripts_end %}
+    <script type="text/javascript">
+    {% autoescape off %}
+    var data = {{ data }};
+    {% endautoescape %}
+    </script>
+    <script defer src="{{ STATIC_URL }}feeds/chart.js"></script>
+    <script defer src="{{ STATIC_URL }}feeds/feed_detail.js"> </script>
+  {% endblock %}
+
+

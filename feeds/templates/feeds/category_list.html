@@ -1,0 +1,54 @@
+{%extends 'feeds/index.html'%}
+
+{%block breadcrumb %}
+          <ul class="breadcrumb">
+            <li><a href="/">Home</a> <span class="divider">/</span></li>
+            <li><a href="{% url "planet:feed-home" %}">Feeds</a> <span class="divider">/</span></li>
+            <li><a href="{% url "planet:category-home" %}">Categories</a> <span class="divider">/</span></li>
+            <li class="active">You are here</li>
+          </ul>
+{%endblock%}
+
+{% block content %}
+<table class="table table-striped table-condensed">
+{%for o in object_list%}
+  <tr>
+    <td><a href="{{ o.get_absolute_url }}">{{ o }}</a></td>
+    <td>{{o.post_set.count}}</td>
+    <td>
+   {% if user.is_authenticated %}
+     {% if perms.feeds.edit_category %}<a href="{{o.get_absolute_url}}update" class="btn btn-mini">edit</a>{% endif %}
+     {% if perms.feeds.delete_category %}<a href="{{o.get_absolute_url}}delete" class="btn btn-mini">delete</a>{% endif %}
+   {% endif %}
+     </td>
+  </tr>
+{% endfor %}
+</table>
+
+{% if is_paginated %}
+  <div class="pagination pagination-mini pagination-centered">
+    <ul>
+      {% if page_obj.has_previous %}
+        <li class="active"><a href="{% url "planet:category-home-paginated" page_obj.previous_page_number %}"> previous</a></li>
+      {% else %}
+        <li class="disabled"><a href="#">previous</a></li>
+      {% endif %}
+
+      {% for page in  page_obj.paginator.page_range %}
+        {% if page == page_obj.number %}
+          <li class="disabled"><a href="#">{{ page }}</a></li>
+        {% else %}
+          <li class="active"><a href="{% url "planet:category-home-paginated" page %}">{{ page }}</a></li>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <li class="active"> <a href="{% url "planet:category-home-paginated" page_obj.next_page_number %}">next</a></li>
+      {% else %}
+        <li class="disabled"><a href="#">next</a></li>
+      {% endif %}
+    </ul>
+  </div>
+{% endif %}
+
+{%endblock%}

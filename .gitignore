@@ -1,0 +1,12 @@
+django_feedbrater.egg-info/*
+dist/*
+*.py[co]
+*.swp
+*.pyc
+*.mo
+*.log
+log/*
+env/*
+.coverage
+*.pot
+.pypirc 
