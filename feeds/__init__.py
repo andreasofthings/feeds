@@ -2,6 +2,18 @@
 # -*- coding: utf-8 -*-
 
 """
+feeds is the core module for feedbrater.
+
+feeds provides all functionality built from django methods, namely:
+ 
+ - :mod:`feeds.models`
+   the models to store information
+ - :mod:`feeds.rss` 
+   methods and classes to output re-build feeds
+ - :mod:`feeds.views`
+   the functions used to interface with the user
+ - :mod:`feeds.forms`
+   automated input handling through django-forms and crispy-forms
 """
 
 USER_AGENT = ""
