@@ -1,7 +1,7 @@
-:mod:`feeds.models` -- Feedbrater
+:mod:`feeds.models` -- feed views
 ==========================================
 
-.. automodule:: feeds
+.. automodule:: feeds.models
    :members:
    :show-inheritance:
 

@@ -37,6 +37,8 @@ Contents:
    :maxdepth: 2
 
    feeds
+     feed_views
+     feed_models
 
 Indices and tables
 ==================
