@@ -34,7 +34,7 @@ Contents:
 ---------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    feeds
      feed_views
