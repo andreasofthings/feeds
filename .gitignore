@@ -10,3 +10,4 @@ env/*
 .coverage
 *.pot
 .pypirc 
+docs/build/*

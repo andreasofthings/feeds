@@ -312,7 +312,6 @@ class Post(models.Model):
         except IntegrityError, e:
             if e == 1062:
                 pass
-                # logger.debug("entry %s does already exist"%(self.guid))
 
 class Enclosure(models.Model):
     """
