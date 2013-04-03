@@ -1,10 +1,12 @@
-feeds
-=====
+:mod:`models` -- feeds models
+==========================================
 
 .. automodule:: feeds.models
    :members:
+   :show-inheritance:
 
-.. autoclass:: feeds.models.Feed
-   :members:
-
+.. autoclass:: Feed
+.. autoclass:: Post
+.. autoclass:: Tag
+.. autoclass:: Category
 
