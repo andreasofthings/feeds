@@ -35,7 +35,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-
+.. automodule:: feeds
+   :members:
 
 Indices and tables
 ==================
