@@ -5,8 +5,4 @@
    :members:
    :show-inheritance:
 
-.. autoclass:: Feed
-.. autoclass:: Post
-.. autoclass:: Tag
-.. autoclass:: Category
 
