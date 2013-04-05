@@ -36,9 +36,7 @@ Contents:
 .. toctree::
    :maxdepth: 3
 
-   feeds
-     feed_views
-     feed_models
+   feeds*
 
 Indices and tables
 ==================
