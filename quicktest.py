@@ -4,7 +4,7 @@ import os
 import sys
 import argparse
 from django.conf import settings
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 
 class QuickDjangoTest(object):
     """
