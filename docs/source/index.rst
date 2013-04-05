@@ -34,9 +34,14 @@ Contents:
 ---------
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
-   feeds*
+   feeds
+   feed_models
+   feed_views
+   feed_forms
+   feed_mixins
+   feed_rss
 
 Indices and tables
 ==================

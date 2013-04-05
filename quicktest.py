@@ -64,6 +64,7 @@ class QuickDjangoTest(object):
         """
         settings.configure(
             DEBUG = True,
+            ROOT_URLCONF = 'feeds.urls',
             DATABASES = {
                 'default': {
                     'ENGINE': 'django.db.backends.sqlite3',
