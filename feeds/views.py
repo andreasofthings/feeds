@@ -23,7 +23,7 @@ from feeds.models import Feed, Post, Category, Tag, PostReadCount
 from feeds.forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
 from feeds.forms import FeedUpdateForm, CategoryUpdateForm
 
-from angryplanet.mixins import LoginRequiredMixin, PermissionRequiredMixin, google_required
+from feeds.mixins import LoginRequiredMixin, PermissionRequiredMixin, google_required
 
 class BraterView(TemplateView):
     template_name = "feeds/brater.html"
