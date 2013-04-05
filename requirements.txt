@@ -1,6 +1,7 @@
 Django>=1.5
 celery>=3.0.17
 feedparser>=5.1.2
+httplib2>=0.7.5
 simplejson>=2.6.2
 twitter>=1.9.2
 
