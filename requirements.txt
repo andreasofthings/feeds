@@ -1,4 +1,5 @@
 Django>=1.5
 feedparser>=5.1.2
-simplejson==2.6.2
+simplejson>=2.6.2
+twitter>=1.9.2
 
