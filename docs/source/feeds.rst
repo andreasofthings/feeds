@@ -1,4 +1,4 @@
-:mod:`feeds.models` -- Feedbrater
+:mod:`feeds` -- Feedbrater
 ==========================================
 
 .. automodule:: feeds

@@ -1,6 +1,13 @@
 #! /usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
+"""
+:mod:`feeds.views`
+
+views for feedbrater
+
+"""
+
 import simplejson as json
 from datetime import datetime, timedelta
 from django.core.urlresolvers import reverse
