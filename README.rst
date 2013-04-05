@@ -2,6 +2,8 @@
 Feedbrater
 =====
 
+[![Build Status](https://travis-ci.org/aneumeier/feedbrater.png?branch=master)](https://travis-ci.org/aneumeier/feedbrater)
+
 Feedbrater aims to be a replacement for feedburner. It is realized as a Django app. It takes feeds in any format `feedparser` can understand and aims to reproduce identical but trackable feeds, augmented with feedbrater information.
 
 Detailed documentation is in the "docs" directory.
