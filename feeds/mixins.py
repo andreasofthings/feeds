@@ -6,6 +6,13 @@
 
 """
 
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _ 
+
 def google_required(func):
     """
     find googlebot in useragent
