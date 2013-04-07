@@ -16,7 +16,17 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
 class TagManager(models.Manager):
+    """
+    :mod:`feeds.models.TagManager`
+
+    manager for Tag objects
+
+
+    """
     def get_by_natural_key(self, slug):
+        """
+        get Tag by natural key, to allow serialization by key rather than `ìd`
+        """
         return self.get(slug=slug)
 
 class Tag(models.Model):
@@ -317,10 +327,24 @@ class Enclosure(models.Model):
     """
     potential enclosure of a post
     """
+    
     post = models.ForeignKey(Post, related_name="enclosure")
+    """reference to the post the enclosure belongs to."""
+    
     url = models.URLField()
+    """the url of the enclosed media file."""
+    
     length = models.BigIntegerField()
+    """length of the enclosed media file in byte."""
+    
     enclosure_type = models.CharField(max_length=32)
+    """type of the enclosed file, for example 'image/jpeg'."""
+    
+    def __unicode__(self):
+        """
+        return type of object and containing post
+        """
+        return u'%s [for %s]' % (self.enclosure_type, self.post)
 
 class FeedPostCount(models.Model):
     feed = models.ForeignKey(Feed, verbose_name=_('feed'), null=False, blank=False)

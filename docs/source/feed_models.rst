@@ -2,7 +2,6 @@
 ==========================================
 
 .. automodule:: feeds.models
-   :data:
    :members:
    :show-inheritance:
 

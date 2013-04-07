@@ -37,11 +37,12 @@ Contents:
    :maxdepth: 2
 
    feeds
-   feed_models
    feed_views
+   feed_rss
+   feed_models
+   feed_tasks
    feed_forms
    feed_mixins
-   feed_rss
 
 Indices and tables
 ==================
