@@ -17,12 +17,9 @@ from django.template.defaultfilters import slugify
 
 class TagManager(models.Manager):
     """
-    :mod:`feeds.models.TagManager`
-
-    manager for Tag objects
-
-
+    Manager for Tag objects
     """
+    
     def get_by_natural_key(self, slug):
         """
         get Tag by natural key, to allow serialization by key rather than `ìd`
@@ -34,23 +31,35 @@ class Tag(models.Model):
     A tag.
     """
     objects = TagManager()
+    """Overwrite the inherited manager with the custom :mod:`feeds.models.TagManager`"""
     name = models.CharField(_('name'), max_length=50, unique=True, db_index=True)
+    """The name of the Tag."""
     slug = models.SlugField(
         max_length=255,
         db_index=True,
         unique=True,
         help_text='Short descriptive unique name for use in urls.',
     )
+    """The slug of the Tag. It can be used in any URL referencing this particular Tag."""
 
     relevant = models.BooleanField(default = False)
+    """Indicates whether this Tag is relevant for further processing. It should be used to allow administrative intervention."""
+
     touched = models.DateTimeField(auto_now=True)
+    """Keep track of when this Tag was last used."""
 
     def save(self, *args, **kwargs):
+        """
+        This function is called whenever the object is saved. For a Tag, it will try to set a slug if it is not yet available.
+        """
         if not self.slug:
             self.slug = slugify(self.name)
         super(Tag, self).save(*args, **kwargs)
 
     class Meta:
+        """
+        Django Meta.
+        """
         ordering = ('name',)
         verbose_name = _('tag')
         verbose_name_plural = _('tags')
@@ -63,6 +72,9 @@ class Tag(models.Model):
         return ()# self.tag_posts.all()
     
     def __unicode__(self):
+        """
+        Human readable representation of the object.
+        """
         return self.name
 
     @models.permalink
@@ -325,7 +337,7 @@ class Post(models.Model):
 
 class Enclosure(models.Model):
     """
-    potential enclosure of a post
+    potential enclosure of a :mod:`feeds.models.Post`
     """
     
     post = models.ForeignKey(Post, related_name="enclosure")
