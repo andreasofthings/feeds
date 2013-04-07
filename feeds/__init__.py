@@ -2,25 +2,34 @@
 # -*- coding: utf-8 -*-
 
 """
+feedbrater - feed aggregator, social relevance and stats
+
+:Author:    Andreas Neumeier
+:Contact:   andreas@neumeier.org
+:Revision:  $Revision: 1 $
+:Date:      $Date: 2003-10-24 19:46:32 +0000 (Fri, 24 Oct 2003) $
+:Copyright: To be decided soon. BSD alike, probably.
+
 feeds is the core module for feedbrater.
 
-feeds provides all functionality built from django methods, namely:
+feeds provides all functionality built on top of django_ methods. Features include aggregation of rss and Atom feeds, collection of social stats from twitter, facebook, google+ and own piwik server, tracking of views in output feeds (feedburner like), displaying all with Chartjs_.
  
- - :mod:`feeds.models`
-   the models to store information
- - :mod:`feeds.rss` 
-   methods and classes to output re-build feeds
  - :mod:`feeds.views`
-   the functions used to interface with the user
+ - :mod:`feeds.models`
+ - :mod:`feeds.admin`
  - :mod:`feeds.forms`
-   automated input handling through django-forms and crispy-forms
+ - :mod:`feeds.rss` 
+
+_django: www.djangoproject.com
+_chartjs: www.chartjs.org
+
 """
 
 USER_AGENT = ""
 ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR = range(4)
 FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC = range(5)
 
-version_info = (0, 9, 1)
+version_info = (0, 9, 2)
 __version__ = ".".join(map(str, version_info))
 SERVER_SOFTWARE = "feedbrater/%s" % __version__
 

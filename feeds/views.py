@@ -26,6 +26,12 @@ from feeds.forms import FeedUpdateForm, CategoryUpdateForm
 from feeds.mixins import LoginRequiredMixin, PermissionRequiredMixin, google_required
 
 class BraterView(TemplateView):
+    """
+    Marketing Page
+
+    This is where new users are supposed to come to first.
+
+    """
     template_name = "feeds/brater.html"
 
 class FeedCreateView(PermissionRequiredMixin, CreateView):
