@@ -6,6 +6,7 @@
 
 """
 
+from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -23,11 +24,11 @@ def google_required(func):
         if request.META.has_key('HTTP_USER_AGENT'):
             useragent = request.META['HTTP_USER_AGENT']
             if request.user.is_anonymous() and not "googlebot" in useragent.lower():
-                return HttpResponseRedirect(reverse("userprofile:login"))
+                return HttpResponseRedirect(settings.LOGIN_URL)
             else:
                 return func(request, *args, **kwargs)
         else:
-            return HttpResponseRedirect(reverse("userprofile:login"))
+            return HttpResponseRedirect(settings.LOGIN_URL)
     return _view
 
 class LoginRequiredMixin(object):
@@ -58,7 +59,7 @@ class PermissionRequiredMixin(object):
                 request,
                 _('You do not have the permission required to perform the requested view.')
             )
-            return HttpResponseRedirect(reverse('userprofile:login'))
+            return HttpResponseRedirect(settings.LOGIN_URL)
         return super(PermissionRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 # vim: ts=4 et sw=4 sts=4

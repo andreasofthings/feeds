@@ -44,14 +44,6 @@ class TaskTest(TestCase):
             result = entry_process(entry, f.id, None, None)
             self.assertEqual(result, True)
 
-    def test_entry_tags(self):
-        entry = self.feed.entries[0]
-        feed_id = Feed.objects.all()[0].id
-        entry_process(entry.id, feed_id, None, None)
-        e = Post.objects.all()[0]
-        result = entry_tags(e, ['test'])
-        self.assertEqual(result, True)
-
     def tearDown(self):
         pass
 
@@ -90,6 +82,7 @@ class ViewsTest(TestCase):
         """
         result = self.client.get(reverse('planet:feed-add'))
         self.assertEqual(result.status_code, 302)
+        self.assertRedirects(result, '/accounts/login')
 
     def test_feed_add_logged_in_no_credentials(self):
         """
@@ -98,6 +91,7 @@ class ViewsTest(TestCase):
         self.client.login(username=self.username, password=self.password)
         result = self.client.get(reverse('planet:feed-add'))
         self.assertEqual(result.status_code, 302)
+        self.assertRedirects(result, '/accounts/login')
 
     def test_feed_add_logged_in_valid_credentials(self):
         """
@@ -111,12 +105,29 @@ class ViewsTest(TestCase):
         result = self.client.get(reverse('planet:feed-add'))
         self.assertEqual(result.status_code, 200)
 
-    def test_feed_add_post(self):
+    def test_feed_add_post_anonymous(self):
         """
-        go to feed-add
+        go to feed-add, anonymous client
         """
         result = self.client.post(reverse('planet:feed-add'))
-        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 302)
+
+    def test_feed_add_post_no_credential(self):
+        """
+        go to feed-add, anonymous client
+        """
+        result = self.client.post(reverse('planet:feed-add'))
+        self.client.login(username=self.username, password=self.password)
+        self.assertEqual(result.status_code, 302)
+
+    def test_feed_add_post_valid_credential(self):
+        """
+        go to feed-add, anonymous client
+        """
+        result = self.client.post(reverse('planet:feed-add'))
+        self.client.login(username=self.username, password=self.password)
+        permission = Permission.objects.get(codename="add_feed")
+        self.assertEqual(result.status_code, 302)
 
     def test_feed_view(self):
         """

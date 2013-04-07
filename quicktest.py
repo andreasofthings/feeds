@@ -4,7 +4,6 @@ import os
 import sys
 import argparse
 from django.conf import settings
-from django.conf.urls import patterns, url, include
 
 class QuickDjangoTest(object):
     """
@@ -23,6 +22,8 @@ class QuickDjangoTest(object):
         'django.contrib.contenttypes',
         'django.contrib.sessions',
         'django.contrib.admin',
+        'crispy_forms',
+        'test',
     )
 
     def __init__(self, *args, **kwargs):
@@ -30,10 +31,9 @@ class QuickDjangoTest(object):
         Test Django App for Django 1.5 in travis.ci
         """
         self.apps = args
-        self.urlpatterns = patterns('', url(r'^feeds/', include( 'feeds.urls', namespace="planet", app_name="planet")),)
         settings.configure(
             DEBUG = True,
-            ROOT_URLCONF = self,
+            ROOT_URLCONF = "test.urls",
             DATABASES = {
                 'default': {
                     'ENGINE': 'django.db.backends.sqlite3',
