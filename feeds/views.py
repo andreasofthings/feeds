@@ -50,7 +50,7 @@ class FeedListView(ListView):
     context_object_name = "feeds"
     queryset = Feed.objects.filter(beta=True)
 
-    def get_paginate_by(queryset):
+    def get_paginate_by(self, queryset):
         return 10
 
 class FeedDetailView(DetailView):
