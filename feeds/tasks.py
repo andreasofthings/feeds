@@ -18,8 +18,7 @@ import feedparser
 
 from django.template.defaultfilters import slugify
 
-from celery import task, Task
-from celery.registry import tasks
+from celery import task
 from datetime import datetime, timedelta
 
 from feeds import USER_AGENT
@@ -61,9 +60,9 @@ def dummy(x=10):
     print(__name__)
     logger = logging.getLogger(__name__)
     logger.info("dummy: invoked")
-    logger.debug("Started to sleep for %ss"%x)
+    logger.debug("Started to sleep for %ss", x)
     sleep(x)
-    logger.debug("Woke up after sleeping for %ss"%x)
+    logger.debug("Woke up after sleeping for %ss", x)
     return True
 
 @task
@@ -76,26 +75,31 @@ def entry_update_twitter(entry_id):
     """
     logger = logging.getLogger(__name__)
     logger.debug("start: counting tweets")
+
+    http = httplib2.Http()
     entry = Post.objects.get(pk=entry_id)
     twitter_count = "http://urls.api.twitter.com/1/urls/count.json?url=%s"
     query = twitter_count % (entry.link)
 
-    resp, content = self.http.request(query, "GET")
+    resp, content = http.request(query, "GET")
 
     if resp.has_key('status') and resp['status'] == "200":
         result = simplejson.loads(content)
+        entry.tweets = result['count']
+        entry.save()
     else:
-        print resp, content
+        logger.debug("status error: %s: %s", resp, content)
 
-    entry.tweets = resp['count']
-    entry.save()
     logger.debug("stop: counting tweets")
     return True
 
 @task
 def entry_tags(entry_id, tags):
+    """
+    Process tags for entry.
+    """
     logger = logging.getLogger(__name__)
-    logger.debug("start: entry tags: %s"%(tags))
+    logger.debug("start: entry tags: %s", tags)
     
     entry = Post.objects.get(pk=entry_id)
 
@@ -105,8 +109,8 @@ def entry_tags(entry_id, tags):
                 t, created = Tag.objects.get_or_create(name=str(tag.term), slug=slugify(tag.term))
                 if created:
                     t.save()
-                p.tags.add(t)
-            p.save()
+                entry.tags.add(t)
+            entry.save()
     logger.debug("stop: entry tags")
     return
 
@@ -133,7 +137,7 @@ def entry_process(entry, feed_id, postdict, fpf):
     logger = logging.getLogger(__name__)
     logger.debug("start: entry")
     feed = Feed.objects.get(pk=feed_id)
-    logger.debug("Keys in entry '%s': %s"%(entry.title, entry.keys()))
+    logger.debug("Keys in entry '%s': %s", entry.title, entry.keys())
     p, created = Post.objects.get_or_create(
         feed=feed, 
         title=entry.title, 
@@ -142,7 +146,7 @@ def entry_process(entry, feed_id, postdict, fpf):
     )
     
     if created:
-        logger.debug("'%s' is a new entry"%(entry.title))
+        logger.debug("'%s' is a new entry", entry.title)
         p.save()
     
     p.link = entry.link
@@ -156,11 +160,16 @@ def entry_process(entry, feed_id, postdict, fpf):
     return True
 
 @task
-def feed_refresh(feed_id, **kwargs):
+def feed_refresh(feed_id):
+    """
+    refresh entries for `feed_id`
+
+    :codeauthor: Andreas Neumeier
+    """
     logger = logging.getLogger(__name__)
     feed = Feed.objects.get(pk=feed_id)
     logger.debug("start")
-    logger.info("collecting new posts for feed: %s (ID: %s)"%(feed.name, feed.id))
+    logger.info("collecting new posts for feed: %s (ID: %s)", feed.name, feed.id)
 
     feed_stats = { 
         ENTRY_NEW:0,
@@ -172,20 +181,20 @@ def feed_refresh(feed_id, **kwargs):
     try:
         fpf = feedparser.parse(feed.feed_url, agent=USER_AGENT, etag=feed.etag)
     except Exception, e: # Feedparser Exeptions
-        logger.error('Feedparser Error: (%s) cannot be parsed: %s'%(feed.feed_url, str(e)))
+        logger.error('Feedparser Error: (%s) cannot be parsed: %s', feed.feed_url, str(e))
         
     if hasattr(fpf, 'status'):
         # feedparsere returned a status
         if fpf.status == 304:
             # this means feed has not changed
-            logger.debug("%s (ID: %s) has not changed"%(feed.name, feed.id))
+            logger.debug("%s (ID: %s) has not changed", feed.name, feed.id)
             return False
         if fpf.status >= 400:
             # this means a server error
-            logger.debug("%s (ID: %s) gave a server error"%(feed.name, feed.id))
+            logger.debug("%s (ID: %s) gave a server error", feed.name, feed.id)
             return False
     if hasattr(fpf, 'bozo') and fpf.bozo:
-        logger.debug('[%d] !BOZO! Feed is not well formed: %s' % (feed.id, feed.name))
+        logger.debug("[%d] !BOZO! Feed is not well formed: %s", feed.id, feed.name)
         
     feed.etag = fpf.get('etag', '')
 
@@ -197,7 +206,7 @@ def feed_refresh(feed_id, **kwargs):
         feed.last_modified = mtime(fpf.modified)
     except Exception, e:
         feed.last_modified = datetime.now()
-        logger.debug('[%s] last_modified not well formed: %s Reason: %s' % (feed.name, feed.last_modified, str(e)))
+        logger.debug("[%s] last_modified not well formed: %s Reason: %s", feed.name, feed.last_modified, str(e))
         
     feed.title = fpf.feed.get('title', '')[0:254]
     feed.tagline = fpf.feed.get('tagline', '')
@@ -206,14 +215,13 @@ def feed_refresh(feed_id, **kwargs):
 
     guids = []
     for entry in fpf.entries:
-            guid = get_entry_guid(entry)
-            guids.append(guid)
-    logger.debug("guids: %s"%(str(guids)))
+        guid = get_entry_guid(entry)
+        guids.append(guid)
 
     try:
         feed.save()
     except Feed.last_modified.ValidationError, e:
-        logger.warning("Feed.ValidationError: %s"%str(e))
+        logger.warning("Feed.ValidationError: %s", str(e))
 
 
     if guids:
@@ -221,7 +229,7 @@ def feed_refresh(feed_id, **kwargs):
         fetch posts that we have on file already
         """
         postdict = dict([(post.guid, post) for post in Post.objects.filter(feed=feed.id).filter(guid__in=guids)])
-        logger.debug("postdict keys: %s"%(postdict.keys()))
+        logger.debug("postdict keys: %s", postdict.keys())
     else:
         """
         we didn't find any guids. leave postdict empty
@@ -238,10 +246,10 @@ def feed_refresh(feed_id, **kwargs):
 
     feed.save()
     logger.debug("stop")
-    return True
+    return feed_stats
 
 @task
-def aggregate(**kwargs):
+def aggregate():
     """
     aggregate feeds
 
@@ -249,13 +257,13 @@ def aggregate(**kwargs):
 
     find all tasks that are marked for beta access
 
-    .. codeauthor: Andreas Neumeier
+    :codeauthor: Andreas Neumeier
     """
     from celery import group
     logger = logging.getLogger(__name__)
     logger.debug("start aggregating")
     feeds = Feed.objects.filter(is_active=True).filter(beta=True)
-    logger.debug("processing %s feeds"%(feeds.count()))
+    logger.debug("processing %s feeds", feeds.count())
     job = group([feed_refresh.s(i.id) for i in feeds])
     job.apply_async()
     logger.debug("stop aggregating")
