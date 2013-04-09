@@ -20,8 +20,10 @@ feeds provides all functionality built on top of django_ methods. Features inclu
  - :mod:`feeds.forms`
  - :mod:`feeds.rss` 
 
-_django: www.djangoproject.com
-_chartjs: www.chartjs.org
+
+django:: www.djangoproject.com
+
+chartjs:: www.chartjs.org
 
 """
 

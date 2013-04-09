@@ -1,0 +1,165 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-04-09 09:54+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: mixins.py:60
+msgid "You do not have the permission required to perform the requested view."
+msgstr ""
+
+#: models.py:35 models.py:150
+msgid "name"
+msgstr ""
+
+#: models.py:64 models.py:400
+msgid "tag"
+msgstr ""
+
+#: models.py:65
+msgid "tags"
+msgstr ""
+
+#: models.py:151
+msgid "shortname"
+msgstr ""
+
+#: models.py:160
+msgid "feed url"
+msgstr ""
+
+#: models.py:162
+msgid "is active"
+msgstr ""
+
+#: models.py:164
+msgid "If disabled, this feed will not be further updated."
+msgstr ""
+
+#: models.py:167
+msgid "is beta"
+msgstr ""
+
+#: models.py:169
+msgid "If beta, this feed will be processed through the celery pipeline."
+msgstr ""
+
+#: models.py:175
+msgid "title"
+msgstr ""
+
+#: models.py:180 models.py:281
+msgid "link"
+msgstr ""
+
+#: models.py:184 models.py:282
+msgid "description"
+msgstr ""
+
+#: models.py:186
+msgid "Phrase or sentence describing the channel."
+msgstr ""
+
+#: models.py:192
+msgid "language"
+msgstr ""
+
+#: models.py:197
+msgid "copyright"
+msgstr ""
+
+#: models.py:203
+msgid "managingEditor"
+msgstr ""
+
+#: models.py:209
+msgid "webmaster"
+msgstr ""
+
+#: models.py:214 models.py:293
+msgid "pubDate"
+msgstr ""
+
+#: models.py:215
+msgid "lastBuildDate"
+msgstr ""
+
+#: models.py:228
+msgid ""
+"ttl stands for time to live. It's a number of minutes that indicates how "
+"long a channel can be cached before refreshing from the source."
+msgstr ""
+
+#: models.py:232
+msgid "image_title"
+msgstr ""
+
+#: models.py:233
+msgid "image_link"
+msgstr ""
+
+#: models.py:234
+msgid "image_url"
+msgstr ""
+
+#: models.py:242
+msgid "etag"
+msgstr ""
+
+#: models.py:243
+msgid "last checked"
+msgstr ""
+
+#: models.py:258 models.py:275 models.py:362
+msgid "feed"
+msgstr ""
+
+#: models.py:259
+msgid "feeds"
+msgstr ""
+
+#: models.py:283
+msgid "author"
+msgstr ""
+
+#: models.py:284
+msgid "author email"
+msgstr ""
+
+#: models.py:290
+msgid "comments"
+msgstr ""
+
+#: models.py:292
+msgid "guid"
+msgstr ""
+
+#: models.py:298
+msgid "date modified"
+msgstr ""
+
+#: models.py:401
+msgid "post"
+msgstr ""
+
+#: models.py:406
+msgid "tagged item"
+msgstr ""
+
+#: models.py:407
+msgid "tagged node"
+msgstr ""
