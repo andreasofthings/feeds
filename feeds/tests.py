@@ -13,7 +13,35 @@ from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
 
 from feeds.models import Feed, Post
-from feeds.tasks import aggregate, entry_process, feed_refresh, entry_tags
+from feeds.tasks import aggregate, entry_process, feed_refresh
+
+from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
+
+
+class ModelTest(TestCase):
+    """
+    Test Models and their Managers
+    """
+    def setUp(self):
+        """
+        Set up enivironment to test models
+        """
+        pass
+
+    def test_tag(self):
+        """
+        Test a Tag
+        """
+        from feeds.models import Tag
+        t = Tag("tag")
+        t.save()
+        self.assertEqual(str(t), "tag")
+
+    def tearDown(self):
+        """
+        Clean up environment after model tests
+        """
+        pass
 
 class TaskTest(TestCase):
     """
@@ -22,6 +50,9 @@ class TaskTest(TestCase):
     ..codeauthor: Andreas Neumeier
     """
     def setUp(self):
+        """
+        Set up enivironment to test models
+        """
         Feed(feed_url=reverse('planet:rss1'), name="rss1", shortname="rss1").save()
         Feed(feed_url=reverse('planet:rss2'), name="rss2", shortname="rss2").save()
 
@@ -35,14 +66,17 @@ class TaskTest(TestCase):
     def test_feed_refresh(self):
         feed = Feed.objects.all()[0]
         result = feed_refresh(feed.id)
-        self.assertEqual(result, True)
+        self.assertGreaterEqual(result[ENTRY_NEW], 0)
+        self.assertGreaterEqual(result[ENTRY_UPDATED], 0)
+        self.assertGreaterEqual(result[ENTRY_SAME], 0)
+        self.assertGreaterEqual(result[ENTRY_ERR], 0)
 
     def test_entry_process(self):
         f = Feed.objects.all()[0]
         feed = feedparser.parse(f.feed_url)
         for entry in feed.entries:
             result = entry_process(entry, f.id, None, None)
-            self.assertNotEqual(result, True)
+            self.assertEqual(result, True)
 
     def tearDown(self):
         pass
@@ -56,6 +90,9 @@ class ViewsTest(TestCase):
     password = "password"
 
     def setUp(self):
+        """
+        Set up enivironment to test models
+        """
         self.user = User.objects.create_user(self.username, 'lennon@thebeatles.com', self.password)
         for i in range(30):
             f = Feed(feed_url=("http://test.de/%s"%(str(i))), slug="test%s"%(i))

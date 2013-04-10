@@ -84,7 +84,7 @@ class FeedDetailView(DetailView):
                 clickdata.append(clicklist.filter(created__gte=lower_offset).filter(created__lte=upper_offset).count())
             else:
                 clickdata.append(0)
-            contentdata.append(random.Random().randint(0,7))
+            contentdata.append(random.Random().randint(0, 7))
             labels.append("%s:00"%(str(lower_offset.hour)))
 
         chartdata = {
@@ -105,7 +105,6 @@ class FeedDetailView(DetailView):
             ]
         }
         context['data'] = json.dumps(chartdata)
-
         context['top5'] = Post.objects.filter(feed__id=self.kwargs['pk'])[:5]
         return context
 
