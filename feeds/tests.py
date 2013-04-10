@@ -42,7 +42,7 @@ class TaskTest(TestCase):
         feed = feedparser.parse(f.feed_url)
         for entry in feed.entries:
             result = entry_process(entry, f.id, None, None)
-            self.assertEqual(result, True)
+            self.assertNotEqual(result, True)
 
     def tearDown(self):
         pass

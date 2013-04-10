@@ -5,11 +5,7 @@
 Feed-Aggregator models
 """
 
-import os
-import re
-                
 import feedparser
-import urllib2
 from django.db import models, IntegrityError
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _ 
@@ -30,10 +26,13 @@ class Tag(models.Model):
     """
     A tag.
     """
+    
     objects = TagManager()
     """Overwrite the inherited manager with the custom :mod:`feeds.models.TagManager`"""
+    
     name = models.CharField(_('name'), max_length=50, unique=True, db_index=True)
     """The name of the Tag."""
+    
     slug = models.SlugField(
         max_length=255,
         db_index=True,
@@ -54,7 +53,7 @@ class Tag(models.Model):
         """
         if not self.slug:
             self.slug = slugify(self.name)
-        super(Tag, self).save(*args, **kwargs)
+        models.Model.save(args, kwargs)
 
     class Meta:
         """
@@ -64,12 +63,11 @@ class Tag(models.Model):
         verbose_name = _('tag')
         verbose_name_plural = _('tags')
 
-    @property
     def posts(self):
         """
         return all feeds in this category
         """
-        return ()# self.tag_posts.all()
+        return self.tag_posts.all()
     
     def __unicode__(self):
         """
@@ -82,7 +80,13 @@ class Tag(models.Model):
         return ('planet:tag-view', [str(self.slug)])
 
 class CategoryManager(models.Manager):
+    """
+    Manager for Category
+    """
     def get_by_natural_key(self, slug):
+        """
+        Get Category by natural kea to allow serialization
+        """
         return self.get(slug=slug)
 
 class Category(models.Model):
@@ -111,6 +115,9 @@ class Category(models.Model):
         return self.title
 
     class Meta:
+        """
+        Django Meta.
+        """
         ordering = ('title',)
         verbose_name = 'category'
         verbose_name_plural = 'categories'
@@ -119,7 +126,7 @@ class Category(models.Model):
         # ToDo: prohibit circular references
         if not self.slug:
             self.slug = slugify(self.title)  # Where self.name is the field used for 'pre-populate from'
-        super(Category, self).save(*args, **kwargs)
+        models.Model.save(*args, **kwargs)
 
     @property
     def children(self):
@@ -249,7 +256,7 @@ class Feed(models.Model):
         """
         if not self.slug:
             self.slug = slugify(self.shortname) 
-        super(Feed, self).save(args, kwargs)
+        models.Model.save(args, kwargs)
 
     class Meta:
         """
@@ -270,6 +277,9 @@ class Feed(models.Model):
         return ('planet:feed-view', [str(self.id)])
     
 class Post(models.Model):
+    """
+    Model to hold an actual feed entry
+    """
     feed = models.ForeignKey(
         Feed, 
         verbose_name=_('feed'), 
@@ -323,14 +333,21 @@ class Post(models.Model):
 
     @models.permalink
     def get_trackable_url(self):
+        """
+        Get an URL for this particular object, that will be tracked in a separate view.
+
+        The related view is :mod:`feeds.views.PostTrackableView`
+
+        The view redirects to `feeds.models.Post.link`, storing information about the requesting client in `feeds.models.PostReadCount`
+        """
         return ('planet:post-trackable-view', [str(self.id)])
 
     def __unicode__(self):
-        return u'%s'%(self.title)
+        return u'%s' % (self.title)
 
     def save(self, *args, **kwargs):
         try:
-            super(Post, self).save(*args, **kwargs)
+            models.Model.save(*args, **kwargs)
         except IntegrityError, e:
             if e == 1062:
                 pass
@@ -383,12 +400,36 @@ class FeedPostCount(models.Model):
         self.created = int(this_hour) 
         super(FeedPostCount, self).save(*args, **kwargs) # Call the "real" save() method.
 
+
+class PostReadCountManager(models.Manager):
+    """
+    Manager for Tag objects
+    """
+
+    def get_feed_count_in_timeframe(self, feed_id, start, delta, steps):
+        """
+        feed_id:which feed
+        start:  start at which time 
+        delta:  how long shall one step be
+        steps:  how many steps
+        """
+        clickdata = ()
+        clicklist = PostReadCount.objects.filter(post__feed__id=feed_id)
+        lower_offset = start
+        for i in range(steps):
+            upper_offset = lower_offset
+            lower_offset = upper_offset - delta
+            if clicklist:
+                clickdata.append(clicklist.filter(created__gte=lower_offset).filter(created__lte=upper_offset).count())
+        return clickdata
+        
 class PostReadCount(models.Model):
     """
     This is not a real counter, more a log.
 
     Need to count and cleanup elsewhere.
     """
+    objects = PostReadCountManager()
     post = models.ForeignKey(Post)
     created = models.DateTimeField(auto_now=True)
 
