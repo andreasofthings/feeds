@@ -8,6 +8,7 @@ feedbrater - feed aggregator, social relevance and stats
 :Contact:   andreas@neumeier.org
 :Revision:  $Revision: 1 $
 :Date:      $Date: 2003-10-24 19:46:32 +0000 (Fri, 24 Oct 2003) $
+:ID:        $Id:
 :Copyright: To be decided soon. BSD alike, probably.
 
 feeds is the core module for feedbrater.
@@ -31,7 +32,7 @@ USER_AGENT = ""
 ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR = range(4)
 FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC = range(5)
 
-version_info = (0, 9, 2)
+version_info = (0, 9, 3)
 __version__ = ".".join(map(str, version_info))
 SERVER_SOFTWARE = "feedbrater/%s" % __version__
 

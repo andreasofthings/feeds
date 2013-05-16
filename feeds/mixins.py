@@ -7,11 +7,10 @@
 """
 
 from django.conf import settings
-from django.http import HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy as _ 
 
 def google_required(func):
@@ -37,6 +36,10 @@ class LoginRequiredMixin(object):
     """
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        """
+        dispatch
+        decorated with `login_required`
+        """
         return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 class PermissionRequiredMixin(object):
@@ -54,6 +57,10 @@ class PermissionRequiredMixin(object):
      
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        """
+        dispatch the actual view.
+        only allow access if `request.user.has_perms` is true
+        """
         if not request.user.has_perms(self.require_permissions):
             messages.error(
                 request,

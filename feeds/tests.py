@@ -13,7 +13,7 @@ from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
 
 from feeds.models import Feed, Post
-from feeds.tasks import aggregate, entry_process, feed_refresh
+from feeds.tasks import aggregate, entry_process, feed_refresh, dummy
 
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 
@@ -33,8 +33,9 @@ class ModelTest(TestCase):
         Test a Tag
         """
         from feeds.models import Tag
-        t = Tag("tag")
-        t.save()
+        t = Tag(name="tag")
+        tagid = t.save()
+        self.assertNotEqual(tagid, 0)
         self.assertEqual(str(t), "tag")
 
     def tearDown(self):
@@ -58,6 +59,10 @@ class TaskTest(TestCase):
 
         self.feed1 = Feed.objects.all()[0]
         self.feed2 = Feed.objects.all()[1]
+
+    def test_task_time(self):
+        dummy(10)
+        dummy.delay()
 
     def test_aggregate(self):
         result = aggregate()

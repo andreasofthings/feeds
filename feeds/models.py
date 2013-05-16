@@ -29,7 +29,7 @@ class Tag(models.Model):
     
     objects = TagManager()
     """Overwrite the inherited manager with the custom :mod:`feeds.models.TagManager`"""
-    
+ 
     name = models.CharField(_('name'), max_length=50, unique=True, db_index=True)
     """The name of the Tag."""
     
@@ -53,7 +53,7 @@ class Tag(models.Model):
         """
         if not self.slug:
             self.slug = slugify(self.name)
-        models.Model.save(args, kwargs)
+        super(Tag, self).save(*args, **kwargs)
 
     class Meta:
         """
@@ -126,7 +126,7 @@ class Category(models.Model):
         # ToDo: prohibit circular references
         if not self.slug:
             self.slug = slugify(self.title)  # Where self.name is the field used for 'pre-populate from'
-        models.Model.save(*args, **kwargs)
+        models.Model.save(self, *args, **kwargs)
 
     @property
     def children(self):
@@ -256,7 +256,7 @@ class Feed(models.Model):
         """
         if not self.slug:
             self.slug = slugify(self.shortname) 
-        models.Model.save(args, kwargs)
+        models.Model.save(self, args, kwargs)
 
     class Meta:
         """
@@ -347,7 +347,7 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         try:
-            models.Model.save(*args, **kwargs)
+            models.Model.save(self, *args, **kwargs)
         except IntegrityError, e:
             if e == 1062:
                 pass

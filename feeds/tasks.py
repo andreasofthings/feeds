@@ -18,7 +18,7 @@ import feedparser
 
 from django.template.defaultfilters import slugify
 
-from celery import task
+import celery
 from datetime import datetime, timedelta
 
 from feeds import USER_AGENT
@@ -49,8 +49,8 @@ def get_entry_guid(entry, feed_id=None):
 
 
 
-@task
-def dummy(x=10):
+@celery.task(time_invoked=datetime.now())
+def dummy(x=10, *args, **kwargs):
     """
     Dummy Task that sleeps for x seconds,
     where the default for x is 10
@@ -59,13 +59,13 @@ def dummy(x=10):
     from time import sleep
     print(__name__)
     logger = logging.getLogger(__name__)
-    logger.info("dummy: invoked")
+    logger.info("dummy: invoked: %s", kwargs['time_invoked'])
     logger.debug("Started to sleep for %ss", x)
     sleep(x)
     logger.debug("Woke up after sleeping for %ss", x)
     return True
 
-@task
+@celery.task
 def entry_update_twitter(entry_id):
     """
     count tweets
@@ -93,7 +93,7 @@ def entry_update_twitter(entry_id):
     logger.debug("stop: counting tweets")
     return True
 
-@task
+@celery.task
 def entry_tags(entry_id, tags):
     """
     Process tags for entry.
@@ -114,7 +114,7 @@ def entry_tags(entry_id, tags):
     logger.debug("stop: entry tags")
     return
 
-@task
+@celery.task
 def entry_process(entry, feed_id, postdict, fpf):
     """
     Receive Entry, process
@@ -159,7 +159,7 @@ def entry_process(entry, feed_id, postdict, fpf):
     logger.debug("stop: entry")
     return True
 
-@task
+@celery.task
 def feed_refresh(feed_id):
     """
     refresh entries for `feed_id`
@@ -248,7 +248,7 @@ def feed_refresh(feed_id):
     logger.debug("stop")
     return feed_stats
 
-@task
+@celery.task
 def aggregate():
     """
     aggregate feeds
