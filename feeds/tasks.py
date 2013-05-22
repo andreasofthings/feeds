@@ -50,17 +50,18 @@ def get_entry_guid(entry, feed_id=None):
 
 
 
-@celery.task()
+@celery.task
 def dummy(x=10, *args, **kwargs):
     """
-    Dummy Task that sleeps for x seconds,
+    Dummy celery.task that sleeps for x seconds,
     where the default for x is 10
     it returns True
     """
     from time import sleep
     print(__name__)
     logger = logging.getLogger(__name__)
-    logger.info("dummy: invoked: %s", kwargs['invocation_time'])
+    if kwargs.has_key('invocation_time'):
+        logger.debug("task was delayed for %s", (datetime.now()-kwargs['invocation_time']))
     logger.debug("Started to sleep for %ss", x)
     sleep(x)
     logger.debug("Woke up after sleeping for %ss", x)

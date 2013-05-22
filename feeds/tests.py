@@ -17,6 +17,7 @@ from feeds.tasks import aggregate, entry_process, feed_refresh, dummy
 
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 
+from datetime import datetime
 
 class ModelTest(TestCase):
     """
@@ -61,8 +62,8 @@ class TaskTest(TestCase):
         self.feed2 = Feed.objects.all()[1]
 
     def test_task_time(self):
+        dummy.delay(invocation_time=datetime.now())
         dummy(10)
-        dummy.delay()
 
     def test_aggregate(self):
         result = aggregate()
