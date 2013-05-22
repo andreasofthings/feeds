@@ -14,6 +14,7 @@ from django.core.urlresolvers import reverse
 
 from feeds.models import Feed, Post
 from feeds.tasks import aggregate, entry_process, feed_refresh, dummy
+from feeds.tasks import entry_update_twitter, entry_update_facebook
 
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 
@@ -55,11 +56,17 @@ class TaskTest(TestCase):
         """
         Set up enivironment to test models
         """
-        Feed(feed_url=reverse('planet:rss1'), name="rss1", shortname="rss1").save()
-        Feed(feed_url=reverse('planet:rss2'), name="rss2", shortname="rss2").save()
+        self.feed1 = Feed(feed_url=reverse('planet:rss1'), name="rss1", shortname="rss1")
+        self.feed2 = Feed(feed_url=reverse('planet:rss2'), name="rss2", shortname="rss2")
 
-        self.feed1 = Feed.objects.all()[0]
-        self.feed2 = Feed.objects.all()[1]
+        self.feed1.save()
+        self.feed2.save()
+
+        self.post1 = Post(feed=self.feed1, link="http://localhost")
+        self.post2 = Post(feed=self.feed2, link="http://localhost")
+
+        self.post1.save()
+        self.post2.save()
 
     def test_task_time(self):
         dummy.delay(invocation_time=datetime.now())
@@ -68,6 +75,15 @@ class TaskTest(TestCase):
     def test_aggregate(self):
         result = aggregate()
         self.assertEqual(result, True)
+
+    def test_count_tweets(self):
+        result = entry_update_twitter(Post.objects.all()[0].id)
+        self.assertEqual(result, True)
+
+    def test_count_share_like(self):
+        result = entry_update_facebook(Post.objects.all()[0].id)
+        self.assertEqual(result, True)
+
 
     def test_feed_refresh(self):
         feed = Feed.objects.all()[0]

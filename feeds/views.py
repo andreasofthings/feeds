@@ -19,11 +19,15 @@ from django.views.generic import DeleteView, RedirectView
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import utc
 
+from braces.views import LoginRequiredMixin, PermissionRequiredMixin
+from braces.views import MultiplePermissionsRequiredMixin
+
 from feeds.models import Feed, Post, Category, Tag, PostReadCount
 from feeds.forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
 from feeds.forms import FeedUpdateForm, CategoryUpdateForm
+from feeds.mixins import google_required
 
-from feeds.mixins import LoginRequiredMixin, PermissionRequiredMixin, google_required
+
 
 class BraterView(TemplateView):
     """
@@ -40,9 +44,7 @@ class FeedCreateView(PermissionRequiredMixin, CreateView):
 
     Required login and credentials.
     """
-    require_permissions = (
-        'feeds.add_feed',
-    )
+    permission_required = "feeds.add_feed"
     form_class = FeedCreateForm
     model = Feed
     initial = {'is_Active': False}

@@ -13,13 +13,16 @@ import twitter
 import httplib2
 import simplejson
 import feedparser
+import urllib
+import celery
+from datetime import datetime, timedelta
+from xml.dom.minidom import parseString
 
 # from exceptions import ValidationError
 
 from django.template.defaultfilters import slugify
+from django.conf import settings
 
-import celery
-from datetime import datetime, timedelta
 
 from feeds import USER_AGENT
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
@@ -55,7 +58,6 @@ def dummy(x=10, *args, **kwargs):
     it returns True
     """
     from time import sleep
-    print(__name__)
     logger = logging.getLogger(__name__)
     if kwargs.has_key('invocation_time'):
         logger.debug("task was delayed for %s", (datetime.now()-kwargs['invocation_time']))
@@ -71,14 +73,14 @@ def entry_update_facebook(entry_id):
     """
     logger = logging.getLogger(__name__)
     logger.debug("start: counting facebook shares & likes")
+    entry = Post.objects.get(pk=entry_id)
     facebook_api = "https://api.facebook.com/method/fql.query?query=%s"
     facebook_sql = """select like_count, share_count from link_stat where url='%s'"""
-    query_sql = facebook_sql % (self.link)
+    query_sql = facebook_sql % (entry.link)
     query_url = facebook_api % (urllib.quote(query_sql))
+    http = httplib2.Http()
+    resp, content = http.request(query_url, "GET")
 
-    resp, content = self.http.request(query_url, "GET")
-
-    entry = Post.objects.get(pk=entry_id)
 
     if resp.has_key('status') and resp['status'] == "200":
         xml = parseString(content)
@@ -91,6 +93,7 @@ def entry_update_facebook(entry_id):
     entry.save()
 
     logger.debug("stop: counting facebook shares & likes")
+    return True
 
 
 @celery.task
@@ -181,8 +184,10 @@ def entry_process(entry, feed_id, postdict, fpf):
     p.content = entry.content[0].value
     p.save()
 
-    entry_update_twitter.delay(p.id)
-    entry_update_facebook.delay(p.id)
+    if settings.FEED_POST_UPDATE_TWITTER:
+        entry_update_twitter.delay(p.id)
+    if settings.FEED_POST_UPDATE_FACEBOOK:
+        entry_update_facebook.delay(p.id)
 
     if entry.has_key('tags'):
         entry_tags.delay(p.id, entry.tags)

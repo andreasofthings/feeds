@@ -30,44 +30,5 @@ def google_required(func):
             return HttpResponseRedirect(settings.LOGIN_URL)
     return _view
 
-class LoginRequiredMixin(object):
-    """
-    Generic Mixin that dispatches login_required to Generic Views
-    """
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        """
-        dispatch
-        decorated with `login_required`
-        """
-        return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
-
-class PermissionRequiredMixin(object):
-    """
-    Example:
-    class View(PermissionRequiredMixin, ListView):
-    ...
-    require_permissions = (
-        'app.permission',
-        ...
-    )
-    ...
-    """
-    require_permissions = ()
-     
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        """
-        dispatch the actual view.
-        only allow access if `request.user.has_perms` is true
-        """
-        if not request.user.has_perms(self.require_permissions):
-            messages.error(
-                request,
-                _('You do not have the permission required to perform the requested view.')
-            )
-            return HttpResponseRedirect(settings.LOGIN_URL)
-        return super(PermissionRequiredMixin, self).dispatch(request, *args, **kwargs)
-
 # vim: ts=4 et sw=4 sts=4
 
