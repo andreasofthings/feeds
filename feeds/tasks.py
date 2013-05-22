@@ -28,6 +28,7 @@ from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 from feeds.tools import mtime
 from feeds.models import Feed, Post, Tag, Category
 
+from feeds.decorators import task_time
 
 def get_entry_guid(entry, feed_id=None):
     """
@@ -49,7 +50,7 @@ def get_entry_guid(entry, feed_id=None):
 
 
 
-@celery.task(time_invoked=datetime.now())
+@celery.task()
 def dummy(x=10, *args, **kwargs):
     """
     Dummy Task that sleeps for x seconds,
@@ -59,7 +60,7 @@ def dummy(x=10, *args, **kwargs):
     from time import sleep
     print(__name__)
     logger = logging.getLogger(__name__)
-    logger.info("dummy: invoked: %s", kwargs['time_invoked'])
+    logger.info("dummy: invoked: %s", kwargs['invocation_time'])
     logger.debug("Started to sleep for %ss", x)
     sleep(x)
     logger.debug("Woke up after sleeping for %ss", x)
