@@ -28,8 +28,6 @@ from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 from feeds.tools import mtime
 from feeds.models import Feed, Post, Tag, Category
 
-from feeds.decorators import task_time
-
 def get_entry_guid(entry, feed_id=None):
     """
     Get an individual guid for an entry
@@ -47,7 +45,6 @@ def get_entry_guid(entry, feed_id=None):
         guid = feed.link
 
     return entry.get('id', guid)
-
 
 
 @celery.task
@@ -68,7 +65,7 @@ def dummy(x=10, *args, **kwargs):
     return True
 
 @celery.task
-def entry_update_twitter(entry_id):
+def entry_update_facebook(entry_id):
     """
     count facebook shares & likes
     """
