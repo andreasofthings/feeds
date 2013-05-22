@@ -32,7 +32,7 @@ USER_AGENT = ""
 ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR = range(4)
 FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC = range(5)
 
-version_info = (0, 9, 3)
+version_info = (0, 9, 4)
 __version__ = ".".join(map(str, version_info))
 SERVER_SOFTWARE = "feedbrater/%s" % __version__
 
