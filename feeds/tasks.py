@@ -68,6 +68,35 @@ def dummy(x=10, *args, **kwargs):
 @celery.task
 def entry_update_twitter(entry_id):
     """
+    count facebook shares & likes
+    """
+    logger = logging.getLogger(__name__)
+    logger.debug("start: counting facebook shares & likes")
+    facebook_api = "https://api.facebook.com/method/fql.query?query=%s"
+    facebook_sql = """select like_count, share_count from link_stat where url='%s'"""
+    query_sql = facebook_sql % (self.link)
+    query_url = facebook_api % (urllib.quote(query_sql))
+
+    resp, content = self.http.request(query_url, "GET")
+
+    entry = Post.objects.get(pk=entry_id)
+
+    if resp.has_key('status') and resp['status'] == "200":
+        xml = parseString(content)
+        for i in xml.getElementsByTagName("link_stat"):
+            for j in i.getElementsByTagName("like_count"):
+                entry.likes = int(getText(j.childNodes))
+            for j in i.getElementsByTagName("share_count"):
+                entry.shares = int(getText(j.childNodes))
+
+    entry.save()
+
+    logger.debug("stop: counting facebook shares & likes")
+
+
+@celery.task
+def entry_update_twitter(entry_id):
+    """
     count tweets
     
     this is the old implementation 
@@ -76,8 +105,8 @@ def entry_update_twitter(entry_id):
     logger = logging.getLogger(__name__)
     logger.debug("start: counting tweets")
 
-    http = httplib2.Http()
     entry = Post.objects.get(pk=entry_id)
+    http = httplib2.Http()
     twitter_count = "http://urls.api.twitter.com/1/urls/count.json?url=%s"
     query = twitter_count % (entry.link)
 
@@ -152,6 +181,9 @@ def entry_process(entry, feed_id, postdict, fpf):
     p.link = entry.link
     p.content = entry.content[0].value
     p.save()
+
+    entry_update_twitter.delay(p.id)
+    entry_update_facebook.delay(p.id)
 
     if entry.has_key('tags'):
         entry_tags.delay(p.id, entry.tags)
