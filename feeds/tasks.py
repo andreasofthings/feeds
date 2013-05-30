@@ -23,7 +23,7 @@ from xml.dom.minidom import parseString
 from django.template.defaultfilters import slugify
 from django.conf import settings
 
-from piwik import Piwik
+from feeds.piwik import Piwik
 
 from feeds import USER_AGENT
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
@@ -201,16 +201,36 @@ def entry_update_pageviews(entry_id):
     return entry.pageviews
 
 @celery.task
-def entry_update_social(entry_id):
-    if settings.FEED_POST_UPDATE_TWITTER:
-        entry_update_twitter.delay(p.id)
-    if settings.FEED_POST_UPDATE_FACEBOOK:
-        entry_update_facebook.delay(p.id)
-    if settings.FEED_POST_UPDATE_GOOGLEPLUS:
-        entry_update_googleplus.delay(p.id)
-    if settings.FEED_POST_UPDATE_PAGEVIEWS:
-        entry_update_pageviews.delay(p.id)
+def tsum(numbers):
+    return sum(numbers)
 
+@celery.task
+def entry_update_social(entry_id):
+    logger = logging.getLogger(__name__)
+
+    p = Post.objects.get(pk=entry_id)
+
+    # ToDo
+    return
+
+    header = []
+
+    if settings.FEED_POST_UPDATE_TWITTER:
+        header.append(entry_update_twitter.subtask((p.id)))
+    if settings.FEED_POST_UPDATE_FACEBOOK:
+        header.append(entry_update_facebook.subtask((p.id)))
+    if settings.FEED_POST_UPDATE_GOOGLEPLUS:
+        header.append(entry_update_googleplus.subtask((p.id)))
+    if settings.FEED_POST_UPDATE_PAGEVIEWS:
+        header.append(entry_update_pageviews.subtask((p.id)))
+   
+    callback = tsum.s()
+    result = chord(header)(callback)
+
+    p.score = result.get()
+    p.save()
+
+    return p.score
 
 
 @celery.task
@@ -280,7 +300,7 @@ def entry_process(entry, feed_id, postdict, fpf):
 
     p.save()
 
-    entry_update_social.delay(p)
+    entry_update_social.delay(p.id)
 
     if entry.has_key('tags'):
         entry_tags.delay(p.id, entry.tags)
