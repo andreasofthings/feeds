@@ -23,13 +23,14 @@ from xml.dom.minidom import parseString
 from django.template.defaultfilters import slugify
 from django.conf import settings
 
+from piwik import Piwik
 
 from feeds import USER_AGENT
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 
-from feeds.tools import mtime
-from feeds.models import Feed, Post, Tag, Category
+from feeds.tools import mtime, prints, getText
+from feeds.models import Feed, Post, Tag, Category, TaggedPost
 
 def get_entry_guid(entry, feed_id=None):
     """
@@ -67,45 +68,17 @@ def dummy(x=10, *args, **kwargs):
     return True
 
 @celery.task
-def entry_update_facebook(entry_id):
-    """
-    count facebook shares & likes
-    """
-    logger = logging.getLogger(__name__)
-    logger.debug("start: counting facebook shares & likes")
-    entry = Post.objects.get(pk=entry_id)
-    facebook_api = "https://api.facebook.com/method/fql.query?query=%s"
-    facebook_sql = """select like_count, share_count from link_stat where url='%s'"""
-    query_sql = facebook_sql % (entry.link)
-    query_url = facebook_api % (urllib.quote(query_sql))
-    http = httplib2.Http()
-    resp, content = http.request(query_url, "GET")
-
-
-    if resp.has_key('status') and resp['status'] == "200":
-        xml = parseString(content)
-        for i in xml.getElementsByTagName("link_stat"):
-            for j in i.getElementsByTagName("like_count"):
-                entry.likes = int(getText(j.childNodes))
-            for j in i.getElementsByTagName("share_count"):
-                entry.shares = int(getText(j.childNodes))
-
-    entry.save()
-
-    logger.debug("stop: counting facebook shares & likes")
-    return True
-
-
-@celery.task
 def entry_update_twitter(entry_id):
     """
     count tweets
     
-    this is the old implementation 
-    it is deprecated
     """
     logger = logging.getLogger(__name__)
     logger.debug("start: counting tweets")
+
+    if not entry_id:
+        logger.error("can't count tweets for non-post. pk is empty.")
+        return
 
     entry = Post.objects.get(pk=entry_id)
     http = httplib2.Http()
@@ -121,8 +94,124 @@ def entry_update_twitter(entry_id):
     else:
         logger.debug("status error: %s: %s", resp, content)
 
-    logger.debug("stop: counting tweets")
+    logger.debug("stop: counting tweets. got %ss", entry.tweets)
+    return entry.tweets
+
+@celery.task
+def entry_update_facebook(entry_id):
+    """
+    count facebook shares & likes
+    """
+    logger = logging.getLogger(__name__)
+
+    if not entry_id:
+        logger.error("can't count shares&likes for non-post. pk is empty.")
+        return
+
+    entry = Post.objects.get(pk=entry_id)
+    logger.debug("start: facebook shares & likes for %s...", entry.guid)
+    facebook_api = "https://api.facebook.com/method/fql.query?query=%s"
+    facebook_sql = """select like_count, share_count from link_stat where url='%s'"""
+    query_sql = facebook_sql % (entry.link)
+    query_url = facebook_api % (urllib.quote(query_sql))
+    http = httplib2.Http()
+    resp, content = http.request(query_url, "GET")
+
+    if resp.has_key('status') and resp['status'] == "200":
+        xml = parseString(content)
+        for i in xml.getElementsByTagName("link_stat"):
+            for j in i.getElementsByTagName("like_count"):
+                entry.likes = int(getText(j.childNodes))
+            for j in i.getElementsByTagName("share_count"):
+                entry.shares = int(getText(j.childNodes))
+
+    entry.save()
+
+    logger.debug("stop: counting facebook shares & likes")
     return True
+
+@celery.task
+def entry_update_googleplus(entry_id):
+    """
+    plus 1
+    """
+    logger = logging.getLogger(__name__)
+    logger.debug("start: counting +1s")
+
+    if not entry_id:
+        logger.error("can't count +1s for non-post. pk is empty.")
+        return
+
+    http = httplib2.Http()
+    entry = Post.objects.get(pk=entry_id)
+
+    queryurl = "https://clients6.google.com/rpc"
+    params = {
+        "method": "pos.plusones.get",
+        "id": "p",
+        "params": {
+            "nolog": True,
+            "id": "%s" % (entry.link),
+            "source": "widget",
+            "userId": "@viewer",
+            "groupId": "@self",
+        },
+        "jsonrpc": "2.0",
+        "key": "p",
+        "apiVersion": "v1"
+    }
+    headers = {'Content-type': 'application/json',}
+
+    resp, content = http.request(
+        queryurl, 
+        method="POST", 
+        body=simplejson.dumps(params), 
+        headers=headers
+    )
+
+    if resp.has_key('status') and resp['status'] == "200":
+        result = simplejson.loads(content)
+        plusone = int( result['result']['metadata']['globalCounts']['count'] )
+        entry.plus1 = plusone
+        entry.save()
+        logger.debug("stop: counting +1s. Got %s.", plusone)
+        return plusone
+    else:
+        logger.debug("stop: counting +1s. Got none. or something weird happened.")
+
+@celery.task
+def entry_update_pageviews(entry_id):
+    """
+    get pageviews from piwik
+    """
+    logger = logging.getLogger(__name__)
+    logger.debug("start: get local pageviews")
+
+    if not entry_id:
+        logger.error("can't get local pageviews for non-post. pk is empty.")
+        return
+
+    entry = Post.objects.get(pk=entry_id)
+
+    piwik = Piwik() 
+    pageurl = "http://angry-planet.com%s"%(entry.get_absolute_url())
+    entry.pageviews = piwik.getPageActions(pageurl)
+    entry.save()
+    logger.debug("stop: get local pageviews. got %s.", entry.pageviews)
+    return entry.pageviews
+
+@celery.task
+def entry_update_social(entry_id):
+    if settings.FEED_POST_UPDATE_TWITTER:
+        entry_update_twitter.delay(p.id)
+    if settings.FEED_POST_UPDATE_FACEBOOK:
+        entry_update_facebook.delay(p.id)
+    if settings.FEED_POST_UPDATE_GOOGLEPLUS:
+        entry_update_googleplus.delay(p.id)
+    if settings.FEED_POST_UPDATE_PAGEVIEWS:
+        entry_update_pageviews.delay(p.id)
+
+
 
 @celery.task
 def entry_tags(entry_id, tags):
@@ -140,7 +229,9 @@ def entry_tags(entry_id, tags):
                 t, created = Tag.objects.get_or_create(name=str(tag.term), slug=slugify(tag.term))
                 if created:
                     t.save()
-                entry.tags.add(t)
+                tp, created = TaggedPost.objects.get_or_create(tag=t, post=entry)
+                if created:
+                    tp.save()
             entry.save()
     logger.debug("stop: entry tags")
     return
@@ -169,6 +260,7 @@ def entry_process(entry, feed_id, postdict, fpf):
     logger.debug("start: entry")
     feed = Feed.objects.get(pk=feed_id)
     logger.debug("Keys in entry '%s': %s", entry.title, entry.keys())
+
     p, created = Post.objects.get_or_create(
         feed=feed, 
         title=entry.title, 
@@ -180,14 +272,15 @@ def entry_process(entry, feed_id, postdict, fpf):
         logger.debug("'%s' is a new entry", entry.title)
         p.save()
     
-    p.link = entry.link
-    p.content = entry.content[0].value
+    if hasattr(entry, 'link'):
+        p.link = entry.link
+
+    if hasattr(entry, 'content'):
+        p.content = entry.content[0].value
+
     p.save()
 
-    if settings.FEED_POST_UPDATE_TWITTER:
-        entry_update_twitter.delay(p.id)
-    if settings.FEED_POST_UPDATE_FACEBOOK:
-        entry_update_facebook.delay(p.id)
+    entry_update_social.delay(p)
 
     if entry.has_key('tags'):
         entry_tags.delay(p.id, entry.tags)
@@ -301,7 +394,7 @@ def aggregate():
     feeds = Feed.objects.filter(is_active=True).filter(beta=True)
     logger.debug("processing %s feeds", feeds.count())
     job = group([feed_refresh.s(i.id) for i in feeds])
-    job.apply_async()
+    job.delay()
     logger.debug("stop aggregating")
     return True
 

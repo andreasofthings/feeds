@@ -154,17 +154,17 @@ class Feed(models.Model):
     - results from social updates
     - calculated values 
     """
-    name = models.CharField(_('name'), max_length=100)
-    shortname = models.CharField(_('shortname'), max_length=50)
+    feed_url = models.URLField(_('feed url'), unique=True)
+    name = models.CharField(_('name'), max_length=100, null=True, blank=True)
+    shortname = models.CharField(_('shortname'), max_length=50, null=True, blank=True)
     slug = models.SlugField(
         max_length=255,
         db_index=True,
         unique=True,
         null=True,
+        blank=True,
         help_text='Short descriptive unique name for use in urls.',
     )
-
-    feed_url = models.URLField(_('feed url'), unique=True)
     is_active = models.BooleanField(
             _('is active'), 
             default=True,
@@ -254,9 +254,19 @@ class Feed(models.Model):
         """
         Need to update items before saving?
         """
+        f = feedparser.parse(self.feed_url)
+        if not self.name:
+            self.name = f.feed.title
+        if not self.shortname:
+            self.shortname = f.feed.title
+        if not self.link and hasattr(f.feed, 'link'):
+            self.link = f.feed.link
+        if hasattr(f.feed, 'language'):
+            self.language = f.feed.language
         if not self.slug:
-            self.slug = slugify(self.shortname) 
-        models.Model.save(self, args, kwargs)
+            self.slug = slugify(self.name)
+
+        super(Feed, self).save(args, kwargs)
 
     class Meta:
         """

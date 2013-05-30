@@ -17,9 +17,9 @@ class FeedAdmin(admin.ModelAdmin):
     Feed admin options
     """
     form = FeedAdminForm
-    list_display = ('name', 'is_active', 'beta', 'title', 'last_modified', 'last_checked', )
+    list_display = ('name', 'is_active', 'beta', 'slug', 'title', 'last_modified', 'last_checked', )
     list_display_links = ('name', 'is_active', 'beta',)
-    list_filter = ('category', 'is_active', 'beta',)
+    list_filter = ('category', 'is_active', 'beta', 'slug')
 
 class PostAdmin(admin.ModelAdmin):
     """

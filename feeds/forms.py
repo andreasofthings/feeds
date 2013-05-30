@@ -24,9 +24,9 @@ class FeedCreateForm(forms.ModelForm):
         self.helper.layout = Layout(
             Fieldset(
                 'Add Feed',
+                'feed_url',
                 'name',
                 'shortname',
-                'feed_url',
                 'category',
             ),
             ButtonHolder(
