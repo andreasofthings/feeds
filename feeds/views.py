@@ -244,5 +244,12 @@ class TagCreateView(LoginRequiredMixin, CreateView):
     model = Tag
     initial = {'is_Active': False}
 
+class TagUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """
+    Update particular tag
+    """
+    permission_required = "feeds.update_tag"
+    model = Tag
+
 # vim: ts=4 et sw=4 sts=4
 

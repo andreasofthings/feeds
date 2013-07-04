@@ -7,7 +7,7 @@ class TagAdmin(admin.ModelAdmin):
     """
     Tag Admin Class
     """
-    pass
+    list_display = ('name', 'slug', 'relevant', 'touched')
 
 class CategoryAdmin(admin.ModelAdmin):
     pass

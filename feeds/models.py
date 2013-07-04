@@ -309,7 +309,7 @@ class Post(models.Model):
     )
     comments = models.URLField(_('comments'), blank=True)
     # enclosure, see there
-    guid = models.CharField(_('guid'), max_length=200, db_index=True, unique=True)
+    guid = models.CharField(_('guid'), max_length=255, db_index=True, unique=True)
     created = models.DateTimeField(_('pubDate'), auto_now_add=True)
 
     published = models.BooleanField(default=False)

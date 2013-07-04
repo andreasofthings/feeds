@@ -3,7 +3,11 @@
 {% block additional_scripts_start %}
   <link rel="stylesheet" type="text/css" hrf="{{ STATIC_URL }}jqplot/jquery.jqplot.min.css" />
 {% endblock %}
-            
+
+{% block title %}
+Feed: {{ object }}
+{% endblock %}
+
 {%block breadcrumb %}
           <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider">/</span></li>

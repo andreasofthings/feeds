@@ -15,6 +15,7 @@ import simplejson
 import feedparser
 import urllib
 import celery
+from celery import chord
 from datetime import datetime, timedelta
 from xml.dom.minidom import parseString
 
@@ -67,7 +68,7 @@ def dummy(x=10, *args, **kwargs):
     logger.debug("Woke up after sleeping for %ss", x)
     return True
 
-@celery.task
+@celery.task(time_limit=10)
 def entry_update_twitter(entry_id):
     """
     count tweets
@@ -94,10 +95,10 @@ def entry_update_twitter(entry_id):
     else:
         logger.debug("status error: %s: %s", resp, content)
 
-    logger.debug("stop: counting tweets. got %ss", entry.tweets)
+    logger.debug("stop: counting tweets. got %s", entry.tweets)
     return entry.tweets
 
-@celery.task
+@celery.task(time_limit=10)
 def entry_update_facebook(entry_id):
     """
     count facebook shares & likes
@@ -127,10 +128,10 @@ def entry_update_facebook(entry_id):
 
     entry.save()
 
-    logger.debug("stop: counting facebook shares & likes")
+    logger.debug("stop: counting facebook shares & likes. got %s shares and %s likes.", entry.shares, entry.likes)
     return True
 
-@celery.task
+@celery.task(time_limit=10)
 def entry_update_googleplus(entry_id):
     """
     plus 1
@@ -171,15 +172,18 @@ def entry_update_googleplus(entry_id):
 
     if resp.has_key('status') and resp['status'] == "200":
         result = simplejson.loads(content)
-        plusone = int( result['result']['metadata']['globalCounts']['count'] )
-        entry.plus1 = plusone
-        entry.save()
-        logger.debug("stop: counting +1s. Got %s.", plusone)
-        return plusone
+        try:
+            plusone = int( result['result']['metadata']['globalCounts']['count'] )
+            entry.plus1 = plusone
+            entry.save()
+            logger.debug("stop: counting +1s. Got %s.", plusone)
+            return plusone
+        except KeyError, e:
+            raise KeyError, e
     else:
         logger.debug("stop: counting +1s. Got none. or something weird happened.")
 
-@celery.task
+@celery.task(time_limit=10)
 def entry_update_pageviews(entry_id):
     """
     get pageviews from piwik
@@ -208,28 +212,36 @@ def tsum(numbers):
 def entry_update_social(entry_id):
     logger = logging.getLogger(__name__)
 
-    p = Post.objects.get(pk=entry_id)
+    logger.debug("start: social scoring")
 
-    # ToDo
-    return
+    if not entry_id:
+        logger.error("can't get tags for non-post. pk is empty.")
+        return
+
+    p = Post.objects.get(pk=entry_id)
 
     header = []
 
     if settings.FEED_POST_UPDATE_TWITTER:
-        header.append(entry_update_twitter.subtask((p.id)))
+        f = (entry_update_twitter.subtask((p.id, )))
+        header.append(f)
     if settings.FEED_POST_UPDATE_FACEBOOK:
-        header.append(entry_update_facebook.subtask((p.id)))
+        f = (entry_update_facebook.subtask((p.id, )))
+        header.append(f)
     if settings.FEED_POST_UPDATE_GOOGLEPLUS:
-        header.append(entry_update_googleplus.subtask((p.id)))
+        f = (entry_update_googleplus.subtask((p.id, )))
+        header.append(f)
     if settings.FEED_POST_UPDATE_PAGEVIEWS:
-        header.append(entry_update_pageviews.subtask((p.id)))
+        f = (entry_update_pageviews.subtask((p.id, )))
+        header.append(f)
    
     callback = tsum.s()
     result = chord(header)(callback)
 
-    p.score = result.get()
+    p.score = result.get(timeout=60)
     p.save()
 
+    logger.debug("stop: social scoring. got %s"%p.score)
     return p.score
 
 
@@ -241,6 +253,10 @@ def entry_tags(entry_id, tags):
     logger = logging.getLogger(__name__)
     logger.debug("start: entry tags: %s", tags)
     
+    if not entry_id:
+        logger.error("can't get tags for non-post. pk is empty.")
+        return
+
     entry = Post.objects.get(pk=entry_id)
 
     if tags is not "":

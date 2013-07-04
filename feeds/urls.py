@@ -8,7 +8,7 @@ from feeds.views import BraterView
 from feeds.views import FeedCreateView, FeedListView, FeedDetailView, FeedUpdateView, FeedDeleteView, FeedRefreshView
 from feeds.views import PostListView, PostDetailView, PostTrackableView
 from feeds.views import CategoryListView, CategoryCreateView, CategoryDetailView, CategoryUpdateView
-from feeds.views import TagListView, TagDetailView, TagCreateView
+from feeds.views import TagListView, TagDetailView, TagCreateView, TagUpdateView
 
 from feeds.rss import RssFeed
 
@@ -48,7 +48,8 @@ urlpatterns += patterns('',
     url(r'^tag/$', TagListView.as_view(), name="tag-home"), 
     url(r'^tag/page/(?P<page>\w+)/$', TagListView.as_view(), name="tag-home-paginated"), 
     url(r'^tag/add/$', TagCreateView.as_view(), name="tag-add"), 
-    url(r'^tag/(?P<slug>\w+)/$', TagDetailView.as_view(), name="tag-view"), 
+    url(r'^tag/(?P<slug>[\w-]+)/$', TagDetailView.as_view(), name="tag-view"), 
+    url(r'^tag/(?P<id>\d+)/update/$', TagUpdateView.as_view(), name="tag-update"), 
 )
 
 

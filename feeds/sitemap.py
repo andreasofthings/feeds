@@ -12,8 +12,9 @@
         'never'
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
+from django.utils import timezone
 from django.contrib.sitemaps import Sitemap
 from django.db.models import Max
 
@@ -50,7 +51,15 @@ class PostSitemap(Sitemap):
     """
 
     def changefreq(self, obj):
-        return "weekly"
+        if obj.created > timezone.now()-timedelta(hours=1):
+            return "hourly"
+        if obj.created > timezone.now()-timedelta(days=1):
+            return "daily"
+        if obj.created > timezone.now()-timedelta(days=7):
+            return "weekly"
+        if obj.created > timezone.now()-timedelta(days=31):
+            return "monthly"
+        return "yearly"
 
     def priority(self, obj):
         maximum = float(Post.objects.all().aggregate(Max('score'))['score__max'])
@@ -65,10 +74,10 @@ class PostSitemap(Sitemap):
         return priority
 
     def items(self):
-        return Post.objects.filter(published=True)
+        return Post.objects.all()
 
     def lastmod(self, obj):
-        return obj.last_modified
+        return obj.created
 
 class CategorySitemap(Sitemap):
     """
@@ -93,13 +102,23 @@ class TagSitemap(Sitemap):
     """
 
     def changefreq(self, obj):
-        return "weekly"
+        if obj.touched > timezone.now()-timedelta(hours=1):
+            return "hourly"
+        if obj.touched > timezone.now()-timedelta(days=1):
+            return "daily"
+        if obj.touched > timezone.now()-timedelta(days=7):
+            return "weekly"
+        return "monthly"
+
 
     def priority(self, obj):
-        return 1.0
+        posts_per_tag = obj.posts().count()
+        total_posts = Post.objects.all().count()
+        priority = float(posts_per_tag) / float(total_posts)
+        return priority
 
     def items(self):
         return Tag.objects.all()
 
     def lastmod(self, obj):
-        return datetime.now()
+        return obj.touched
