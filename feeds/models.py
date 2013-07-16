@@ -17,23 +17,41 @@ class SiteManager(models.Manager):
 
 class Site(models.Model):
     url = models.URLField(unique=True)
+    """url of the site."""
+    
     slug = models.SlugField(null=True)
+    """Human readble url component"""
+
     objects = SiteManager()
+    """Sitemanager"""
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.url)
+        """
+        Since 'slug' is not a required field for userinput,
+        set it before saving.
+        """
+        if not self.slug:
+            self.slug = slugify(self.url)
         super(Site, self).save(*args, **kwargs)
 
     def __str__(self):
+        """
+        String representation of :Site:
+        """
         return u"%s"%(self.url)
 
     @models.permalink
     def get_absolute_url(self):
+        """
+        Absolute URL for this object.
+
+        ToDo: should use 'slug' instead of 'id'
+        """
         return ('planet:site-view', [str(self.id)])
 
     def feeds(self):
         """
-        return all feeds in this category
+        return all feeds for this :Site:.
         """
         return self.feed_set.all()
     
