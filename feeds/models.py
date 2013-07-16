@@ -11,6 +11,32 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _ 
 from django.template.defaultfilters import slugify
 
+class SiteManager(models.Manager):
+    def __init__(self, *args, **kwargs):
+        super(SiteManager, self).__init__(*args, **kwargs)
+
+class Site(models.Model):
+    url = models.URLField(unique=True)
+    slug = models.SlugField(null=True)
+    objects = SiteManager()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.url)
+        super(Site, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return u"%s"%(self.url)
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('planet:site-view', [str(self.id)])
+
+    def feeds(self):
+        """
+        return all feeds in this category
+        """
+        return self.feed_set.all()
+    
 class TagManager(models.Manager):
     """
     Manager for Tag objects
@@ -154,6 +180,7 @@ class Feed(models.Model):
     - results from social updates
     - calculated values 
     """
+    site = models.ForeignKey(Site, null=True)
     feed_url = models.URLField(_('feed url'), unique=True)
     name = models.CharField(_('name'), max_length=100, null=True, blank=True)
     shortname = models.CharField(_('shortname'), max_length=50, null=True, blank=True)

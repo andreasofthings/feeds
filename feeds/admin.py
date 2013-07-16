@@ -1,7 +1,13 @@
 from django.contrib import admin
 
-from feeds.models import Feed, Post, FeedPostCount, Category, Tag
+from feeds.models import Site, Feed, Post, FeedPostCount, Category, Tag
 from feeds.forms import FeedAdminForm
+
+class SiteAdmin(admin.ModelAdmin):
+    """
+    Site Admin Class
+    """
+    list_display = ('url', 'slug', )
 
 class TagAdmin(admin.ModelAdmin):
     """
@@ -10,6 +16,8 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'relevant', 'touched')
 
 class CategoryAdmin(admin.ModelAdmin):
+    """
+    """
     pass
 
 class FeedAdmin(admin.ModelAdmin):
@@ -34,12 +42,10 @@ class FeedPostCountAdmin(admin.ModelAdmin):
     """
     pass
 
+admin.site.register(Site, SiteAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Feed, FeedAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(FeedPostCount, FeedPostCountAdmin)
-
-
-
 

@@ -1,1 +1,0 @@
-$('.tag-tooltip').tooltip();

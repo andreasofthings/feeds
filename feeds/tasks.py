@@ -215,7 +215,7 @@ def entry_update_social(entry_id):
     logger.debug("start: social scoring")
 
     if not entry_id:
-        logger.error("can't get tags for non-post. pk is empty.")
+        logger.error("can't do social scoring for non-post. pk is empty.")
         return
 
     p = Post.objects.get(pk=entry_id)
@@ -243,34 +243,6 @@ def entry_update_social(entry_id):
 
     logger.debug("stop: social scoring. got %s"%p.score)
     return p.score
-
-
-@celery.task
-def entry_tags(entry_id, tags):
-    """
-    Process tags for entry.
-    """
-    logger = logging.getLogger(__name__)
-    logger.debug("start: entry tags: %s", tags)
-    
-    if not entry_id:
-        logger.error("can't get tags for non-post. pk is empty.")
-        return
-
-    entry = Post.objects.get(pk=entry_id)
-
-    if tags is not "":
-        if isinstance(tags, types.ListType):
-            for tag in tags:
-                t, created = Tag.objects.get_or_create(name=str(tag.term), slug=slugify(tag.term))
-                if created:
-                    t.save()
-                tp, created = TaggedPost.objects.get_or_create(tag=t, post=entry)
-                if created:
-                    tp.save()
-            entry.save()
-    logger.debug("stop: entry tags")
-    return
 
 @celery.task
 def entry_process(entry, feed_id, postdict, fpf):
@@ -319,7 +291,19 @@ def entry_process(entry, feed_id, postdict, fpf):
     entry_update_social.delay(p.id)
 
     if entry.has_key('tags'):
-        entry_tags.delay(p.id, entry.tags)
+        """
+        Rather Inline Tags-function
+        """
+        tags = entry['tags']
+        if tags is not "" and isinstance(tags, types.ListType):
+            for tag in tags:
+                t, created = Tag.objects.get_or_create(name=str(tag.term), slug=slugify(tag.term))
+                if created:
+                    t.save()
+                tp, created = TaggedPost.objects.get_or_create(tag=t, post=entry)
+                if created:
+                    tp.save()
+            entry.save()
 
     logger.debug("stop: entry")
     return True

@@ -5,19 +5,32 @@ from django.conf.urls.defaults import url, patterns
 
 from feeds.views import BraterView
 
+from feeds.views import SiteListView, SiteCreateView, SiteDetailView, SiteUpdateView, SiteDeleteView
 from feeds.views import FeedCreateView, FeedListView, FeedDetailView, FeedUpdateView, FeedDeleteView, FeedRefreshView
 from feeds.views import PostListView, PostDetailView, PostTrackableView
 from feeds.views import CategoryListView, CategoryCreateView, CategoryDetailView, CategoryUpdateView
 from feeds.views import TagListView, TagDetailView, TagCreateView, TagUpdateView
 
+from feeds.views import SiteSubmitWizardView
+from feeds.forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
+
 from feeds.rss import RssFeed
 
 urlpatterns = patterns('',
-    url(r'^brater/$', BraterView.as_view(), name="brater"),
+    url(r'^$', BraterView.as_view(), name="brater"),
 )
 
 urlpatterns += patterns('',
-    url(r'^$', FeedListView.as_view(), name="feed-home"), 
+    url(r'^site/$', SiteListView.as_view(), name="site-home"), 
+    url(r'^site/submit/$', SiteSubmitWizardView.as_view([SiteCreateForm, SiteFeedAddForm]), name="site-submit"), 
+    url(r'^site/add/$', SiteCreateView.as_view(), name="site-add"), 
+    url(r'^site/(?P<pk>\d+)/$', SiteDetailView.as_view(), name="site-view"), 
+    url(r'^site/(?P<pk>\d+)/update/$', SiteUpdateView.as_view(), name="site-update"),
+    url(r'^site/(?P<pk>\d+)/delete/$', SiteDeleteView.as_view(), name="site-delete"), 
+)
+
+urlpatterns += patterns('',
+    url(r'^list/$', FeedListView.as_view(), name="feed-home"), 
     url(r'^page/(?P<page>\w+)/$', FeedListView.as_view(), name="feed-home-paginated"), 
     url(r'^add/$', FeedCreateView.as_view(), name="feed-add"), 
     url(r'^(?P<pk>\d+)/$', FeedDetailView.as_view(), name="feed-view"), 
@@ -27,8 +40,8 @@ urlpatterns += patterns('',
 )
 
 urlpatterns += patterns('',
-    url(r'^p/$', PostListView.as_view(), name="post-view"), 
     url(r'^p/(?P<pk>\d+)/$', PostDetailView.as_view(), name="post-view"), 
+    url(r'^p/$', PostListView.as_view(), name="post-view"), 
 )
 
 urlpatterns += patterns('',

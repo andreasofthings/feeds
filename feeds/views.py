@@ -22,11 +22,19 @@ from django.utils.timezone import utc
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from braces.views import MultiplePermissionsRequiredMixin
 
-from feeds.models import Feed, Post, Category, Tag, PostReadCount
+from feeds.models import Site, Feed, Post, Category, Tag, PostReadCount
 from feeds.forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
 from feeds.forms import FeedUpdateForm, CategoryUpdateForm
-from feeds.mixins import google_required
+from feeds.mixins import google_required, UserAgentRequiredMixin
 
+from feeds.forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
+
+from django import forms
+
+from django.contrib.formtools.wizard.views import SessionWizardView
+
+from bs4 import BeautifulSoup
+import requests
 
 
 class BraterView(TemplateView):
@@ -34,9 +42,67 @@ class BraterView(TemplateView):
     Marketing Page
 
     This is where new users are supposed to come to first.
-
     """
     template_name = "feeds/brater.html"
+
+class SiteSubmitWizardView(SessionWizardView):
+    """
+    Wizard that walks people through when adding a site with feeds
+    """
+    template_name = "feeds/site_submit_wizard.html"
+    form_list = [SiteCreateForm, SiteFeedAddForm]
+
+    def done(self, form_list, **kwargs):
+        return HttpResponseRedirect('/page-to-redirect-to-when-done/')
+    
+    def get_form(self, step=None, data=None, files=None):
+        form = super(SiteSubmitWizardView, self).get_form(step, data, files)
+
+        step = step or self.steps.current
+
+        if step == '1':
+            step_0_data = self.storage.get_step_data('0')
+            form = SiteFeedAddForm()
+            html = requests.get(step_0_data['0-url'])
+            soup = BeautifulSoup(html.text)
+            result = []
+            for link in soup.head.find_all('link'):
+                if link.has_key('type'):
+                    if "application/rss" in link.get('type'):
+                        form.fields[link.get('href')] = forms.BooleanField(initial=False, required=False, label=link.get('title'))
+
+        return form
+
+class SiteListView(PermissionRequiredMixin, ListView):
+    permission_required = "feeds.add_site"
+    model = Site
+    template_name = "feeds/site_list.html"
+
+class SiteCreateView(PermissionRequiredMixin, CreateView):
+    """
+    View to create a new site.
+    """
+    permission_required = "feeds.add_site"
+    form_class = SiteCreateForm
+    model = Site
+
+class SiteDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = 'feeds'
+    model = Site
+    template_name = "feeds/site_detail.html"
+
+class SiteUpdateView(PermissionRequiredMixin, UpdateView):
+    """ 
+    View to update an existing site.
+    """
+    permission_required = "feeds.change_site"
+    form_class = SiteUpdateForm
+    model = Site
+
+class SiteDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = "feeds.delete_site"
+    model = Site
+    success_url = "planet:site-home"
 
 class FeedCreateView(PermissionRequiredMixin, CreateView):
     """
@@ -154,6 +220,10 @@ class PostListView(ListView):
     queryset = Post.objects.order_by('-published')
 
 class PostDetailView(DetailView):
+    user_agent = "google"
+    permissions = {
+        "any": ("feeds.delete_post", "feeds.change_post", "feeds.add_post",)
+    }
     model = Post
     context_object_name = "node"
 
