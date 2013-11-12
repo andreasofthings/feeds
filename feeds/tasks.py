@@ -14,13 +14,14 @@ import httplib2
 import simplejson
 import feedparser
 import urllib
-import celery
-from celery import chord
+import urlparse
 from datetime import datetime, timedelta
 from xml.dom.minidom import parseString
 
-# from exceptions import ValidationError
+from celery import task
+from celery import chord
 
+from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.conf import settings
 
@@ -38,21 +39,18 @@ def get_entry_guid(entry, feed_id=None):
     Get an individual guid for an entry
     """
     guid = None
+    feed = Feed.objects.get(pk=feed_id)
+
     if entry.get('id', ''):
         guid = entry.get('id', '')
-    elif entry.link:
+    elif entry.link or feed.has_no_guid:
         guid = entry.link
     elif entry.title:
         guid = entry.title
 
-    if feed_id and not guid:
-        feed = Feed.objects.get(pk=feed_id)
-        guid = feed.link
-
     return entry.get('id', guid)
 
-
-@celery.task
+@task
 def dummy(x=10, *args, **kwargs):
     """
     Dummy celery.task that sleeps for x seconds,
@@ -68,7 +66,37 @@ def dummy(x=10, *args, **kwargs):
     logger.debug("Woke up after sleeping for %ss", x)
     return True
 
-@celery.task(time_limit=10)
+@task
+def twitter_post(post_id):
+    """
+    announce track and artist on twitter
+    """
+    logger = logging.getLogger(__name__)
+    logger.debug("twittering new post")
+    if not post_id:
+        """
+        failed
+        """
+        return
+    from twitter import Api
+    post = Post.objects.get(pk=post_id)
+    user_auth = User.objects.get(id=15).social_auth.filter(provider="twitter")
+    message = """%s on %s http://angry-planet.com%s"""%(post.title, post.feed.title, post.get_absolute_url())
+    for account in user_auth:
+        access_token = urlparse.parse_qs(account.extra_data['access_token'])
+        oauth_token = access_token['oauth_token'][0]
+        oauth_access = access_token['oauth_token_secret'][0]
+        twitter = Api(
+            consumer_key=settings.TWITTER_CONSUMER_KEY, 
+            consumer_secret=settings.TWITTER_CONSUMER_SECRET,
+            access_token_key=oauth_token,
+            access_token_secret=oauth_access
+        )
+        result = twitter.PostUpdate(message)
+        logger.debug("twitter said: %s", result)
+    logger.debug("done twittering post")
+
+@task(time_limit=10)
 def entry_update_twitter(entry_id):
     """
     count tweets
@@ -98,7 +126,7 @@ def entry_update_twitter(entry_id):
     logger.debug("stop: counting tweets. got %s", entry.tweets)
     return entry.tweets
 
-@celery.task(time_limit=10)
+@task(time_limit=10)
 def entry_update_facebook(entry_id):
     """
     count facebook shares & likes
@@ -131,7 +159,7 @@ def entry_update_facebook(entry_id):
     logger.debug("stop: counting facebook shares & likes. got %s shares and %s likes.", entry.shares, entry.likes)
     return True
 
-@celery.task(time_limit=10)
+@task(time_limit=10)
 def entry_update_googleplus(entry_id):
     """
     plus 1
@@ -183,7 +211,7 @@ def entry_update_googleplus(entry_id):
     else:
         logger.debug("stop: counting +1s. Got none. or something weird happened.")
 
-@celery.task(time_limit=10)
+@task(time_limit=10)
 def entry_update_pageviews(entry_id):
     """
     get pageviews from piwik
@@ -204,11 +232,11 @@ def entry_update_pageviews(entry_id):
     logger.debug("stop: get local pageviews. got %s.", entry.pageviews)
     return entry.pageviews
 
-@celery.task
+@task
 def tsum(numbers):
     return sum(numbers)
 
-@celery.task
+@task
 def entry_update_social(entry_id):
     logger = logging.getLogger(__name__)
 
@@ -244,7 +272,32 @@ def entry_update_social(entry_id):
     logger.debug("stop: social scoring. got %s"%p.score)
     return p.score
 
-@celery.task
+@task
+def entry_tags(post_id, tags):
+    """
+    """
+    logger = logging.getLogger(__name__)
+    logger.info("start: entry tagging (%s)", post_id)
+    if not post_id:
+        logger.error("Cannot tag Post (%s)", post_id)
+        return
+    p = Post.objects.get(pk=post_id)
+    if tags is not "" and isinstance(tags, types.ListType):
+        new_tags = 0
+        for tag in tags:
+            t, created = Tag.objects.get_or_create(name=str(tag.term), slug=slugify(tag.term))
+            if created:
+                logger.info("created new tag '%s'", t)
+                t.save()
+                new_tags += 1
+            tp, created = TaggedPost.objects.get_or_create(tag=t, post=p)
+            if created:
+                tp.save()
+        p.save()
+    logger.info("created %s new tags", new_tags)
+    logger.debug("stop: entry tagging")
+
+@task
 def entry_process(entry, feed_id, postdict, fpf):
     """
     Receive Entry, process
@@ -277,8 +330,8 @@ def entry_process(entry, feed_id, postdict, fpf):
     )
     
     if created:
-        logger.debug("'%s' is a new entry", entry.title)
         p.save()
+        logger.debug("'%s' is a new entry (%s)", entry.title, p.id)
     
     if hasattr(entry, 'link'):
         p.link = entry.link
@@ -288,27 +341,19 @@ def entry_process(entry, feed_id, postdict, fpf):
 
     p.save()
 
-    entry_update_social.delay(p.id)
+    if settings.FEED_POST_SOCIAL:
+        entry_update_social.apply_async((p.id,), countdown=2)
 
-    if entry.has_key('tags'):
-        """
-        Rather Inline Tags-function
-        """
-        tags = entry['tags']
-        if tags is not "" and isinstance(tags, types.ListType):
-            for tag in tags:
-                t, created = Tag.objects.get_or_create(name=str(tag.term), slug=slugify(tag.term))
-                if created:
-                    t.save()
-                tp, created = TaggedPost.objects.get_or_create(tag=t, post=entry)
-                if created:
-                    tp.save()
-            entry.save()
+    if created and entry.has_key('tags'):
+        entry_tags.apply_async((p.id, entry['tags'],), countdown=2)
+
+    if created and p.feed.announce_posts:
+        twitter_post.apply_async((p.id,), countdown=2)
 
     logger.debug("stop: entry")
     return True
 
-@celery.task
+@task
 def feed_refresh(feed_id):
     """
     refresh entries for `feed_id`
@@ -364,7 +409,7 @@ def feed_refresh(feed_id):
 
     guids = []
     for entry in fpf.entries:
-        guid = get_entry_guid(entry)
+        guid = get_entry_guid(entry, feed_id)
         guids.append(guid)
 
     try:
@@ -390,14 +435,16 @@ def feed_refresh(feed_id):
             # feed_id, options, entry, postdict, fpf
             logger.debug("spawning task: %s %s"%(entry.title, feed_id)) # options are optional
             entry_process.delay(entry, feed_id, postdict, fpf) #options are optional
+            feed_stats[ENTRY_NEW] += 1
         except Exception, e:
             logger.debug("could not spawn task: %s"%(str(e)))
 
     feed.save()
+    logger.info("Feed '%s' had %s new entries", feed.title, feed_stats[ENTRY_NEW])
     logger.debug("stop")
     return feed_stats
 
-@celery.task
+@task
 def aggregate():
     """
     aggregate feeds
@@ -417,4 +464,3 @@ def aggregate():
     job.delay()
     logger.debug("stop aggregating")
     return True
-

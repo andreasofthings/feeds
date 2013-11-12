@@ -24,7 +24,8 @@ def google_required(func):
     def _view(request, *args, **kwargs):
         if request.META.has_key('HTTP_USER_AGENT'):
             useragent = request.META['HTTP_USER_AGENT']
-            if request.user.is_anonymous() and not "googlebot" in useragent.lower():
+            params = request.META.get('QUERY_STRING', "")
+            if request.user.is_anonymous() and not "googlebot" in useragent.lower() and not "login" in params:
                 return HttpResponseRedirect(settings.LOGIN_URL)
             else:
                 return func(request, *args, **kwargs)

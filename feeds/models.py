@@ -12,18 +12,21 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
 class SiteManager(models.Manager):
+    """
+    `SiteManager` provide extra functions.
+    """
     def __init__(self, *args, **kwargs):
         super(SiteManager, self).__init__(*args, **kwargs)
 
 class Site(models.Model):
     url = models.URLField(unique=True)
-    """url of the site."""
+    """URL of the `Site`."""
     
     slug = models.SlugField(null=True)
-    """Human readble url component"""
+    """Human readble URL component"""
 
     objects = SiteManager()
-    """Sitemanager"""
+    """Overwrite the inherited manager with the custom :mod:`feeds.models.SiteManager`"""
 
     def save(self, *args, **kwargs):
         """
@@ -57,7 +60,7 @@ class Site(models.Model):
     
 class TagManager(models.Manager):
     """
-    Manager for Tag objects
+    Manager for `Tag` objects.
     """
     
     def get_by_natural_key(self, slug):
@@ -220,6 +223,11 @@ class Feed(models.Model):
         default=False,
         help_text=_('If beta, this feed will be processed through the celery pipeline.') 
     )
+    has_no_guid = models.BooleanField(
+        _('has no guid'), 
+        default=False,
+        help_text=_("""This feed doesn't have a proper guid. use something else instead.""") 
+    )
 
     # <rss><channel>
     # mandatory fields
@@ -294,6 +302,8 @@ class Feed(models.Model):
     etag = models.CharField(_('etag'), max_length=50, blank=True)
     last_checked = models.DateTimeField(_('last checked'), null=True, blank=True)
 
+    announce_posts = models.BooleanField(default=False)
+    """Whether to socially announce new articles posts"""
 
     def save(self, *args, **kwargs):
         """
@@ -361,7 +371,6 @@ class Post(models.Model):
         
     last_modified = models.DateTimeField(null=True, blank=True) # ToDo: this is unused, remove?
     date_modified = models.DateTimeField(_('date modified'), null=True, blank=True)
-            
 
     tags = models.ManyToManyField(Tag, related_name="tag_posts", through='TaggedPost')
 
@@ -399,13 +408,6 @@ class Post(models.Model):
 
     def __unicode__(self):
         return u'%s' % (self.title)
-
-    def save(self, *args, **kwargs):
-        try:
-            models.Model.save(self, *args, **kwargs)
-        except IntegrityError, e:
-            if e == 1062:
-                pass
 
 class Enclosure(models.Model):
     """

@@ -1,7 +1,7 @@
 #! /usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-from django.conf.urls.defaults import url, patterns
+from django.conf.urls.defaults import url, patterns, include
 
 from feeds.views import BraterView
 
@@ -11,7 +11,7 @@ from feeds.views import PostListView, PostDetailView, PostTrackableView
 from feeds.views import CategoryListView, CategoryCreateView, CategoryDetailView, CategoryUpdateView
 from feeds.views import TagListView, TagDetailView, TagCreateView, TagUpdateView
 
-from feeds.views import SiteSubmitWizardView
+from feeds.views import SiteSubmitWizardView, SiteSubmitForms
 from feeds.forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
 
 from feeds.rss import RssFeed
@@ -22,7 +22,7 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('',
     url(r'^site/$', SiteListView.as_view(), name="site-home"), 
-    url(r'^site/submit/$', SiteSubmitWizardView.as_view([SiteCreateForm, SiteFeedAddForm]), name="site-submit"), 
+    url(r'^site/submit/$', SiteSubmitWizardView.as_view(SiteSubmitForms), name="site-submit"), 
     url(r'^site/add/$', SiteCreateView.as_view(), name="site-add"), 
     url(r'^site/(?P<pk>\d+)/$', SiteDetailView.as_view(), name="site-view"), 
     url(r'^site/(?P<pk>\d+)/update/$', SiteUpdateView.as_view(), name="site-update"),
@@ -58,13 +58,16 @@ urlpatterns += patterns('',
 )
 
 urlpatterns += patterns('',
-    url(r'^tag/$', TagListView.as_view(), name="tag-home"), 
+    url(r'^tag /$', TagListView.as_view(), name="tag-home"), 
     url(r'^tag/page/(?P<page>\w+)/$', TagListView.as_view(), name="tag-home-paginated"), 
     url(r'^tag/add/$', TagCreateView.as_view(), name="tag-add"), 
     url(r'^tag/(?P<slug>[\w-]+)/$', TagDetailView.as_view(), name="tag-view"), 
     url(r'^tag/(?P<id>\d+)/update/$', TagUpdateView.as_view(), name="tag-update"), 
 )
 
+#
+# RSS
+#
 
 from django.views.generic import TemplateView
 
@@ -72,3 +75,4 @@ urlpatterns += patterns('',
     url(r'test/rss1/$', TemplateView.as_view(template_name="feeds/tests/rss1.html"), name="rss1"),
     url(r'test/rss2/$', TemplateView.as_view(template_name="feeds/tests/rss2.html"), name="rss2"),
 )
+

@@ -10,6 +10,7 @@ views for feedbrater
 
 import simplejson as json
 from datetime import datetime, timedelta
+from django import forms
 from django.core.urlresolvers import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
@@ -25,11 +26,11 @@ from braces.views import MultiplePermissionsRequiredMixin
 from feeds.models import Site, Feed, Post, Category, Tag, PostReadCount
 from feeds.forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
 from feeds.forms import FeedUpdateForm, CategoryUpdateForm
-from feeds.mixins import google_required, UserAgentRequiredMixin
-
 from feeds.forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
 
-from django import forms
+
+from feeds.mixins import google_required, UserAgentRequiredMixin
+
 
 from django.contrib.formtools.wizard.views import SessionWizardView
 
@@ -44,6 +45,11 @@ class BraterView(TemplateView):
     This is where new users are supposed to come to first.
     """
     template_name = "feeds/brater.html"
+
+SiteSubmitForms = [
+    ('Site', SiteCreateForm),
+    ('Feeds', SiteFeedAddForm),
+    ]
 
 class SiteSubmitWizardView(SessionWizardView):
     """
@@ -60,10 +66,10 @@ class SiteSubmitWizardView(SessionWizardView):
 
         step = step or self.steps.current
 
-        if step == '1':
-            step_0_data = self.storage.get_step_data('0')
+        if step == u'Feeds':
+            step_0_data = self.storage.get_step_data('Site')
             form = SiteFeedAddForm()
-            html = requests.get(step_0_data['0-url'])
+            html = requests.get(step_0_data['Site-url'])
             soup = BeautifulSoup(html.text)
             result = []
             for link in soup.head.find_all('link'):
@@ -320,6 +326,18 @@ class TagUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """
     permission_required = "feeds.update_tag"
     model = Tag
+
+#
+# API
+#
+
+from rest_framework import viewsets
+from serializers import ScoreSerializer
+
+class ApiScore(viewsets.ModelViewSet):
+    model = Post
+    serializer_class = ScoreSerializer
+
 
 # vim: ts=4 et sw=4 sts=4
 

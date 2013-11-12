@@ -111,9 +111,6 @@ class ProcessEntryTask(Task):
     def run(self, **kwargs):
         pass
 
-
-
-
 class ProcessEntry:
     def __init__(self, feed, options, entry, postdict, fpf):
         self.feed = feed
@@ -266,7 +263,6 @@ class ProcessEntry:
             [tobj.tags.add(tcat) for tcat in fcat]
             tobj.save()
         return retval
-
 
 class ProcessFeed:
     def __init__(self, feed, options):
@@ -502,23 +498,4 @@ class Dispatcher:
                 break
 
 
-
-def update():
-  # cleanup first
-  # _cleanup()
-
-  class Options:
-    verbose = False
-
-  options = Options()
-
-  # get feeds due, maximum of 5 per cycle
-  feeds = Feed.objects.filter(last_checked__lt=datetime.datetime.now()-datetime.timedelta(hours=1))[:5]
-  feeds = Feed.objects.all()
-
-  disp = Dispatcher(options, settings.FEEDS_WORKERTHREADS)
-  for feed in feeds:
-    disp.add_job(feed)
-
-  disp.poll()
 

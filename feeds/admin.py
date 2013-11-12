@@ -3,11 +3,31 @@ from django.contrib import admin
 from feeds.models import Site, Feed, Post, FeedPostCount, Category, Tag
 from feeds.forms import FeedAdminForm
 
+class FeedInline(admin.TabularInline):
+    """
+    Inline View of Feeds, meant to display all `Feeds` per `Site`
+    """
+    model = Feed
+    fields = ('name', 'feed_url', 'slug', )
+
+class PostInline(admin.TabularInline):
+    """
+    Inline View of Posts, meant to display all `Posts` per `Feed`
+    """
+    model = Post
+    fields = ('title', 'tweets', 'shares', 'likes')
+    ordering = ('-created',)
+    readonly_fields = ('title', 'tweets', 'shares', 'likes')
+    can_delete = False
+
 class SiteAdmin(admin.ModelAdmin):
     """
     Site Admin Class
     """
     list_display = ('url', 'slug', )
+    inlines = [
+        FeedInline,
+    ]
 
 class TagAdmin(admin.ModelAdmin):
     """
@@ -25,16 +45,20 @@ class FeedAdmin(admin.ModelAdmin):
     Feed admin options
     """
     form = FeedAdminForm
-    list_display = ('name', 'is_active', 'beta', 'slug', 'title', 'last_modified', 'last_checked', )
-    list_display_links = ('name', 'is_active', 'beta',)
+    list_display = ('name', 'is_active', 'beta', 'announce_posts', 'slug', 'title', 'last_modified', 'last_checked', )
+    list_display_links = ('name', )
+    list_editable = ('is_active', 'beta', 'announce_posts',)
     list_filter = ('category', 'is_active', 'beta', 'slug')
+    inlines = [
+        PostInline,
+    ]
 
 class PostAdmin(admin.ModelAdmin):
     """
     Post admin options
     """
     list_display = ('title', 'created', 'tweets', 'blogs', 'plus1', 'likes', 'shares', 'pageviews', 'score', 'was_announced', 'updated_social',)
-    list_filter = ('was_announced',)
+    list_filter = ('was_announced', 'feed', 'category', )
 
 class FeedPostCountAdmin(admin.ModelAdmin):
     """
