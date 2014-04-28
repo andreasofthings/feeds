@@ -10,9 +10,6 @@ import urlparse
 import urllib, urllib2
 
 from django.conf import settings 
-from feeds import defaults
-
-settings.configure(defaults)
 
 try:
     from django.utils import simplejson

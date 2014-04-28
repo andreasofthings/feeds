@@ -13,8 +13,14 @@ import twitter
 import httplib2
 import simplejson
 import feedparser
-import urllib
-import urlparse
+try:
+    from urllib.parse import urlparse
+    from urllib.quote import quote
+except ImportError:
+    from urlparse import urlparse
+    from urllib import quote
+
+
 from datetime import datetime, timedelta
 from xml.dom.minidom import parseString
 
@@ -142,7 +148,7 @@ def entry_update_facebook(entry_id):
     facebook_api = "https://api.facebook.com/method/fql.query?query=%s"
     facebook_sql = """select like_count, share_count from link_stat where url='%s'"""
     query_sql = facebook_sql % (entry.link)
-    query_url = facebook_api % (urllib.quote(query_sql))
+    query_url = facebook_api % (quote(query_sql))
     http = httplib2.Http()
     resp, content = http.request(query_url, "GET")
 
