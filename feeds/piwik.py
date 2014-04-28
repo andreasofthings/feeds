@@ -11,6 +11,10 @@ import urllib, urllib2
 
 from django.conf import settings 
 
+PIWIK_SERVER = getattr(settings, 'PIWIK_SERVER', "default_value")
+PIWIK_SITEID = getattr(settings, 'PIWIK_SITEID', "default_value")
+PIWIK_TOKEN = getattr(settings, 'PIWIK_TOKEN', "default_value")
+
 try:
     from django.utils import simplejson
 except:
