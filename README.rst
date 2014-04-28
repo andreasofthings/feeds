@@ -2,10 +2,15 @@
 Feedbrater
 =====
 
-.. image:: https://travis-ci.org/aneumeier/feedbrater.png?branch=master
-   :target: https://travis-ci.org/aneumeier/feedbrater 
+.. image:: https://travis-ci.org/aneumeier/feeds.png?branch=master
+   :target: https://travis-ci.org/aneumeier/feeds 
+   
+.. image:: https://coveralls.io/repos/aneumeier/feeds/badge.png 
+   :target: https://coveralls.io/r/aneumeier/feeds 
 
-Feedbrater aims to be a replacement for feedburner. It is realized as a Django app. It takes feeds in any format `feedparser` can understand and aims to reproduce identical but trackable feeds, augmented with feedbrater information.
+Feeds aims to be a feed aggregator, readed and potentially a replacement feedburner. 
+
+It is realized as a Django app. It takes feeds in any format `feedparser` can understand and aims to reproduce identical but trackable feeds, augmented with feedbrater information.
 
 Detailed documentation is in the "docs" directory.
 
