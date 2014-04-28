@@ -206,8 +206,8 @@ def entry_update_googleplus(entry_id):
             entry.save()
             logger.debug("stop: counting +1s. Got %s.", plusone)
             return plusone
-        except KeyError, e:
-            raise KeyError, e
+        except KeyError as e:
+            raise KeyError(e)
     else:
         logger.debug("stop: counting +1s. Got none. or something weird happened.")
 
@@ -374,7 +374,7 @@ def feed_refresh(feed_id):
 
     try:
         fpf = feedparser.parse(feed.feed_url, agent=USER_AGENT, etag=feed.etag)
-    except Exception, e: # Feedparser Exeptions
+    except Exception as e: # Feedparser Exeptions
         logger.error('Feedparser Error: (%s) cannot be parsed: %s', feed.feed_url, str(e))
         
     if hasattr(fpf, 'status'):
@@ -398,7 +398,7 @@ def feed_refresh(feed_id):
 
     try:
         feed.last_modified = mtime(fpf.modified)
-    except Exception, e:
+    except Exception as e:
         feed.last_modified = datetime.now()
         logger.debug("[%s] last_modified not well formed: %s Reason: %s", feed.name, feed.last_modified, str(e))
         
@@ -414,7 +414,7 @@ def feed_refresh(feed_id):
 
     try:
         feed.save()
-    except Feed.last_modified.ValidationError, e:
+    except Feed.last_modified.ValidationError as e:
         logger.warning("Feed.ValidationError: %s", str(e))
 
 
@@ -436,7 +436,7 @@ def feed_refresh(feed_id):
             logger.debug("spawning task: %s %s"%(entry.title, feed_id)) # options are optional
             entry_process.delay(entry, feed_id, postdict, fpf) #options are optional
             feed_stats[ENTRY_NEW] += 1
-        except Exception, e:
+        except Exception as e:
             logger.debug("could not spawn task: %s"%(str(e)))
 
     feed.save()
