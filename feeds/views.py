@@ -4,7 +4,7 @@
 """
 :mod:`feeds.views`
 
-views for feedbrater
+views for feeds
 
 """
 
@@ -38,13 +38,13 @@ from bs4 import BeautifulSoup
 import requests
 
 
-class BraterView(TemplateView):
+class HomeView(TemplateView):
     """
     Marketing Page
 
     This is where new users are supposed to come to first.
     """
-    template_name = "feeds/brater.html"
+    template_name = "feeds/home.html"
 
 SiteSubmitForms = [
     ('Site', SiteCreateForm),
