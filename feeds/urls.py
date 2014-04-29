@@ -1,10 +1,9 @@
 #! /usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-from django.conf.urls.defaults import url, patterns, include
+from django.conf.urls import url, patterns, include
 
-from feeds.views import BraterView
-
+from feeds.views import HomeView
 from feeds.views import SiteListView, SiteCreateView, SiteDetailView, SiteUpdateView, SiteDeleteView
 from feeds.views import FeedCreateView, FeedListView, FeedDetailView, FeedUpdateView, FeedDeleteView, FeedRefreshView
 from feeds.views import PostListView, PostDetailView, PostTrackableView
@@ -17,7 +16,7 @@ from feeds.forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
 from feeds.rss import RssFeed
 
 urlpatterns = patterns('',
-    url(r'^$', BraterView.as_view(), name="brater"),
+    url(r'^$', HomeView.as_view(), name="home"),
 )
 
 urlpatterns += patterns('',
