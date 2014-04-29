@@ -174,7 +174,7 @@ class Piwik:
         'VisitsSummary.getSumVisitsLengthPretty',
   )
 
-    def __init__(self, server=settings.PIWIK_SERVER, siteid=settings.PIWIK_SITEID, token_auth=settings.PIWIK_TOKEN):
+    def __init__(self, server=PIWIK_SERVER, siteid=PIWIK_SITEID, token_auth=PIWIK_TOKEN):
         """
         Constructor
         """
