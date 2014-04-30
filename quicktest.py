@@ -36,11 +36,11 @@ class QuickDjangoTest(object):
             ROOT_URLCONF = "test.urls",
             DATABASES = {
                 'default': {
-                    'ENGINE': 'django.db.backends.sqlite3',
-                    'NAME': os.path.join(self.DIRNAME, 'database.db'),
-                    'USER': '',
+                    'ENGINE': 'django.db.backends.mysql',
+                    'NAME': 'myapp_test',
+                    'USER': 'root',
                     'PASSWORD': '',
-                    'HOST': '',
+                    'HOST': 'localhost',
                     'PORT': '',
                 }
             },

@@ -59,7 +59,7 @@ class TaskTest(TestCase):
         self.feed1 = Feed(feed_url=reverse('planet:rss1'), name="rss1", shortname="rss1")
         self.feed1.save()
 
-        self.feed2 = Feed(feed_url=reverse('planet:rss2'), name="rss2", shortname="rss2)"
+        self.feed2 = Feed(feed_url=reverse('planet:rss2'), name="rss2", shortname="rss2")
         self.feed2.save()
 
         self.post1 = Post(feed=self.feed1, link="http://localhost")
