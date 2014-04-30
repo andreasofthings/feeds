@@ -13,6 +13,7 @@ env:
 services:
   - rabbitmq # will start rabbitmq-server
   - memcache # will start memcached
+
 install: 
    # This is a dependency of our Django test script
  - pip install argparse --use-mirrors
@@ -22,6 +23,8 @@ install:
    # Install whatever version of Django that's listed above
    # Travis is currently working on
  - pip install -q Django==$DJANGO_VERSION --use-mirrors
+before_script:
+  - mysql -e 'create database myapp_test;'
 # Tell Travis how to run the test script itself
 script: python quicktest.py feeds
 after_success:
