@@ -1,8 +1,9 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
 
 """
-feedbrater - feed aggregator, social relevance and stats
+feeds - feed aggregator, social relevance and stats
 
 :Author:    Andreas Neumeier
 :Contact:   andreas@neumeier.org
@@ -11,7 +12,7 @@ feedbrater - feed aggregator, social relevance and stats
 :ID:        $Id:
 :Copyright: To be decided soon. BSD alike, probably.
 
-feeds is the core module for feedbrater.
+feeds is the core module for feeds.
 
 feeds provides all functionality built on top of django_ methods. Features include aggregation of rss and Atom feeds, collection of social stats from twitter, facebook, google+ and own piwik server, tracking of views in output feeds (feedburner like), displaying all with Chartjs_.
  
@@ -34,7 +35,7 @@ FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC = range(5)
 
 version_info = (0, 9, 6)
 __version__ = ".".join(map(str, version_info))
-SERVER_SOFTWARE = "feedbrater/%s" % __version__
+SERVER_SOFTWARE = "feeds/%s" % __version__
 
-# vim: ts=4 et sw=4 sts=4
+
 
