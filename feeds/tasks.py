@@ -17,7 +17,7 @@ try:
     from urllib.parse import urlparse
     from urllib.quote import quote
 except ImportError:
-    from urlparse import urlparse
+    import urlparse
     from urllib import quote
 
 
