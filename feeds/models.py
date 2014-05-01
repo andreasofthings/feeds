@@ -406,6 +406,15 @@ class Post(models.Model):
         """
         return ('planet:post-trackable-view', [str(self.id)])
 
+    def save(self, *args, **kwargs):
+        """
+        sanity check the post before saving.
+        """
+        if not self.guid and not self.has_no_guid:
+            self.guid = self.link
+        super(Post, self).save(*args, **kwargs) 
+        """Call the "real" save() method."""
+
     def __unicode__(self):
         return u'%s' % (self.title)
 

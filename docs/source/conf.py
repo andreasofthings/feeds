@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# feedbrater documentation build configuration file, created by
+# feeds documentation build configuration file, created by
 # sphinx-quickstart on Wed Apr  3 14:03:23 2013.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -44,8 +44,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'feedbrater'
-copyright = u'2013, Andreas Neumeier'
+project = u'feeds'
+copyright = u'2013-2014, Andreas Neumeier'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -168,7 +168,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'feedbraterdoc'
+htmlhelp_basename = 'feedsdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -187,7 +187,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'feedbrater.tex', u'feedbrater Documentation',
+  ('index', 'feeds.tex', u'feeds Documentation',
    u'Andreas Neumeier', 'manual'),
 ]
 
@@ -217,7 +217,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'feedbrater', u'feedbrater Documentation',
+    ('index', 'feeds', u'feeds Documentation',
      [u'Andreas Neumeier'], 1)
 ]
 
@@ -231,8 +231,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'feedbrater', u'feedbrater Documentation',
-   u'Andreas Neumeier', 'feedbrater', 'One line description of project.',
+  ('index', 'feeds', u'feeds Documentation',
+   u'Andreas Neumeier', 'feeds', 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -249,10 +249,10 @@ texinfo_documents = [
 # -- Options for Epub output ---------------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = u'feedbrater'
+epub_title = u'feeds'
 epub_author = u'Andreas Neumeier'
 epub_publisher = u'Andreas Neumeier'
-epub_copyright = u'2013, Andreas Neumeier'
+epub_copyright = u'2013-2014, Andreas Neumeier'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.

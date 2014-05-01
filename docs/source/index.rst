@@ -1,12 +1,12 @@
-.. feedbrater documentation master file, created by
+.. feeds documentation master file, created by
    sphinx-quickstart on Wed Apr  3 14:03:23 2013.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to feedbrater's documentation!
+Welcome to feeds documentation!
 ======================================
 
-Feedbrater aims to be a replacement for feedburner. It is realized as a Django app. It takes feeds in any format `feedparser` can understand and aims to reproduce identical but trackable feeds, augmented with feedbrater information.
+Feeds aims to be a replacement for feedburner. It is realized as a Django app. It takes feeds in any format `feedparser` can understand and aims to reproduce identical but trackable feeds, augmented with feeds information.
 
 Detailed documentation is in the "docs" directory.
 

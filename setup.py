@@ -9,14 +9,14 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 from feeds import __version__
 
 setup(
-    name = 'django-feedbrater',
+    name = 'django-feeds',
     version = __version__,
     packages = ['feeds'],
     include_package_data = True,
     license = 'BSD License', # example license
     description = 'A feedburner replacement built on Django.',
     long_description = README,
-    url = 'http://angry-planet.com/feeds/brater',
+    url = 'https://angry-planet.com/feeds',
     author = 'Andreas.Neumeier',
     author_email = 'andreas@neumeier.org',
     classifiers = [
