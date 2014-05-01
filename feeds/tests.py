@@ -62,10 +62,10 @@ class TaskTest(TestCase):
         self.feed2 = Feed(feed_url=reverse('planet:rss2'), name="rss2", shortname="rss2")
         self.feed2.save()
 
-        self.post1 = Post(feed=self.feed1, link="http://localhost")
+        self.post1 = Post(feed=self.feed1, link="http://localhost/post1")
         self.post1.save()
         
-        self.post2 = Post(feed=self.feed2, link="http://localhost")
+        self.post2 = Post(feed=self.feed2, link="http://localhost/post2")
         self.post2.save()
 
     def test_task_time(self):
