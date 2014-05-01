@@ -78,7 +78,7 @@ class TaskTest(TestCase):
 
     def test_count_tweets(self):
         result = entry_update_twitter(Post.objects.all()[0].id)
-        self.assertEqual(result, True)
+        self.assertEqual(result, 0)
 
     def test_count_share_like(self):
         result = entry_update_facebook(Post.objects.all()[0].id)
@@ -200,7 +200,7 @@ class ViewsTest(TestCase):
         """
         go to feed-view for feed 1
         """
-        result = self.client.get(reverse('planet:feed-view', args=("1",)))
+        result = self.client.get(reverse('planet:feed-view', args=("rss1",)))
         self.assertEqual(result.status_code, 200)
 
     def test_category_home(self):
