@@ -116,10 +116,18 @@ class ViewsTest(TestCase):
         Set up enivironment to test models
         """
         self.user = User.objects.create_user(self.username, 'lennon@thebeatles.com', self.password)
-        for i in range(30):
-            f = Feed(feed_url=("http://test.de/%s"%(str(i))), slug="test%s"%(i))
-            f.save()
+        """Test user."""
+        
+        self.feed1 = Feed(feed_url=reverse('planet:rss1'), name="rss1", shortname="rss1")
+        self.feed1.save()
+        """Feed 1."""
+
+        self.feed2 = Feed(feed_url=reverse('planet:rss2'), name="rss2", shortname="rss2")
+        self.feed2.save()
+        """Feed 2."""
+
         self.client = Client()
+        """Test Client."""
 
     def test_feed_home(self):
         """
