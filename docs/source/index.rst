@@ -52,6 +52,7 @@ Contents:
    feed_tasks
    feed_forms
    feed_mixins
+   tests
 
 Indices and tables
 ==================
