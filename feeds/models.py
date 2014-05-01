@@ -410,7 +410,7 @@ class Post(models.Model):
         """
         sanity check the post before saving.
         """
-        if not self.guid and not self.has_no_guid:
+        if not self.guid:
             self.guid = self.link
         super(Post, self).save(*args, **kwargs) 
         """Call the "real" save() method."""
