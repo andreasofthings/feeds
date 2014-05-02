@@ -1,17 +1,17 @@
-# taken from:
-# http://datadesk.latimes.com/posts/2012/06/test-your-django-app-with-travisci/
 # Tell Travis you want a Python environment to test in
 language: python
+
 # List the versions of Python you'd like to test against
 python:
   - "2.7"
+
 # List the versions of Django you'd like to test against
 env:
   - DJANGO_VERSION=1.6.3
+
 # Tell it the things it will need to install when it boots
 services:
   - rabbitmq # will start rabbitmq-server
-  - memcache # will start memcached
 
 install: 
    # This is a dependency of our Django test script
@@ -25,6 +25,6 @@ install:
 before_script:
   - mysql -e 'create database myapp_test;'
 # Tell Travis how to run the test script itself
-script: python quicktest.py feeds
+script: python coverage quicktest.py feeds
 after_success:
   - coveralls
