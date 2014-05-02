@@ -25,6 +25,6 @@ install:
 before_script:
   - mysql -e 'create database myapp_test;'
 # Tell Travis how to run the test script itself
-script: py.test feeds/tests.py --doctest-modules --pep8 feeds -v --cov feeds --cov-report term-missing
+script: py.test feeds/tests.py --doctest-modules -v --cov feeds --cov-report term-missing
 after_success:
   - coveralls
