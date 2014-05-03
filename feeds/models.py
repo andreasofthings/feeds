@@ -19,10 +19,10 @@ from django.template.defaultfilters import slugify
 
 class SiteManager(models.Manager):
     """
-    `SiteManager` provide extra functions.
+    :py:mod:`SiteManager` provide extra functions.
     """
     def __init__(self, *args, **kwargs):
-        super(SiteManager, self).__init__(*args, **kwargs)
+        return super(SiteManager, self).__init__(*args, **kwargs)
 
 class Site(models.Model):
     url = models.URLField(unique=True)
@@ -41,7 +41,7 @@ class Site(models.Model):
         """
         if not self.slug:
             self.slug = slugify(self.url)
-        super(Site, self).save(*args, **kwargs)
+        return super(Site, self).save(*args, **kwargs)
 
     def __str__(self):
         """

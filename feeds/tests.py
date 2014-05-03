@@ -169,7 +169,9 @@ class ViewsAnonymousTest(TestCase):
         """
         from models import Site
         site = Site(url="https://angry-planet.com/")
-        self.site_id = site.save()
+        site.save()
+        self.site_id = site.pk
+        print("site-pk: %s"%(self.site_id))
         """Test Site."""
 
         self.client = Client()
@@ -233,7 +235,7 @@ class ViewsAnonymousTest(TestCase):
 
             Should return 200.
         """
-        result = self.client.get(reverse('planet:site-view', args="1"))
+        result = self.client.get(reverse('planet:site-view', args=str(self.site_id)))
         self.assertEqual(result.status_code, 200)
 
     def site_update(self):
@@ -244,18 +246,18 @@ class ViewsAnonymousTest(TestCase):
 
             .. todo:: needs to be defined.
         """
-        result = self.client.get(reverse('planet:site-update'))
+        result = self.client.get(reverse('planet:site-update', args=str(self.site_id)))
         self.assertEqual(result.status_code, 302)
 
-    def site_update(self):
+    def site_delete(self):
         """
         site-delete
         -----------
             :url: url(r'^site/(?P<pk>\d+)/delete/$', SiteDeleteView.as_view(), name="site-delete"), 
             
-            .. todo:: needs to be defined.a
+            .. todo:: needs to be defined.
         """
-        result = self.client.get(reverse('planet:site-delete'))
+        result = self.client.get(reverse('planet:site-delete', args=str(self.site_id)))
         self.assertEqual(result.status_code, 302)
 
     def test_site(self):
@@ -274,7 +276,6 @@ class ViewsAnonymousTest(TestCase):
         self.site_view()
         self.site_update()
         self.site_delete()
-
 
 class ViewsLoggedInTest(TestCase):
     """
