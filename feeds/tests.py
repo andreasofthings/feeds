@@ -169,7 +169,7 @@ class ViewsAnonymousTest(TestCase):
         """
         from models import Site
         site = Site(url="https://angry-planet.com/")
-        site.save()
+        self.site_id = site.save()
         """Test Site."""
 
         self.client = Client()
@@ -233,7 +233,7 @@ class ViewsAnonymousTest(TestCase):
 
             Should return 200.
         """
-        result = self.client.get(reverse('planet:site-view', args=(1,)))
+        result = self.client.get(reverse('planet:site-view', args=(self.site_id,)))
         self.assertEqual(result.status_code, 200)
 
     def site_update(self):
