@@ -10,7 +10,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = patterns('',
     url(r'^feeds/', include( 'feeds.urls', namespace="planet", app_name="planet")),
-    url(r'^account/login/', TemplateView.as_view(template_name="feeds/index.html")),
+    url(r'^accounts/login/', TemplateView.as_view(template_name="feeds/index.html")),
 )
 
 
