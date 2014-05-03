@@ -130,9 +130,33 @@ class TaskTest(TestCase):
     def tearDown(self):
         pass
 
-class ViewsTest(TestCase):
+class ViewsAnonymousTest(TestCase):
     """
-    test Feeds views
+    Test whether all `feeds.views` are working.
+
+    Working, in this context means the, corresponding URL returns:
+    - "2xx OK" for publically visible sites/pages.
+    - "3xx Redirect" for pages that require authentication.
+
+    URLs available in `feeds` are defined in `feeds.urls`.
+
+    .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
+    """
+
+    def test_feed_home(self):
+        """
+        Go to feed-home.
+
+        Assert the returned page comes with "HTTP 200 OK".
+
+        .. todo:: define/document expected result/return values.
+        """
+        result = self.client.get(reverse('planet:feed-home'))
+        self.assertEqual(result.status_code, 200)
+
+class ViewsLoggedInTest(TestCase):
+    """
+    Test Feeds views for users that are authenticated.
     """
 
     username = "john"
