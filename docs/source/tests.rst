@@ -1,7 +1,7 @@
 :mod:`feeds.tests` 
 ==================
 
-:mod:`feeds.tests` is the module to test `feeds`.
+:mod:`feeds.tests` is the module to test feeds.
 
 .. automodule:: feeds.tests
    :members:
