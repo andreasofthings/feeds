@@ -4,6 +4,15 @@
 
 """
 Tests for the "feeds" app
+
+3 Test Classes:
+
+.. Models:: `feeds.models`
+- Views
+- Tasks
+
+.. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
+:date: 2014-05-03
 """
 
 import feedparser
