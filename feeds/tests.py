@@ -167,7 +167,10 @@ class ViewsAnonymousTest(TestCase):
         """
         Set up environment.
         """
-        
+        site = Site(url="https://angry-planet.com/")
+        site.save()
+        """Test Site."""
+
         self.client = Client()
         """Test Client."""
 
@@ -229,7 +232,7 @@ class ViewsAnonymousTest(TestCase):
 
             Should return 200.
         """
-        result = self.client.get(reverse('planet:site-view'))
+        result = self.client.get(reverse('planet:site-view', args=(1,)))
         self.assertEqual(result.status_code, 200)
 
     def site_update(self):
