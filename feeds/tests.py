@@ -163,6 +163,14 @@ class ViewsAnonymousTest(TestCase):
     .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
 
+    def setUp(self):
+        """
+        Set up environment.
+        """
+        
+        self.client = Client()
+        """Test Client."""
+
     def test_feed_home(self):
         """
         Go to feed-home.
@@ -173,6 +181,59 @@ class ViewsAnonymousTest(TestCase):
         """
         result = self.client.get(reverse('planet:feed-home'))
         self.assertEqual(result.status_code, 200)
+
+    def test_site(self):
+        """
+        Site.
+        =====
+
+        Test the :py:mod:`feeds.models.Site` section from the user-side.
+
+        Access the following pages, in order, as defined in :py:mod:`feeds.urls`.
+
+        site-home
+        ---------
+            :url: url(r'^site/$', SiteListView.as_view(), name="site-home"), 
+
+            Should return 200
+        
+        site-submit
+        -----------
+            :url: url(r'^site/submit/$', SiteSubmitWizardView.as_view(SiteSubmitForms), name="site-submit"), 
+
+            Should return a form.
+            Should accept a post.
+
+        site-add
+        --------
+            :url: url(r'^site/add/$', SiteCreateView.as_view(), name="site-add"), 
+
+            To add a site should require credentials.
+            
+            Should result in a redirect to the login-page.
+
+        site-view
+        ---------
+            :url: url(r'^site/(?P<pk>\d+)/$', SiteDetailView.as_view(), name="site-view"), 
+
+            Viewing a site should be available to the public.
+
+            Should return 200.
+
+        site-update
+        -----------
+            :url: url(r'^site/(?P<pk>\d+)/update/$', SiteUpdateView.as_view(), name="site-update"),
+
+            .. todo:: needs to be defined.
+
+        site-delete
+        -----------
+            :url: url(r'^site/(?P<pk>\d+)/delete/$', SiteDeleteView.as_view(), name="site-delete"), 
+            
+            .. todo:: needs to be defined.a
+
+        """
+
 
 class ViewsLoggedInTest(TestCase):
     """
