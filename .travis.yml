@@ -5,7 +5,7 @@ language: python
 python:
   - "2.7"
 
-service:
+services:
   - rabbitmq
 
 # List the versions of Django you'd like to test against
