@@ -47,6 +47,7 @@ Contents:
 
    feeds
    feed_views
+   feed_urls
    feed_rss
    feed_models
    feed_tasks

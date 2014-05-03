@@ -2,9 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """
-async tasks, run via celery
+:py:mod:`feeds.tasks`
+=====================
 
-updated to work with celery3
+Async tasks, run via celery, updated to work with celery3.
+
+This module takes care of everything that is not client/customer facing.
+
+.. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
 """
 
 import logging

@@ -5,13 +5,18 @@
 """
 Tests for the "feeds" app
 
-3 Test Classes:
+Test Cases are supposed to cover:
 
-.. Models:: `feeds.models`
-- Views
-- Tasks
+- :py:mod:`feeds.models`
+- :py:mod:`feeds.views`
+
+ - for anonymous users / not logged in
+ - for logged in users
+
+- :py:mod:`feeds.tasks`
 
 .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
+
 :date: 2014-05-03
 """
 
@@ -34,17 +39,17 @@ class ModelTest(TestCase):
     """
     Test Models and their Managers
 
-    `Feeds` has following models:
+    :py:mod:`feeds.tests.ModelTest` aims to test following models:
 
-    - `feeds.models:SiteManager`
-    - `feeds.models:Site`
-    - `feeds.models:TagManager`
-    - `feeds.models:Tag`
-    - `feeds.models:CategoryManager`
-    - `feeds.models:Category`
-    - `feeds.models:Feed`
-    - `feeds.models:Post`
-    - `feeds.models:Enclosure`
+    - :py:mod:`feeds.models.SiteManager`
+    - :py:mod:`feeds.models.Site`
+    - :py:mod:`feeds.models.TagManager`
+    - :py:mod:`feeds.models.Tag`
+    - :py:mod:`feeds.models.CategoryManager`
+    - :py:mod:`feeds.models.Category`
+    - :py:mod:`feeds.models.Feed`
+    - :py:mod:`feeds.models.Post`
+    - :py:mod:`feeds.models.Enclosure`
     
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
@@ -54,14 +59,27 @@ class ModelTest(TestCase):
         """
         pass
 
+    def test_site(self):
+        """
+        Create a :py:mod:`feeds.models.Site` Object and verify it functions properly.
+        """
+
+        from feeds.models import Site
+        s = Site()
+        s.save()
+
     def test_tag(self):
         """
         Test a Tag
         """
         from feeds.models import Tag
+        """Import the :py:mod:`feeds.models.Tag`-model."""
         t = Tag(name="tag")
+        """Instanciate the model."""
         tagid = t.save()
+        """Save the model and retrieve the pk/id."""
         self.assertNotEqual(tagid, 0)
+        """Assert the pk/id is not 0."""
         self.assertEqual(str(t), "tag")
 
     def tearDown(self):
@@ -74,7 +92,7 @@ class TaskTest(TestCase):
     """
     Test Tasks
 
-    ..codeauthor: Andreas Neumeier
+    ..codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
     def setUp(self):
         """
@@ -132,13 +150,14 @@ class TaskTest(TestCase):
 
 class ViewsAnonymousTest(TestCase):
     """
-    Test whether all `feeds.views` are working.
+    Test whether all :py:mod:`feeds.views` are working.
 
     Working, in this context means the, corresponding URL returns:
+
     - "2xx OK" for publically visible sites/pages.
     - "3xx Redirect" for pages that require authentication.
 
-    URLs available in `feeds` are defined in `feeds.urls`.
+    URLs available in :mod:`feeds` are defined in :mod:`feeds.urls`.
 
     .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
