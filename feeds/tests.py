@@ -3,7 +3,8 @@
 # vim: ts=4 et sw=4 sts=4
 
 """
-Tests for the "feeds" app
+Tests for the "feeds" app.
+==========================
 
 Test Cases are supposed to cover:
 

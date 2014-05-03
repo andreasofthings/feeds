@@ -144,12 +144,17 @@ class CategoryManager(models.Manager):
 
 class Category(models.Model):
     """
+    Category
+    ========
+
     Category model to be used for categorization of content. Categories are
     high level constructs to be used for grouping and organizing content,
     thus creating a site's table of contents.
     """
+
     objects = CategoryManager()
-    
+    """References the default ModelManager, here :py:mod:`feeds.models.CategoryManager`."""
+
     title = models.CharField(
         max_length=200,
         help_text='Short descriptive name for this category.',
