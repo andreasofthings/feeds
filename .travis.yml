@@ -5,6 +5,9 @@ language: python
 python:
   - "2.7"
 
+service:
+  - rabbitmq
+
 # List the versions of Django you'd like to test against
 env:
   - DJANGO_VERSION=1.6.3

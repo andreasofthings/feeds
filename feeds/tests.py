@@ -69,6 +69,9 @@ class TaskTest(TestCase):
         self.post2.save()
 
     def test_task_time(self):
+        """
+        .. todo:: Needs amqp.
+        """
         dummy.delay(invocation_time=datetime.now())
         dummy(10)
 
