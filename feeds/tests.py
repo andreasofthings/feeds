@@ -33,6 +33,20 @@ from datetime import datetime
 class ModelTest(TestCase):
     """
     Test Models and their Managers
+
+    `Feeds` has following models:
+
+    - `feeds.models:SiteManager`
+    - `feeds.models:Site`
+    - `feeds.models:TagManager`
+    - `feeds.models:Tag`
+    - `feeds.models:CategoryManager`
+    - `feeds.models:Category`
+    - `feeds.models:Feed`
+    - `feeds.models:Post`
+    - `feeds.models:Enclosure`
+    
+    .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
     def setUp(self):
         """

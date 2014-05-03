@@ -1,8 +1,14 @@
 #! /usr/bin/env python2.7
 # -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
 
 """
-Feed-Aggregator models
+Feed-Aggregator models.
+=======================
+
+Stores as much as possible coming out of the feed.
+
+.. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
 """
 
 import feedparser
@@ -516,5 +522,4 @@ class TaggedPost(models.Model):
     def __unicode__(self):
         return u'%s [%s]' % (self.post, self.tag)
 
-# vim: ts=4 et sw=4 sts=4
 
