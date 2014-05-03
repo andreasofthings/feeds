@@ -15,10 +15,10 @@ env:
 install: 
    # Install the dependencies the app itself has
    # which in this case I choose to keep in a requirements file
- - pip install -r requirements.txt --use-mirrors
+ - pip install -r requirements.txt
    # Install whatever version of Django that's listed above
    # Travis is currently working on
- - pip install -q Django==$DJANGO_VERSION --use-mirrors
+ - pip install -q Django==$DJANGO_VERSION
 before_script:
   - mysql -e 'create database myapp_test;'
 # Tell Travis how to run the test script itself
