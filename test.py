@@ -5,16 +5,8 @@ import sys
 import argparse
 from django.conf import settings
 
-class QuickDjangoTest(object):
+class DjangoTest(object):
     """
-    A quick way to run the Django test suite without a fully-configured project.
-
-    Example usage:
-
-        >>> QuickDjangoTest('app1', 'app2')
-
-    Based on a script published by Lukasz Dziedzia at: 
-    http://stackoverflow.com/questions/3841725/how-to-launch-tests-for-django-reusable-app
     """
     DIRNAME = os.path.dirname(__file__)
     INSTALLED_APPS = (
@@ -23,6 +15,7 @@ class QuickDjangoTest(object):
         'django.contrib.sessions',
         'django.contrib.admin',
         'crispy_forms',
+        'feeds',
         'test',
     )
 
@@ -53,17 +46,5 @@ class QuickDjangoTest(object):
 
 if __name__ == '__main__':
     """
-    What do when the user hits this file from the shell.
-
-    Example usage:
-
-        $ python quicktest.py app1 app2
-
     """
-    parser = argparse.ArgumentParser(
-        usage="[args]",
-        description="Run Django tests on the provided applications."
-    )
-    parser.add_argument('apps', nargs='+', type=str)
-    args = parser.parse_args()
-    QuickDjangoTest(*args.apps)
+    DjangoTest('feeds')

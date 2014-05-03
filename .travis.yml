@@ -25,6 +25,6 @@ install:
 before_script:
   - mysql -e 'create database myapp_test;'
 # Tell Travis how to run the test script itself
-script: py.test --cov feeds 
+script: py.test test.py --cov feeds 
 after_success:
   - coveralls
