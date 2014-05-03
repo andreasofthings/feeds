@@ -167,6 +167,7 @@ class ViewsAnonymousTest(TestCase):
         """
         Set up environment.
         """
+        from models import Site
         site = Site(url="https://angry-planet.com/")
         site.save()
         """Test Site."""
