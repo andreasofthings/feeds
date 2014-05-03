@@ -216,7 +216,7 @@ class ViewsAnonymousTest(TestCase):
             Should result in a redirect to the login-page.
         """
         result = self.client.get(reverse('planet:site-add'))
-        self.assertRedirects(response, '/accounts/login/?next=%s'%(reverse('planet:site-add')))
+        self.assertRedirects(result, '/accounts/login/?next=%s'%(reverse('planet:site-add')))
         self.assertEqual(result.status_code, 302)
 
     def site_view(self):
