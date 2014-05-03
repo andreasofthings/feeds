@@ -1,5 +1,6 @@
 #! /usr/bin/env python2.7
 # -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
 
 """
 Tests for the "feeds" app
@@ -241,5 +242,4 @@ class ViewsTest(TestCase):
         with self.assertNumQueries(1):
             Post.objects.create(owner=self.user, feed=self.feed)
 
-# vim: ts=4 et sw=4 sts=4
 

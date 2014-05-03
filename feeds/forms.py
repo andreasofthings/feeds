@@ -97,7 +97,7 @@ class FeedCreateForm(forms.ModelForm):
 
     Django Form to create an angryplanet-feed
 
-    ..author: Andreas Neumeier
+    .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
     class Meta:
         model = Feed
@@ -128,7 +128,7 @@ class FeedUpdateForm(forms.ModelForm):
 
     Django Form to modify an angryplanet-feed
 
-    ..author: Andreas Neumeier
+    .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
     class Meta:
         model = Feed
@@ -181,7 +181,7 @@ class CategoryUpdateForm(forms.ModelForm):
 
     Django Form to modify an angryplanet-category
 
-    ..author: Andreas Neumeier
+    .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
     class Meta:
         model = Category
