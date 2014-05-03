@@ -100,8 +100,16 @@ class SiteCreateView(PermissionRequiredMixin, CreateView):
     form_class = SiteCreateForm
     model = Site
 
-class SiteDetailView(PermissionRequiredMixin, DetailView):
-    permission_required = 'feeds'
+class SiteDetailView(DetailView):
+    """
+    Shows Details for one particular :py:mod:`feeds.models.Site`.
+
+    The view is accessible publically.
+
+    :url: planet:site-view
+
+    .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
+    """
     model = Site
     template_name = "feeds/site_detail.html"
 
