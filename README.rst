@@ -33,5 +33,5 @@ Quick start
 3. Run `python manage.py syncdb` to create the feeds models.
 
 
-.. _Documentation: http://feeds.readthedocs.org/en/lates/
+.. _Documentation: http://feeds.readthedocs.org/en/latest/
 .. _feedburner: http://www.feedburner.com
