@@ -233,7 +233,7 @@ class ViewsAnonymousTest(TestCase):
 
             Should return 200.
         """
-        result = self.client.get(reverse('planet:site-view', args=(self.site_id,)))
+        result = self.client.get(reverse('planet:site-view', args="1"))
         self.assertEqual(result.status_code, 200)
 
     def site_update(self):
