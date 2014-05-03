@@ -182,6 +182,77 @@ class ViewsAnonymousTest(TestCase):
         result = self.client.get(reverse('planet:feed-home'))
         self.assertEqual(result.status_code, 200)
 
+    def site_home(self):
+        """
+        site-home
+        ---------
+            :url: url(r'^site/$', SiteListView.as_view(), name="site-home"), 
+
+            Should return 200
+        """
+        result = self.client.get(reverse('planet:site-home'))
+        self.assertEqual(result.status_code, 200)
+
+    def site_submit(self):
+        """
+        site-submit
+        -----------
+            :url: url(r'^site/submit/$', SiteSubmitWizardView.as_view(SiteSubmitForms), name="site-submit"), 
+
+            Should return a form.
+            Should accept a post.
+        """
+        result = self.client.get(reverse('planet:site-submit'))
+        self.assertEqual(result.status_code, 200)
+
+    def site_add(self):
+        """
+        site-add
+        --------
+            :url: url(r'^site/add/$', SiteCreateView.as_view(), name="site-add"), 
+
+            To add a site should require credentials.
+            
+            Should result in a redirect to the login-page.
+        """
+        result = self.client.get(reverse('planet:site-add'))
+        self.assertEqual(result.status_code, 200)
+
+    def site_view(self):
+        """
+        site-view
+        ---------
+            :url: url(r'^site/(?P<pk>\d+)/$', SiteDetailView.as_view(), name="site-view"), 
+
+            Viewing a site should be available to the public.
+
+            Should return 200.
+        """
+        result = self.client.get(reverse('planet:site-view'))
+        self.assertEqual(result.status_code, 200)
+
+    def site_update(self):
+        """
+        site-update
+        -----------
+            :url: url(r'^site/(?P<pk>\d+)/update/$', SiteUpdateView.as_view(), name="site-update"),
+
+            .. todo:: needs to be defined.
+        """
+        result = self.client.get(reverse('planet:site-update'))
+        self.assertEqual(result.status_code, 302)
+
+    def site_update(self):
+        """
+        site-delete
+        -----------
+            :url: url(r'^site/(?P<pk>\d+)/delete/$', SiteDeleteView.as_view(), name="site-delete"), 
+            
+            .. todo:: needs to be defined.a
+        """
+        result = self.client.get(reverse('planet:site-delete'))
+        self.assertEqual(result.status_code, 302)
+
     def test_site(self):
         """
         Site.
@@ -191,48 +262,13 @@ class ViewsAnonymousTest(TestCase):
 
         Access the following pages, in order, as defined in :py:mod:`feeds.urls`.
 
-        site-home
-        ---------
-            :url: url(r'^site/$', SiteListView.as_view(), name="site-home"), 
-
-            Should return 200
-        
-        site-submit
-        -----------
-            :url: url(r'^site/submit/$', SiteSubmitWizardView.as_view(SiteSubmitForms), name="site-submit"), 
-
-            Should return a form.
-            Should accept a post.
-
-        site-add
-        --------
-            :url: url(r'^site/add/$', SiteCreateView.as_view(), name="site-add"), 
-
-            To add a site should require credentials.
-            
-            Should result in a redirect to the login-page.
-
-        site-view
-        ---------
-            :url: url(r'^site/(?P<pk>\d+)/$', SiteDetailView.as_view(), name="site-view"), 
-
-            Viewing a site should be available to the public.
-
-            Should return 200.
-
-        site-update
-        -----------
-            :url: url(r'^site/(?P<pk>\d+)/update/$', SiteUpdateView.as_view(), name="site-update"),
-
-            .. todo:: needs to be defined.
-
-        site-delete
-        -----------
-            :url: url(r'^site/(?P<pk>\d+)/delete/$', SiteDeleteView.as_view(), name="site-delete"), 
-            
-            .. todo:: needs to be defined.a
-
         """
+        self.site_home()
+        self.site_submit()
+        self.site_add()
+        self.site_view()
+        self.site_update()
+        self.site_delete()
 
 
 class ViewsLoggedInTest(TestCase):
