@@ -28,7 +28,7 @@ Quick start
 
             url(r'^feeds/', include( 'feeds.urls', namespace="planet", app_name="planet")),
 
-         Mind the namespace.
+   Mind the namespace.
 
 3. Run `python manage.py syncdb` to create the feeds models.
 
