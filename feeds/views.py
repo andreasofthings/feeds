@@ -79,8 +79,16 @@ class SiteSubmitWizardView(SessionWizardView):
 
         return form
 
-class SiteListView(PermissionRequiredMixin, ListView):
-    permission_required = "feeds.add_site"
+class SiteListView(ListView):
+    """
+    Lists all sites in the database.
+
+    The view is accessible publically.
+
+    :url: planet:site-home
+
+    .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
+    """
     model = Site
     template_name = "feeds/site_list.html"
 
