@@ -260,7 +260,7 @@ class ViewsAnonymousTest(TestCase):
         result = self.client.get(reverse('planet:site-delete', args=str(self.site_id)))
         self.assertEqual(result.status_code, 302)
 
-    def test_site(self):
+    def test_site_views(self):
         """
         Site.
         =====
@@ -276,6 +276,41 @@ class ViewsAnonymousTest(TestCase):
         self.site_view()
         self.site_update()
         self.site_delete()
+
+    def feed_home(self):
+        """
+        feed-home
+        ---------
+            url(r'^list/$', FeedListView.as_view(), name="feed-home"), 
+
+            Should return 200 for an anonymous user.
+        """
+        result = self.client.get(reverse('planet:feed-home'))
+        self.assertEqual(result.status_code, 200)
+
+    def test_feed_views(self):
+        """
+        Feed.
+        =====
+
+        Test Feed Views:
+
+        .. todo::
+            url(r'^page/(?P<page>\w+)/$', FeedListView.as_view(), name="feed-home-paginated"), 
+            url(r'^add/$', FeedCreateView.as_view(), name="feed-add"), 
+            url(r'^(?P<pk>\d+)/$', FeedDetailView.as_view(), name="feed-view"), 
+            url(r'^(?P<pk>\d+)/update/$', FeedUpdateView.as_view(), name="feed-update"),
+            url(r'^(?P<pk>\d+)/delete/$', FeedDeleteView.as_view(), name="feed-delete"), 
+            url(r'^(?P<pk>\d+)/refresh/$', FeedRefreshView.as_view(), name="feed-refresh"), 
+        """
+        self.feed_home()
+        # self.feed_home_paginated()
+        # self.feed_add()
+        # self.feed_view()
+        # self.feed_update()
+        # self.feed_delete()
+        # self.feed_refresh()
+
 
 class ViewsLoggedInTest(TestCase):
     """

@@ -181,7 +181,17 @@ class Category(models.Model):
         verbose_name_plural = 'categories'
 
     def save(self, *args, **kwargs):
-        # ToDo: prohibit circular references
+        """
+        save
+        ----
+        serves two purposes:
+
+         - prohibit circular references
+         - create the slug if not present/user-set
+
+        .. todo:: 
+            prohibit circular references
+        """
         if not self.slug:
             self.slug = slugify(self.title)  # Where self.name is the field used for 'pre-populate from'
         models.Model.save(self, *args, **kwargs)
