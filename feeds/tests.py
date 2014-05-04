@@ -355,7 +355,7 @@ class ViewsAnonymousTest(TestCase):
             .. todo:: needs to be defined.
         """
         result = self.client.get(reverse('planet:feed-delete', args=(1,)))
-        self.assertRedirects(result, '/accounts/login/?next=%s'%(reverse('planet:feed-update')))
+        self.assertRedirects(result, '/accounts/login/?next=%s'%(reverse('planet:feed-delete', args=(1,))))
         self.assertEqual(result.status_code, 302)
 
     def test_feed_views(self):
