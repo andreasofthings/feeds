@@ -97,7 +97,7 @@ class ModelTest(TestCase):
         .. todo:: use `fixtures` instead.
         """
         from feeds.models import Category
-        c = Category(name="default")
+        c = Category(title="default")
         c.save()
         self.assertEquals(str(c), c.name)
         self.assertContains(c.get_absolute_url(), c.id)
