@@ -59,7 +59,7 @@ class ModelTest(TestCase):
         """
         Set up enivironment to test models
         """
-        pass
+        self.client = Client()
 
     def test_site(self):
         """
@@ -67,8 +67,11 @@ class ModelTest(TestCase):
         """
 
         from feeds.models import Site
-        s = Site()
+        s = Site(name="test")
         s.save()
+        self.assertContains( s.get_absolute_url(), s.pk)
+        self.assertEqual(str(s), "test")
+        """Assert the __str__ representation equals the site-name."""
 
     def test_tag(self):
         """
@@ -83,6 +86,9 @@ class ModelTest(TestCase):
         self.assertNotEqual(tagid, 0)
         """Assert the pk/id is not 0."""
         self.assertEqual(str(t), "tag")
+        """Assert the __str__ representation equals the tag-name."""
+        self.assertContains( t.get_absolute_url(), t.pk)
+        """Assert the tag URL contains the tag.pk."""
 
     def tearDown(self):
         """
