@@ -249,7 +249,7 @@ class ViewsAnonymousTest(TestCase):
             .. todo:: needs to be defined.
         """
         result = self.client.get(reverse('planet:site-update', args=str(self.site_id)))
-        self.assertRedirects(result, '/accounts/login/?next=%s'%(reverse('planet:site-update')))
+        self.assertRedirects(result, '/accounts/login/?next=%s'%(reverse('planet:site-update', args=str(self.site_id))))
         self.assertEqual(result.status_code, 302)
 
     def site_delete(self):
@@ -341,7 +341,7 @@ class ViewsAnonymousTest(TestCase):
             .. todo:: needs to be defined.
         """
         result = self.client.get(reverse('planet:feed-update', args=(1,)))
-        self.assertRedirects(result, '/accounts/login/?next=%s'%(reverse('planet:feed-update')))
+        self.assertRedirects(result, '/accounts/login/?next=%s'%(reverse('planet:feed-update', args=(1,))))
         self.assertEqual(result.status_code, 302)
 
     def feed_delete(self):
