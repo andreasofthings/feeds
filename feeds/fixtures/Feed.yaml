@@ -1,0 +1,7 @@
+- model: feeds.Feed
+  pk: 1
+  fields:
+    "feed_url": "http://feeds.feedburner.com/WrintRealitaetsabgleich" 
+    "name": "WRINT - Realitätsableich"
+    "short_name": "Realitätsabgleich"
+    "slug": "WRINT-Realitaetsabgleich"

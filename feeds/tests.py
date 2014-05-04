@@ -5,8 +5,10 @@
 """
 Tests for the "feeds" app.
 ==========================
-
-Test Cases are supposed to cover:
+  
+  :date: 2014-05-03
+  :version: 0.1
+  :description: Test Cases for :py:mod:`feeds`
 
 - :py:mod:`feeds.models`
 - :py:mod:`feeds.views`
@@ -18,7 +20,6 @@ Test Cases are supposed to cover:
 
 .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
 
-:date: 2014-05-03
 """
 
 import feedparser
@@ -99,10 +100,10 @@ class TaskTest(TestCase):
         """
         Set up enivironment to test models
         """
-        self.feed1 = Feed(feed_url=reverse('planet:rss1'), name="rss1", shortname="rss1")
+        self.feed1 = Feed(feed_url=reverse('planet:rss1'), name="rss1", short_name="rss1")
         self.feed1.save()
 
-        self.feed2 = Feed(feed_url=reverse('planet:rss2'), name="rss2", shortname="rss2")
+        self.feed2 = Feed(feed_url=reverse('planet:rss2'), name="rss2", short_name="rss2")
         self.feed2.save()
 
         self.post1 = Post(feed=self.feed1, link="http://localhost/post1")
@@ -162,6 +163,8 @@ class ViewsAnonymousTest(TestCase):
 
     .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
+
+    fixtures = ['Feed.yaml']
 
     def setUp(self):
         """
@@ -281,11 +284,23 @@ class ViewsAnonymousTest(TestCase):
         """
         feed-home
         ---------
-            url(r'^list/$', FeedListView.as_view(), name="feed-home"), 
+            :url: url(r'^list/$', FeedListView.as_view(), name="feed-home"), 
 
             Should return 200 for an anonymous user.
         """
         result = self.client.get(reverse('planet:feed-home'))
+        self.assertEqual(result.status_code, 200)
+
+    def feed_home_paginated(self):
+        """
+        feed-home-paginated
+        -------------------
+            :url: url(r'^page/(?P<page>\w+)/$', FeedListView.as_view(), name="feed-home-paginated"), 
+
+            - Should return 200 for an anonymous user.
+            - Should allow to navigate between paginated results.
+        """
+        result = self.client.get(reverse('planet:feed-home-paginated', args=(1,)))
         self.assertEqual(result.status_code, 200)
 
     def test_feed_views(self):
@@ -296,7 +311,6 @@ class ViewsAnonymousTest(TestCase):
         Test Feed Views:
 
         .. todo::
-            url(r'^page/(?P<page>\w+)/$', FeedListView.as_view(), name="feed-home-paginated"), 
             url(r'^add/$', FeedCreateView.as_view(), name="feed-add"), 
             url(r'^(?P<pk>\d+)/$', FeedDetailView.as_view(), name="feed-view"), 
             url(r'^(?P<pk>\d+)/update/$', FeedUpdateView.as_view(), name="feed-update"),
@@ -327,11 +341,11 @@ class ViewsLoggedInTest(TestCase):
         self.user = User.objects.create_user(self.username, 'lennon@thebeatles.com', self.password)
         """Test user."""
         
-        self.feed1 = Feed(feed_url=reverse('planet:rss1'), name="rss1", shortname="rss1")
+        self.feed1 = Feed(feed_url=reverse('planet:rss1'), name="rss1", short_name="rss1")
         self.feed1.save()
         """Feed 1."""
 
-        self.feed2 = Feed(feed_url=reverse('planet:rss2'), name="rss2", shortname="rss2")
+        self.feed2 = Feed(feed_url=reverse('planet:rss2'), name="rss2", short_name="rss2")
         self.feed2.save()
         """Feed 2."""
 
@@ -438,13 +452,13 @@ class ViewsLoggedInTest(TestCase):
         result = c.get(reverse('planet:feed-refresh', args=(Feed.objects.all()[0].id,)))
         self.assertEqual(result.status_code, 302)
 
-
-    def createPost(self):
+    def test_create_post(self):
         """
         create a new post
         """
-
+        feed = Feed.objects.all()[0]
+        """Get first feed from the db. We use fixtures, so we can assume there are feeds."""
         with self.assertNumQueries(1):
-            Post.objects.create(owner=self.user, feed=self.feed)
+            Post.objects.create(feed=feed)
 
 

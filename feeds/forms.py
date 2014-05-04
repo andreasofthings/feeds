@@ -101,7 +101,7 @@ class FeedCreateForm(forms.ModelForm):
     """
     class Meta:
         model = Feed
-        fields = ('name', 'shortname', 'feed_url', 'category',)
+        fields = ('name', 'short_name', 'feed_url', 'category',)
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -110,7 +110,7 @@ class FeedCreateForm(forms.ModelForm):
                 'Add Feed',
                 'feed_url',
                 'name',
-                'shortname',
+                'short_name',
                 'category',
             ),
             ButtonHolder(
@@ -132,7 +132,7 @@ class FeedUpdateForm(forms.ModelForm):
     """
     class Meta:
         model = Feed
-        fields = ('name', 'shortname', 'feed_url', 'category',)
+        fields = ('name', 'short_name', 'feed_url', 'category',)
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -140,7 +140,7 @@ class FeedUpdateForm(forms.ModelForm):
             Fieldset(
                 'Add Feed',
                 'name',
-                'shortname',
+                'short_name',
                 'feed_url',
                 'category',
             ),

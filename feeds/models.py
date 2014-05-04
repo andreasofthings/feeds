@@ -215,6 +215,15 @@ class Category(models.Model):
     def get_absolute_url(self):
         return ('planet:category-view', [str(self.slug)])
 
+class FeedManager(models.Manager):
+    """
+    """
+    def get_by_natural_key(self, slug):
+        """
+        get Feed by natural key, to allow serialization by key rather than `ìd`
+        """
+        return self.get(slug=slug)
+
 class Feed(models.Model):
     """
     Model that contains information about any feed, including
@@ -225,7 +234,7 @@ class Feed(models.Model):
     site = models.ForeignKey(Site, null=True)
     feed_url = models.URLField(_('feed url'), unique=True)
     name = models.CharField(_('name'), max_length=100, null=True, blank=True)
-    shortname = models.CharField(_('shortname'), max_length=50, null=True, blank=True)
+    short_name = models.CharField(_('short_name'), max_length=50, null=True, blank=True)
     slug = models.SlugField(
         max_length=255,
         db_index=True,
@@ -314,7 +323,7 @@ class Feed(models.Model):
     image_link = models.URLField(_('image_link'), blank=True)
     image_url = models.URLField(_('image_url'), blank=True)
 
-    # ratin
+    # rating
     # textInput
     # skipHours
     # skipDay
@@ -326,6 +335,8 @@ class Feed(models.Model):
     announce_posts = models.BooleanField(default=False)
     """Whether to socially announce new articles posts"""
 
+    objects = FeedManager()
+
     def save(self, *args, **kwargs):
         """
         Need to update items before saving?
@@ -333,8 +344,8 @@ class Feed(models.Model):
         f = feedparser.parse(self.feed_url)
         if not self.name:
             self.name = f.feed.title
-        if not self.shortname:
-            self.shortname = f.feed.title
+        if not self.short_name:
+            self.short_name = f.feed.title
         if not self.link and hasattr(f.feed, 'link'):
             self.link = f.feed.link
         if hasattr(f.feed, 'language'):
@@ -357,6 +368,9 @@ class Feed(models.Model):
 
     def __unicode__(self):
         return u'%s' % (self.name)
+
+    def natural_key(self):
+        return (self.slug,)
 
     @models.permalink
     def get_absolute_url(self):

@@ -8,7 +8,7 @@ from feeds.models import Feed, Post, Tag
 class FeedIndex(indexes.SearchIndex):
     title = indexes.CharField(document=True, use_template=True)
     name = indexes.CharField()
-    shortname = indexes.CharField()
+    short_name = indexes.CharField()
     tagline = indexes.CharField()
 
     def get_model(self):
