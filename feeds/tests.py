@@ -67,7 +67,7 @@ class ModelTest(TestCase):
         """
 
         from feeds.models import Site
-        s = Site(name="test")
+        s = Site(url="https//angry-planet.com/")
         s.save()
         self.assertContains( s.get_absolute_url(), s.pk)
         self.assertEqual(str(s), "test")
@@ -89,6 +89,18 @@ class ModelTest(TestCase):
         """Assert the __str__ representation equals the tag-name."""
         self.assertContains( t.get_absolute_url(), t.pk)
         """Assert the tag URL contains the tag.pk."""
+
+    def test_category(self):
+        """
+        Test a :py:mod:`feeds:models.Category`
+
+        .. todo:: use `fixtures` instead.
+        """
+        from feeds.models import Category
+        c = Category(name="default")
+        c.save()
+        self.assertEquals(str(c), c.name)
+        self.assertContains(c.get_absolute_url(), c.id)
 
     def tearDown(self):
         """
