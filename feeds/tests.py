@@ -174,7 +174,6 @@ class ViewsAnonymousTest(TestCase):
         site = Site(url="https://angry-planet.com/")
         site.save()
         self.site_id = site.pk
-        print("site-pk: %s"%(self.site_id))
         """Test Site."""
 
         self.client = Client()
@@ -250,6 +249,7 @@ class ViewsAnonymousTest(TestCase):
             .. todo:: needs to be defined.
         """
         result = self.client.get(reverse('planet:site-update', args=str(self.site_id)))
+        self.assertRedirects(result, '/accounts/login/?next=%s'%(reverse('planet:site-update')))
         self.assertEqual(result.status_code, 302)
 
     def site_delete(self):
@@ -303,6 +303,61 @@ class ViewsAnonymousTest(TestCase):
         result = self.client.get(reverse('planet:feed-home-paginated', args=(1,)))
         self.assertEqual(result.status_code, 200)
 
+    def feed_add(self):
+        """
+        feed-add
+        --------
+            :url: url(r'^add/$', FeedCreateView.as_view(), name="feed-add"), 
+
+        """
+        result = self.client.get(reverse('planet:feed-add'))
+        self.assertRedirects(result, '/accounts/login/?next=%s'%(reverse('planet:feed-add')))
+        self.assertEqual(result.status_code, 302)
+
+    def feed_view(self):
+        """
+        feed-view
+        ---------
+            :url: url(r'^(?P<pk>\d+)/$', FeedDetailView.as_view(), name="feed-view"), 
+            
+            Viewing details for a :py:mod:`feeds.models.Feed` should be available to the public.
+
+            Should return 200.
+
+            The `fixture` has a feed with the ID 1.
+        """
+
+        result = self.client.get(reverse('planet:feed-view', args=(1,)))
+        self.assertEqual(result.status_code, 200)
+
+    def feed_update(self):
+        """
+        feed-update
+        -----------
+            :url: url(r'^(?P<pk>\d+)/update/$', FeedUpdateView.as_view(), name="feed-update"),
+
+            The `fixture` has a feed with the ID 1.
+
+            .. todo:: needs to be defined.
+        """
+        result = self.client.get(reverse('planet:feed-update', args=(1,)))
+        self.assertRedirects(result, '/accounts/login/?next=%s'%(reverse('planet:feed-update')))
+        self.assertEqual(result.status_code, 302)
+
+    def feed_delete(self):
+        """
+        feed-delete
+        -----------
+            :url: url(r'^(?P<pk>\d+)/delete/$', FeedDeleteView.as_view(), name="feed-delete"), 
+            
+            The `fixture` has a feed with the ID 1.
+
+            .. todo:: needs to be defined.
+        """
+        result = self.client.get(reverse('planet:feed-delete', args=(1,)))
+        self.assertRedirects(result, '/accounts/login/?next=%s'%(reverse('planet:feed-update')))
+        self.assertEqual(result.status_code, 302)
+
     def test_feed_views(self):
         """
         Feed.
@@ -311,18 +366,14 @@ class ViewsAnonymousTest(TestCase):
         Test Feed Views:
 
         .. todo::
-            url(r'^add/$', FeedCreateView.as_view(), name="feed-add"), 
-            url(r'^(?P<pk>\d+)/$', FeedDetailView.as_view(), name="feed-view"), 
-            url(r'^(?P<pk>\d+)/update/$', FeedUpdateView.as_view(), name="feed-update"),
-            url(r'^(?P<pk>\d+)/delete/$', FeedDeleteView.as_view(), name="feed-delete"), 
             url(r'^(?P<pk>\d+)/refresh/$', FeedRefreshView.as_view(), name="feed-refresh"), 
         """
         self.feed_home()
-        # self.feed_home_paginated()
-        # self.feed_add()
-        # self.feed_view()
-        # self.feed_update()
-        # self.feed_delete()
+        self.feed_home_paginated()
+        self.feed_add()
+        self.feed_view()
+        self.feed_update()
+        self.feed_delete()
         # self.feed_refresh()
 
 
