@@ -240,6 +240,13 @@ class ViewsAnonymousTest(TestCase):
         """
         result = self.client.get(reverse('planet:site-submit'))
         self.assertEqual(result.status_code, 200)
+        """Assert the `submit` site is visible to anonymous users."""
+        result = self.client.post(
+            reverse('planet:site-submit'),
+            {'url': 'https://angry-planet.com/'}
+        )
+        self.assertEqual(result.status_code, 200)
+        """Assert the `submit` site accepts `POST` from anonymous users."""
 
     def site_add(self):
         """
@@ -431,9 +438,25 @@ class ViewsLoggedInTest(TestCase):
         self.client = Client()
         """Test Client."""
 
+    def test_site(self):
+        """
+        test_site
+        ---------
+
+        Test all aspects of "Site" as a logged in user.
+
+        - add
+        - submit
+        - view
+        - update
+        """
+        self.site_add()
+
     def test_feed_home(self):
         """
         go to feed-home
+
+        .. todo:: rename and restructure as in :py:mod:`feeds.tests.ViewsAnonymousTest`.
         """
         result = self.client.get(reverse('planet:feed-home'))
         self.assertEqual(result.status_code, 200)
@@ -445,7 +468,7 @@ class ViewsLoggedInTest(TestCase):
         result = self.client.get(reverse('planet:feed-home-paginated', args=("1",)))
         self.assertEqual(result.status_code, 200)
 
-    def test_feed_add_anonymous(self):
+    def test_feed_add(self):
         """
         go to feed-add
         """
@@ -453,7 +476,7 @@ class ViewsLoggedInTest(TestCase):
         self.assertEqual(result.status_code, 302)
         # self.assertRedirects(result, '/accounts/login')
 
-    def test_feed_add_logged_in_no_credentials(self):
+    def test_feed_add_no_credentials(self):
         """
         go to feed-add
         """
