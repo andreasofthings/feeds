@@ -130,7 +130,7 @@ class Tag(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('planet:tag-view', [str(self.slug)])
+        return ('planet:tag-view', [str(self.id)])
 
 class CategoryManager(models.Manager):
     """

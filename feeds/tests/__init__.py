@@ -218,7 +218,7 @@ class ViewsAnonymousTest(TestCase):
         """
         Set up environment.
         """
-        from models import Site
+        from feeds.models import Site
         site = Site(url="https://angry-planet.com/")
         site.save()
         self.site_id = site.pk
@@ -681,7 +681,8 @@ class ViewsLoggedInTest(TestCase):
         manually refresh a feed
         """
         c = Client()
-        result = c.get(reverse('planet:feed-refresh', args=(Feed.objects.all()[0].id,)))
+        feed_id = Feed.objects.all()[0].id
+        result = c.get(reverse('planet:feed-refresh', args=(feed_id,)))
         self.assertEqual(result.status_code, 302)
 
     def test_create_post(self):
@@ -689,33 +690,17 @@ class ViewsLoggedInTest(TestCase):
         create a new post
         """
         feed = Feed.objects.all()[0]
-        """Get first feed from the db. We use fixtures, so we can assume there are feeds."""
+        """
+        Get first feed from the db.
+        We use fixtures, so we can assume there are feeds.
+        """
         with self.assertNumQueries(1):
             Post.objects.create(feed=feed)
 
-
-
-def TestSiteCredential(TestCase):
+class TestSiteCredential(TestCase):
     """
     Test those aspects of :py:mod:`feeds.views` related to
     py:mod:`feeds.models.Site`.
     """
     def setUp(self):
         pass
-
-class TestFeedCredentials(TestCase):
-    """
-    Test those aspects of :py:mod:`feeds.views` related to
-    py:mod:`feeds.models.Feed`, that require proper cedentials.
-    """
-    def test_feed_add_post_valid_credential(self):
-        """
-        go to feed-add
-        """
-        result = self.client.post(reverse('planet:feed-add'))
-        self.client.login(username=self.username, password=self.password)
-        permission = Permission.objects.get(codename="add_feed")
-        self.assertEqual(result.status_code, 302)
-
-
-
