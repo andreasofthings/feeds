@@ -9,5 +9,7 @@ log/*
 docs/build/*
 feeds.egg-info/*
 .coverage
+.ropeproject
+feeds/.ropeproject
 *.pot
 .pypirc 
