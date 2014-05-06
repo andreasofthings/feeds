@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 from feeds import __version__
 
 setup(
-    name = 'django-feeds',
+    name = 'feeds',
     version = __version__,
     packages = ['feeds'],
     include_package_data = True,
