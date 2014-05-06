@@ -76,7 +76,7 @@ class ModelTest(TestCase):
         .. todo:: self.assertContains won't work
         for what is being tested here.
         """
-        self.assertEqual(str(s), "http://angry-planet.com/")
+        self.assertEqual(str(s), "https://angry-planet.com/")
         """Assert the __str__ representation equals the site-name."""
 
     def test_tag(self):
@@ -655,9 +655,10 @@ class ViewsLoggedInTest(TestCase):
         """
         go to feed-view for feed 1
         """
-        result = self.client.get(reverse('planet:feed-view', args=(1,)))
+        feed_id = Feed.objects.all()[0].pk
+        result = self.client.get(reverse('planet:feed-view', args=(feed_id,)))
         """.. todo:: figure out why this gives 404"""
-        # self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 200)
 
     def test_category_home(self):
         """
