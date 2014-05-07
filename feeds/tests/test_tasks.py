@@ -21,7 +21,7 @@ class TaskTest(TestCase):
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
 
-    fixtures = ['Feed.yaml', ]
+    fixtures = ['Site.yaml', 'Feed.yaml', ]
 
     def setUp(self):
         """

@@ -5,6 +5,7 @@
     "name": "WRINT - Realitätsableich"
     "short_name": "Realitätsabgleich"
     "slug": "WRINT-Realitaetsabgleich"
+    "site": "WRINT"
 - model: feeds.Feed
   pk: 2
   fields:
