@@ -12,10 +12,10 @@ Stores as much as possible coming out of the feed.
 """
 
 import feedparser
-from django.db import models, IntegrityError
-from django.core.urlresolvers import reverse
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
+
 
 class SiteManager(models.Manager):
     """
@@ -23,6 +23,7 @@ class SiteManager(models.Manager):
     """
     def __init__(self, *args, **kwargs):
         return super(SiteManager, self).__init__(*args, **kwargs)
+
 
 class Site(models.Model):
     url = models.URLField(unique=True)
@@ -32,7 +33,10 @@ class Site(models.Model):
     """Human readble URL component"""
 
     objects = SiteManager()
-    """Overwrite the inherited manager with the custom :mod:`feeds.models.SiteManager`"""
+    """
+    Overwrite the inherited manager
+    with the custom :mod:`feeds.models.SiteManager`
+    """
 
     def save(self, *args, **kwargs):
         """
@@ -47,7 +51,7 @@ class Site(models.Model):
         """
         String representation of :Site:
         """
-        return u"%s"%(self.url)
+        return u"%s" % (self.url)
 
     @models.permalink
     def get_absolute_url(self):
@@ -64,6 +68,7 @@ class Site(models.Model):
         """
         return self.feed_set.all()
 
+
 class TagManager(models.Manager):
     """
     Manager for `Tag` objects.
@@ -75,15 +80,24 @@ class TagManager(models.Manager):
         """
         return self.get(slug=slug)
 
+
 class Tag(models.Model):
     """
     A tag.
     """
 
     objects = TagManager()
-    """Overwrite the inherited manager with the custom :mod:`feeds.models.TagManager`"""
+    """
+    Overwrite the inherited manager
+    with the custom :mod:`feeds.models.TagManager`
+    """
 
-    name = models.CharField(_('name'), max_length=50, unique=True, db_index=True)
+    name = models.CharField(
+        _('name'),
+        max_length=50,
+        unique=True,
+        db_index=True
+    )
     """The name of the Tag."""
 
     slug = models.SlugField(
@@ -92,17 +106,24 @@ class Tag(models.Model):
         unique=True,
         help_text='Short descriptive unique name for use in urls.',
     )
-    """The slug of the Tag. It can be used in any URL referencing this particular Tag."""
+    """
+    The slug of the Tag.
+    It can be used in any URL referencing this particular Tag.
+    """
 
-    relevant = models.BooleanField(default = False)
-    """Indicates whether this Tag is relevant for further processing. It should be used to allow administrative intervention."""
+    relevant = models.BooleanField(default=False)
+    """
+    Indicates whether this Tag is relevant for further processing.
+    It should be used to allow administrative intervention.
+    """
 
     touched = models.DateTimeField(auto_now=True)
     """Keep track of when this Tag was last used."""
 
     def save(self, *args, **kwargs):
         """
-        This function is called whenever the object is saved. For a Tag, it will try to set a slug if it is not yet available.
+        This function is called whenever the object is saved.
+        For a Tag, it will try to set a slug if it is not yet available.
         """
         if not self.slug:
             self.slug = slugify(self.name)
@@ -131,6 +152,7 @@ class Tag(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('planet:tag-view', [str(self.id)])
+
 
 class CategoryManager(models.Manager):
     """
@@ -215,12 +237,13 @@ class Category(models.Model):
     def get_absolute_url(self):
         return ('planet:category-view', [str(self.slug)])
 
+
 class FeedManager(models.Manager):
     """
     """
     def get_by_natural_key(self, slug):
         """
-        get Feed by natural key, to allow serialization by key rather than `ìd`
+        Get Feed by natural key, to allow serialization by key rather than `id`.
         """
         return self.get(slug=slug)
 
