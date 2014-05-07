@@ -53,7 +53,12 @@ class ModelTest(TestCase):
 
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
-    fixtures = ["Feed.yaml", "Site.yaml", ]
+    fixtures = [
+        "Feed.yaml",
+        "Site.yaml",
+        "Tags.yaml",
+        "Categories.yaml",
+    ]
 
     def setUp(self):
         """

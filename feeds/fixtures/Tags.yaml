@@ -1,0 +1,3 @@
+- model: feeds.Tag
+  fields:
+    "name": "test"

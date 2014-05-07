@@ -24,6 +24,9 @@ class SiteManager(models.Manager):
     def __init__(self, *args, **kwargs):
         return super(SiteManager, self).__init__(*args, **kwargs)
 
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
 
 class Site(models.Model):
     url = models.URLField(unique=True)
@@ -67,6 +70,9 @@ class Site(models.Model):
         return all feeds for this :Site:.
         """
         return self.feed_set.all()
+
+    def natural_key(self):
+        return (self.slug,)
 
 
 class TagManager(models.Manager):
@@ -153,6 +159,9 @@ class Tag(models.Model):
     def get_absolute_url(self):
         return ('planet:tag-view', [str(self.id)])
 
+    def natural_key(self):
+        return (self.name,)
+
 
 class CategoryManager(models.Manager):
     """
@@ -163,6 +172,7 @@ class CategoryManager(models.Manager):
         Get Category by natural kea to allow serialization
         """
         return self.get(slug=slug)
+
 
 class Category(models.Model):
     """
@@ -175,9 +185,12 @@ class Category(models.Model):
     """
 
     objects = CategoryManager()
-    """References the default ModelManager, here :py:mod:`feeds.models.CategoryManager`."""
+    """
+    References the default ModelManager,
+    here :py:mod:`feeds.models.CategoryManager`.
+    """
 
-    title = models.CharField(
+    name = models.CharField(
         max_length=200,
         help_text='Short descriptive name for this category.',
     )
@@ -215,7 +228,8 @@ class Category(models.Model):
             prohibit circular references
         """
         if not self.slug:
-            self.slug = slugify(self.title)  # Where self.name is the field used for 'pre-populate from'
+            """Where self.name is the field used for 'pre-populate from'."""
+            self.slug = slugify(self.title)
         models.Model.save(self, *args, **kwargs)
 
     @property
@@ -233,6 +247,9 @@ class Category(models.Model):
         """
         return self.category_feeds.all()
 
+    def natural_key(self):
+        return (self.name,)
+
     @models.permalink
     def get_absolute_url(self):
         return ('planet:category-view', [str(self.slug)])
@@ -243,9 +260,11 @@ class FeedManager(models.Manager):
     """
     def get_by_natural_key(self, slug):
         """
-        Get Feed by natural key, to allow serialization by key rather than `id`.
+        Get Feed by natural key, to allow
+        serialization by key rather than `id`.
         """
         return self.get(slug=slug)
+
 
 class Feed(models.Model):
     """
