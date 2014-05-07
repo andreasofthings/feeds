@@ -1,0 +1,9 @@
+- model: feeds.Site
+  pk: 1
+  fields:
+    "url": "http://www.wrint.de" 
+    "slug": "WRINT"
+- model: feeds.Site
+  pk: 2
+  fields:
+    "url": "http://www.metaebene.me"

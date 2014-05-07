@@ -14,7 +14,7 @@ Stores as much as possible coming out of the feed.
 import feedparser
 from django.db import models, IntegrityError
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _ 
+from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
 class SiteManager(models.Manager):
@@ -27,7 +27,7 @@ class SiteManager(models.Manager):
 class Site(models.Model):
     url = models.URLField(unique=True)
     """URL of the `Site`."""
-    
+
     slug = models.SlugField(null=True)
     """Human readble URL component"""
 
@@ -63,12 +63,12 @@ class Site(models.Model):
         return all feeds for this :Site:.
         """
         return self.feed_set.all()
-    
+
 class TagManager(models.Manager):
     """
     Manager for `Tag` objects.
     """
-    
+
     def get_by_natural_key(self, slug):
         """
         get Tag by natural key, to allow serialization by key rather than `ìd`
@@ -79,13 +79,13 @@ class Tag(models.Model):
     """
     A tag.
     """
-    
+
     objects = TagManager()
     """Overwrite the inherited manager with the custom :mod:`feeds.models.TagManager`"""
- 
+
     name = models.CharField(_('name'), max_length=50, unique=True, db_index=True)
     """The name of the Tag."""
-    
+
     slug = models.SlugField(
         max_length=255,
         db_index=True,
@@ -121,7 +121,7 @@ class Tag(models.Model):
         return all feeds in this category
         """
         return self.tag_posts.all()
-    
+
     def __unicode__(self):
         """
         Human readable representation of the object.
@@ -159,14 +159,14 @@ class Category(models.Model):
         max_length=200,
         help_text='Short descriptive name for this category.',
     )
-    
+
     slug = models.SlugField(
         max_length=255,
         db_index=True,
         unique=True,
         help_text='Short descriptive unique name for use in urls.',
     )
-    
+
     parent = models.ForeignKey('self', null=True, blank=True)
 
     def __unicode__(self):
@@ -189,7 +189,7 @@ class Category(models.Model):
          - prohibit circular references
          - create the slug if not present/user-set
 
-        .. todo:: 
+        .. todo::
             prohibit circular references
         """
         if not self.slug:
@@ -227,9 +227,9 @@ class FeedManager(models.Manager):
 class Feed(models.Model):
     """
     Model that contains information about any feed, including
-    - metadata for processing 
+    - metadata for processing
     - results from social updates
-    - calculated values 
+    - calculated values
     """
     site = models.ForeignKey(Site, null=True)
     feed_url = models.URLField(_('feed url'), unique=True)
@@ -244,71 +244,71 @@ class Feed(models.Model):
         help_text='Short descriptive unique name for use in urls.',
     )
     is_active = models.BooleanField(
-            _('is active'), 
+            _('is active'),
             default=True,
-            help_text=_('If disabled, this feed will not be further updated.') 
+            help_text=_('If disabled, this feed will not be further updated.')
         )
     beta = models.BooleanField(
-        _('is beta'), 
+        _('is beta'),
         default=False,
-        help_text=_('If beta, this feed will be processed through the celery pipeline.') 
+        help_text=_('If beta, this feed will be processed through the celery pipeline.')
     )
     has_no_guid = models.BooleanField(
-        _('has no guid'), 
+        _('has no guid'),
         default=False,
-        help_text=_("""This feed doesn't have a proper guid. use something else instead.""") 
+        help_text=_("""This feed doesn't have a proper guid. use something else instead.""")
     )
 
     # <rss><channel>
     # mandatory fields
     title = models.CharField(
-          _('title'), 
-          max_length=200, 
+          _('title'),
+          max_length=200,
           blank=True
     )
     link = models.URLField(
-        _('link'), 
+        _('link'),
         blank=True
     )
     tagline = models.TextField(
-        _('description'), 
+        _('description'),
         blank=True,
         help_text=_('Phrase or sentence describing the channel.'),
     )
-    
+
     # <rss><channel>
     # optional fields
     language = models.CharField(
-        _('language'), 
-        blank=True, 
+        _('language'),
+        blank=True,
         max_length=8,
     )
     copyright = models.CharField(
-        _('copyright'), 
-        blank=True, 
+        _('copyright'),
+        blank=True,
         max_length=64,
     )
 
     author = models.CharField(
-        _('managingEditor'), 
-        blank=True, 
+        _('managingEditor'),
+        blank=True,
         max_length=64,
     )
 
     webmaster = models.CharField(
-        _('webmaster'), 
-        blank=True, 
+        _('webmaster'),
+        blank=True,
         max_length=64,
     )
-    
+
     pubDate = models.DateTimeField(_('pubDate'), null=True, blank=True)
     last_modified = models.DateTimeField(_('lastBuildDate'), null=True, blank=True)
 
     # Category
     category = models.ManyToManyField(
-        Category, 
-        related_name="category_feeds", 
-        blank=True, 
+        Category,
+        related_name="category_feeds",
+        blank=True,
     )
     # generator
     # docs
@@ -375,16 +375,16 @@ class Feed(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('planet:feed-view', [str(self.id)])
-    
+
 class Post(models.Model):
     """
     Model to hold an actual feed entry
     """
     feed = models.ForeignKey(
-        Feed, 
-        verbose_name=_('feed'), 
+        Feed,
+        verbose_name=_('feed'),
         related_name="posts",
-        null=False, 
+        null=False,
         blank=False,
     )
     title = models.CharField(max_length=512)
@@ -393,9 +393,9 @@ class Post(models.Model):
     author = models.CharField(_('author'), max_length=50, blank=True)
     author_email = models.EmailField(_('author email'), blank=True)
     category = models.ManyToManyField(
-        Category, 
-        related_name="category_posts", 
-        blank=True, 
+        Category,
+        related_name="category_posts",
+        blank=True,
     )
     comments = models.URLField(_('comments'), blank=True)
     # enclosure, see there
@@ -403,7 +403,7 @@ class Post(models.Model):
     created = models.DateTimeField(_('pubDate'), auto_now_add=True)
 
     published = models.BooleanField(default=False)
-        
+
     last_modified = models.DateTimeField(null=True, blank=True) # ToDo: this is unused, remove?
     date_modified = models.DateTimeField(_('date modified'), null=True, blank=True)
 
@@ -447,7 +447,7 @@ class Post(models.Model):
         """
         if not self.guid:
             self.guid = self.link
-        super(Post, self).save(*args, **kwargs) 
+        super(Post, self).save(*args, **kwargs)
         """Call the "real" save() method."""
 
     def __unicode__(self):
@@ -457,19 +457,19 @@ class Enclosure(models.Model):
     """
     potential enclosure of a :mod:`feeds.models.Post`
     """
-    
+
     post = models.ForeignKey(Post, related_name="enclosure")
     """reference to the post the enclosure belongs to."""
-    
+
     url = models.URLField()
     """the url of the enclosed media file."""
-    
+
     length = models.BigIntegerField()
     """length of the enclosed media file in byte."""
-    
+
     enclosure_type = models.CharField(max_length=32)
     """type of the enclosed file, for example 'image/jpeg'."""
-    
+
     def __unicode__(self):
         """
         return type of object and containing post
@@ -497,8 +497,8 @@ class FeedPostCount(models.Model):
         # subtract the modulo of 3600, result is the floor hour
         """
         import time
-        this_hour = int(time.time()) - int(time.time()) % 3600 
-        self.created = int(this_hour) 
+        this_hour = int(time.time()) - int(time.time()) % 3600
+        self.created = int(this_hour)
         super(FeedPostCount, self).save(*args, **kwargs) # Call the "real" save() method.
 
 
@@ -510,7 +510,7 @@ class PostReadCountManager(models.Manager):
     def get_feed_count_in_timeframe(self, feed_id, start, delta, steps):
         """
         feed_id:which feed
-        start:  start at which time 
+        start:  start at which time
         delta:  how long shall one step be
         steps:  how many steps
         """
@@ -523,7 +523,7 @@ class PostReadCountManager(models.Manager):
             if clicklist:
                 clickdata.append(clicklist.filter(created__gte=lower_offset).filter(created__lte=upper_offset).count())
         return clickdata
-        
+
 class PostReadCount(models.Model):
     """
     This is not a real counter, more a log.
@@ -538,7 +538,7 @@ class TaggedPost(models.Model):
     """
     Holds the relationship between a tag and the item being tagged.
     """
-    
+
     tag  = models.ForeignKey(Tag, verbose_name=_('tag'), related_name='post_tags')
     post = models.ForeignKey(Post, verbose_name=_('post'))
 

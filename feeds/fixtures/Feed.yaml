@@ -5,3 +5,10 @@
     "name": "WRINT - Realitätsableich"
     "short_name": "Realitätsabgleich"
     "slug": "WRINT-Realitaetsabgleich"
+- model: feeds.Feed
+  pk: 2
+  fields:
+    "feed_url": "http://feeds.feedburner.com/DieWrintheit"
+    "name": "WRINT - Die Wrintheit"
+    "short_name": "Wrintheit"
+    "slug": "WRINT-Wrintheit"

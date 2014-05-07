@@ -18,11 +18,14 @@ class TaskTest(TestCase):
     """
     Test Tasks
 
-    ..codeauthor:: Andreas Neumeier <andreas@neumeier.org>
+    .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
+
+    fixtures = ['Feed.yaml', ]
+
     def setUp(self):
         """
-        Set up enivironment to test models
+        Set up enivironment to test models.
         """
 
         self.feed1 = Feed(

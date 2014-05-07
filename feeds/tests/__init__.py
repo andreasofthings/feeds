@@ -56,6 +56,7 @@ class ModelTest(TestCase):
 
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
+    fixtures = ["Feed.yaml", "Site.yaml", ]
     def setUp(self):
         """
         Set up enivironment to test models
