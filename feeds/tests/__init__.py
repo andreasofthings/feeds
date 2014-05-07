@@ -111,7 +111,7 @@ class ModelTest(TestCase):
         .. todo:: use `fixtures` instead.
         """
         from feeds.models import Category
-        c = Category(title="default")
+        c = Category(name="default")
         c.save()
         self.assertEquals(str(c), c.title)
         # self.assertContains(c.get_absolute_url(), c.id)
@@ -198,7 +198,8 @@ class ViewsAnonymousTest(TestCase):
             reverse('planet:site-submit'),
             {
                 'url': 'http://spiegel.de/',
-                'forms-0': "0",
+                'form-TOTAL_FORMS': 1,
+                'form-INITIAL_FORMS': 0
             }
         )
         self.assertEqual(result.status_code, 200)
