@@ -205,13 +205,13 @@ class Category(models.Model):
     parent = models.ForeignKey('self', null=True, blank=True)
 
     def __unicode__(self):
-        return self.title
+        return self.name
 
     class Meta:
         """
         Django Meta.
         """
-        ordering = ('title',)
+        ordering = ('name',)
         verbose_name = 'category'
         verbose_name_plural = 'categories'
 
@@ -234,11 +234,11 @@ class Category(models.Model):
 
     @property
     def children(self):
-        return self.category_set.all().order_by('title')
+        return self.category_set.all().order_by('name')
 
     @property
     def tags(self):
-        return Tag.objects.filter(categories__in=[self]).order_by('title')
+        return Tag.objects.filter(categories__in=[self]).order_by('name')
 
     @property
     def feeds(self):
@@ -275,8 +275,18 @@ class Feed(models.Model):
     """
     site = models.ForeignKey(Site, null=True)
     feed_url = models.URLField(_('feed url'), unique=True)
-    name = models.CharField(_('name'), max_length=100, null=True, blank=True)
-    short_name = models.CharField(_('short_name'), max_length=50, null=True, blank=True)
+    name = models.CharField(
+        _('name'),
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    short_name = models.CharField(
+        _('short_name'),
+        max_length=50,
+        null=True,
+        blank=True
+    )
     slug = models.SlugField(
         max_length=255,
         db_index=True,
@@ -286,27 +296,31 @@ class Feed(models.Model):
         help_text='Short descriptive unique name for use in urls.',
     )
     is_active = models.BooleanField(
-            _('is active'),
-            default=True,
-            help_text=_('If disabled, this feed will not be further updated.')
-        )
+        _('is active'),
+        default=True,
+        help_text=_('If disabled, this feed will not be further updated.')
+    )
     beta = models.BooleanField(
         _('is beta'),
         default=False,
-        help_text=_('If beta, this feed will be processed through the celery pipeline.')
+        help_text=_('If beta, celery pipeline.')
     )
     has_no_guid = models.BooleanField(
         _('has no guid'),
         default=False,
-        help_text=_("""This feed doesn't have a proper guid. use something else instead.""")
+        help_text=_("""
+                    This feed doesn't have a proper guid.
+                    Use something else instead.
+                    """
+                    )
     )
 
     # <rss><channel>
     # mandatory fields
     title = models.CharField(
-          _('title'),
-          max_length=200,
-          blank=True
+        _('title'),
+        max_length=200,
+        blank=True
     )
     link = models.URLField(
         _('link'),
@@ -344,7 +358,11 @@ class Feed(models.Model):
     )
 
     pubDate = models.DateTimeField(_('pubDate'), null=True, blank=True)
-    last_modified = models.DateTimeField(_('lastBuildDate'), null=True, blank=True)
+    last_modified = models.DateTimeField(
+        _('lastBuildDate'),
+        null=True,
+        blank=True
+    )
 
     # Category
     category = models.ManyToManyField(
@@ -357,13 +375,28 @@ class Feed(models.Model):
     # cloud
 
     ttl = models.IntegerField(
-        _("""ttl stands for time to live. It's a number of minutes that indicates how long a channel can be cached before refreshing from the source."""),
+        _("""
+          TTL stands for time to live.
+          It's a number of minutes that indicates how long a
+          channel can be cached before refreshing from the source.
+          """
+          ),
         default=60
     )
 
-    image_title = models.CharField(_('image_title'), max_length=200, blank=True)
-    image_link = models.URLField(_('image_link'), blank=True)
-    image_url = models.URLField(_('image_url'), blank=True)
+    image_title = models.CharField(
+        _('image_title'),
+        max_length=200,
+        blank=True
+    )
+    image_link = models.URLField(
+        _('image_link'),
+        blank=True
+    )
+    image_url = models.URLField(
+        _('image_url'),
+        blank=True
+    )
 
     # rating
     # textInput
@@ -371,8 +404,16 @@ class Feed(models.Model):
     # skipDay
 
     # http://feedparser.org/docs/http-etag.html
-    etag = models.CharField(_('etag'), max_length=50, blank=True)
-    last_checked = models.DateTimeField(_('last checked'), null=True, blank=True)
+    etag = models.CharField(
+        _('etag'),
+        max_length=50,
+        blank=True
+    )
+    last_checked = models.DateTimeField(
+        _('last checked'),
+        null=True,
+        blank=True
+    )
 
     announce_posts = models.BooleanField(default=False)
     """Whether to socially announce new articles posts"""
@@ -418,6 +459,7 @@ class Feed(models.Model):
     def get_absolute_url(self):
         return ('planet:feed-view', [str(self.id)])
 
+
 class Post(models.Model):
     """
     Model to hold an actual feed entry
@@ -441,15 +483,30 @@ class Post(models.Model):
     )
     comments = models.URLField(_('comments'), blank=True)
     # enclosure, see there
-    guid = models.CharField(_('guid'), max_length=255, db_index=True, unique=True)
+    guid = models.CharField(
+        _('guid'),
+        max_length=255,
+        db_index=True,
+        unique=True
+    )
     created = models.DateTimeField(_('pubDate'), auto_now_add=True)
 
     published = models.BooleanField(default=False)
 
-    last_modified = models.DateTimeField(null=True, blank=True) # ToDo: this is unused, remove?
-    date_modified = models.DateTimeField(_('date modified'), null=True, blank=True)
+    last_modified = models.DateTimeField(null=True, blank=True)
+    """.. todo::  this is unused, remove? """
 
-    tags = models.ManyToManyField(Tag, related_name="tag_posts", through='TaggedPost')
+    date_modified = models.DateTimeField(
+        _('date modified'),
+        null=True,
+        blank=True
+    )
+
+    tags = models.ManyToManyField(
+        Tag,
+        related_name="tag_posts",
+        through='TaggedPost'
+    )
 
     # Social
     tweets = models.IntegerField(default=0)
@@ -475,11 +532,13 @@ class Post(models.Model):
     @models.permalink
     def get_trackable_url(self):
         """
-        Get an URL for this particular object, that will be tracked in a separate view.
+        Get an URL for this particular object,
+        that will be tracked in a separate view.
 
         The related view is :mod:`feeds.views.PostTrackableView`
 
-        The view redirects to `feeds.models.Post.link`, storing information about the requesting client in `feeds.models.PostReadCount`
+        The view redirects to `feeds.models.Post.link`, storing
+        information about the requesting client in `feeds.models.PostReadCount`
         """
         return ('planet:post-trackable-view', [str(self.id)])
 
@@ -494,6 +553,7 @@ class Post(models.Model):
 
     def __unicode__(self):
         return u'%s' % (self.title)
+
 
 class Enclosure(models.Model):
     """
@@ -518,8 +578,14 @@ class Enclosure(models.Model):
         """
         return u'%s [for %s]' % (self.enclosure_type, self.post)
 
+
 class FeedPostCount(models.Model):
-    feed = models.ForeignKey(Feed, verbose_name=_('feed'), null=False, blank=False)
+    feed = models.ForeignKey(
+        Feed,
+        verbose_name=_('feed'),
+        null=False,
+        blank=False
+    )
     entry_new = models.IntegerField(default=0)
     entry_updated = models.IntegerField(default=0)
     entry_same = models.IntegerField(default=0)
@@ -541,7 +607,7 @@ class FeedPostCount(models.Model):
         import time
         this_hour = int(time.time()) - int(time.time()) % 3600
         self.created = int(this_hour)
-        super(FeedPostCount, self).save(*args, **kwargs) # Call the "real" save() method.
+        super(FeedPostCount, self).save(*args, **kwargs)
 
 
 class PostReadCountManager(models.Manager):
@@ -563,8 +629,12 @@ class PostReadCountManager(models.Manager):
             upper_offset = lower_offset
             lower_offset = upper_offset - delta
             if clicklist:
-                clickdata.append(clicklist.filter(created__gte=lower_offset).filter(created__lte=upper_offset).count())
+                clickdata.append(
+                    clicklist.filter(
+                        created__gte=lower_offset
+                    ).filter(created__lte=upper_offset).count())
         return clickdata
+
 
 class PostReadCount(models.Model):
     """
@@ -576,13 +646,21 @@ class PostReadCount(models.Model):
     post = models.ForeignKey(Post)
     created = models.DateTimeField(auto_now=True)
 
+
 class TaggedPost(models.Model):
     """
     Holds the relationship between a tag and the item being tagged.
     """
 
-    tag  = models.ForeignKey(Tag, verbose_name=_('tag'), related_name='post_tags')
-    post = models.ForeignKey(Post, verbose_name=_('post'))
+    tag = models.ForeignKey(
+        Tag,
+        verbose_name=_('tag'),
+        related_name='post_tags'
+    )
+    post = models.ForeignKey(
+        Post,
+        verbose_name=_('post')
+    )
 
     class Meta:
         # Enforce unique tag association per object
@@ -592,5 +670,3 @@ class TaggedPost(models.Model):
 
     def __unicode__(self):
         return u'%s [%s]' % (self.post, self.tag)
-
-
