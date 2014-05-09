@@ -229,7 +229,7 @@ class Category(models.Model):
         """
         if not self.slug:
             """Where self.name is the field used for 'pre-populate from'."""
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.name)
         models.Model.save(self, *args, **kwargs)
 
     @property

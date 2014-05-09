@@ -199,7 +199,8 @@ class ViewsAnonymousTest(TestCase):
             {
                 'url': 'http://spiegel.de/',
                 'form-TOTAL_FORMS': 1,
-                'form-INITIAL_FORMS': 0
+                'form-INITIAL_FORMS': 0,
+                'site_submit_wizard_view-current_step': 'Site',
             }
         )
         self.assertEqual(result.status_code, 200)
