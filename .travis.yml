@@ -23,6 +23,6 @@ install:
 before_script:
   - mysql -e 'create database myapp_test;'
 # Tell Travis how to run the test script itself
-script: coverage run --source=feeds feedtest.py -m py.test
+script: coverage run --source=feeds --omit=feeds/migration feedtest.py -m py.test
 after_success:
   - coveralls
