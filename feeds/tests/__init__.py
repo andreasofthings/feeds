@@ -22,7 +22,6 @@ Tests for the "feeds" app.
 
 """
 
-import feedparser
 
 from django.test import TestCase
 from django.test.client import Client
@@ -30,12 +29,10 @@ from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
 
 from feeds.models import Feed, Post
-from feeds.tasks import aggregate, entry_process, feed_refresh, dummy
-from feeds.tasks import entry_update_twitter, entry_update_facebook
 
-from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
-
-from datetime import datetime
+from feeds.tests.test_tag import *
+from feeds.tests.test_feeds import *
+from feeds.tests.test_tasks import *
 
 
 class ModelTest(TestCase):
@@ -121,80 +118,6 @@ class ModelTest(TestCase):
         """
         Clean up environment after model tests
         """
-        pass
-
-
-class TaskTest(TestCase):
-    """
-    Test Tasks
-
-    ..codeauthor:: Andreas Neumeier <andreas@neumeier.org>
-    """
-    def setUp(self):
-        """
-        Set up enivironment to test models
-        """
-        self.feed1 = Feed(
-            feed_url=reverse('planet:rss1'),
-            name="rss1",
-            short_name="rss1"
-        )
-        self.feed1.save()
-
-        self.feed2 = Feed(
-            feed_url=reverse('planet:rss2'),
-            name="rss2",
-            short_name="rss2"
-        )
-        self.feed2.save()
-
-        self.post1 = Post(
-            feed=self.feed1,
-            link="http://localhost/post1"
-        )
-        self.post1.save()
-
-        self.post2 = Post(
-            feed=self.feed2,
-            link="http://localhost/post2"
-        )
-        self.post2.save()
-
-    def test_task_time(self):
-        """
-        .. todo:: Needs amqp.
-        """
-        dummy.delay(invocation_time=datetime.now())
-        dummy(10)
-
-    def test_aggregate(self):
-        result = aggregate()
-        self.assertEqual(result, True)
-
-    def test_count_tweets(self):
-        result = entry_update_twitter(Post.objects.all()[0].id)
-        self.assertEqual(result, 0)
-
-    def test_count_share_like(self):
-        result = entry_update_facebook(Post.objects.all()[0].id)
-        self.assertEqual(result, True)
-
-    def test_feed_refresh(self):
-        feed = Feed.objects.all()[0]
-        result = feed_refresh(feed.id)
-        self.assertGreaterEqual(result[ENTRY_NEW], 0)
-        self.assertGreaterEqual(result[ENTRY_UPDATED], 0)
-        self.assertGreaterEqual(result[ENTRY_SAME], 0)
-        self.assertGreaterEqual(result[ENTRY_ERR], 0)
-
-    def test_entry_process(self):
-        f = Feed.objects.all()[0]
-        feed = feedparser.parse(f.feed_url)
-        for entry in feed.entries:
-            result = entry_process(entry, f.id, None, None)
-            self.assertEqual(result, True)
-
-    def tearDown(self):
         pass
 
 
@@ -696,6 +619,7 @@ class ViewsLoggedInTest(TestCase):
         """
         with self.assertNumQueries(1):
             Post.objects.create(feed=feed)
+
 
 class TestSiteCredential(TestCase):
     """
