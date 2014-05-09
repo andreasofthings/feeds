@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
 
 """
 feeds/feeds.py
@@ -17,6 +18,7 @@ from django.utils.feedgenerator import Rss201rev2Feed
 
 from feeds.models import Feed, Post
 
+
 class ITunesFeed(Rss201rev2Feed):
     """
     This shall reproduce an iTunes Feed
@@ -29,6 +31,7 @@ class ITunesFeed(Rss201rev2Feed):
     def add_root_elements(self, handler):
         super(ITunesFeed, self).add_root_elements(handler)
         handler.addQuickElement('itunes:explicit', 'clean')
+
 
 class RssFeed(NewsFeed):
     """
@@ -81,6 +84,3 @@ class RssFeed(NewsFeed):
         Return a trackable link for every item part of this feed.
         """
         return item.get_trackable_url()
-
-# vim: ts=4 et sw=4 sts=4
-

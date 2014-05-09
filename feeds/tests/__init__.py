@@ -22,7 +22,6 @@ Tests for the "feeds" app.
 
 """
 
-
 from django.test import TestCase
 from django.test.client import Client
 from django.contrib.auth.models import User, Permission
@@ -30,8 +29,10 @@ from django.core.urlresolvers import reverse
 
 from feeds.models import Feed, Post
 
+from feeds.tests.test_feeds import TestFeedCredentials
+from feeds.tests.test_site import *
+from feeds.tests.test_rss import TestRSS
 from feeds.tests.test_tag import *
-from feeds.tests.test_feeds import *
 from feeds.tests.test_tasks import *
 
 
@@ -53,6 +54,13 @@ class ModelTest(TestCase):
 
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
+    fixtures = [
+        "Feed.yaml",
+        "Site.yaml",
+        "Tags.yaml",
+        "Categories.yaml",
+    ]
+
     def setUp(self):
         """
         Set up enivironment to test models
@@ -104,9 +112,9 @@ class ModelTest(TestCase):
         .. todo:: use `fixtures` instead.
         """
         from feeds.models import Category
-        c = Category(title="default")
+        c = Category(name="default")
         c.save()
-        self.assertEquals(str(c), c.title)
+        self.assertEquals(str(c), c.name)
         # self.assertContains(c.get_absolute_url(), c.id)
         """
         Assert the category URL contains the category.pk.
@@ -180,7 +188,6 @@ class ViewsAnonymousTest(TestCase):
                     r'^site/submit/$',
                     SiteSubmitWizardView.as_view(SiteSubmitForms),
                     name="site-submit"
-                  )
 
             Should return a form.
             Should accept a post.
@@ -190,7 +197,12 @@ class ViewsAnonymousTest(TestCase):
         """Assert the `submit` site is visible to anonymous users."""
         result = self.client.post(
             reverse('planet:site-submit'),
-            {'url': 'http://spiegel.de/'}
+            {
+                'url': 'http://spiegel.de/',
+                'form-TOTAL_FORMS': 1,
+                'form-INITIAL_FORMS': 0,
+                'site_submit_wizard_view-current_step': 'Site',
+            }
         )
         self.assertEqual(result.status_code, 200)
         """Assert the `submit` site accepts `POST` from anonymous users."""
@@ -231,7 +243,7 @@ class ViewsAnonymousTest(TestCase):
             Should return 200.
         """
         result = self.client.get(
-            reverse('planet:site-view', args=str(self.site_id))
+            reverse('planet:site-view', args=(self.site_id,))
         )
         self.assertEqual(result.status_code, 200)
 
@@ -250,14 +262,14 @@ class ViewsAnonymousTest(TestCase):
         result = self.client.get(
             reverse(
                 'planet:site-update',
-                args=str(self.site_id)
+                args=(self.site_id,)
                 )
             )
         self.assertRedirects(
             result,
             '/accounts/login/?next=%s' % (
                 reverse('planet:site-update',
-                        args=str(self.site_id)
+                        args=(self.site_id,)
                         )
             )
         )
@@ -278,7 +290,7 @@ class ViewsAnonymousTest(TestCase):
         result = self.client.get(
             reverse(
                 'planet:site-delete',
-                args=str(self.site_id)
+                args=(self.site_id,)
             )
         )
         self.assertEqual(result.status_code, 302)
@@ -306,6 +318,13 @@ class ViewsAnonymousTest(TestCase):
         ---------
             :url: url(
                 r'^list/$',
+                FeedListView.as_view(),
+                name="feed-home"
+                )
+
+                name="feed-home"
+                )
+
                 FeedListView.as_view(),
                 name="feed-home"
                 )
@@ -443,6 +462,11 @@ class ViewsAnonymousTest(TestCase):
         self.feed_delete()
         # self.feed_refresh()
 
+    def test_sitemap(self):
+        client = Client()
+        result = client.get("/sitemap.xml")
+        self.assertEqual(result.status_code, 200)
+
 
 class ViewsLoggedInTest(TestCase):
     """
@@ -564,13 +588,6 @@ class ViewsLoggedInTest(TestCase):
         go to feed-add, anonymous client
         """
         result = self.client.post(reverse('planet:feed-add'))
-        self.assertEqual(result.status_code, 302)
-
-    def test_feed_add_post_no_credential(self):
-        """
-        go to feed-add, anonymous client
-        """
-        result = self.client.post(reverse('planet:feed-add'))
         self.client.login(username=self.username, password=self.password)
         self.assertEqual(result.status_code, 302)
 
@@ -619,12 +636,3 @@ class ViewsLoggedInTest(TestCase):
         """
         with self.assertNumQueries(1):
             Post.objects.create(feed=feed)
-
-
-class TestSiteCredential(TestCase):
-    """
-    Test those aspects of :py:mod:`feeds.views` related to
-    py:mod:`feeds.models.Site`.
-    """
-    def setUp(self):
-        pass

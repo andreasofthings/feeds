@@ -1,0 +1,3 @@
+- model: feeds.Category
+  fields:
+    "name": "Root"

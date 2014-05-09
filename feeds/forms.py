@@ -3,7 +3,13 @@
 
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Field, Fieldset, ButtonHolder, Submit, Button, Div
+from crispy_forms.layout import Layout
+from crispy_forms.layout import Field
+from crispy_forms.layout import Fieldset
+from crispy_forms.layout import ButtonHolder
+from crispy_forms.layout import Submit
+from crispy_forms.layout import Button
+from crispy_forms.layout import Div
 from crispy_forms.bootstrap import FormActions
 from django.core import validators
 from django.core.exceptions import ValidationError
@@ -14,6 +20,7 @@ import requests
 
 from feeds.models import Site, Feed, Category, Tag
 
+
 class SiteValidator(validators.URLValidator):
     def __init__(self, *args, **kwargs):
         super(SiteValidator, self).__init__(*args, **kwargs)
@@ -22,7 +29,7 @@ class SiteValidator(validators.URLValidator):
         try:
             super(SiteValidator, self).__call__(value)
         except ValidationError as e:
-            raise
+            raise e
 
         try:
             html = requests.get(value)
@@ -31,12 +38,13 @@ class SiteValidator(validators.URLValidator):
             for link in soup.head.find_all('link'):
                 if "application/rss" in link.get('type'):
                     result.append(link.get('href'))
-            if not results:
+            if not result:
                 raise Exception
         except Exception:
-            raise 
+            raise
         else:
-            site = value
+            self.site = value
+
 
 class SiteField(forms.URLField):
     default_validators = [SiteValidator]
@@ -44,11 +52,13 @@ class SiteField(forms.URLField):
     def __init__(self, *args, **kwargs):
         super(SiteField, self).__init__(*args, **kwargs)
 
+
 class SiteCreateForm(forms.ModelForm):
     """
     Form to create a new Site
     """
     url = SiteField()
+
     class Meta:
         model = Site
         fields = ('url', )
@@ -56,6 +66,7 @@ class SiteCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
+        self.helper.form_class = "field_inline"
         self.helper.form_action = 'planet:site-add'
         self.helper.layout = Layout(
             Field('url'),
@@ -66,9 +77,11 @@ class SiteCreateForm(forms.ModelForm):
         )
         super(SiteCreateForm, self).__init__(*args, **kwargs)
 
+
 class SiteFeedAddForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(SiteFeedAddForm, self).__init__(*args, **kwargs)
+
 
 class SiteUpdateForm(forms.ModelForm):
     """
@@ -90,6 +103,7 @@ class SiteUpdateForm(forms.ModelForm):
             )
         )
         super(SiteUpdateForm, self).__init__(*args, **kwargs)
+
 
 class FeedCreateForm(forms.ModelForm):
     """
@@ -122,6 +136,7 @@ class FeedCreateForm(forms.ModelForm):
         self.helper.form_action = 'planet:feed-add'
         super(FeedCreateForm, self).__init__(*args, **kwargs)
 
+
 class FeedUpdateForm(forms.ModelForm):
     """
     FeedUpdateForm
@@ -153,16 +168,17 @@ class FeedUpdateForm(forms.ModelForm):
         # self.helper.form_action = 'planet:feed-update'
         super(FeedUpdateForm, self).__init__(*args, **kwargs)
 
+
 class CategoryCreateForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ('title', 'parent',)
-    
+        fields = ('name', 'parent',)
+
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                'title', 
+                'title',
                 'parent',
             ),
             ButtonHolder(
@@ -175,6 +191,7 @@ class CategoryCreateForm(forms.ModelForm):
         self.helper.form_action = 'planet:category-add'
         super(CategoryCreateForm, self).__init__(*args, **kwargs)
 
+
 class CategoryUpdateForm(forms.ModelForm):
     """
     CategoryUpdateForm
@@ -185,14 +202,14 @@ class CategoryUpdateForm(forms.ModelForm):
     """
     class Meta:
         model = Category
-        fields = ('title', 'slug', 'parent',)
+        fields = ('name', 'slug', 'parent',)
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Fieldset(
                 'Change Category',
-                'title',
+                'name',
                 'slug',
                 'parent',
             ),
@@ -206,10 +223,13 @@ class CategoryUpdateForm(forms.ModelForm):
 
 
 class TagCreateForm(forms.ModelForm):
-  class Meta:
-    model = Tag
-    fields = ('name', )
+    """
+    """
+    class Meta:
+        model = Tag
+        fields = ('name', )
+
 
 class FeedAdminForm(forms.ModelForm):
-  class Meta:
-    model = Feed
+    class Meta:
+        model = Feed

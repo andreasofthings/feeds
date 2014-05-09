@@ -10,7 +10,7 @@ services:
 
 # List the versions of Django you'd like to test against
 env:
-  - DJANGO_VERSION=1.6.3
+  - DJANGO_VERSION=1.6.4
 
 install: 
    # Install the dependencies the app itself has
@@ -23,6 +23,6 @@ install:
 before_script:
   - mysql -e 'create database myapp_test;'
 # Tell Travis how to run the test script itself
-script: coverage run feedtest.py --source feeds -m py.test
+script: coverage run --source=feeds --omit=feeds/migration feedtest.py -m py.test
 after_success:
   - coveralls

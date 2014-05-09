@@ -18,6 +18,7 @@ if __name__ == '__main__':
             'django.contrib.contenttypes',
             'django.contrib.sessions',
             'django.contrib.admin',
+            'django.contrib.sitemaps',
             'crispy_forms',
             'feeds',
         ),
