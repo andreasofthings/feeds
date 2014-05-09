@@ -31,6 +31,7 @@ from feeds.models import Feed, Post
 
 from feeds.tests.test_feeds import TestFeedCredentials
 from feeds.tests.test_site import *
+from feeds.tests.test_rss import TestRSS
 from feeds.tests.test_tag import *
 from feeds.tests.test_tasks import *
 
@@ -461,6 +462,7 @@ class ViewsAnonymousTest(TestCase):
         self.feed_delete()
         # self.feed_refresh()
 
+    def test_sitemap(self):
 
 class ViewsLoggedInTest(TestCase):
     """
@@ -630,3 +632,9 @@ class ViewsLoggedInTest(TestCase):
         """
         with self.assertNumQueries(1):
             Post.objects.create(feed=feed)
+
+class TestSitemap(TestCase):
+    def test_sitemap(self):
+        client = Client()
+        result = client.get("/sitemap.xml")
+        otself.assertEqual(result.status_code, 200)
