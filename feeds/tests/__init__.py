@@ -261,7 +261,7 @@ class ViewsAnonymousTest(TestCase):
         result = self.client.get(
             reverse(
                 'planet:site-update',
-                args=str(self.site_id)
+                args=(self.site_id,)
                 )
             )
         self.assertRedirects(
