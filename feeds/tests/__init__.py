@@ -113,7 +113,7 @@ class ModelTest(TestCase):
         from feeds.models import Category
         c = Category(name="default")
         c.save()
-        self.assertEquals(str(c), c.title)
+        self.assertEquals(str(c), c.name)
         # self.assertContains(c.get_absolute_url(), c.id)
         """
         Assert the category URL contains the category.pk.
@@ -242,7 +242,7 @@ class ViewsAnonymousTest(TestCase):
             Should return 200.
         """
         result = self.client.get(
-            reverse('planet:site-view', args=str(self.site_id))
+            reverse('planet:site-view', args=(self.site_id,))
         )
         self.assertEqual(result.status_code, 200)
 
