@@ -268,7 +268,7 @@ class ViewsAnonymousTest(TestCase):
             result,
             '/accounts/login/?next=%s' % (
                 reverse('planet:site-update',
-                        args=str(self.site_id)
+                        args=(self.site_id,)
                         )
             )
         )
@@ -289,7 +289,7 @@ class ViewsAnonymousTest(TestCase):
         result = self.client.get(
             reverse(
                 'planet:site-delete',
-                args=str(self.site_id)
+                args=(self.site_id,)
             )
         )
         self.assertEqual(result.status_code, 302)
