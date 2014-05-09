@@ -18,5 +18,5 @@ class TestRSS(TestCase):
     def test_rss(self):
         c = Client()
         f = Feed.objects.all()[0].pk
-        r = c.get(reverse('planet:rss', args=(f,)))
+        r = c.get(reverse('planet:rss', kwargs={'pk':f,}))
         self.assertEquals(r.status_code, 200)
