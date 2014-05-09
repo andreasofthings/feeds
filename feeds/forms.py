@@ -66,6 +66,7 @@ class SiteCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
+        self.helper.form_class = "field_inline"
         self.helper.form_action = 'planet:site-add'
         self.helper.layout = Layout(
             Field('url'),
