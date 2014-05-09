@@ -463,6 +463,10 @@ class ViewsAnonymousTest(TestCase):
         # self.feed_refresh()
 
     def test_sitemap(self):
+        client = Client()
+        result = client.get("/sitemap.xml")
+        self.assertEqual(result.status_code, 200)
+
 
 class ViewsLoggedInTest(TestCase):
     """
@@ -632,9 +636,3 @@ class ViewsLoggedInTest(TestCase):
         """
         with self.assertNumQueries(1):
             Post.objects.create(feed=feed)
-
-class TestSitemap(TestCase):
-    def test_sitemap(self):
-        client = Client()
-        result = client.get("/sitemap.xml")
-        otself.assertEqual(result.status_code, 200)
