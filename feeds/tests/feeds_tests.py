@@ -249,7 +249,7 @@ class TestFeedCredentials(TestCase):
         result = c.get(reverse('planet:feed-refresh', args=(feed_id,)))
         self.assertEqual(result.status_code, 302)
         self.assertRedirects(result,
-                             reverse('planet:feed-refresh',
+                             reverse('planet:feed-view',
                                      args=(feed_id,)
                                      )
                              )
