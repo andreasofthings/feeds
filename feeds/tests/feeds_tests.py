@@ -207,7 +207,9 @@ class TestFeedCredentials(TestCase):
 
         permission = Permission.objects.get(codename="add_feed")
         self.user.user_permissions.add(permission)
-        permission = Permission.objects.get(codename="update_feed")
+        permission = Permission.objects.get(codename="feeds.change_feed")
+        self.user.user_permissions.add(permission)
+        permission = Permission.objects.get(codename="can_refresh_feed")
         self.user.user_permissions.add(permission)
         """Give the test user proper permission."""
 
@@ -231,3 +233,12 @@ class TestFeedCredentials(TestCase):
         f = Feed.objects.all()[0].pk
         result = self.client.post(reverse('planet:feed-update', args=(f,)))
         self.assertEquals(result.status_code, 200)
+
+    def test_FeedRefreshView(self):
+        """
+        manually refresh a feed
+        """
+        c = Client()
+        feed_id = Feed.objects.all()[0].id
+        result = c.get(reverse('planet:feed-refresh', args=(feed_id,)))
+        self.assertEqual(result.status_code, 200)
