@@ -1,0 +1,7 @@
+- model: feeds.Post
+  pk: 1
+  fields: 
+    "feed": 1
+    "title": "Test"
+    "link": "http://www.spiegel.de/1234"
+    "created": "2000-01-01 00:00"

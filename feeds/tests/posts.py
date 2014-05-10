@@ -12,6 +12,11 @@ from feeds.models import Post
 
 
 class TestPostAnonymous(TestCase):
+    """
+    """
+
+    fixtures = ['Feed.yaml', 'Posts.yaml',]
+
     def setUp(self):
         self.client = Client()
 

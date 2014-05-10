@@ -93,10 +93,11 @@ class ViewsLoggedInTest(TestCase):
 
     def test_feed_add(self):
         """
-        go to feed-add
+        Go to feed-add.
+        This should require the proper credentials.
         """
         result = self.client.get(reverse('planet:feed-add'), follow=False)
-        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 302)
 
     def test_feed_add_no_credentials(self):
         """
@@ -206,6 +207,8 @@ class TestFeedCredentials(TestCase):
 
         permission = Permission.objects.get(codename="add_feed")
         self.user.user_permissions.add(permission)
+        permission = Permission.objects.get(codename="update_feed")
+        self.user.user_permissions.add(permission)
         """Give the test user proper permission."""
 
     def test_feed_add_post(self):
@@ -225,5 +228,6 @@ class TestFeedCredentials(TestCase):
         """
         Test whether a user with proper credentials can update a feed.
         """
-        result = self.client.post(reverse('planet:feed-update'))
+        f = Feed.objects.all()[0].pk
+        result = self.client.post(reverse('planet:feed-update', args=(f,)))
         self.assertEquals(result.status_code, 200)

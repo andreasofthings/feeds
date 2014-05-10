@@ -22,6 +22,7 @@ if __name__ == '__main__':
             'crispy_forms',
             'feeds',
         ),
+        CRISPY_TEMPLATE_PACK = "bootstrap",
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.mysql',
