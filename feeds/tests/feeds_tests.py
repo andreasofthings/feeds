@@ -239,7 +239,6 @@ class TestFeedCredentials(TestCase):
         self.assertEquals(result.status_code, 302)
         self.assertRedirects(result, reverse('planet:feed-home'))
 
-
     def test_feed_refresh_view(self):
         """
         manually refresh a feed
@@ -248,4 +247,9 @@ class TestFeedCredentials(TestCase):
         c.login(username=self.username, password=self.password)
         feed_id = Feed.objects.all()[0].id
         result = c.get(reverse('planet:feed-refresh', args=(feed_id,)))
-        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 302)
+        self.assertRedirects(result,
+                             reverse('planet:feed-refresh',
+                                     args=(feed_id,)
+                                     )
+                             )
