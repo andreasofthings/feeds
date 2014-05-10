@@ -274,7 +274,10 @@ class Feed(models.Model):
     - calculated values
     """
     site = models.ForeignKey(Site, null=True)
-    feed_url = models.URLField(_('feed url'), unique=True)
+    feed_url = models.URLField(
+        _('feed url'),
+        unique=True
+    )
     name = models.CharField(
         _('name'),
         max_length=100,
@@ -423,9 +426,11 @@ class Feed(models.Model):
     def save(self, *args, **kwargs):
         """
         Need to update items before saving?
+
+        .. todo: This is for sure flaky.
         """
         f = feedparser.parse(self.feed_url)
-        if not self.name:
+        if not self.name and 'title' in f.feed:
             self.name = f.feed.title
         if not self.short_name:
             self.short_name = f.feed.title

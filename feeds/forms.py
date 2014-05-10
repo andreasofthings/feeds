@@ -11,52 +11,20 @@ from crispy_forms.layout import Submit
 from crispy_forms.layout import Button
 from crispy_forms.layout import Div
 from crispy_forms.bootstrap import FormActions
-from django.core import validators
-from django.core.exceptions import ValidationError
 
-from exceptions import Exception
-from bs4 import BeautifulSoup
-import requests
+from feeds.models import Site
+from feeds.models import Feed
+from feeds.models import Category
+from feeds.models import Tag
 
-from feeds.models import Site, Feed, Category, Tag
-
-
-class SiteValidator(validators.URLValidator):
-    def __init__(self, *args, **kwargs):
-        super(SiteValidator, self).__init__(*args, **kwargs)
-
-    def __call__(self, value):
-        try:
-            super(SiteValidator, self).__call__(value)
-        except ValidationError as e:
-            raise e
-
-        try:
-            html = requests.get(value)
-            soup = BeautifulSoup(html.text)
-            result = []
-            for link in soup.head.find_all('link'):
-                if "application/rss" in link.get('type'):
-                    result.append(link.get('href'))
-            if not result:
-                raise Exception
-        except Exception:
-            raise
-        else:
-            self.site = value
-
-
-class SiteField(forms.URLField):
-    default_validators = [SiteValidator]
-
-    def __init__(self, *args, **kwargs):
-        super(SiteField, self).__init__(*args, **kwargs)
+from feeds.validators import SiteField, FeedField
 
 
 class SiteCreateForm(forms.ModelForm):
     """
     Form to create a new Site
     """
+
     url = SiteField()
 
     class Meta:
@@ -113,6 +81,9 @@ class FeedCreateForm(forms.ModelForm):
 
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
+
+    feed_url = FeedField()
+
     class Meta:
         model = Feed
         fields = ('name', 'short_name', 'feed_url', 'category',)

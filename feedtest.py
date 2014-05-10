@@ -19,10 +19,20 @@ if __name__ == '__main__':
             'django.contrib.admin',
             'django.contrib.sitemaps',
             'crispy_forms',
+            'haystack',
             'test',
             'feeds',
         ),
         CRISPY_TEMPLATE_PACK="bootstrap",
+        HAYSTACK_CONNECTIONS={
+            "default": {
+                'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+                'PATH': os.path.join(
+                    os.path.dirname(__file__),
+                    'whoosh_index'
+                ),
+            }
+        },
         DATABASES={
             'default': {
                 'ENGINE': 'django.db.backends.mysql',

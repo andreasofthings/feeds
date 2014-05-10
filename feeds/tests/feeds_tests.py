@@ -161,7 +161,7 @@ class ViewsLoggedInTest(TestCase):
         result = c.get(reverse('planet:tag-home'))
         self.assertEqual(result.status_code, 200)
 
-    def test_FeedRefreshView(self):
+    def test_feed_refresh_view(self):
         """
         manually refresh a feed
         """
@@ -207,7 +207,7 @@ class TestFeedCredentials(TestCase):
 
         permission = Permission.objects.get(codename="add_feed")
         self.user.user_permissions.add(permission)
-        permission = Permission.objects.get(codename="feeds.change_feed")
+        permission = Permission.objects.get(codename="change_feed")
         self.user.user_permissions.add(permission)
         permission = Permission.objects.get(codename="can_refresh_feed")
         self.user.user_permissions.add(permission)
@@ -230,15 +230,22 @@ class TestFeedCredentials(TestCase):
         """
         Test whether a user with proper credentials can update a feed.
         """
+        c = Client()
+        c.login(username=self.username, password=self.password)
         f = Feed.objects.all()[0].pk
-        result = self.client.post(reverse('planet:feed-update', args=(f,)))
-        self.assertEquals(result.status_code, 200)
+        result = c.post(reverse('planet:feed-update', args=(f,)),
+                        {'feed_url': "http://spiegel.de/index.rss"}
+                        )
+        self.assertEquals(result.status_code, 302)
+        self.assertRedirects(result, reverse('planet:feed-home'))
 
-    def test_FeedRefreshView(self):
+
+    def test_feed_refresh_view(self):
         """
         manually refresh a feed
         """
         c = Client()
+        c.login(username=self.username, password=self.password)
         feed_id = Feed.objects.all()[0].id
         result = c.get(reverse('planet:feed-refresh', args=(feed_id,)))
         self.assertEqual(result.status_code, 200)

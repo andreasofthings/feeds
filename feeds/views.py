@@ -1,5 +1,6 @@
-#! /usr/bin/env python2.7
+#! /usr/bin/env python
 # -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
 
 """
 :mod:`feeds.views`
@@ -12,25 +13,20 @@ import simplejson as json
 from datetime import datetime, timedelta
 from django import forms
 from django.core.urlresolvers import reverse
-from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.views.generic import DetailView, ListView
 from django.views.generic import CreateView, UpdateView
 from django.views.generic import DeleteView, RedirectView
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import utc
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
-from braces.views import MultiplePermissionsRequiredMixin
 
 from feeds.models import Site, Feed, Post, Category, Tag, PostReadCount
 from feeds.forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
 from feeds.forms import FeedUpdateForm, CategoryUpdateForm
 from feeds.forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
-
-
-from feeds.mixins import google_required, UserAgentRequiredMixin
-
 
 from django.contrib.formtools.wizard.views import SessionWizardView
 
@@ -51,6 +47,7 @@ SiteSubmitForms = [
     ('Feeds', SiteFeedAddForm),
     ]
 
+
 class SiteSubmitWizardView(SessionWizardView):
     """
     Wizard that walks people through when adding a site with feeds
@@ -60,7 +57,7 @@ class SiteSubmitWizardView(SessionWizardView):
 
     def done(self, form_list, **kwargs):
         return HttpResponseRedirect('/page-to-redirect-to-when-done/')
-    
+
     def get_form(self, step=None, data=None, files=None):
         form = super(SiteSubmitWizardView, self).get_form(step, data, files)
 
@@ -71,13 +68,17 @@ class SiteSubmitWizardView(SessionWizardView):
             form = SiteFeedAddForm()
             html = requests.get(step_0_data['Site-url'])
             soup = BeautifulSoup(html.text)
-            result = []
             for link in soup.head.find_all('link'):
-                if link.has_key('type'):
+                if 'type' in link:
                     if "application/rss" in link.get('type'):
-                        form.fields[link.get('href')] = forms.BooleanField(initial=False, required=False, label=link.get('title'))
+                        form.fields[link.get('href')] = forms.BooleanField(
+                            initial=False,
+                            required=False,
+                            label=link.get('title')
+                        )
 
         return form
+
 
 class SiteListView(ListView):
     """
@@ -92,6 +93,7 @@ class SiteListView(ListView):
     model = Site
     template_name = "feeds/site_list.html"
 
+
 class SiteCreateView(PermissionRequiredMixin, CreateView):
     """
     View to create a new site.
@@ -99,6 +101,7 @@ class SiteCreateView(PermissionRequiredMixin, CreateView):
     permission_required = "feeds.add_site"
     form_class = SiteCreateForm
     model = Site
+
 
 class SiteDetailView(DetailView):
     """
@@ -113,18 +116,21 @@ class SiteDetailView(DetailView):
     model = Site
     template_name = "feeds/site_detail.html"
 
+
 class SiteUpdateView(PermissionRequiredMixin, UpdateView):
-    """ 
+    """
     View to update an existing site.
     """
     permission_required = "feeds.change_site"
     form_class = SiteUpdateForm
     model = Site
 
+
 class SiteDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = "feeds.delete_site"
     model = Site
     success_url = "planet:site-home"
+
 
 class FeedCreateView(PermissionRequiredMixin, CreateView):
     """
@@ -137,6 +143,7 @@ class FeedCreateView(PermissionRequiredMixin, CreateView):
     model = Feed
     initial = {'is_Active': False}
 
+
 class FeedListView(ListView):
     """
     List all registered feeds
@@ -148,6 +155,7 @@ class FeedListView(ListView):
 
     def get_paginate_by(self, queryset):
         return 10
+
 
 class FeedDetailView(DetailView):
     """
@@ -165,38 +173,46 @@ class FeedDetailView(DetailView):
         labels = []
         now = datetime.utcnow().replace(tzinfo=utc)
 
-        clicklist = PostReadCount.objects.filter(post__feed__id=self.kwargs['pk'])
+        clicklist = PostReadCount.objects.filter(
+            post__feed__id=self.kwargs['pk']
+        )
         import random
         for i in range(24):
             upper_offset = now - timedelta(hours=i)
             lower_offset = now - timedelta(hours=i+1)
             if clicklist:
-                clickdata.append(clicklist.filter(created__gte=lower_offset).filter(created__lte=upper_offset).count())
+                clickdata.append(
+                    clicklist.filter(
+                        created__gte=lower_offset
+                    ).filter(
+                        created__lte=upper_offset
+                    ).count())
             else:
                 clickdata.append(0)
             contentdata.append(random.Random().randint(0, 7))
-            labels.append("%s:00"%(str(lower_offset.hour)))
+            labels.append("%s:00" % (str(lower_offset.hour)))
 
         chartdata = {
             'labels': labels,
-            'datasets': [ {
-                  'fillColor' : "rgba(220,220,220,0.5)",
-                  'strokeColor' : "rgba(220,220,220,1)",
-                  'pointColor' : "rgba(220,220,220,1)",
-                  'pointStrokeColor' : "#fff",
-                  'data': contentdata,
+            'datasets': [{
+                'fillColor': "rgba(220,220,220,0.5)",
+                'strokeColor': "rgba(220,220,220,1)",
+                'pointColor': "rgba(220,220,220,1)",
+                'pointStrokeColor': "#fff",
+                'data': contentdata,
             }, {
-                  'fillColor' : "rgba(200,200,250,0.5)",
-                  'strokeColor' : "rgba(220,220,220,1)",
-                  'pointColor' : "rgba(220,220,220,1)",
-                  'pointStrokeColor' : "#fff",
-                  'data': clickdata,
+                'fillColor': "rgba(200,200,250,0.5)",
+                'strokeColor': "rgba(220,220,220,1)",
+                'pointColor': "rgba(220,220,220,1)",
+                'pointStrokeColor': "#fff",
+                'data': clickdata,
             },
             ]
         }
         context['data'] = json.dumps(chartdata)
         context['top5'] = Post.objects.filter(feed__id=self.kwargs['pk'])[:5]
         return context
+
 
 class FeedUpdateView(LoginRequiredMixin, UpdateView):
     """
@@ -211,6 +227,7 @@ class FeedUpdateView(LoginRequiredMixin, UpdateView):
         else:
             return reverse('planet:feed-home')
 
+
 class FeedDeleteView(LoginRequiredMixin, DeleteView):
     """
     Delete a particular feed
@@ -219,6 +236,7 @@ class FeedDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('planet:feed-home')
+
 
 class FeedRefreshView(LoginRequiredMixin, RedirectView):
     """
@@ -231,6 +249,7 @@ class FeedRefreshView(LoginRequiredMixin, RedirectView):
         feed_refresh.delay(feed_id=pk)
         return reverse('planet:feed-view', args=(pk,))
 
+
 class PostListView(ListView):
     """
     List Posts
@@ -241,6 +260,7 @@ class PostListView(ListView):
     object_list = "nodes"
     queryset = Post.objects.order_by('-published')
 
+
 class PostDetailView(DetailView):
     user_agent = "google"
     permissions = {
@@ -249,16 +269,19 @@ class PostDetailView(DetailView):
     model = Post
     context_object_name = "node"
 
-    @method_decorator(google_required)
     def dispatch(self, *args, **kwargs):
         return super(PostDetailView, self).dispatch(*args, **kwargs)
 
+
 class PostTrackableView(RedirectView):
+
     permanent = False
+
     def get_redirect_url(self, pk):
         post = get_object_or_404(Post, pk=pk)
         PostReadCount(post=post).save()
         return post.link
+
 
 class CategoryListView(ListView):
     """
@@ -269,6 +292,7 @@ class CategoryListView(ListView):
     context_object_name = "categories"
     paginate_by = 10
     # queryset = Category.objects.all()
+
 
 class CategoryDetailView(DetailView):
     """
@@ -281,6 +305,7 @@ class CategoryDetailView(DetailView):
 
     def dispatch(self, *args, **kwargs):
         return super(CategoryDetailView, self).dispatch(*args, **kwargs)
+
 
 class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     """
@@ -295,6 +320,7 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
         else:
             return reverse('planet:category-home')
 
+
 class CategoryCreateView(LoginRequiredMixin, CreateView):
     """
     ToDo:
@@ -303,6 +329,7 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
     form_class = CategoryCreateForm
     model = Category
     initial = {'is_Active': False}
+
 
 class TagListView(ListView):
     """
@@ -313,6 +340,7 @@ class TagListView(ListView):
     context_object_name = "tags"
     paginate_by = 10
     queryset = Tag.objects.all()
+
 
 class TagDetailView(DetailView):
     """
@@ -327,6 +355,7 @@ class TagDetailView(DetailView):
     def dispatch(self, *args, **kwargs):
         return super(TagDetailView, self).dispatch(*args, **kwargs)
 
+
 class TagCreateView(LoginRequiredMixin, CreateView):
     """
     ToDo:
@@ -335,6 +364,7 @@ class TagCreateView(LoginRequiredMixin, CreateView):
     form_class = TagCreateForm
     model = Tag
     initial = {'is_Active': False}
+
 
 class TagUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """
@@ -350,10 +380,7 @@ class TagUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 from rest_framework import viewsets
 from serializers import ScoreSerializer
 
+
 class ApiScore(viewsets.ModelViewSet):
     model = Post
     serializer_class = ScoreSerializer
-
-
-# vim: ts=4 et sw=4 sts=4
-
