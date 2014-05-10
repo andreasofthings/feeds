@@ -1,0 +1,23 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
+
+"""
+"""
+
+from django.test import TestCase, Client
+from django.core.urlresolvers import reverse
+
+from feeds.models import Post
+
+
+class TestPostAnonymous(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_post_view(self):
+        """
+        """
+        p = Post.objects.all()[0].pk
+        result = self.client.get(reverse('planet:post-view', args=(p,)))
+        self.assertEquals(result.status_code, 200)
