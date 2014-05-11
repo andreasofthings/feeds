@@ -10,4 +10,8 @@ import requests
 
 if __name__ == '__main__':
     payload = {'key1': 'value1', 'key2': 'value2'}
-    r = requests.post("https:/angry-planet.com/hook/feeds", data=payload)
+    r = requests.post(
+        "https://angry-planet.com/hook/feeds",
+        data=payload,
+        verify=False
+    )
