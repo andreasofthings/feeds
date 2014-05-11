@@ -1,0 +1,13 @@
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-target"#"><i class="icon-list-alt"></i>{% trans "Feeds" %}<b class="caret"></b></a>
+      <ul class="dropdown-menu">
+        <li><a href="{% url 'planet:feed-home' %}">feeds overview</a></li>
+        <li><a href="{% url 'category:category-home' %}">category overview</a></li>
+        <li><a href="{% url 'category:tag-home' %}">tags overview</a></li>
+        {% if user.is_authenticated %}
+          {% if perms.feeds.add_feed %} <li> <a href="{% url 'planet:feed-add' %}">add feed</a></li> {% endif %}
+          {% if perms.feeds.add_category %} <li> <a href="{% url 'category:category-add' %}">add category</a></li> {% endif %}
+          {% if perms.feeds.add_tag %} <li> <a href="{% url 'category:tag-add' %}">add tag</a></li> {% endif %}
+        {% endif %}
+      </ul>
+    </li>
