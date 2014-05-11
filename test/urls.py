@@ -23,6 +23,12 @@ urlpatterns = patterns('',
                            )
                            ),
                        url(
+                           r'^testfeed1',
+                           TemplateView.as_view(
+                               template_name="test/feed1.html"
+                           )
+                       ),
+                       url(
                            r'^accounts/login/',
                            TemplateView.as_view(
                                template_name="feeds/index.html"

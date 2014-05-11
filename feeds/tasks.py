@@ -30,7 +30,6 @@ from xml.dom.minidom import parseString
 
 from celery import shared_task
 from celery import chord
-from celery import group
 
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
@@ -97,7 +96,8 @@ def twitter_post(post_id):
         return
     from twitter import Api
     post = Post.objects.get(pk=post_id)
-    user_auth = User.objects.get(id=15).social_auth.filter(provider="twitter")
+    user = User.objects.get(id=15)
+    user_auth = user.social_auth.filter(provider="twitter")
     message = """%s on %s http://angry-planet.com%s""" % (
         post.title,
         post.feed.title,
@@ -162,10 +162,10 @@ def entry_update_facebook(entry_id):
 
     entry = Post.objects.get(pk=entry_id)
     logger.debug("start: facebook shares & likes for %s...", entry.guid)
-    facebook_api = "https://api.facebook.com/method/fql.query?query=%s"
-    facebook_sql = """select like_count, share_count from link_stat where url='%s'"""
-    query_sql = facebook_sql % (entry.link)
-    query_url = facebook_api % (quote(query_sql))
+    fb_api = "https://api.facebook.com/method/fql.query?query=%s"
+    fb_sql = """select like_count, share_count from link_stat where url='%s'"""
+    query_sql = fb_sql % (entry.link)
+    query_url = fb_api % (quote(query_sql))
     http = httplib2.Http()
     resp, content = http.request(query_url, "GET")
 
@@ -408,6 +408,7 @@ def feed_refresh(feed_id):
                 )
 
     feed_stats = {
+        'feed_id': 0,
         ENTRY_NEW: 0,
         ENTRY_UPDATED: 0,
         ENTRY_SAME: 0,
@@ -516,6 +517,11 @@ def feed_refresh(feed_id):
 
 
 @shared_task
+def aggregate_stats(result):
+    return sum(result)
+
+
+@shared_task
 def aggregate():
     """
     aggregate feeds
@@ -524,13 +530,12 @@ def aggregate():
 
     find all tasks that are marked for beta access
 
-    :codeauthor: Andreas Neumeier
+    .. codeauthor:: Andreas Neumeier
     """
     logger = logging.getLogger(__name__)
     logger.debug("start aggregating")
     feeds = Feed.objects.filter(is_active=True).filter(beta=True)
     logger.debug("processing %s feeds", feeds.count())
-    job = group([feed_refresh.s(i.id) for i in feeds])
-    job.delay()
+    job = chord((feed_refresh.s(i.id) for i in feeds), aggregate_stats.s())()
     logger.debug("stop aggregating")
     return job.get()

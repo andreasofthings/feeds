@@ -12,3 +12,10 @@
     "name": "WRINT - Die Wrintheit"
     "short_name": "Wrintheit"
     "slug": "WRINT-Wrintheit"
+- model: feeds.Feed
+  pk: 3
+  fields:
+      "feed_url": "http://testserver/testfeed-1"
+      "name": "Test - Feed Nummer 1"
+      "short_name": "testfeed1"
+      "slug": "testfeed1"
