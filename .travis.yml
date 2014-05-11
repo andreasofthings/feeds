@@ -26,3 +26,4 @@ before_script:
 script: coverage run --source=feeds feedtest.py -m py.test
 after_success:
   - coveralls
+  - python webhook.py
