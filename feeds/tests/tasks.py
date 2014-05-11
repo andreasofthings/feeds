@@ -11,6 +11,7 @@ import feedparser
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
+from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 from feeds.models import Feed, Post
 
 
@@ -56,16 +57,29 @@ class TaskTest(TestCase):
 
     def test_task_time(self):
         """
-        .. todo:: Needs amqp.
+        This is a test whether start-time is seen.
         """
         from feeds.tasks import dummy
         dummy.delay(invocation_time=datetime.now())
         dummy(10)
 
     def test_aggregate(self):
+        """
+        Test for the `aggregate` function in :py:mod:`feeds.tasks`
+        """
         from feeds.tasks import aggregate
         result = aggregate()
-        self.assertEqual(result, True)
+        self.assertEqual(type(result), type({}))
+        self.assertDictContainsSubset(
+            {
+                FEED_OK: 0,
+                FEED_SAME: 0,
+                FEED_ERRPARSE: 0,
+                FEED_ERREXC: 0,
+                FEED_ERRHTTP: 0
+            },
+            result
+        )
 
     def test_count_tweets(self):
         from feeds.tasks import entry_update_twitter

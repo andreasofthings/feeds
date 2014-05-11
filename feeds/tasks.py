@@ -14,7 +14,6 @@ This module takes care of everything that is not client/customer facing.
 
 import logging
 import types
-import twitter
 import httplib2
 import simplejson
 import feedparser
@@ -26,11 +25,12 @@ except ImportError:
     from urllib import quote
 
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from xml.dom.minidom import parseString
 
-from celery import task
+from celery import shared_task
 from celery import chord
+from celery import group
 
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
@@ -42,8 +42,9 @@ from feeds import USER_AGENT
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 
-from feeds.tools import mtime, prints, getText
-from feeds.models import Feed, Post, Tag, Category, TaggedPost
+from feeds.tools import mtime, getText
+from feeds.models import Feed, Post, Tag, TaggedPost
+
 
 def get_entry_guid(entry, feed_id=None):
     """
@@ -61,7 +62,8 @@ def get_entry_guid(entry, feed_id=None):
 
     return entry.get('id', guid)
 
-@task
+
+@shared_task
 def dummy(x=10, *args, **kwargs):
     """
     Dummy celery.task that sleeps for x seconds,
@@ -70,14 +72,18 @@ def dummy(x=10, *args, **kwargs):
     """
     from time import sleep
     logger = logging.getLogger(__name__)
-    if kwargs.has_key('invocation_time'):
-        logger.debug("task was delayed for %s", (datetime.now()-kwargs['invocation_time']))
+    if 'invocation_time' in kwargs:
+        logger.debug(
+            "task was delayed for %s",
+            (datetime.now() - kwargs['invocation_time'])
+        )
     logger.debug("Started to sleep for %ss", x)
     sleep(x)
     logger.debug("Woke up after sleeping for %ss", x)
     return True
 
-@task
+
+@shared_task
 def twitter_post(post_id):
     """
     announce track and artist on twitter
@@ -92,13 +98,17 @@ def twitter_post(post_id):
     from twitter import Api
     post = Post.objects.get(pk=post_id)
     user_auth = User.objects.get(id=15).social_auth.filter(provider="twitter")
-    message = """%s on %s http://angry-planet.com%s"""%(post.title, post.feed.title, post.get_absolute_url())
+    message = """%s on %s http://angry-planet.com%s""" % (
+        post.title,
+        post.feed.title,
+        post.get_absolute_url()
+    )
     for account in user_auth:
         access_token = urlparse.parse_qs(account.extra_data['access_token'])
         oauth_token = access_token['oauth_token'][0]
         oauth_access = access_token['oauth_token_secret'][0]
         twitter = Api(
-            consumer_key=settings.TWITTER_CONSUMER_KEY, 
+            consumer_key=settings.TWITTER_CONSUMER_KEY,
             consumer_secret=settings.TWITTER_CONSUMER_SECRET,
             access_token_key=oauth_token,
             access_token_secret=oauth_access
@@ -107,11 +117,12 @@ def twitter_post(post_id):
         logger.debug("twitter said: %s", result)
     logger.debug("done twittering post")
 
-@task(time_limit=10)
+
+@shared_task(time_limit=10)
 def entry_update_twitter(entry_id):
     """
     count tweets
-    
+
     """
     logger = logging.getLogger(__name__)
     logger.debug("start: counting tweets")
@@ -127,7 +138,7 @@ def entry_update_twitter(entry_id):
 
     resp, content = http.request(query, "GET")
 
-    if resp.has_key('status') and resp['status'] == "200":
+    if 'status' in resp and resp['status'] == "200":
         result = simplejson.loads(content)
         entry.tweets = result['count']
         entry.save()
@@ -137,7 +148,8 @@ def entry_update_twitter(entry_id):
     logger.debug("stop: counting tweets. got %s", entry.tweets)
     return entry.tweets
 
-@task(time_limit=10)
+
+@shared_task(time_limit=10)
 def entry_update_facebook(entry_id):
     """
     count facebook shares & likes
@@ -157,7 +169,7 @@ def entry_update_facebook(entry_id):
     http = httplib2.Http()
     resp, content = http.request(query_url, "GET")
 
-    if resp.has_key('status') and resp['status'] == "200":
+    if 'status' in resp and resp['status'] == "200":
         xml = parseString(content)
         for i in xml.getElementsByTagName("link_stat"):
             for j in i.getElementsByTagName("like_count"):
@@ -167,10 +179,14 @@ def entry_update_facebook(entry_id):
 
     entry.save()
 
-    logger.debug("stop: counting facebook shares & likes. got %s shares and %s likes.", entry.shares, entry.likes)
+    logger.debug("stop: facebook shares & likes. got %s shares and %s likes.",
+                 entry.shares,
+                 entry.likes
+                 )
     return True
 
-@task(time_limit=10)
+
+@shared_task(time_limit=10)
 def entry_update_googleplus(entry_id):
     """
     plus 1
@@ -200,29 +216,33 @@ def entry_update_googleplus(entry_id):
         "key": "p",
         "apiVersion": "v1"
     }
-    headers = {'Content-type': 'application/json',}
+    headers = {
+        'Content-type': 'application/json',
+    }
 
     resp, content = http.request(
-        queryurl, 
-        method="POST", 
-        body=simplejson.dumps(params), 
+        queryurl,
+        method="POST",
+        body=simplejson.dumps(params),
         headers=headers
     )
 
-    if resp.has_key('status') and resp['status'] == "200":
+    if 'status' in resp and resp['status'] == "200":
         result = simplejson.loads(content)
         try:
-            plusone = int( result['result']['metadata']['globalCounts']['count'] )
-            entry.plus1 = plusone
+            entry.plus1 = int(
+                result['result']['metadata']['globalCounts']['count']
+            )
             entry.save()
-            logger.debug("stop: counting +1s. Got %s.", plusone)
-            return plusone
+            logger.debug("stop: counting +1s. Got %s.", entry.plus1)
+            return entry.plus1
         except KeyError as e:
             raise KeyError(e)
     else:
-        logger.debug("stop: counting +1s. Got none. or something weird happened.")
+        logger.debug("stop: counting +1s. Got none. Something weird happened.")
 
-@task(time_limit=10)
+
+@shared_task(time_limit=10)
 def entry_update_pageviews(entry_id):
     """
     get pageviews from piwik
@@ -236,18 +256,20 @@ def entry_update_pageviews(entry_id):
 
     entry = Post.objects.get(pk=entry_id)
 
-    piwik = Piwik() 
-    pageurl = "http://angry-planet.com%s"%(entry.get_absolute_url())
+    piwik = Piwik()
+    pageurl = "http://angry-planet.com%s" % (entry.get_absolute_url())
     entry.pageviews = piwik.getPageActions(pageurl)
     entry.save()
     logger.debug("stop: get local pageviews. got %s.", entry.pageviews)
     return entry.pageviews
 
-@task
+
+@shared_task
 def tsum(numbers):
     return sum(numbers)
 
-@task
+
+@shared_task
 def entry_update_social(entry_id):
     logger = logging.getLogger(__name__)
 
@@ -273,17 +295,18 @@ def entry_update_social(entry_id):
     if settings.FEED_POST_UPDATE_PAGEVIEWS:
         f = (entry_update_pageviews.subtask((p.id, )))
         header.append(f)
-   
+
     callback = tsum.s()
     result = chord(header)(callback)
 
     p.score = result.get(timeout=60)
     p.save()
 
-    logger.debug("stop: social scoring. got %s"%p.score)
+    logger.debug("stop: social scoring. got %s" % p.score)
     return p.score
 
-@task
+
+@shared_task
 def entry_tags(post_id, tags):
     """
     """
@@ -296,7 +319,10 @@ def entry_tags(post_id, tags):
     if tags is not "" and isinstance(tags, types.ListType):
         new_tags = 0
         for tag in tags:
-            t, created = Tag.objects.get_or_create(name=str(tag.term), slug=slugify(tag.term))
+            t, created = Tag.objects.get_or_create(
+                name=str(tag.term),
+                slug=slugify(tag.term)
+            )
             if created:
                 logger.info("created new tag '%s'", t)
                 t.save()
@@ -308,7 +334,8 @@ def entry_tags(post_id, tags):
     logger.info("created %s new tags", new_tags)
     logger.debug("stop: entry tagging")
 
-@task
+
+@shared_task
 def entry_process(entry, feed_id, postdict, fpf):
     """
     Receive Entry, process
@@ -334,16 +361,16 @@ def entry_process(entry, feed_id, postdict, fpf):
     logger.debug("Keys in entry '%s': %s", entry.title, entry.keys())
 
     p, created = Post.objects.get_or_create(
-        feed=feed, 
-        title=entry.title, 
-        guid=get_entry_guid(entry, feed_id), 
+        feed=feed,
+        title=entry.title,
+        guid=get_entry_guid(entry, feed_id),
         published=True
     )
-    
+
     if created:
         p.save()
         logger.debug("'%s' is a new entry (%s)", entry.title, p.id)
-    
+
     if hasattr(entry, 'link'):
         p.link = entry.link
 
@@ -355,7 +382,7 @@ def entry_process(entry, feed_id, postdict, fpf):
     if settings.FEED_POST_SOCIAL:
         entry_update_social.apply_async((p.id,), countdown=2)
 
-    if created and entry.has_key('tags'):
+    if created and 'tags' in entry:
         entry_tags.apply_async((p.id, entry['tags'],), countdown=2)
 
     if created and p.feed.announce_posts:
@@ -364,7 +391,8 @@ def entry_process(entry, feed_id, postdict, fpf):
     logger.debug("stop: entry")
     return True
 
-@task
+
+@shared_task
 def feed_refresh(feed_id):
     """
     refresh entries for `feed_id`
@@ -374,33 +402,45 @@ def feed_refresh(feed_id):
     logger = logging.getLogger(__name__)
     feed = Feed.objects.get(pk=feed_id)
     logger.debug("start")
-    logger.info("collecting new posts for feed: %s (ID: %s)", feed.name, feed.id)
+    logger.info("collecting new posts for feed: %s (ID: %s)",
+                feed.name,
+                feed.id
+                )
 
-    feed_stats = { 
-        ENTRY_NEW:0,
-        ENTRY_UPDATED:0,
-        ENTRY_SAME:0,
-        ENTRY_ERR:0
+    feed_stats = {
+        ENTRY_NEW: 0,
+        ENTRY_UPDATED: 0,
+        ENTRY_SAME: 0,
+        ENTRY_ERR: 0
     }
 
     try:
         fpf = feedparser.parse(feed.feed_url, agent=USER_AGENT, etag=feed.etag)
-    except Exception as e: # Feedparser Exeptions
-        logger.error('Feedparser Error: (%s) cannot be parsed: %s', feed.feed_url, str(e))
-        
+    except Exception as e:
+        logger.error(
+            'Feedparser Error: (%s) cannot be parsed: %s',
+            feed.feed_url,
+            str(e)
+        )
+        return FEED_ERRPARSE
+
     if hasattr(fpf, 'status'):
         # feedparsere returned a status
         if fpf.status == 304:
             # this means feed has not changed
             logger.debug("%s (ID: %s) has not changed", feed.name, feed.id)
-            return False
+            return FEED_SAME
         if fpf.status >= 400:
             # this means a server error
             logger.debug("%s (ID: %s) gave a server error", feed.name, feed.id)
-            return False
+            return FEED_ERRHTTP
     if hasattr(fpf, 'bozo') and fpf.bozo:
-        logger.debug("[%d] !BOZO! Feed is not well formed: %s", feed.id, feed.name)
-        
+        logger.debug(
+            "[%d] !BOZO! Feed is not well formed: %s",
+            feed.id,
+            feed.name
+        )
+
     feed.etag = fpf.get('etag', '')
 
     # some times this is None (it never should) *sigh*
@@ -411,8 +451,13 @@ def feed_refresh(feed_id):
         feed.last_modified = mtime(fpf.modified)
     except Exception as e:
         feed.last_modified = datetime.now()
-        logger.debug("[%s] last_modified not well formed: %s Reason: %s", feed.name, feed.last_modified, str(e))
-        
+        logger.debug(
+            "[%s] last_modified not well formed: %s Reason: %s",
+            feed.name,
+            feed.last_modified,
+            str(e)
+        )
+
     feed.title = fpf.feed.get('title', '')[0:254]
     feed.tagline = fpf.feed.get('tagline', '')
     feed.link = fpf.feed.get('link', '')
@@ -428,12 +473,17 @@ def feed_refresh(feed_id):
     except Feed.last_modified.ValidationError as e:
         logger.warning("Feed.ValidationError: %s", str(e))
 
-
     if guids:
         """
         fetch posts that we have on file already
         """
-        postdict = dict([(post.guid, post) for post in Post.objects.filter(feed=feed.id).filter(guid__in=guids)])
+        postdict = dict(
+            [(post.guid, post) for post in Post.objects.filter(
+                feed=feed.id
+            ).filter(
+                guid__in=guids
+            )]
+        )
         logger.debug("postdict keys: %s", postdict.keys())
     else:
         """
@@ -444,18 +494,28 @@ def feed_refresh(feed_id):
     for entry in fpf.entries:
         try:
             # feed_id, options, entry, postdict, fpf
-            logger.debug("spawning task: %s %s"%(entry.title, feed_id)) # options are optional
-            entry_process.delay(entry, feed_id, postdict, fpf) #options are optional
+            logger.debug("spawning task: %s %s" % (entry.title, feed_id))
+            entry_process.delay(
+                entry,
+                feed_id,
+                postdict,
+                fpf
+            )
             feed_stats[ENTRY_NEW] += 1
         except Exception as e:
-            logger.debug("could not spawn task: %s"%(str(e)))
+            logger.debug("could not spawn task: %s" % (str(e)))
 
     feed.save()
-    logger.info("Feed '%s' had %s new entries", feed.title, feed_stats[ENTRY_NEW])
+    logger.info(
+        "Feed '%s' had %s new entries",
+        feed.title,
+        feed_stats[ENTRY_NEW]
+    )
     logger.debug("stop")
-    return feed_stats
+    return FEED_OK
 
-@task
+
+@shared_task
 def aggregate():
     """
     aggregate feeds
@@ -466,7 +526,6 @@ def aggregate():
 
     :codeauthor: Andreas Neumeier
     """
-    from celery import group
     logger = logging.getLogger(__name__)
     logger.debug("start aggregating")
     feeds = Feed.objects.filter(is_active=True).filter(beta=True)
@@ -474,4 +533,4 @@ def aggregate():
     job = group([feed_refresh.s(i.id) for i in feeds])
     job.delay()
     logger.debug("stop aggregating")
-    return True
+    return job.get()

@@ -15,12 +15,12 @@ feeds - feed aggregator, social relevance and stats
 feeds is the core module for feeds.
 
 feeds provides all functionality built on top of Django_ methods. Features include aggregation of rss and Atom feeds, collection of social stats from twitter, facebook, google+ and own piwik server, tracking of views in output feeds (feedburner like), displaying all with Chartjs_.
- 
+
  - :mod:`feeds.views`
  - :mod:`feeds.models`
  - :mod:`feeds.admin`
  - :mod:`feeds.forms`
- - :mod:`feeds.rss` 
+ - :mod:`feeds.rss`
 
 .. _Django: http://www.djangoproject.com
 .. _Chartjs: http://www.chartjs.org
