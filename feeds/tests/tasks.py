@@ -86,13 +86,13 @@ class TaskTest(TestCase):
         """
         from feeds.tasks import entry_update_twitter
         post = Post.objects.all()[0]
-        result = entry_update_twitter(post.pk).delay()
+        result = entry_update_twitter.delay(post.pk)
         self.assertEqual(result.get(), 0)
 
     def test_count_share_like(self):
         from feeds.tasks import entry_update_facebook
         post = Post.objects.all()[0]
-        result = entry_update_facebook(post.pk).delay()
+        result = entry_update_facebook.delay(post.pk)
         self.assertEqual(result.get(), True)
 
     def test_feed_refresh(self):
@@ -100,6 +100,7 @@ class TaskTest(TestCase):
         from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
         feed = Feed.objects.all()[0]
         result = feed_refresh(feed.id)
+        self.assertEqual(type({}), type(result))
         self.assertDictContainsSubset(
             {
                 ENTRY_NEW: 0,
@@ -107,7 +108,6 @@ class TaskTest(TestCase):
                 ENTRY_SAME: 0,
                 ENTRY_ERR: 0,
             },
-            result
         )
 
     def test_entry_process(self):
