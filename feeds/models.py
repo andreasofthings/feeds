@@ -615,6 +615,12 @@ class FeedPostCount(models.Model):
         super(FeedPostCount, self).save(*args, **kwargs)
 
 
+class FeedStats(models.Model):
+    collected = models.DateTimeField(auto_now_add=True)
+    feed_ok = models.IntegerField(default=0)
+    feed_err = models.IntegerField(default=0)
+
+
 class PostReadCountManager(models.Manager):
     """
     Manager for Tag objects

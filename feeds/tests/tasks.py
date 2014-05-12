@@ -108,6 +108,7 @@ class TaskTest(TestCase):
                 ENTRY_SAME: 0,
                 ENTRY_ERR: 0,
             },
+            result
         )
 
     def test_entry_process(self):

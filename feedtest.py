@@ -24,6 +24,7 @@ if __name__ == '__main__':
             'feeds',
         ),
         CRISPY_TEMPLATE_PACK="bootstrap",
+        CELERY_ALWAYS_EAGER=True,
         HAYSTACK_CONNECTIONS={
             "default": {
                 'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',

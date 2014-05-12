@@ -42,7 +42,7 @@ from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 
 from feeds.tools import mtime, getText
-from feeds.models import Feed, Post, Tag, TaggedPost
+from feeds.models import Feed, Post, Tag, TaggedPost, FeedStats
 
 
 def get_entry_guid(entry, feed_id=None):
@@ -408,12 +408,14 @@ def feed_refresh(feed_id):
                 )
 
     feed_stats = {
-        'feed_id': 0,
+        'STATUS': FEED_OK,
         ENTRY_NEW: 0,
         ENTRY_UPDATED: 0,
         ENTRY_SAME: 0,
         ENTRY_ERR: 0
     }
+
+    return feed_stats
 
     try:
         fpf = feedparser.parse(feed.feed_url, agent=USER_AGENT, etag=feed.etag)
@@ -517,7 +519,15 @@ def feed_refresh(feed_id):
 
 
 @shared_task
-def aggregate_stats(result):
+def aggregate_stats(result_list):
+    result = {
+        FEED_OK: 0,
+        FEED_SAME: 0,
+        FEED_ERRPARSE: 0,
+        FEED_ERRHTTP: 0,
+        FEED_ERREXC: 0
+    }
+    result = [result[i['STATUS']] for i in result_list]
     return sum(result)
 
 
@@ -539,3 +549,14 @@ def aggregate():
     job = chord((feed_refresh.s(i.id) for i in feeds), aggregate_stats.s())()
     logger.debug("stop aggregating")
     return job.get()
+
+
+@shared_task()
+def cronjob():
+    """
+    Run aggregate, save the result.
+
+    .. codeauthor: Andreas Neumeier <andreas@neumeier.org>
+    """
+    fr = FeedStats(aggregate())
+    fr.save()
