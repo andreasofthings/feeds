@@ -25,6 +25,7 @@ if __name__ == '__main__':
         ),
         CRISPY_TEMPLATE_PACK="bootstrap",
         CELERY_ALWAYS_EAGER=True,
+        CELERY_RESULT_BACKEND="amqp",
         HAYSTACK_CONNECTIONS={
             "default": {
                 'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
