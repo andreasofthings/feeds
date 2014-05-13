@@ -10,7 +10,7 @@ if __name__ == '__main__':
     """
     settings.configure(
         DEBUG=True,
-        ROOT_URLCONF="test.urls",
+        ROOT_URLCONF="tests.urls",
         DIRNAME=os.path.dirname(__file__),
         INSTALLED_APPS=(
             'django.contrib.auth',
@@ -20,7 +20,7 @@ if __name__ == '__main__':
             'django.contrib.sitemaps',
             'crispy_forms',
             'haystack',
-            'test',
+            'tests',
             'feeds',
         ),
         CRISPY_TEMPLATE_PACK="bootstrap",
