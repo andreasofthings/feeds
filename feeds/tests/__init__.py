@@ -22,8 +22,6 @@ Tests for the "feeds" app.
 
 """
 
-import django
-django.setup()
 from django.test import TestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
