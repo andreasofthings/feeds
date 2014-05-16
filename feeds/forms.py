@@ -203,4 +203,5 @@ class TagCreateForm(forms.ModelForm):
 
 class FeedAdminForm(forms.ModelForm):
     class Meta:
+        exclude = ()
         model = Feed

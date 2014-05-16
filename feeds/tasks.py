@@ -392,33 +392,46 @@ def entry_process(entry, feed_id, postdict, fpf):
     return True
 
 
-@shared_task
-def feed_refresh(feed_id):
+def feed_stats(result_list):
     """
-    refresh entries for `feed_id`
-
-    :codeauthor: Andreas Neumeier
+    this function is supposed to collect all the return
+    values from `entry_process`. That function will return either:
+        ENTRY_NEW
+        ENTRY_UPDATED
+        ENTRY_SAME
+        ENTRY_ERR
     """
-    logger = logging.getLogger(__name__)
-    feed = Feed.objects.get(pk=feed_id)
-    logger.debug("start")
-    logger.info("collecting new posts for feed: %s (ID: %s)",
-                feed.name,
-                feed.id
-                )
-
+    from collections import Counter
     feed_stats = {
-        'STATUS': FEED_OK,
         ENTRY_NEW: 0,
         ENTRY_UPDATED: 0,
         ENTRY_SAME: 0,
         ENTRY_ERR: 0
     }
+    result = feed_stats.update(Counter(result_list))
+    return result
 
-    return feed_stats
+
+@shared_task
+def feed_refresh(feed_id):
+    """
+    refresh entries for `feed_id`
+
+    .. todo:: returns `FEED_OK`
+
+    saves :py:mod:`feeds.models.FeedEntryStats`
+
+    :codeauthor: Andreas Neumeier <andreas@neumeier.org>
+    """
+    logger = logging.getLogger(__name__)
+    feed = Feed.objects.get(pk=feed_id)
 
     try:
-        fpf = feedparser.parse(feed.feed_url, agent=USER_AGENT, etag=feed.etag)
+        fpf = feedparser.parse(
+            feed.feed_url,
+            agent=USER_AGENT,
+            etag=feed.etag
+        )
     except Exception as e:
         logger.error(
             'Feedparser Error: (%s) cannot be parsed: %s',
@@ -443,6 +456,7 @@ def feed_refresh(feed_id):
             feed.id,
             feed.name
         )
+        return FEED_ERRPARSE
 
     feed.etag = fpf.get('etag', '')
 
@@ -520,6 +534,12 @@ def feed_refresh(feed_id):
 
 @shared_task
 def aggregate_stats(result_list):
+    """
+    this function is supposed to collect all the return
+    values from `feed_refresh`. That function will return either
+
+    """
+    from collections import Counter
     result = {
         FEED_OK: 0,
         FEED_SAME: 0,
@@ -527,8 +547,8 @@ def aggregate_stats(result_list):
         FEED_ERRHTTP: 0,
         FEED_ERREXC: 0
     }
-    result = [result[i['STATUS']] for i in result_list]
-    return sum(result)
+    result.update(Counter(result_list))
+    return result
 
 
 @shared_task
@@ -540,14 +560,18 @@ def aggregate():
 
     find all tasks that are marked for beta access
 
+    return result_dict (FEED_OK/FEED_SAME/FEED_ERR), that
+    comes from :py:mod:`feeds.tasks.aggregate_stats`
+
     .. codeauthor:: Andreas Neumeier
     """
     logger = logging.getLogger(__name__)
-    logger.debug("start aggregating")
-    feeds = Feed.objects.filter(is_active=True).filter(beta=True)
+    feeds = Feed.objects.filter(is_active=True)
     logger.debug("processing %s feeds", feeds.count())
-    job = chord((feed_refresh.s(i.id) for i in feeds), aggregate_stats.s())()
-    logger.debug("stop aggregating")
+    job = chord(
+        (feed_refresh.s(i.id) for i in feeds),
+        aggregate_stats.s()
+    )()
     return job.get()
 
 
@@ -555,6 +579,8 @@ def aggregate():
 def cronjob():
     """
     Run aggregate, save the result.
+
+    expects a __dict__.
 
     .. codeauthor: Andreas Neumeier <andreas@neumeier.org>
     """
