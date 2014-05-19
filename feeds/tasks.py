@@ -520,11 +520,11 @@ def feed_refresh(feed_id):
 @shared_task
 def aggregate_stats(result_list):
     """
-    this function is supposed to collect all the return
-    values from `feed_refresh`. That function will return either
 
+    Input: `result_list` will be a list of values from enum(FEED)
+
+    Summarize the number of values and store into a dict.
     """
-    from collections import Counter
     result = {
         FEED_OK: 0,
         FEED_SAME: 0,
