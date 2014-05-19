@@ -520,6 +520,11 @@ def feed_refresh(feed_id):
 
 @shared_task
 def aggregate_stats(result_list):
+    """
+    Input: `result_list` will be a list of values from enum(FEED)
+
+    Summarize the number of values and store into a dict.
+    """
     result = {
         FEED_OK: 0,
         FEED_SAME: 0,
@@ -527,7 +532,7 @@ def aggregate_stats(result_list):
         FEED_ERRHTTP: 0,
         FEED_ERREXC: 0
     }
-    result = [result[i['STATUS']] for i in result_list]
+    result = [result[i]+=1 for i in result_list]
     return sum(result)
 
 
