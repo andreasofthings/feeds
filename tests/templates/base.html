@@ -22,15 +22,9 @@
           </button>
           <a class="navbar-brand" href="{% url "planet:home" %}">angryplanet</a>
         </div>
-        <div class="navbar-collapse collapse">
-          {% include 'menu3.html' %}
-        </div>
       </div>
       <div class="">
       {% block breadcrumbs %}
-      <ol class="breadcrumb" itemprop="breadcrumb">
-        <li><a href="/" class="active">{% trans "Home" %}</a></li>
-      </ol>
       {% endblock %}
       {% if messages %}
       <div class="row">
