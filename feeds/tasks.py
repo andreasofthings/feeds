@@ -63,6 +63,20 @@ def get_entry_guid(entry, feed_id=None):
     return entry.get('id', guid)
 
 
+def get_guids(entries, feed_has_no_guid=False):
+    guids = []
+    for entry in entries:
+        guid = ""
+        if entry.get('id', ''):
+            guid = entry.get('id', '')
+        elif entry.link or feed_has_no_guid:
+            guid = entry.link
+        elif entry.title:
+            guid = entry.title
+        guids.append(entry.get('id', guid))
+    return guids
+
+
 @shared_task
 def dummy(x=10, *args, **kwargs):
     """
@@ -463,12 +477,7 @@ def feed_refresh(feed_id):
     feed.tagline = fpf.feed.get('tagline', '')
     feed.link = fpf.feed.get('link', '')
     feed.last_checked = datetime.now()
-
-    guids = []
-
-    for entry in fpf.entries:
-        guid = get_entry_guid(entry, feed_id)
-        guids.append(guid)
+    guids = get_guids(fpf.entries)
 
     try:
         feed.save()
@@ -525,6 +534,7 @@ def aggregate_stats(result_list):
 
     Summarize the number of values and store into a dict.
     """
+    from collections import Counter
     result = {
         FEED_OK: 0,
         FEED_SAME: 0,

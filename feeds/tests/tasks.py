@@ -100,7 +100,7 @@ class TaskTest(TestCase):
         from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
         feed = Feed.objects.all()[0]
         result = feed_refresh(feed.id)
-        self.assertEqual(type({}), type(result))
+        self.assertEqual(type(int()), type(result))
         self.assertDictContainsSubset(
             {
                 ENTRY_NEW: 0,
