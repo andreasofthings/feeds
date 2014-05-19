@@ -615,7 +615,23 @@ class FeedPostCount(models.Model):
         super(FeedPostCount, self).save(*args, **kwargs)
 
 
+class FeedEntryStats(models.Model):
+    """
+    These are stats for one particulat :py:mod:`feeds.models.Feed` in the list.
+    """
+    feed = models.ForeignKey(Feed)
+    collected = models.DateTimeField(auto_now_add=True)
+    entry_ok = models.IntegerField(default=0)
+    entry_err = models.IntegerField(default=0)
+
+    def __init__(self, feed_id, stats):
+        self.feed = feed_id
+
+
 class FeedStats(models.Model):
+    """
+    These are stats for all :py:mod:`feeds.models.Feed` in the list.
+    """
     collected = models.DateTimeField(auto_now_add=True)
     feed_ok = models.IntegerField(default=0)
     feed_err = models.IntegerField(default=0)
