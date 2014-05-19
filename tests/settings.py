@@ -30,12 +30,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.admin',
+    'django.contrib.sitemaps',
+    'crispy_forms',
+    'haystack',
+    'tests',
+    'feeds',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,8 +63,12 @@ WSGI_APPLICATION = 'tests.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'myapp_test',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -81,3 +90,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Crispy-Forms
+CRISPY_TEMPLATE_PACK = "bootstrap"
+
+# Haystack
+HAYSTACK_CONNECTIONS = {
+    "default": {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(
+            os.path.dirname(__file__),
+            'whoosh_index'
+        ),
+    }
+}
+
+# Celery
+CELERY_ALWAYS_EAGER = True
+CELERY_RESULT_BACKEND = "amqp"
