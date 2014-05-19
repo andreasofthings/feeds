@@ -42,7 +42,8 @@ from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 
 from feeds.tools import mtime, getText
-from feeds.models import Feed, Post, Tag, TaggedPost, FeedStats
+from feeds.models import Feed, Post, Tag, TaggedPost
+from feeds.models import FeedStats, FeedEntryStats
 
 
 def get_entry_guid(entry, feed_id=None):
@@ -441,15 +442,13 @@ def feed_refresh(feed_id):
         return FEED_ERRPARSE
 
     if hasattr(fpf, 'status'):
-        # feedparsere returned a status
         if fpf.status == 304:
             # this means feed has not changed
-            logger.debug("%s (ID: %s) has not changed", feed.name, feed.id)
             return FEED_SAME
         if fpf.status >= 400:
             # this means a server error
-            logger.debug("%s (ID: %s) gave a server error", feed.name, feed.id)
             return FEED_ERRHTTP
+
     if hasattr(fpf, 'bozo') and fpf.bozo:
         logger.debug(
             "[%d] !BOZO! Feed is not well formed: %s",
@@ -459,28 +458,14 @@ def feed_refresh(feed_id):
         return FEED_ERRPARSE
 
     feed.etag = fpf.get('etag', '')
-
-    # some times this is None (it never should) *sigh*
-    if feed.etag is None:
-        feed.etag = ''
-
-    try:
-        feed.last_modified = mtime(fpf.modified)
-    except Exception as e:
-        feed.last_modified = datetime.now()
-        logger.debug(
-            "[%s] last_modified not well formed: %s Reason: %s",
-            feed.name,
-            feed.last_modified,
-            str(e)
-        )
-
+    feed.last_modified = mtime(fpf.modified)
     feed.title = fpf.feed.get('title', '')[0:254]
     feed.tagline = fpf.feed.get('tagline', '')
     feed.link = fpf.feed.get('link', '')
     feed.last_checked = datetime.now()
 
     guids = []
+
     for entry in fpf.entries:
         guid = get_entry_guid(entry, feed_id)
         guids.append(guid)
@@ -512,13 +497,13 @@ def feed_refresh(feed_id):
         try:
             # feed_id, options, entry, postdict, fpf
             logger.debug("spawning task: %s %s" % (entry.title, feed_id))
-            entry_process.delay(
+            r = chord(entry_process(
                 entry,
                 feed_id,
                 postdict,
                 fpf
-            )
-            feed_stats[ENTRY_NEW] += 1
+            ), feed_stats.s())()
+            FeedEntryStats(feed_id, r).save()
         except Exception as e:
             logger.debug("could not spawn task: %s" % (str(e)))
 
@@ -560,7 +545,7 @@ def aggregate():
 
     find all tasks that are marked for beta access
 
-    return result_dict (FEED_OK/FEED_SAME/FEED_ERR), that
+    saves a result_dict (FEED_OK/FEED_SAME/FEED_ERR), that
     comes from :py:mod:`feeds.tasks.aggregate_stats`
 
     .. codeauthor:: Andreas Neumeier
@@ -572,17 +557,5 @@ def aggregate():
         (feed_refresh.s(i.id) for i in feeds),
         aggregate_stats.s()
     )()
-    return job.get()
-
-
-@shared_task()
-def cronjob():
-    """
-    Run aggregate, save the result.
-
-    expects a __dict__.
-
-    .. codeauthor: Andreas Neumeier <andreas@neumeier.org>
-    """
-    fr = FeedStats(aggregate())
+    fr = FeedStats(job.get())
     fr.save()
