@@ -68,7 +68,7 @@ class TaskTest(TestCase):
         Test for the `aggregate` function in :py:mod:`feeds.tasks`
         """
         from feeds.tasks import aggregate
-        result = aggregate().delay().get()
+        result = aggregate.delay().get()
         self.assertEqual(type(result), type({}))
         self.assertDictContainsSubset(
             {
@@ -101,15 +101,6 @@ class TaskTest(TestCase):
         feed = Feed.objects.all()[0]
         result = feed_refresh(feed.id)
         self.assertEqual(type(int()), type(result))
-        self.assertDictContainsSubset(
-            {
-                ENTRY_NEW: 0,
-                ENTRY_UPDATED: 0,
-                ENTRY_SAME: 0,
-                ENTRY_ERR: 0,
-            },
-            result
-        )
 
     def test_entry_process(self):
         from feeds.tasks import entry_process
