@@ -10,6 +10,8 @@ if __name__ == '__main__':
     """
     Test Django App in travis.ci
     """
+    import django
+    django.setup()
     from django.test.simple import DjangoTestSuiteRunner
     failures = DjangoTestSuiteRunner().run_tests(("feeds",), verbosity=1)
     if failures:
