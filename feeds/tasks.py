@@ -567,5 +567,10 @@ def aggregate():
         (feed_refresh.s(i.id) for i in feeds),
         aggregate_stats.s()
     )()
+    return job.get()
+
+
+def cronjob():
+    job = aggregate.delay()
     fr = FeedStats(job.get())
     fr.save()

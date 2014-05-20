@@ -10,8 +10,8 @@ services:
 
 # List the versions of Django you'd like to test against
 env:
-  - DJANGO_VERSION=1.6.4
-  - DJANGO_VERSION="https://github.com/django/django/archive/1.7b4.tar.gz#egg=Django"
+  - DJANGO="Django>=1.6.4"
+  - DJANGO="https://github.com/django/django/archive/1.7b4.tar.gz#egg=Django"
 
 install: 
    # Install the dependencies the app itself has
@@ -20,7 +20,7 @@ install:
  - pip install coveralls
    # Install whatever version of Django that's listed above
    # Travis is currently working on
- - pip install -q Django==$DJANGO_VERSION
+ - pip install -q $DJANGO
 before_script:
   - mysql -e 'create database myapp_test;'
 # Tell Travis how to run the test script itself

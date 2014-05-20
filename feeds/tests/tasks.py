@@ -69,8 +69,8 @@ class TaskTest(TestCase):
         """
         from feeds.tasks import aggregate
         result = aggregate.delay()
-        self.assertTrue(result.successful())
         test_result = result.get()
+        self.assertTrue(result.successful())
         self.assertEqual(type(test_result), type({}))
         self.assertDictContainsSubset(
             {
