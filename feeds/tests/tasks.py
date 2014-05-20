@@ -68,8 +68,10 @@ class TaskTest(TestCase):
         Test for the `aggregate` function in :py:mod:`feeds.tasks`
         """
         from feeds.tasks import aggregate
-        result = aggregate.delay().get()
-        self.assertEqual(type(result), type({}))
+        result = aggregate.delay()
+        self.assertTrue(result.successful())
+        test_result = result.get()
+        self.assertEqual(type(test_result), type({}))
         self.assertDictContainsSubset(
             {
                 FEED_OK: 0,
@@ -78,7 +80,7 @@ class TaskTest(TestCase):
                 FEED_ERREXC: 0,
                 FEED_ERRHTTP: 0
             },
-            result
+            test_result
         )
 
     def test_count_tweets(self):
