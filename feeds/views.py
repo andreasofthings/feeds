@@ -47,6 +47,9 @@ class HomeView(TemplateView):
 class OptionsView(LoginRequiredMixin, UpdateView):
     model = Options
 
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
     def get_object(self, queryset=None):
         if queryset is None:
             queryset = self.get_queryset()
