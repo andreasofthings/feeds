@@ -23,7 +23,7 @@ from django.utils.timezone import utc
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
-from feeds.models import Option
+from feeds.models import Options
 from feeds.models import Site, Feed, Post, Category, Tag, PostReadCount
 from feeds.forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
 from feeds.forms import FeedUpdateForm, CategoryUpdateForm
@@ -49,19 +49,19 @@ SiteSubmitForms = [
     ]
 
 
-class OptionView(LoginRequiredMixin, UpdateView):
-    model = Option
+class OptionsView(LoginRequiredMixin, UpdateView):
+    model = Options
 
     def get_object(self, queryset=None):
         if queryset is None:
             queryset = self.get_queryset()
 
         # easy way to get the right question from the url parameters:
-        option = super(OptionView, self).get_object(Option.objects.all())
+        option = super(OptionsView, self).get_object(Options.objects.all())
 
         try:
             obj = queryset.get(user=self.request.user, option=option)
-        except Option.DoesNotExist:
+        except Options.DoesNotExist:
             obj = None
         return obj
 
