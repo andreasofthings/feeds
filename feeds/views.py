@@ -46,6 +46,7 @@ class HomeView(TemplateView):
 
 class OptionsView(LoginRequiredMixin, UpdateView):
     model = Options
+    template_name = "feeds/options.html"
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
