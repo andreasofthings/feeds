@@ -77,6 +77,21 @@ class ViewsAnonymousTest(TestCase):
         result = self.client.get(reverse('planet:feed-home'))
         self.assertEqual(result.status_code, 200)
 
+    def test_feed_options(self):
+        """
+        Go to the options page.
+
+        This is only available per user.
+
+        Assert the returned page comes with "HTTP 302 Redirect".
+        """
+        result = self.client.get(reverse('planet:options'))
+        self.assertEqual(result.status_code, 302)
+        self.assertRedirects(
+            result,
+            '/accounts/login/?next=%s' % (reverse('planet:options'))
+        )
+
     def site_home(self):
         """
         site-home

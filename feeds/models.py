@@ -15,6 +15,34 @@ import feedparser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
+from django.contrib.auth.models import User
+
+
+class OptionsManager(models.Manager):
+    def get_options(self):
+        options = Options.objects.all()
+        if options:
+            options = options[0]
+        else:
+            options = Options.objects.create()
+            """Create with default value."""
+        return options
+
+
+class Options(models.Model):
+    user = models.ForeignKey(User)
+    number_initially_displayed = models.IntegerField(default=10)
+    number_additionally_displayed = models.IntegerField(default=5)
+    max_entries_saved = models.IntegerField(default=100)
+
+    objects = models.Manager()
+    manager = OptionsManager()
+
+    class Meta:
+        verbose_name_plural = "options"
+
+    def __unicode__(self):
+        return u'Options'
 
 
 class SiteManager(models.Manager):

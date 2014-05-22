@@ -4,6 +4,7 @@
 from django.conf.urls import url, patterns
 
 from feeds.views import HomeView
+from feeds.views import OptionView
 from feeds.views import SiteListView
 from feeds.views import SiteCreateView
 from feeds.views import SiteDetailView
@@ -30,6 +31,7 @@ from feeds.rss import RssFeed
 
 urlpatterns = patterns('',
                        url(r'^$', HomeView.as_view(), name="home"),
+                       url(r'^options$', OptionView.as_view(), name="options"),
                        )
 
 urlpatterns += patterns(
@@ -70,7 +72,10 @@ urlpatterns += patterns(
     '',
     url(r'^list/$', FeedListView.as_view(), name="feed-home"),
     url(
-        r'^page/(?P<page>\w+)/$', FeedListView.as_view(), name="feed-home-paginated"),
+        r'^page/(?P<page>\w+)/$',
+        FeedListView.as_view(),
+        name="feed-home-paginated"
+    ),
     url(r'^add/$', FeedCreateView.as_view(), name="feed-add"),
     url(r'^(?P<pk>\d+)/$', FeedDetailView.as_view(), name="feed-view"),
     url(r'^(?P<pk>\d+)/update/$', FeedUpdateView.as_view(), name="feed-update"),

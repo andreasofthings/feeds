@@ -436,7 +436,7 @@ def feed_refresh(feed_id):
 
     saves :py:mod:`feeds.models.FeedEntryStats`
 
-    :codeauthor: Andreas Neumeier <andreas@neumeier.org>
+    .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
     logger = logging.getLogger(__name__)
     feed = Feed.objects.get(pk=feed_id)
