@@ -4,7 +4,7 @@
 from django.conf.urls import url, patterns
 
 from feeds.views import HomeView
-from feeds.views import OptionView
+from feeds.views import OptionsView
 from feeds.views import SiteListView
 from feeds.views import SiteCreateView
 from feeds.views import SiteDetailView
@@ -31,7 +31,7 @@ from feeds.rss import RssFeed
 
 urlpatterns = patterns('',
                        url(r'^$', HomeView.as_view(), name="home"),
-                       url(r'^options$', OptionView.as_view(), name="options"),
+                       url(r'^options$', OptionsView.as_view(), name="options"),
                        )
 
 urlpatterns += patterns(
