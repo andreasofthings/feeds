@@ -34,6 +34,6 @@ class ViewsLoggedInTest(TestCase):
         """
         """
         client = Client()
-        client.login(self.username, self.password)
+        client.login(username=self.username, password=self.password)
         result = client.get(reverse('planet:options'))
         self.assertEquals(result.status_code, 200)
