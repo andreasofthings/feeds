@@ -43,11 +43,6 @@ class HomeView(TemplateView):
     """
     template_name = "feeds/home.html"
 
-SiteSubmitForms = [
-    ('Site', SiteCreateForm),
-    ('Feeds', SiteFeedAddForm),
-    ]
-
 
 class OptionsView(LoginRequiredMixin, UpdateView):
     model = Options
@@ -56,14 +51,17 @@ class OptionsView(LoginRequiredMixin, UpdateView):
         if queryset is None:
             queryset = self.get_queryset()
 
-        # easy way to get the right question from the url parameters:
-        option = super(OptionsView, self).get_object(Options.objects.all())
-
         try:
-            obj = queryset.get(user=self.request.user, option=option)
+            obj = queryset.get(user=self.request.user)
         except Options.DoesNotExist:
             obj = None
         return obj
+
+
+SiteSubmitForms = [
+    ('Site', SiteCreateForm),
+    ('Feeds', SiteFeedAddForm),
+    ]
 
 
 class SiteSubmitWizardView(SessionWizardView):
