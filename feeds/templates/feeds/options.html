@@ -1,6 +1,7 @@
 {% extends "feeds/index.html" %}
 {% load i18n %} {% get_current_language as LANGUAGE_CODE %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-{{ form }}
+{% crispy form %}
 {% endblock %}

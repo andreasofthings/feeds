@@ -1,5 +1,6 @@
 #! /usr/bin/env python2.7
 # -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
 
 """
 :mod:`feeds.mixins`
@@ -7,13 +8,12 @@
 """
 
 from django.conf import settings
-from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-from django.utils.translation import ugettext_lazy as _ 
 from django.contrib.auth.views import redirect_to_login
 from braces.views import AccessMixin
+
+from django.exceptions import ImproperlyConfigured, PermissionDenied
+
 
 def google_required(func):
     """
@@ -22,10 +22,12 @@ def google_required(func):
     require other users to login
     """
     def _view(request, *args, **kwargs):
-        if request.META.has_key('HTTP_USER_AGENT'):
+        if 'HTTP_USER_AGENT' in request.META:
             useragent = request.META['HTTP_USER_AGENT']
             params = request.META.get('QUERY_STRING', "")
-            if request.user.is_anonymous() and not "googlebot" in useragent.lower() and not "login" in params:
+            if request.user.is_anonymous() and \
+                    "googlebot" not in useragent.lower() and \
+                    "login" not in params:
                 return HttpResponseRedirect(settings.LOGIN_URL)
             else:
                 return func(request, *args, **kwargs)
@@ -46,14 +48,14 @@ class UserAgentRequiredMixin(AccessMixin):
 
         if self.user_agent is None:
             raise ImproperlyConfigured("'UserAgentRequiredMixin' requires "
-                "'user_agent' attribute to be set.")
+                                       "'user_agent' attribute to be set.")
 
         if not request.user.is_authenticated():
             """
             Check to see if the request's user has the required permission.
             """
-            if request.META.has_key('HTTP_USER_AGENT'):
-               agent = request.META['HTTP_USER_AGENT']
+            if 'HTTP_USER_AGENT' in request.META:
+                agent = request.META['HTTP_USER_AGENT']
             else:
                 if self.raise_exception:  # *and* if an exception was desired
                     raise PermissionDenied
@@ -62,17 +64,16 @@ class UserAgentRequiredMixin(AccessMixin):
                                              self.get_login_url(),
                                              self.get_redirect_field_name())
 
-            if not self.user_agent in agent:
+            if self.user_agent not in agent:
                 if self.raise_exception:  # *and* if an exception was desired
                     raise PermissionDenied
                 else:
                     return redirect_to_login(request.get_full_path(),
-                                            self.get_login_url(),
-                                            self.get_redirect_field_name())
+                                             self.get_login_url(),
+                                             self.get_redirect_field_name())
 
-            return super(UserAgentRequiredMixin, self).dispatch(request,
-                *args, **kwargs)
-
-
-# vim: ts=4 et sw=4 sts=4
-
+            return super(UserAgentRequiredMixin, self).dispatch(
+                request,
+                *args,
+                **kwargs
+            )

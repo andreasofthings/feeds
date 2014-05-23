@@ -64,6 +64,13 @@ class OptionsView(LoginRequiredMixin, UpdateView):
             obj = None
         return obj
 
+    def get_initial(self):
+        """
+        Get initial values for 'user', to ensure no other user is edited.
+        """
+        self.initial.update({'user': self.request.user})
+        return self.initial
+
 
 SiteSubmitForms = [
     ('Site', SiteCreateForm),
