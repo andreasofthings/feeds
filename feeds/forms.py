@@ -12,12 +12,39 @@ from crispy_forms.layout import Button
 from crispy_forms.layout import Div
 from crispy_forms.bootstrap import FormActions
 
+from feeds.models import Options
 from feeds.models import Site
 from feeds.models import Feed
 from feeds.models import Category
 from feeds.models import Tag
 
 from feeds.validators import SiteField, FeedField
+
+
+class OptionsForm(forms.ModelForm):
+    class Meta:
+        model = Options
+        fields = (
+            'number_initially_displayed',
+            'number_additionally_displayed',
+            'max_entries_saved',
+        )
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_class = "field_inline"
+        self.helper.form_action = 'planet:options'
+        self.helper.layout = Layout(
+            Field('number_initially_displayed'),
+            Field('number_additionally_displayed'),
+            Field('max_entries_saved'),
+            FormActions(
+                Submit('submit', 'Submit', css_class='btn-small'),
+                Button('cancel', 'Cancel', css_class='btn-small')
+            )
+        )
+        super(OptionsForm, self).__init__(*args, **kwargs)
 
 
 class SiteCreateForm(forms.ModelForm):

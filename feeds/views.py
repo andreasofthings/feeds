@@ -24,6 +24,8 @@ from django.utils.timezone import utc
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
 from feeds.models import Options
+from feeds.forms import OptionsForm
+
 from feeds.models import Site, Feed, Post, Category, Tag, PostReadCount
 from feeds.forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
 from feeds.forms import FeedUpdateForm, CategoryUpdateForm
@@ -47,6 +49,7 @@ class HomeView(TemplateView):
 class OptionsView(LoginRequiredMixin, UpdateView):
     model = Options
     template_name = "feeds/options.html"
+    form_class = OptionsForm
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)

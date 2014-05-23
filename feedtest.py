@@ -13,7 +13,7 @@ if __name__ == '__main__':
     import django
     if hasattr(django, 'setup'):
         django.setup()
-    from django.test.simple import DjangoTestSuiteRunner
-    failures = DjangoTestSuiteRunner().run_tests(("feeds",), verbosity=1)
+    from django.test.runner import DiscoverRunner
+    failures = DiscoverRunner().run_tests(("feeds",), verbosity=1)
     if failures:
         sys.exit(failures)

@@ -13,7 +13,7 @@ from django.contrib.auth.models import User, Permission
 from feeds.models import Feed, Post
 
 
-class ViewsLoggedInTest(TestCase):
+class TestAllViewsLoggedIn(TestCase):
     """
     Test Feeds views for users that are authenticated.
     """
@@ -183,7 +183,7 @@ class ViewsLoggedInTest(TestCase):
             Post.objects.create(feed=feed)
 
 
-class TestFeedCredentials(TestCase):
+class TestFeedViewsWithCredentials(TestCase):
     """
     Test those aspects of :py:mod:`feeds.views` related to
     py:mod:`feeds.models.Feed`, that require proper cedentials.
