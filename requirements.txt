@@ -12,4 +12,5 @@ requests>=2.2.1
 simplejson>=2.6.2
 twitter>=1.9.2
 Whoosh==2.6.0
+pyaml==14.05.6
 pytz==2014.2
