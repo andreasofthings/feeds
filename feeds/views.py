@@ -58,19 +58,15 @@ class OptionsView(LoginRequiredMixin, UpdateView):
         if queryset is None:
             queryset = self.get_queryset()
 
-        try:
-            obj = queryset.get(user=self.request.user)
-        except Options.DoesNotExist:
-            obj = None
+        obj, created = queryset.get_or_create(user=self.request.user)
+        if created:
+            obj.save()
         return obj
 
-    def get_initial(self):
-        """
-        Get initial values for 'user', to ensure no other user is edited.
-        """
-        self.initial.update({'user': self.request.user})
-        return self.initial
-
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        return super(OptionsView, self).form_valid()
 
 SiteSubmitForms = [
     ('Site', SiteCreateForm),
