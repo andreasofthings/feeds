@@ -7,6 +7,7 @@ urly.py to allow tests in travis-ci
 
 from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
+from django.contrib import admin
 from feeds.sitemap import PostSitemap, FeedSitemap
 
 sitemaps = {
@@ -55,3 +56,7 @@ urlpatterns += patterns(
         },
         name='sitemaps'),
     )
+
+urlpatterns += patterns(
+    url(r'^admin/', include(admin.site.urls)),
+)

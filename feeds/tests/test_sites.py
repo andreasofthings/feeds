@@ -6,16 +6,17 @@
 """
 
 from django.test import TestCase
+from django.contrib.auth.models import User
 
 
-class TestSiteCredential(TestCase):
+class TestSiteWithCredential(TestCase):
     """
     Test those aspects of :py:mod:`feeds.views` related to
     py:mod:`feeds.models.Site`, that require Credentials.
     """
 
-
     username = "john"
+    realname = "John Lennon"
     password = "password"
 
     def setUp(self):
@@ -24,12 +25,10 @@ class TestSiteCredential(TestCase):
         """
         self.user = User.objects.create_user(
             self.username,
-            'lennon@thebeatles.com',
+            self.realname,
             self.password
         )
         """Test user."""
 
         self.user.user_permissions.add('')
         """Give the test user proper permission."""
-
-        pass
