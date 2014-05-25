@@ -31,6 +31,7 @@ class ViewsLoggedInTest(TestCase):
         Set up enivironment to test models
         """
         self.factory = RequestFactory()
+        self.client = Client()
         self.user = User.objects.create_user(
             self.username,
             self.realname,
@@ -64,12 +65,10 @@ class ViewsLoggedInTest(TestCase):
         """
         Try to view options as anonymous.
         """
-        client = Client()
-        client.login(username=self.username, password=self.password)
-        response = client.post(
+        self.client.login(username=self.username, password=self.password)
+        response = self.client.post(
             reverse('planet:options'),
             {
-
                 'number_initially_displayed': "11",
             },
 

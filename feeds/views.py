@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 from django import forms
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
 from django.views.generic import DetailView, ListView
 from django.views.generic import CreateView, UpdateView
 from django.views.generic import DeleteView, RedirectView
@@ -25,6 +26,7 @@ from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
 from feeds.models import Options
 from feeds.forms import OptionsForm
+from feeds.forms import OPMLForm
 
 from feeds.models import Site, Feed, Post, Category, Tag, PostReadCount
 from feeds.forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
@@ -66,7 +68,22 @@ class OptionsView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
-        return super(OptionsView, self).form_valid()
+        return super(OptionsView, self).form_valid(form)
+
+
+class OPMLView(FormView):
+    """
+    View to allow import of OPML Files.
+
+    .. todo:: This should be per user. OPML allows user/ownership.
+    """
+    form_class = OPMLForm
+    success_url = reverse('planet:home')
+
+    def form_valid(self, form):
+        print self.request.FILES['opml']
+        return super(OPMLView, self).form_valid(form)
+
 
 SiteSubmitForms = [
     ('Site', SiteCreateForm),

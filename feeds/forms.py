@@ -47,6 +47,13 @@ class OptionsForm(forms.ModelForm):
         super(OptionsForm, self).__init__(*args, **kwargs)
 
 
+class OPMLForm(forms.Form):
+    """
+    Form that shall allow upload of OPML Files.
+    """
+    opml = forms.FileField()
+
+
 class SiteCreateForm(forms.ModelForm):
     """
     Form to create a new Site

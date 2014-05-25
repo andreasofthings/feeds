@@ -12,6 +12,7 @@ from django.contrib.auth.models import User, Permission
 
 from feeds.models import Feed, Post
 
+
 class ViewsAnonymousTest(TestCase):
     """
     Test whether all :py:mod:`feeds.views` are working.
@@ -66,6 +67,23 @@ class ViewsAnonymousTest(TestCase):
             result,
             '/accounts/login/?next=%s' % (reverse('planet:options'))
         )
+
+    def test_opml_import(self):
+        """
+        Go to the options page.
+
+        This is only available per user.
+
+        Assert the returned page comes with "HTTP 302 Redirect".
+        """
+        with open('feeds/tests/data/feedly.opml') as fp:
+            result = self.client.post(
+                reverse('planet:opml'),
+                {
+                    'opml': fp,
+                }
+            )
+        self.assertEqual(result.status_code, 200)
 
     def site_home(self):
         """
