@@ -79,6 +79,7 @@ class OPMLView(FormView):
     .. todo:: This should be per user. OPML allows user/ownership.
     """
     form_class = OPMLForm
+    template_name = "feeds/opml.html"
     success_url = "planet:home"
 
     def form_valid(self, form):
