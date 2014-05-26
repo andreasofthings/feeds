@@ -79,19 +79,27 @@ class OPMLView(FormView):
     .. todo:: This should be per user. OPML allows user/ownership.
     """
     form_class = OPMLForm
-    success_url = reverse('planet:home')
+    success_url = "planet:home"
 
     def form_valid(self, form):
-        o = opml.parse(self.request.FILES['opml'].data)
+        o = opml.from_string(self.request.FILES['opml'].read())
         for element in o:
-            if 'rss' is element.type:
-                f, c = Feed.objects.get_or_create(url=element.link)
-                if c:
-                    f.save()
+            if 'type' in element:
+                if element.type == 'rss':
+                    f, c = Feed.objects.get_or_create(url=element.link)
+                    if c:
+                        f.save()
+                else:
+                    for l in element:
+                        if 'type' in l:
+                            f, c = Feed.objects.get_or_create(url=element.link)
+                            if c:
+                                f.save()
                 """
                 .. todo:: Subscribe owner of OPML to this feed.
                 """
-
+                from django.core import serializers
+                print(serializers.serialize("yaml", Feed.objects.all()))
         return super(OPMLView, self).form_valid(form)
 
 

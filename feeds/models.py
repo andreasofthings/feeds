@@ -195,7 +195,7 @@ class CategoryManager(models.Manager):
     """
     Manager for Category
     """
-    def get_by_natural_key(self, slug):
+    def get_by_natural_key(self, name, slug, parent):
         """
         Get Category by natural kea to allow serialization
         """
