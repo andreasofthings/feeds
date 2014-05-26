@@ -14,6 +14,6 @@ if __name__ == '__main__':
     if hasattr(django, 'setup'):
         django.setup()
     from django.test.runner import DiscoverRunner
-    failures = DiscoverRunner().run_tests(("feeds",), verbosity=1)
+    failures = DiscoverRunner().run_tests(("feeds",), verbosity=2)
     if failures:
         sys.exit(failures)

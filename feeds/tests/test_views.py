@@ -5,7 +5,7 @@
 """
 """
 
-from django.test import TestCase, Client
+from django.test import TestCase, Client, RequestFactory
 from django.core.urlresolvers import reverse
 
 from django.contrib.auth.models import User, Permission
@@ -40,6 +40,9 @@ class ViewsAnonymousTest(TestCase):
         """Test Site."""
 
         self.client = Client()
+        """Test Client."""
+
+        self.factory = RequestFactory()
         """Test Client."""
 
     def test_feed_home(self):

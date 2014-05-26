@@ -53,6 +53,20 @@ class OPMLForm(forms.Form):
     """
     opml = forms.FileField()
 
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_class = "field_inline"
+        self.helper.form_action = 'planet:opml'
+        self.helper.layout = Layout(
+            Field('opml'),
+            FormActions(
+                Submit('submit', 'Submit', css_class='btn-small'),
+                Button('cancel', 'Cancel', css_class='btn-small')
+            )
+        )
+        super(OPMLForm, self).__init__(*args, **kwargs)
+
 
 class SiteCreateForm(forms.ModelForm):
     """
