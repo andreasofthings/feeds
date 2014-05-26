@@ -37,6 +37,7 @@ from django.contrib.formtools.wizard.views import SessionWizardView
 
 from bs4 import BeautifulSoup
 import requests
+import opml
 
 
 class HomeView(TemplateView):
@@ -81,7 +82,16 @@ class OPMLView(FormView):
     success_url = reverse('planet:home')
 
     def form_valid(self, form):
-        print self.request.FILES['opml']
+        o = opml.parse(self.request.FILES['opml'].data)
+        for element in o:
+            if 'rss' is element.type:
+                f, c = Feed.objects.get_or_create(url=element.link)
+                if c:
+                    f.save()
+                """
+                .. todo:: Subscribe owner of OPML to this feed.
+                """
+
         return super(OPMLView, self).form_valid(form)
 
 

@@ -1,3 +1,18 @@
 - model: feeds.Category
   fields:
     "name": "Root"
+- model: feeds.Category
+  fields:
+    "name": "Business"
+- model: feeds.Category
+  fields:
+    "name": "News"
+- model: feeds.Category
+  fields:
+    "name": "Sports"
+- model: feeds.Category
+  fields:
+    "name": "Culture"
+- model: feeds.Category
+  fields:
+    "name": "High-Tech"

@@ -221,6 +221,7 @@ class Category(models.Model):
     name = models.CharField(
         max_length=200,
         help_text='Short descriptive name for this category.',
+        unique=True,
     )
 
     slug = models.SlugField(
@@ -255,7 +256,7 @@ class Category(models.Model):
         .. todo::
             prohibit circular references
         """
-        if not self.slug:
+        if self.slug == "" or not self.slug:
             """Where self.name is the field used for 'pre-populate from'."""
             self.slug = slugify(self.name)
         models.Model.save(self, *args, **kwargs)
@@ -276,7 +277,7 @@ class Category(models.Model):
         return self.category_feeds.all()
 
     def natural_key(self):
-        return (self.name,)
+        return (self.name, self.slug, self.parent)
 
     @models.permalink
     def get_absolute_url(self):
