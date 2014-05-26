@@ -1,5 +1,6 @@
 #! /usr/bin/env python2.7
 # -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
 
 from django.conf.urls import url, patterns
 
@@ -30,11 +31,12 @@ from feeds.views import SiteSubmitWizardView, SiteSubmitForms
 
 from feeds.rss import RssFeed
 
-urlpatterns = patterns('',
-                       url(r'^$', HomeView.as_view(), name="home"),
-                       url(r'^options$', OptionsView.as_view(), name="options"),
-                       url(r'^opml$', OPMLView.as_view(), name="opml"),
-                       )
+urlpatterns = patterns(
+    '',
+    url(r'^$', HomeView.as_view(), name="home"),
+    url(r'^options$', OptionsView.as_view(), name="options"),
+    url(r'^opml$', OPMLView.as_view(), name="opml"),
+)
 
 urlpatterns += patterns(
     '',
@@ -78,37 +80,117 @@ urlpatterns += patterns(
         FeedListView.as_view(),
         name="feed-home-paginated"
     ),
-    url(r'^add/$', FeedCreateView.as_view(), name="feed-add"),
-    url(r'^(?P<pk>\d+)/$', FeedDetailView.as_view(), name="feed-view"),
-    url(r'^(?P<pk>\d+)/update/$', FeedUpdateView.as_view(), name="feed-update"),
-    url(r'^(?P<pk>\d+)/delete/$', FeedDeleteView.as_view(), name="feed-delete"),
-    url(r'^(?P<pk>\d+)/refresh/$', FeedRefreshView.as_view(), name="feed-refresh"),
+    url(
+        r'^add/$',
+        FeedCreateView.as_view(),
+        name="feed-add"
+    ),
+    url(
+        r'^(?P<pk>\d+)/$',
+        FeedDetailView.as_view(),
+        name="feed-view"
+    ),
+    url(
+        r'^(?P<pk>\d+)/update/$',
+        FeedUpdateView.as_view(),
+        name="feed-update"
+    ),
+    url(
+        r'^(?P<pk>\d+)/delete/$',
+        FeedDeleteView.as_view(),
+        name="feed-delete"
+    ),
+    url(
+        r'^(?P<pk>\d+)/refresh/$',
+        FeedRefreshView.as_view(),
+        name="feed-refresh"
+    ),
 )
 
-urlpatterns += patterns('',
-    url(r'^p/(?P<pk>\d+)/$', PostDetailView.as_view(), name="post-view"),
-    url(r'^p/$', PostListView.as_view(), name="post-view"),
+urlpatterns += patterns(
+    '',
+    url(
+        r'^p/(?P<pk>\d+)/$',
+        PostDetailView.as_view(),
+        name="post-view"
+    ),
+    url(
+        r'^p/$',
+        PostListView.as_view(),
+        name="post-view"
+    ),
 )
 
-urlpatterns += patterns('',
-     url(r'^f/(?P<feed_id>\d+)/$', RssFeed(), name="rss"),
-     url(r'^t/(?P<pk>\d+)/$', PostTrackableView.as_view(), name="post-trackable-view"),
+urlpatterns += patterns(
+    '',
+    url(
+        r'^f/(?P<feed_id>\d+)/$',
+        RssFeed(),
+        name="rss"
+    ),
+    url(
+        r'^t/(?P<pk>\d+)/$',
+        PostTrackableView.as_view(),
+        name="post-trackable-view"
+    ),
 )
 
-urlpatterns += patterns('',
-    url(r'^category/$', CategoryListView.as_view(), name="category-home"),
-    url(r'^category/page/(?P<page>\w+)/$', CategoryListView.as_view(), name="category-home-paginated"),
-    url(r'^category/add/$', CategoryCreateView.as_view(), name="category-add"),
-    url(r'^category/(?P<slug>\w+)/$', CategoryDetailView.as_view(), name="category-view"),
-    url(r'^category/(?P<slug>\w+)/update$', CategoryUpdateView.as_view(), name="category-update"),
+urlpatterns += patterns(
+    '',
+    url(
+        r'^category/$',
+        CategoryListView.as_view(),
+        name="category-home"
+    ),
+    url(
+        r'^category/page/(?P<page>\w+)/$',
+        CategoryListView.as_view(),
+        name="category-home-paginated"
+    ),
+    url(
+        r'^category/add/$',
+        CategoryCreateView.as_view(),
+        name="category-add"
+    ),
+    url(
+        r'^category/(?P<slug>\w+)/$',
+        CategoryDetailView.as_view(),
+        name="category-view"
+    ),
+    url(
+        r'^category/(?P<slug>\w+)/update$',
+        CategoryUpdateView.as_view(),
+        name="category-update"
+    ),
 )
 
-urlpatterns += patterns('',
-    url(r'^tag /$', TagListView.as_view(), name="tag-home"),
-    url(r'^tag/page/(?P<page>\w+)/$', TagListView.as_view(), name="tag-home-paginated"),
-    url(r'^tag/add/$', TagCreateView.as_view(), name="tag-add"),
-    url(r'^tag/(?P<slug>[\w-]+)/$', TagDetailView.as_view(), name="tag-view"),
-    url(r'^tag/(?P<id>\d+)/update/$', TagUpdateView.as_view(), name="tag-update"),
+urlpatterns += patterns(
+    '',
+    url(
+        r'^tag /$',
+        TagListView.as_view(),
+        name="tag-home"
+    ),
+    url(
+        r'^tag/page/(?P<page>\w+)/$',
+        TagListView.as_view(),
+        name="tag-home-paginated"
+    ),
+    url(
+        r'^tag/add/$',
+        TagCreateView.as_view(),
+        name="tag-add"
+    ),
+    url(
+        r'^tag/(?P<slug>[\w-]+)/$',
+        TagDetailView.as_view(),
+        name="tag-view"
+    ),
+    url(
+        r'^tag/(?P<id>\d+)/update/$',
+        TagUpdateView.as_view(),
+        name="tag-update"
+    ),
 )
 
 #
@@ -117,8 +199,16 @@ urlpatterns += patterns('',
 
 from django.views.generic import TemplateView
 
-urlpatterns += patterns('',
-    url(r'test/rss1/$', TemplateView.as_view(template_name="feeds/tests/rss1.html"), name="rss1"),
-    url(r'test/rss2/$', TemplateView.as_view(template_name="feeds/tests/rss2.html"), name="rss2"),
+urlpatterns += patterns(
+    '',
+    url(
+        r'test/rss1/$',
+        TemplateView.as_view(template_name="feeds/tests/rss1.html"),
+        name="rss1"
+    ),
+    url(
+        r'test/rss2/$',
+        TemplateView.as_view(template_name="feeds/tests/rss2.html"),
+        name="rss2"
+    ),
 )
-
