@@ -1,8 +1,5 @@
 - model: feeds.Category
   fields:
-    "name": "Root"
-- model: feeds.Category
-  fields:
     "name": "Business"
 - model: feeds.Category
   fields:

@@ -191,14 +191,13 @@ class FeedUpdateForm(forms.ModelForm):
 class CategoryCreateForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ('name', 'parent',)
+        fields = ('name', )
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                'title',
-                'parent',
+                'name',
             ),
             ButtonHolder(
                 Submit('submit', 'Submit', css_class='btn-small'),
@@ -221,7 +220,7 @@ class CategoryUpdateForm(forms.ModelForm):
     """
     class Meta:
         model = Category
-        fields = ('name', 'slug', 'parent',)
+        fields = ('name', )
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -229,8 +228,6 @@ class CategoryUpdateForm(forms.ModelForm):
             Fieldset(
                 'Change Category',
                 'name',
-                'slug',
-                'parent',
             ),
             ButtonHolder(
                 Submit('submit', 'Submit', css_class='btn-small'),

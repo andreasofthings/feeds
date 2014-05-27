@@ -195,11 +195,11 @@ class CategoryManager(models.Manager):
     """
     Manager for Category
     """
-    def get_by_natural_key(self, name, slug, parent):
+    def get_by_natural_key(self, name):
         """
         Get Category by natural kea to allow serialization
         """
-        return self.get(slug=slug)
+        return self.get(name=name)
 
 
 class Category(models.Model):
@@ -224,14 +224,9 @@ class Category(models.Model):
         unique=True,
     )
 
-    slug = models.SlugField(
-        max_length=255,
-        db_index=True,
-        unique=True,
-        help_text='Short descriptive unique name for use in urls.',
-    )
-
-    parent = models.ForeignKey('self', null=True, blank=True)
+    @property
+    def slug(self):
+        return slugify(self.name)
 
     def __unicode__(self):
         return self.name
@@ -243,27 +238,6 @@ class Category(models.Model):
         ordering = ('name',)
         verbose_name = 'category'
         verbose_name_plural = 'categories'
-
-    def save(self, *args, **kwargs):
-        """
-        save
-        ----
-        serves two purposes:
-
-         - prohibit circular references
-         - create the slug if not present/user-set
-
-        .. todo::
-            prohibit circular references
-        """
-        if self.slug == "" or not self.slug:
-            """Where self.name is the field used for 'pre-populate from'."""
-            self.slug = slugify(self.name)
-        models.Model.save(self, *args, **kwargs)
-
-    @property
-    def children(self):
-        return self.category_set.all().order_by('name')
 
     @property
     def tags(self):
@@ -277,11 +251,11 @@ class Category(models.Model):
         return self.category_feeds.all()
 
     def natural_key(self):
-        return (self.name, self.slug, self.parent)
+        return (self.name, )
 
     @models.permalink
     def get_absolute_url(self):
-        return ('planet:category-view', [str(self.slug)])
+        return ('planet:category-view', [str(self.pk)])
 
 
 class FeedManager(models.Manager):

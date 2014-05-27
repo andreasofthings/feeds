@@ -9,6 +9,8 @@ Tests for the "feeds" app.
 
 from django.test import TestCase, Client
 
+from feeds.models import Category
+
 
 class ModelTest(TestCase):
     """
@@ -85,7 +87,6 @@ class ModelTest(TestCase):
 
         .. todo:: use `fixtures` instead.
         """
-        from feeds.models import Category
         c = Category(name="default")
         c.save()
         self.assertEquals(str(c), c.name)
