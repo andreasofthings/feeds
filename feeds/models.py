@@ -134,7 +134,6 @@ class Tag(models.Model):
     )
     """The name of the Tag."""
 
-
     relevant = models.BooleanField(default=False)
     """
     Indicates whether this Tag is relevant for further processing.
@@ -147,7 +146,6 @@ class Tag(models.Model):
     @property
     def slug(self):
         return slugify(self.name)
-
 
     class Meta:
         """
@@ -175,7 +173,6 @@ class Tag(models.Model):
 
     def natural_key(self):
         return (self.name,)
-    natural_key.dependency = ['feeds.Category', ]
 
 
 class CategoryManager(models.Manager):
@@ -229,7 +226,7 @@ class Category(models.Model):
     @property
     def tags(self):
         """
-        Return all :py:mod:`feeds.models.Tag`s for this Category. 
+        Return all :py:mod:`feeds.models.Tag`s for this Category.
         """
         return Tag.objects.filter(categories__in=[self]).order_by('name')
 
@@ -242,6 +239,7 @@ class Category(models.Model):
 
     def natural_key(self):
         return (self.name, )
+    natural_key.dependency = ['feeds.Category', ]
 
     @models.permalink
     def get_absolute_url(self):
@@ -296,6 +294,11 @@ class Feed(models.Model):
         _('is active'),
         default=True,
         help_text=_('If disabled, this feed will not be further updated.')
+    )
+    category = models.ManyToManyField(
+        Category,
+        related_name="category_feeds",
+        blank=True,
     )
     beta = models.BooleanField(
         _('is beta'),
@@ -442,7 +445,7 @@ class Feed(models.Model):
         Metadata for Feed Model.
         Permissions contain:
         :fields:
-           can_refresh_feed: User with this credential 
+           can_refresh_feed: User with this credential
            is allowed to refresh a feed.
         """
         verbose_name = _('feed')

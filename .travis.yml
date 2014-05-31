@@ -23,6 +23,8 @@ install:
  - pip install -q $DJANGO
 before_script:
   - mysql -e 'create database myapp_test;'
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
 # Tell Travis how to run the test script itself
 script: coverage run --source=feeds feedtest.py -m py.test
 after_success:

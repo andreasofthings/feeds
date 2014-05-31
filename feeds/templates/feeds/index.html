@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{%block breadcrumb %}
+{%block breadcrumbs %}
           <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider">/</span></li>
-            <li><a href="{% url "planet:home" %}">Feeds</a> <span class="divider">/</span></li>
+            <li><a href="/">Home</a> <span class="divider"></span></li>
+            <li><a href="{% url "planet:home" %}">Feeds</a> <span class="divider"></span></li>
             <li class="active">You are here</li>
           </ul>
 {%endblock%}
