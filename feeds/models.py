@@ -108,11 +108,11 @@ class TagManager(models.Manager):
     Manager for `Tag` objects.
     """
 
-    def get_by_natural_key(self, slug):
+    def get_by_natural_key(self, name):
         """
         get Tag by natural key, to allow serialization by key rather than `ìd`
         """
-        return self.get(slug=slug)
+        return self.get(name=name)
 
 
 class Tag(models.Model):
@@ -134,16 +134,6 @@ class Tag(models.Model):
     )
     """The name of the Tag."""
 
-    slug = models.SlugField(
-        max_length=255,
-        db_index=True,
-        unique=True,
-        help_text='Short descriptive unique name for use in urls.',
-    )
-    """
-    The slug of the Tag.
-    It can be used in any URL referencing this particular Tag.
-    """
 
     relevant = models.BooleanField(default=False)
     """
@@ -154,14 +144,10 @@ class Tag(models.Model):
     touched = models.DateTimeField(auto_now=True)
     """Keep track of when this Tag was last used."""
 
-    def save(self, *args, **kwargs):
-        """
-        This function is called whenever the object is saved.
-        For a Tag, it will try to set a slug if it is not yet available.
-        """
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super(Tag, self).save(*args, **kwargs)
+    @property
+    def slug(self):
+        return slugify(self.name)
+
 
     class Meta:
         """
@@ -185,10 +171,11 @@ class Tag(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('planet:tag-view', [str(self.id)])
+        return ('planet:tag-view', [str(self.pk)])
 
     def natural_key(self):
         return (self.name,)
+    natural_key.dependency = ['feeds.Category', ]
 
 
 class CategoryManager(models.Manager):
@@ -241,12 +228,15 @@ class Category(models.Model):
 
     @property
     def tags(self):
+        """
+        Return all :py:mod:`feeds.models.Tag`s for this Category. 
+        """
         return Tag.objects.filter(categories__in=[self]).order_by('name')
 
     @property
     def feeds(self):
         """
-        return all feeds in this category
+        Return all :py:mod:`feeds.models.Feed`s in this Category.
         """
         return self.category_feeds.all()
 
@@ -260,13 +250,14 @@ class Category(models.Model):
 
 class FeedManager(models.Manager):
     """
+    Manager object for :py:mod:`feeds.models.Feed`
     """
-    def get_by_natural_key(self, slug):
+    def get_by_natural_key(self, name):
         """
         Get Feed by natural key, to allow
         serialization by key rather than `id`.
         """
-        return self.get(slug=slug)
+        return self.get(name=name)
 
 
 class Feed(models.Model):
@@ -448,7 +439,11 @@ class Feed(models.Model):
 
     class Meta:
         """
-        Metadata for Feed Model
+        Metadata for Feed Model.
+        Permissions contain:
+        :fields:
+           can_refresh_feed: User with this credential 
+           is allowed to refresh a feed.
         """
         verbose_name = _('feed')
         verbose_name_plural = _('feeds')
@@ -461,7 +456,10 @@ class Feed(models.Model):
         return u'%s' % (self.name)
 
     def natural_key(self):
-        return (self.slug,)
+        """
+        Return a natural_key for this Feed.
+        """
+        return (self.name, )
 
     @models.permalink
     def get_absolute_url(self):
