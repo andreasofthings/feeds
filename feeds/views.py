@@ -82,25 +82,21 @@ class OPMLView(FormView):
     template_name = "feeds/opml.html"
     success_url = "planet:home"
 
-    def form_valid(self, form):
-        o = opml.from_string(self.request.FILES['opml'].read())
-        for element in o:
-            if 'type' in element:
-                if element.type == 'rss':
-                    f, c = Feed.objects.get_or_create(url=element.link)
+    def _import(self, opml):
+        for i in opml:
+            if len(i) > 0:
+                self._import(i)
+            else:
+                if 'type' in i and i.type == 'rss':
+                    f, c = Feed.objects.get_or_create(url=i.url)
                     if c:
                         f.save()
-                else:
-                    for l in element:
-                        if 'type' in l:
-                            f, c = Feed.objects.get_or_create(url=element.link)
-                            if c:
-                                f.save()
-                """
-                .. todo:: Subscribe owner of OPML to this feed.
-                """
-                from django.core import serializers
-                print(serializers.serialize("yaml", Feed.objects.all()))
+
+    def form_valid(self, form):
+        o = opml.from_string(self.request.FILES['opml'].read())
+        self._import(o)
+        from django.core import serializers
+        print(serializers.serialize("yaml", Feed.objects.all()))
         return super(OPMLView, self).form_valid(form)
 
 
