@@ -239,7 +239,6 @@ class Category(models.Model):
 
     def natural_key(self):
         return (self.name, )
-    natural_key.dependency = ['feeds.Category', ]
 
     @models.permalink
     def get_absolute_url(self):
@@ -462,7 +461,8 @@ class Feed(models.Model):
         """
         Return a natural_key for this Feed.
         """
-        return (self.name, )
+        return (self.name, ) + self.category.natural_key()
+    natural_key.dependency = ['feeds.Category', ]
 
     @models.permalink
     def get_absolute_url(self):
