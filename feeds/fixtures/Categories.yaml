@@ -12,4 +12,7 @@
     "name": "Culture"
 - model: feeds.Category
   fields:
+    "name": "Podcast"
+- model: feeds.Category
+  fields:
     "name": "High-Tech"
