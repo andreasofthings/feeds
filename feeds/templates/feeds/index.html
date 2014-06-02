@@ -9,7 +9,7 @@
 {%endblock%}
 
 {% block appmenu %}
-<ul class="nav nav-tabs nav-justified">
+<ul class="nav nav-tabs">
     <li><a href="{% url "planet:home" %}">Home</a></li>
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -19,7 +19,22 @@
         <a href="{% url "planet:feed-home" %}">Home</a>
         </ul>
     </li>
-    <li><a href="{% url "planet:category-home"%}">Categories</a></li>
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            Posts<span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+        <a href="{% url "planet:post-home" %}">Home</a>
+        </ul>
+    </li>
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            Categories<span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <a href="{% url "planet:category-home"%}">Categories</a>
+        </ul>
+    </li>
 </ul>
 {% endblock %}
 
