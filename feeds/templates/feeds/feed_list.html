@@ -19,8 +19,8 @@
     <td>{{o.post_set.count}}</td>
     <td>
     {% if user.is_authenticated %}
-      {% if perms.feeds.change_feed %}<a href="{{o.get_absolute_url}}update" class="btn btn-mini"><i class="icon-edit"></i></a>{% endif %}
-      {% if perms.feeds.delete_feed %}<a href="{{o.get_absolute_url}}delete" class="btn btn-mini"><i class="icon-trash"></i></a>{% endif %}
+      {% if perms.feeds.change_feed %}<a href="{{o.get_absolute_url}}update" class="btn btn-mini" role="button"><i class="icon-edit"></i></a>{% endif %}
+      {% if perms.feeds.delete_feed %}<a href="{{o.get_absolute_url}}delete" class="btn btn-mini" role="button"><i class="icon-trash"></i></a>{% endif %}
     {% endif %}
     </td>
   </tr>
