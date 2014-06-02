@@ -1,12 +1,20 @@
 {% extends "base.html" %}
 
-{%block breadcrumbs %}
+{%block breadcrumb %}
           <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider"></span></li>
             <li><a href="{% url "planet:home" %}">Feeds</a> <span class="divider"></span></li>
             <li class="active">You are here</li>
           </ul>
 {%endblock%}
+
+{% block appmenu %}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#">Home</a></li>
+    <li><a href="#">Profile</a></li>
+    <li><a href="#">Messages</a></li>
+</ul>
+{% endblock %}
 
 {%block content%}
 {%endblock%}
