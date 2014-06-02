@@ -117,7 +117,7 @@ urlpatterns += patterns(
     url(
         r'^p/$',
         PostListView.as_view(),
-        name="post-view"
+        name="post-home"
     ),
 )
 
