@@ -86,22 +86,22 @@ urlpatterns += patterns(
         name="feed-add"
     ),
     url(
-        r'^(?P<pk>\d+)/$',
+        r'^feed/(?P<pk>\d+)/$',
         FeedDetailView.as_view(),
         name="feed-view"
     ),
     url(
-        r'^(?P<pk>\d+)/update/$',
+        r'^feed/(?P<pk>\d+)/update/$',
         FeedUpdateView.as_view(),
         name="feed-update"
     ),
     url(
-        r'^(?P<pk>\d+)/delete/$',
+        r'^feed/(?P<pk>\d+)/delete/$',
         FeedDeleteView.as_view(),
         name="feed-delete"
     ),
     url(
-        r'^(?P<pk>\d+)/refresh/$',
+        r'^feed/(?P<pk>\d+)/refresh/$',
         FeedRefreshView.as_view(),
         name="feed-refresh"
     ),
@@ -110,14 +110,14 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     '',
     url(
-        r'^p/(?P<pk>\d+)/$',
+        r'^(?P<pk>\d+)/$',
         PostDetailView.as_view(),
         name="post-view"
     ),
     url(
         r'^p/$',
         PostListView.as_view(),
-        name="post-view"
+        name="post-home"
     ),
 )
 

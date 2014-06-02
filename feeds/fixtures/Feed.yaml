@@ -5,7 +5,6 @@
     "name": "WRINT - Realitätsableich"
     "short_name": "Realitätsabgleich"
     "slug": "WRINT-Realitaetsabgleich"
-    "category": {"Podcast",}
 - model: feeds.Feed
   pk: 2
   fields:
