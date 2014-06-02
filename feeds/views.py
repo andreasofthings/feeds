@@ -209,7 +209,7 @@ class FeedListView(ListView):
     """
     model = Feed
     context_object_name = "feeds"
-    queryset = Feed.objects.filter(beta=True)
+    queryset = Feed.objects.all()
 
     def get_paginate_by(self, queryset):
         return 10
