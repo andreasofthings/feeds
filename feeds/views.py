@@ -21,6 +21,7 @@ from django.views.generic import DeleteView, RedirectView
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import utc
+from django.core import serializers
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
@@ -93,11 +94,10 @@ class OPMLView(FormView):
                         f.save()
 
     def form_valid(self, form):
-        o = opml.from_string(self.request.FILES['opml'].read())
-        self._import(o)
-        from django.core import serializers
+        response = super(OPMLForm, self).form_valid(form)
+        self._import(opml.from_string(self.request.FILES['opml'].read()))
         print(serializers.serialize("yaml", Feed.objects.all()))
-        return super(OPMLView, self).form_valid(form)
+        return response
 
 
 SiteSubmitForms = [

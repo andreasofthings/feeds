@@ -63,25 +63,31 @@ class TaskTest(TestCase):
         dummy.delay(invocation_time=datetime.now())
         dummy(10)
 
+    def test_cronjob(self):
+        """
+        This is a test for the entire chain.
+        """
+        from feeds.tasks import cronjob
+        cronjob()
+
     def test_aggregate(self):
         """
         Test for the `aggregate` function in :py:mod:`feeds.tasks`
         """
         from feeds.tasks import aggregate
         result = aggregate.delay()
-        #test_result = result.get()
-        #self.assertTrue(result.successful())
-        #self.assertEqual(type(test_result), type({}))
-        #self.assertDictContainsSubset(
-        #    {
-        #        FEED_OK: 0,
-        #        FEED_SAME: 0,
-        #        FEED_ERRPARSE: 0,
-        #        FEED_ERREXC: 0,
-        #        FEED_ERRHTTP: 0
-        #    },
-        #    test_result
-        #)
+        test_result = result.get()
+        self.assertTrue(result.successful())
+        self.assertEqual(type(test_result), type({}))
+        self.assertDictContainsSubset({
+            FEED_OK: 0,
+            FEED_SAME: 0,
+            FEED_ERRPARSE: 0,
+            FEED_ERREXC: 0,
+            FEED_ERRHTTP: 0
+            },
+            test_result
+        )
 
     def test_count_tweets(self):
         """
@@ -99,7 +105,6 @@ class TaskTest(TestCase):
 
     def test_feed_refresh(self):
         from feeds.tasks import feed_refresh
-        from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
         feed = Feed.objects.all()[0]
         result = feed_refresh(feed.id)
         self.assertEqual(type(int()), type(result))

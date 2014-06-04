@@ -427,6 +427,7 @@ def feed_stats(result_list):
     return result
 
 
+
 @shared_task
 def feed_refresh(feed_id):
     """
@@ -529,6 +530,7 @@ def feed_refresh(feed_id):
 @shared_task
 def aggregate_stats(result_list):
     """
+    Callback function for the `chord` in :py:mod:`feeds.tasks.aggregate`.
 
     Input: `result_list` will be a list of values from enum(FEED)
 
@@ -555,7 +557,7 @@ def aggregate():
 
     find all tasks that are marked for beta access
 
-    saves a result_dict (FEED_OK/FEED_SAME/FEED_ERR), that
+    returns a result_dict (FEED_OK/FEED_SAME/FEED_ERR), that
     comes from :py:mod:`feeds.tasks.aggregate_stats`
 
     .. codeauthor:: Andreas Neumeier
