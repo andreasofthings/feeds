@@ -427,7 +427,6 @@ def feed_stats(result_list):
     return result
 
 
-
 @shared_task
 def feed_refresh(feed_id):
     """
