@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from models import Post
+from models import Feed
 
-class ScoreSerializer(serializers.HyperlinkedModelSerializer):
+
+class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Post
-        fields = ('id', 'tweets', 'likes', 'shares', 'plus1', 'score')
+        model = Feed
+        fields = ('name', )

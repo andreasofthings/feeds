@@ -701,3 +701,22 @@ class TaggedPost(models.Model):
 
     def __unicode__(self):
         return u'%s [%s]' % (self.post, self.tag)
+
+
+class Subscription(models.Model):
+    """
+    User Feed Subscription
+    """
+    user = models.ForeignKey(
+        Options,
+        verbose_name=_('User Subscription'),
+        related_name='user_subscription'
+    )
+    feed = models.ForeignKey(
+        Feed,
+        verbose_name=_('Feed Subscription'),
+        related_name='feed_subscription'
+    )
+
+    def __unicode__(self):
+        return u'%s subscribed [%s]' % (self.user, self.feed)
