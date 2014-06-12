@@ -430,15 +430,3 @@ class TagUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """
     permission_required = "feeds.update_tag"
     model = Tag
-
-#
-# API
-#
-
-from rest_framework import viewsets
-from serializers import ScoreSerializer
-
-
-class ApiScore(viewsets.ModelViewSet):
-    model = Post
-    serializer_class = ScoreSerializer
