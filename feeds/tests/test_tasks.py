@@ -1,4 +1,4 @@
-#! /usr/bin/env python2.7
+! /usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 # vim: ts=4 et sw=4 sts=4
 

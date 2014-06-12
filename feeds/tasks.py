@@ -568,7 +568,7 @@ def aggregate():
         (feed_refresh.s(i.id) for i in feeds),
         aggregate_stats.s()
     )()
-    return job.get()
+    return job
 
 
 def cronjob():
