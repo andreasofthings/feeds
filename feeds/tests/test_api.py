@@ -41,7 +41,7 @@ class ApiTest(TestCase):
         """
         request subscription, expect a list of all feeds in json
         """
-        response = self.client.get(reverse("subscription-api"))
+        response = self.client.get(reverse("planet:subscription-api"))
         self.assertEqual(response.status_code,  200)
 
     def tearDown(self):
