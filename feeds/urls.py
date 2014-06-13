@@ -220,6 +220,7 @@ urlpatterns += patterns(
 from api_views import UserSubscriptions
 
 urlpatterns += patterns(
+    '',
     url(
         r'/api/v1/subscriptions$',
         UserSubscriptions.as_view(),
