@@ -46,6 +46,26 @@ from feeds.models import Feed, Post, Tag, TaggedPost
 from feeds.models import FeedStats, FeedEntryStats
 
 
+@shared_task
+def dummy(x=10, *args, **kwargs):
+    """
+    Dummy celery.task that sleeps for x seconds,
+    where the default for x is 10
+    it returns True
+    """
+    from time import sleep
+    logger = logging.getLogger(__name__)
+    if 'invocation_time' in kwargs:
+        logger.debug(
+            "task was delayed for %s",
+            (datetime.now() - kwargs['invocation_time'])
+        )
+    logger.debug("Started to sleep for %ss", x)
+    sleep(x)
+    logger.debug("Woke up after sleeping for %ss", x)
+    return True
+
+
 def get_entry_guid(entry, feed_id=None):
     """
     Get an individual guid for an entry
@@ -75,26 +95,6 @@ def get_guids(entries, feed_has_no_guid=False):
             guid = entry.title
         guids.append(entry.get('id', guid))
     return guids
-
-
-@shared_task
-def dummy(x=10, *args, **kwargs):
-    """
-    Dummy celery.task that sleeps for x seconds,
-    where the default for x is 10
-    it returns True
-    """
-    from time import sleep
-    logger = logging.getLogger(__name__)
-    if 'invocation_time' in kwargs:
-        logger.debug(
-            "task was delayed for %s",
-            (datetime.now() - kwargs['invocation_time'])
-        )
-    logger.debug("Started to sleep for %ss", x)
-    sleep(x)
-    logger.debug("Woke up after sleeping for %ss", x)
-    return True
 
 
 @shared_task
