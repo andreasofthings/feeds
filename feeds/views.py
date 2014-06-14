@@ -21,7 +21,6 @@ from django.views.generic import DeleteView, RedirectView
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import utc
-from django.core import serializers
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
@@ -70,6 +69,7 @@ class OptionsView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
+        self.object.save()
         return super(OptionsView, self).form_valid(form)
 
 
@@ -94,10 +94,8 @@ class OPMLView(FormView):
                         f.save()
 
     def form_valid(self, form):
-        response = super(OPMLForm, self).form_valid(form)
         self._import(opml.from_string(self.request.FILES['opml'].read()))
-        print(serializers.serialize("yaml", Feed.objects.all()))
-        return response
+        return super(OPMLView, self).form_valid(form)
 
 
 SiteSubmitForms = [
@@ -430,15 +428,3 @@ class TagUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """
     permission_required = "feeds.update_tag"
     model = Tag
-
-#
-# API
-#
-
-from rest_framework import viewsets
-from serializers import ScoreSerializer
-
-
-class ApiScore(viewsets.ModelViewSet):
-    model = Post
-    serializer_class = ScoreSerializer

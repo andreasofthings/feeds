@@ -564,14 +564,14 @@ def aggregate():
     logger = logging.getLogger(__name__)
     feeds = Feed.objects.filter(is_active=True)
     logger.debug("processing %s feeds", feeds.count())
-    job = chord(
+    return chord(
         (feed_refresh.s(i.id) for i in feeds),
         aggregate_stats.s()
     )()
-    return job.get()
 
 
 def cronjob():
     job = aggregate.delay()
-    fr = FeedStats(job.get())
+    result = job.get()
+    fr = FeedStats(result)
     fr.save()

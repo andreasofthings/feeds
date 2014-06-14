@@ -18,33 +18,6 @@ from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
 
-class OptionsManager(models.Manager):
-    def get_options(self):
-        options = Options.objects.all()
-        if options:
-            options = options[0]
-        else:
-            options = Options.objects.create()
-            """Create with default value."""
-        return options
-
-
-class Options(models.Model):
-    user = models.ForeignKey(User)
-    number_initially_displayed = models.IntegerField(default=10)
-    number_additionally_displayed = models.IntegerField(default=5)
-    max_entries_saved = models.IntegerField(default=100)
-
-    objects = models.Manager()
-    manager = OptionsManager()
-
-    class Meta:
-        verbose_name_plural = "options"
-
-    def __unicode__(self):
-        return u'Options'
-
-
 class SiteManager(models.Manager):
     """
     :py:mod:`SiteManager` provide extra functions.
@@ -701,3 +674,49 @@ class TaggedPost(models.Model):
 
     def __unicode__(self):
         return u'%s [%s]' % (self.post, self.tag)
+
+
+class OptionsManager(models.Manager):
+    def get_options(self):
+        options = Options.objects.all()
+        if options:
+            options = options[0]
+        else:
+            options = Options.objects.create()
+            """Create with default value."""
+        return options
+
+
+class Options(models.Model):
+    user = models.ForeignKey(User)
+    number_initially_displayed = models.IntegerField(default=10)
+    number_additionally_displayed = models.IntegerField(default=5)
+    max_entries_saved = models.IntegerField(default=100)
+
+    objects = OptionsManager()
+    subscriptions = models.ManyToManyField(Feed, through='Subscription')
+
+    class Meta:
+        verbose_name_plural = "options"
+
+    def __unicode__(self):
+        return u'Options'
+
+
+class Subscription(models.Model):
+    """
+    User Feed Subscription
+    """
+    user = models.ForeignKey(
+        Options,
+        verbose_name=_('User Subscription'),
+        related_name='user_subscription'
+    )
+    feed = models.ForeignKey(
+        Feed,
+        verbose_name=_('Feed Subscription'),
+        related_name='feed_subscription'
+    )
+
+    def __unicode__(self):
+        return u'%s subscribed [%s]' % (self.user, self.feed)
