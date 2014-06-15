@@ -79,15 +79,11 @@ class TaskTest(TestCase):
         test_result = result.get()
         self.assertTrue(result.successful())
         self.assertEqual(type(test_result), type({}))
-        self.assertDictContainsSubset({
-            FEED_OK: 0,
-            FEED_SAME: 0,
-            FEED_ERRPARSE: 0,
-            FEED_ERREXC: 0,
-            FEED_ERRHTTP: 0
-            },
-            test_result
-        )
+        self.assertIn(FEED_OK, test_result)
+        self.assertIn(FEED_SAME, test_result)
+        self.assertIn(FEED_ERRPARSE, test_result)
+        self.assertIn(FEED_ERRHTTP, test_result)
+        self.assertIn(FEED_ERREXC, test_result)
 
     def test_count_tweets(self):
         """

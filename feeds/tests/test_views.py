@@ -83,7 +83,7 @@ class ViewsAnonymousTest(TestCase):
             result = self.client.post(
                 reverse('planet:opml'),
                 {
-                    'opml': fp,
+                    'opml': fp.read(),
                 }
             )
         self.assertEqual(result.status_code, 200)

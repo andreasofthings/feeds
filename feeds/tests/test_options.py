@@ -14,7 +14,7 @@ from feeds.views import OptionsView
 from feeds.models import Options
 
 
-class ViewsLoggedInTest(TestCase):
+class OptionsViewsTest(TestCase):
     """
     Test Options views for users that are authenticated.
     """
@@ -71,6 +71,7 @@ class ViewsLoggedInTest(TestCase):
 
         )
         self.assertEquals(response.status_code, 200)
+        self.assertNumQueries(1)
 
         """
         .. todo:: This should actually be '11', after

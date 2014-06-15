@@ -59,8 +59,10 @@ class OPMLForm(forms.Form):
         self.helper.form_class = "field_inline"
         self.helper.form_action = 'planet:opml'
         self.helper.layout = Layout(
-            'Import OPML.',
-            Field('opml'),
+            Fieldset(
+                'Import OPML.',
+                'opml'
+            ),
             FormActions(
                 Submit('submit', 'Submit', css_class='btn btn-mini'),
                 Button('cancel', 'Cancel', css_class='btn btn-mini')

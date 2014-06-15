@@ -53,15 +53,10 @@ class OptionsView(LoginRequiredMixin, UpdateView):
     model = Options
     template_name = "feeds/options.html"
     form_class = OptionsForm
-
-    def get_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+    success_url = "planet:options"
 
     def get_object(self, queryset=None):
-        if queryset is None:
-            queryset = self.get_queryset()
-
-        obj, created = queryset.get_or_create(user=self.request.user)
+        obj, created = Options.objects.get_or_create(user=self.request.user)
         if created:
             obj.save()
         return obj

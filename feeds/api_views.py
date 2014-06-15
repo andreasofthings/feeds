@@ -2,7 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
 
-from feeds.models import Subscription, Feed
+from feeds.models import Options, Feed
+from feeds.serializers import SubscriptionSerializer
 
 
 class SubscriptionThrottle(UserRateThrottle):
@@ -15,7 +16,8 @@ class UserSubscriptions(APIView):
         Return a list of all user subscriptions, all Feeds if anonymous.
         """
         if request.user.is_authenticated():
-            result = Subscription.objects.filter(user=request.user).feed_set.all()
+            subscriptions = Options.objects.filter(user=request.user)
+            result = subscriptions.feed_subscription.all()
         else:
             result = Feed.objects.all()
-        return Response(result)
+        return Response(SubscriptionSerializer(result, many=True).data)

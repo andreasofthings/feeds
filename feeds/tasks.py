@@ -84,6 +84,9 @@ def get_entry_guid(entry, feed_id=None):
 
 
 def get_guids(entries, feed_has_no_guid=False):
+    """
+    return a list of all GUIDs of posts in list of entries.
+    """
     guids = []
     for entry in entries:
         guid = ""
@@ -434,11 +437,10 @@ def feed_refresh(feed_id):
 
     .. todo:: returns `FEED_OK`
 
-    saves :py:mod:`feeds.models.FeedEntryStats`
-
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
     logger = logging.getLogger(__name__)
+
     feed = Feed.objects.get(pk=feed_id)
 
     try:
@@ -455,15 +457,18 @@ def feed_refresh(feed_id):
         )
         return FEED_ERRPARSE
 
-    if hasattr(fpf, 'status'):
-        if fpf.status == 304:
-            # this means feed has not changed
-            return FEED_SAME
-        if fpf.status >= 400:
-            # this means a server error
-            return FEED_ERRHTTP
+    if 'status' not in fpf or fpf.status >= 400:
+        return FEED_ERRHTTP
 
-    if hasattr(fpf, 'bozo') and fpf.bozo:
+    if fpf.status is 304:
+        logger.debug(
+            "[%d] Feed did not change: %s",
+            feed.id,
+            feed.name
+        )
+        return FEED_SAME
+
+    if 'bozo' in fpf:
         logger.debug(
             "[%d] !BOZO! Feed is not well formed: %s",
             feed.id,
@@ -479,10 +484,7 @@ def feed_refresh(feed_id):
     feed.last_checked = datetime.now()
     guids = get_guids(fpf.entries)
 
-    try:
-        feed.save()
-    except Feed.last_modified.ValidationError as e:
-        logger.warning("Feed.ValidationError: %s", str(e))
+    feed.save()
 
     if guids:
         """
@@ -567,7 +569,7 @@ def aggregate():
     return chord(
         (feed_refresh.s(i.id) for i in feeds),
         aggregate_stats.s()
-    )()
+    )().get()
 
 
 def cronjob():

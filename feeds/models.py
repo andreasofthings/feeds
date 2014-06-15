@@ -609,9 +609,22 @@ class FeedStats(models.Model):
     """
     These are stats for all :py:mod:`feeds.models.Feed` in the list.
     """
+    def __init__(self, *args, **kwargs):
+        from feeds import FEED_OK, FEED_SAME
+        from feeds import FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
+        result = args[0]
+        self.feed_ok = result[FEED_OK]
+        self.feed_same = result[FEED_SAME]
+        self.feed_errparse = result[FEED_ERRPARSE]
+        self.feed_errhttp = result[FEED_ERRHTTP]
+        self.feed_errexc = result[FEED_ERREXC]
+        return super(FeedStats, self).__init__(*args, **kwargs)
     collected = models.DateTimeField(auto_now_add=True)
     feed_ok = models.IntegerField(default=0)
-    feed_err = models.IntegerField(default=0)
+    feed_same = models.IntegerField(default=0)
+    feed_errparse = models.IntegerField(default=0)
+    feed_errhttp = models.IntegerField(default=0)
+    feed_errexc = models.IntegerField(default=0)
 
 
 class PostReadCountManager(models.Manager):

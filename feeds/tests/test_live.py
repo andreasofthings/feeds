@@ -48,7 +48,7 @@ class TestAllViewsAnonymousLive(LiveServerTestCase):
         .. todo:: This currently only tests for a superuser.
         Also create a regular user.
         """
-        self.browser.get(self.live_server_url + '/admin/')
+        self.browser.get(self.live_server_url + '/admin')
 
         # She sees the familiar 'Django administration' heading
         body = self.browser.find_element_by_tag_name('body')
