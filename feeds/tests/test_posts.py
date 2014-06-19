@@ -13,15 +13,20 @@ from feeds.models import Post
 
 class TestPostAnonymous(TestCase):
     """
+    Test views for Posts as anonymous.
     """
 
-    fixtures = ['Feed.yaml', 'Posts.yaml',]
+    fixtures = [
+        'Feed.yaml',
+        'Posts.yaml',
+    ]
 
     def setUp(self):
         self.client = Client()
 
     def test_post_view(self):
         """
+        Test whether a Post can be viewed anonymous.
         """
         p = Post.objects.all()[0].pk
         result = self.client.get(reverse('planet:post-view', args=(p,)))
