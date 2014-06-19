@@ -103,7 +103,7 @@ class TaskTest(TestCase):
         from feeds.tasks import feed_refresh
         feed = Feed.objects.all()[0]
         result = feed_refresh(feed.id)
-        self.assertEqual(type(int()), type(result))
+        self.assertEqual(type(FEED_OK), type(result))
 
     def test_entry_process(self):
         from feeds.tasks import entry_process

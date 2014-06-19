@@ -44,7 +44,7 @@ class OptionsForm(forms.ModelForm):
                 Button('cancel', 'Cancel', css_class='btn-small')
             )
         )
-        super(OptionsForm, self).__init__(*args, **kwargs)
+        return super(OptionsForm, self).__init__(*args, **kwargs)
 
 
 class OPMLForm(forms.Form):

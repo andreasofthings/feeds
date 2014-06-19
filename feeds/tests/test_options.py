@@ -62,13 +62,16 @@ class OptionsViewsTest(TestCase):
         """
         Try to view options as anonymous.
         """
+        self.test_options_user()
         self.client.login(username=self.username, password=self.password)
         response = self.client.post(
             reverse('planet:options'),
             {
                 'number_initially_displayed': "11",
+                'max_entries_saved': "101",
+                'number_additionally_displayed': "9",
+                'submit': "Submit",
             },
-
         )
         self.assertEquals(response.status_code, 200)
         self.assertNumQueries(1)

@@ -14,7 +14,10 @@ feeds - feed aggregator, social relevance and stats
 
 feeds is the core module for feeds.
 
-feeds provides all functionality built on top of Django_ methods. Features include aggregation of rss and Atom feeds, collection of social stats from twitter, facebook, google+ and own piwik server, tracking of views in output feeds (feedburner like), displaying all with Chartjs_.
+feeds provides all functionality built on top of Django_ methods. Features
+include aggregation of rss and Atom feeds, collection of social stats from
+twitter, facebook, google+ and own piwik server, tracking of views in output
+feeds (feedburner like), displaying all with Chartjs_.
 
  - :mod:`feeds.views`
  - :mod:`feeds.models`
@@ -29,11 +32,12 @@ feeds provides all functionality built on top of Django_ methods. Features inclu
 
 USER_AGENT = ""
 ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR = range(4)
-FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC = range(5)
+FEED_OK = 'feed_ok'
+FEED_SAME = 'feed_same'
+FEED_ERRPARSE = 'feed_errparse'
+FEED_ERRHTTP = 'feed_errhttp'
+FEED_ERREXC = 'feed_errexc'
 
 version_info = (0, 9, 6)
 __version__ = ".".join(map(str, version_info))
 SERVER_SOFTWARE = "feeds/%s" % __version__
-
-
-

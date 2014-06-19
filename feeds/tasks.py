@@ -573,7 +573,5 @@ def aggregate():
 
 
 def cronjob():
-    job = aggregate.delay()
-    result = job.get()
-    fr = FeedStats(result)
+    fr = FeedStats(**aggregate.delay().get())
     fr.save()
