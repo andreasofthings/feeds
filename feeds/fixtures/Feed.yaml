@@ -1,150 +1,715 @@
 - model: feeds.Feed
   pk: 1
   fields:
-    "feed_url": "http://www.spvggunterhaching.de/aktuell/news/rss"
-    "name": "spvgg-unterhaching.de" 
+    "feed_url": 'http://www.spvggunterhaching.de/aktuell/news/rss'
+    "name": 'spvgg-unterhaching.de'
 - model: feeds.Feed
   pk: 2
   fields:
-    "feed_url": "http://boerse.ard.de/newsticker.jsp"
-    "name": "boerse.ARD.de - Boerse & Geld bei boerse.ARD.de" 
+    "feed_url": 'http://boerse.ard.de/newsticker.jsp'
+    "name": 'boerse.ARD.de - Boerse & Geld bei boerse.ARD.de'
 - model: feeds.Feed
   pk: 3
   fields:
-    "feed_url": "http://newsfeed.zeit.de/wirtschaft/index"
-    "name": "ZEIT ONLINE: Wirtschaft" 
+    "feed_url": 'http://newsfeed.zeit.de/wirtschaft/index'
+    "name": 'ZEIT ONLINE: Wirtschaft'
 - model: feeds.Feed
   pk: 4
   fields:
-    "feed_url": "http://welt.de/wirtschaft/?service=Rss"
-    "name": "DIE WELT - Wirtschaft" 
+    "feed_url": 'http://welt.de/wirtschaft/?service=Rss'
+    "name": 'DIE WELT - Wirtschaft'
 - model: feeds.Feed
   pk: 5
   fields:
-    "feed_url": "http://www.manager-magazin.de/news/rss/index.xml"
-    "name": "manager magazin" 
+    "feed_url": 'http://www.manager-magazin.de/news/rss/index.xml'
+    "name": 'manager magazin'
 - model: feeds.Feed
   pk: 6
   fields:
-    "feed_url": "http://www.handelsblatt.com/rss/HB_Boerse.xml"
-    "name": "Handelsblatt Online - Finanzen" 
+    "feed_url": 'http://www.handelsblatt.com/rss/HB_Boerse.xml'
+    "name": 'Handelsblatt Online - Finanzen'
 - model: feeds.Feed
   pk: 7
   fields:
-    "feed_url": "http://news.google.com/news?hl=en&gl=us&q=SAP%20AG&um=1&ie=UTF-8&output=rss"
-    "name": "SAP AG - Google News" 
+    "feed_url": 'http://news.google.com/news?hl=en&gl=us&q=SAP%20AG&um=1&ie=UTF-8&output=rss'
+    "name": 'SAP AG - Google News'
 - model: feeds.Feed
   pk: 8
   fields:
-    "feed_url": "http://www.phdcomics.com/gradfeed.php"
-    "name": "PHD Comics" 
+    "feed_url": 'http://www.phdcomics.com/gradfeed.php'
+    "name": 'PHD Comics'
 - model: feeds.Feed
   pk: 9
   fields:
-    "feed_url": "http://feeds.feedburner.com/DilbertDailyStrip"
-    "name": "Dilbert Daily Strip" 
+    "feed_url": 'http://feeds.feedburner.com/DilbertDailyStrip'
+    "name": 'Dilbert Daily Strip'
 - model: feeds.Feed
   pk: 10
   fields:
-    "feed_url": "http://xkcd.com/rss.xml"
-    "name": "xkcd.com" 
+    "feed_url": 'http://xkcd.com/rss.xml'
+    "name": 'xkcd.com'
 - model: feeds.Feed
   pk: 11
   fields:
-    "feed_url": "http://feeds.feedburner.com/NoMeatAthlete"
-    "name": "No Meat Athlete" 
+    "feed_url": 'http://feeds.feedburner.com/NoMeatAthlete'
+    "name": 'No Meat Athlete'
 - model: feeds.Feed
   pk: 12
   fields:
-    "feed_url": "http://twentysixpointtwoormore.blogspot.com/feeds/posts/default"
-    "name": "Shut Up + Run" 
+    "feed_url": 'http://twentysixpointtwoormore.blogspot.com/feeds/posts/default'
+    "name": 'Shut Up + Run'
 - model: feeds.Feed
   pk: 13
   fields:
-    "feed_url": "http://www.coolrunning.com/engine/affiliate/rssLatest.rss"
-    "name": "Cool Running" 
+    "feed_url": 'http://www.coolrunning.com/engine/affiliate/rssLatest.rss'
+    "name": 'Cool Running'
 - model: feeds.Feed
   pk: 14
   fields:
-    "feed_url": "http://skinnyrunner.com/feed/"
-    "name": "SkinnyRunner" 
+    "feed_url": 'http://skinnyrunner.com/feed/'
+    "name": 'SkinnyRunner'
 - model: feeds.Feed
   pk: 15
   fields:
-    "feed_url": "http://running.competitor.com/feed"
-    "name": "Competitor Running" 
+    "feed_url": 'http://running.competitor.com/feed'
+    "name": 'Competitor Running'
 - model: feeds.Feed
   pk: 16
   fields:
-    "feed_url": "http://runtrails.blogspot.com/feeds/posts/default"
-    "name": "A Trail Runner's Blog" 
+    "feed_url": 'http://runtrails.blogspot.com/feeds/posts/default'
+    "name": "A Trail Runner's Blog"
 - model: feeds.Feed
   pk: 17
   fields:
-    "feed_url": "http://www.hungryrunnergirl.com/feeds/posts/default"
-    "name": "The Hungry Runner Girl" 
+    "feed_url": 'http://www.hungryrunnergirl.com/feeds/posts/default'
+    "name": 'The Hungry Runner Girl'
 - model: feeds.Feed
   pk: 18
   fields:
-    "feed_url": "http://www.runblogger.com/feeds/posts/default"
-    "name": "Runblogger" 
+    "feed_url": 'http://www.runblogger.com/feeds/posts/default'
+    "name": 'Runblogger'
 - model: feeds.Feed
   pk: 19
   fields:
-    "feed_url": "http://z.about.com/6/g/running/b/rss2.xml"
-    "name": "About.com Running & Jogging" 
+    "feed_url": 'http://z.about.com/6/g/running/b/rss2.xml'
+    "name": 'About.com Running & Jogging'
 - model: feeds.Feed
   pk: 20
   fields:
-    "feed_url": "http://www.dcrainmaker.com/feeds/posts/default"
-    "name": "DC Rainmaker" 
+    "feed_url": 'http://www.dcrainmaker.com/feeds/posts/default'
+    "name": 'DC Rainmaker'
 - model: feeds.Feed
   pk: 21
   fields:
-    "feed_url": "http://feeds.feedburner.com/eatliverun"
-    "name": "Eat, Live, Run" 
+    "feed_url": 'http://feeds.feedburner.com/eatliverun'
+    "name": 'Eat, Live, Run'
 - model: feeds.Feed
   pk: 22
   fields:
-    "feed_url": "http://www.irunfar.com/feed"
-    "name": "iRunFar.com" 
+    "feed_url": 'http://www.irunfar.com/feed'
+    "name": 'iRunFar.com'
 - model: feeds.Feed
   pk: 23
   fields:
-    "feed_url": "http://feeds.feedburner.com/DigitalPhotographySchool"
-    "name": "Digital Photography School" 
+    "feed_url": 'http://feeds.feedburner.com/DigitalPhotographySchool'
+    "name": 'Digital Photography School'
 - model: feeds.Feed
   pk: 24
   fields:
-    "feed_url": "http://sla.ckers.org/forum/rss.php?16"
-    "name": "Web Application Security Forum - SQL and Code Injection" 
+    "feed_url": 'http://sla.ckers.org/forum/rss.php?16'
+    "name": 'Web Application Security Forum - SQL and Code Injection'
 - model: feeds.Feed
   pk: 25
   fields:
-    "feed_url": "http://iscxml.sans.org/rssfeed.xml"
-    "name": "SANS Internet Storm Center, InfoCON: green" 
+    "feed_url": 'http://iscxml.sans.org/rssfeed.xml'
+    "name": 'SANS Internet Storm Center, InfoCON: green'
 - model: feeds.Feed
   pk: 26
   fields:
-    "feed_url": "http://feeds.feedburner.com/darknethackers"
-    "name": "Darknet - The Darkside" 
+    "feed_url": 'http://feeds.feedburner.com/darknethackers'
+    "name": 'Darknet - The Darkside'
 - model: feeds.Feed
   pk: 27
   fields:
-    "feed_url": "http://www.topix.net/rss/science/cryptography"
-    "name": "Cryptography News" 
+    "feed_url": 'http://www.topix.net/rss/science/cryptography'
+    "name": 'Cryptography News'
 - model: feeds.Feed
   pk: 28
   fields:
-    "feed_url": "http://seclists.org/rss/bugtraq.rss"
-    "name": "Bugtraq" 
+    "feed_url": 'http://seclists.org/rss/bugtraq.rss'
+    "name": 'Bugtraq'
 - model: feeds.Feed
   pk: 29
   fields:
-    "feed_url": "http://www.webappsec.org/rss/websecurity.rss"
-    "name": "websecurity January 2013 Archive" 
+    "feed_url": 'http://www.webappsec.org/rss/websecurity.rss'
+    "name": 'websecurity January 2013 Archive'
 - model: feeds.Feed
   pk: 30
   fields:
-    "feed_url": "http://www.securiteam.com/securiteam.rss"
-    "name": "SecuriTeam" 
+    "feed_url": 'http://www.securiteam.com/securiteam.rss'
+    "name": 'SecuriTeam'
+- model: feeds.Feed
+  pk: 31
+  fields:
+    "feed_url": 'http://packetstormsecurity.org/headlines.xml'
+    "name": 'News ≈ Packet Storm'
+- model: feeds.Feed
+  pk: 32
+  fields:
+    "feed_url": 'https://financialcryptography.com/index.rdf'
+    "name": 'Financial Cryptography'
+- model: feeds.Feed
+  pk: 33
+  fields:
+    "feed_url": 'http://blogs.technet.com/security/rss.xml'
+    "name": 'Microsoft Security Blog'
+- model: feeds.Feed
+  pk: 34
+  fields:
+    "feed_url": 'http://feeds.feedburner.com/ZDI-Upcoming-Advisories'
+    "name": 'ZDI: Upcoming Advisories'
+- model: feeds.Feed
+  pk: 35
+  fields:
+    "feed_url": 'http://msmvps.com/blogs/alunj/rss.aspx'
+    "name": 'Tales from the Crypto'
+- model: feeds.Feed
+  pk: 36
+  fields:
+    "feed_url": 'http://www.schneier.com/blog/rss.xml'
+    "name": 'Schneier on Security'
+- model: feeds.Feed
+  pk: 37
+  fields:
+    "feed_url": 'http://securityreason.com/polish/rss/SecurityAlert'
+    "name": 'WLB2 Database - CXSecurity.com'
+- model: feeds.Feed
+  pk: 38
+  fields:
+    "feed_url": 'http://www.viceland.com/blogs/de/feed/'
+    "name": 'Vice Magazine Deutschland'
+- model: feeds.Feed
+  pk: 39
+  fields:
+    "feed_url": 'http://www.vice.com/de/photo/rss'
+    "name": 'VICE Fotos RSS Feed'
+- model: feeds.Feed
+  pk: 40
+  fields:
+    "feed_url": 'http://rss.slashdot.org/Slashdot/slashdot'
+    "name": 'Slashdot'
+- model: feeds.Feed
+  pk: 41
+  fields:
+    "feed_url": 'http://www.heise.de/tp/news-atom.xml'
+    "name": 'Telepolis - Newsfeed'
+- model: feeds.Feed
+  pk: 42
+  fields:
+    "feed_url": 'http://www.guypo.com/feed/'
+    "name": "Guy's Pod"
+- model: feeds.Feed
+  pk: 43
+  fields:
+    "feed_url": 'http://venturegeist.tumblr.com/rss'
+    "name": 'venturegeist'
+- model: feeds.Feed
+  pk: 44
+  fields:
+    "feed_url": 'http://www.pornoanwalt.de/?feed=rss2'
+    "name": 'PORNOANWALT'
+- model: feeds.Feed
+  pk: 45
+  fields:
+    "feed_url": 'http://www.lawblog.de/index.php/feed/'
+    "name": 'law blog'
+- model: feeds.Feed
+  pk: 46
+  fields:
+    "feed_url": 'http://www.basicthinking.de/blog/feed/'
+    "name": 'Basic Thinking'
+- model: feeds.Feed
+  pk: 47
+  fields:
+    "feed_url": 'http://lifehacker.com/index.xml'
+    "name": 'Lifehacker'
+- model: feeds.Feed
+  pk: 48
+  fields:
+    "feed_url": 'http://clairediazortiz.com/feed/'
+    "name": 'Claire Diaz Ortiz'
+- model: feeds.Feed
+  pk: 49
+  fields:
+    "feed_url": 'http://rebellmarkt.blogger.de/rss10'
+    "name": ':::denn sie wissen nicht, was sie tun sollen:::'
+- model: feeds.Feed
+  pk: 50
+  fields:
+    "feed_url": 'http://daringfireball.net/index.xml'
+    "name": 'Daring Fireball'
+- model: feeds.Feed
+  pk: 51
+  fields:
+    "feed_url": 'http://feeds.feedburner.com/codinghorror/'
+    "name": 'Coding Horror'
+- model: feeds.Feed
+  pk: 52
+  fields:
+    "feed_url": 'http://blog.fefe.de/rss.xml'
+    "name": 'Fefes Blog'
+- model: feeds.Feed
+  pk: 53
+  fields:
+    "feed_url": 'http://feeds.boingboing.net/boingboing/iBag'
+    "name": 'Boing Boing'
+- model: feeds.Feed
+  pk: 54
+  fields:
+    "feed_url": 'http://www.mucbook.de/feed/'
+    "name": 'mucbook'
+- model: feeds.Feed
+  pk: 55
+  fields:
+    "feed_url": 'http://www.muenchnerubahn.de/rss.php'
+    "name": 'muenchnerubahn.de'
+- model: feeds.Feed
+  pk: 56
+  fields:
+    "feed_url": 'http://www.isarblog.de/feed/'
+    "name": 'ISARBLOG'
+- model: feeds.Feed
+  pk: 57
+  fields:
+    "feed_url": 'http://feeds.schlaflosinmuenchen.com/weeklysim.xml'
+    "name": 'Schlaflos in München'
+- model: feeds.Feed
+  pk: 58
+  fields:
+    "feed_url": 'http://www.muenchenblogger.de/rss.xml'
+    "name": 'muenchenblogger.de'
+- model: feeds.Feed
+  pk: 59
+  fields:
+    "feed_url": 'http://www.muenchen.info/pia/RSS/RSS.xml'
+    "name": 'München News - Die Stadt informiert'
+- model: feeds.Feed
+  pk: 60
+  fields:
+    "feed_url": 'http://www.achtneun.com/feed/'
+    "name": '89 – Ich bin München.'
+- model: feeds.Feed
+  pk: 61
+  fields:
+    "feed_url": 'http://www.codeplex.com/rss.ashx'
+    "name": 'CodePlex'
+- model: feeds.Feed
+  pk: 62
+  fields:
+    "feed_url": 'http://google-opensource.blogspot.com/feeds/posts/default'
+    "name": 'Google Open Source Blog'
+- model: feeds.Feed
+  pk: 63
+  fields:
+    "feed_url": 'http://lwn.net/headlines/newrss'
+    "name": 'LWN.net'
+- model: feeds.Feed
+  pk: 64
+  fields:
+    "feed_url": 'http://opensource.com/feed'
+    "name": 'opensource.com'
+- model: feeds.Feed
+  pk: 65
+  fields:
+    "feed_url": 'http://planet.debian.org/rss20.xml'
+    "name": 'Planet Debian'
+- model: feeds.Feed
+  pk: 66
+  fields:
+    "feed_url": 'http://creativecommons.org/weblog/rss'
+    "name": 'Creative Commons » Commons News'
+- model: feeds.Feed
+  pk: 67
+  fields:
+    "feed_url": 'http://www.linuxjournal.com/node/feed'
+    "name": 'Linux Journal - The Original Magazine of the Linux Community'
+- model: feeds.Feed
+  pk: 68
+  fields:
+    "feed_url": 'http://feeds.feedburner.com/Phoronix'
+    "name": 'Phoronix'
+- model: feeds.Feed
+  pk: 69
+  fields:
+    "feed_url": 'http://www.heise.de/open/news/news-atom.xml'
+    "name": 'heise open news'
+- model: feeds.Feed
+  pk: 70
+  fields:
+    "feed_url": 'http://www.motherboard.tv/rss.xml'
+    "name": 'Motherboard RSS Feed'
+- model: feeds.Feed
+  pk: 71
+  fields:
+    "feed_url": 'http://allthingsd.com/feed/'
+    "name": 'AllThingsD'
+- model: feeds.Feed
+  pk: 72
+  fields:
+    "feed_url": 'http://www.alltagsforschung.de/feed/'
+    "name": 'alltagsforschung.de'
+- model: feeds.Feed
+  pk: 73
+  fields:
+    "feed_url": 'http://jobtrainer-blog.de/?feed=rss2'
+    "name": 'Jobtrainer-Blog'
+- model: feeds.Feed
+  pk: 74
+  fields:
+    "feed_url": 'http://psychologienachrichten.de/?feed=rss2'
+    "name": 'PsychologieNachrichten'
+- model: feeds.Feed
+  pk: 75
+  fields:
+    "feed_url": 'http://www.entscheiderblog.de/feed/'
+    "name": 'Entscheiderblog'
+- model: feeds.Feed
+  pk: 76
+  fields:
+    "feed_url": 'http://www.jova-nova.com/rss.xml'
+    "name": 'jova-nova.com :: Winklers Blog'
+- model: feeds.Feed
+  pk: 77
+  fields:
+    "feed_url": 'http://blog.hays.de/feed/'
+    "name": 'Hays - Blog zur Arbeitswelt'
+- model: feeds.Feed
+  pk: 78
+  fields:
+    "feed_url": 'http://www.der-postillon.com/feeds/posts/default'
+    "name": 'Der Postillon'
+- model: feeds.Feed
+  pk: 79
+  fields:
+    "feed_url": 'http://www.kerstin-hoffmann.de/pr-doktor/feed/'
+    "name": 'PR-Doktor'
+- model: feeds.Feed
+  pk: 80
+  fields:
+    "feed_url": 'http://blog.recrutainment.de/feed/'
+    "name": 'eAssessment, SelfAssessment & Employer Branding Blog'
+- model: feeds.Feed
+  pk: 81
+  fields:
+    "feed_url": 'http://www.thomashutter.com/index.php/feed/'
+    "name": "Thomas Hutter's Social Media Blog | Facebook Marketing und Social Media"
+- model: feeds.Feed
+  pk: 82
+  fields:
+    "feed_url": 'http://berufung-selbststaendig.de/feed/'
+    "name": 'Berufung selbststaendig'
+- model: feeds.Feed
+  pk: 83
+  fields:
+    "feed_url": 'http://pr-blogger.de/feed/'
+    "name": 'PR-Blogger'
+- model: feeds.Feed
+  pk: 84
+  fields:
+    "feed_url": 'http://personalmarketing2null.de/feed/atom/'
+    "name": 'personalmarketing, employer branding, social media kritisch hinterfragt - personalmarketing2null'
+- model: feeds.Feed
+  pk: 85
+  fields:
+    "feed_url": 'http://www.wollmilchsau.de/feed/'
+    "name": 'Wollmilchsau'
+- model: feeds.Feed
+  pk: 86
+  fields:
+    "feed_url": 'http://www.rumohr.de/blog/feed/'
+    "name": 'Joachim Rumohr - Deutschlands XING-Experte Nr. 1'
+- model: feeds.Feed
+  pk: 87
+  fields:
+    "feed_url": 'http://socialmediarecht.wordpress.com/feed/'
+    "name": 'Social Media Recht Blog'
+- model: feeds.Feed
+  pk: 88
+  fields:
+    "feed_url": 'http://blog.monika-birkner.de/feed/'
+    "name": 'Das Business Transformation Blog von Monika Birkner'
+- model: feeds.Feed
+  pk: 89
+  fields:
+    "feed_url": 'http://www.personalmarketingblog.de/feed'
+    "name": 'Personalmarketingblog'
+- model: feeds.Feed
+  pk: 90
+  fields:
+    "feed_url": 'http://feeds.feedburner.com/UeberzeugendPraesentieren'
+    "name": 'Überzeugend Präsentieren'
+- model: feeds.Feed
+  pk: 91
+  fields:
+    "feed_url": 'http://netzpolitik.org/feed/'
+    "name": 'netzpolitik.org'
+- model: feeds.Feed
+  pk: 92
+  fields:
+    "feed_url": 'http://www.welt.de/export/xml/rss-1/1.xml'
+    "name": 'WELT ONLINE'
+- model: feeds.Feed
+  pk: 93
+  fields:
+    "feed_url": 'http://www.bundesregierung.de/aktuell.rss'
+    "name": 'Bundesregierung Aktuell'
+- model: feeds.Feed
+  pk: 94
+  fields:
+    "feed_url": 'http://www.antibuerokratieteam.net/feed/'
+    "name": 'antibuerokratieteam.net'
+- model: feeds.Feed
+  pk: 95
+  fields:
+    "feed_url": 'http://feeds.feedburner.com/Politblog'
+    "name": 'Politblog.net'
+- model: feeds.Feed
+  pk: 96
+  fields:
+    "feed_url": 'http://www.lobbycontrol.de/blog/index.php/feed/'
+    "name": 'LobbyControl'
+- model: feeds.Feed
+  pk: 97
+  fields:
+    "feed_url": 'http://lizaswelt.blogspot.com/feeds/posts/default'
+    "name": 'Lizas Welt'
+- model: feeds.Feed
+  pk: 98
+  fields:
+    "feed_url": 'http://www.spiegelfechter.com/wordpress/feed/'
+    "name": 'Spiegelfechter'
+- model: feeds.Feed
+  pk: 99
+  fields:
+    "feed_url": 'http://npd-blog.info/?feed=rss2'
+    "name": 'Publikative.org'
+- model: feeds.Feed
+  pk: 100
+  fields:
+    "feed_url": 'http://www.spiegel.de/schlagzeilen/rss/0,5291,20,00.xml'
+    "name": 'SPIEGEL ONLINE - Politik'
+- model: feeds.Feed
+  pk: 101
+  fields:
+    "feed_url": 'http://frank.geekheim.de/?feed=rss2'
+    "name": 'Knowledge Brings Fear'
+- model: feeds.Feed
+  pk: 102
+  fields:
+    "feed_url": 'http://moritzleuenberger.blueblog.ch/rss2/'
+    "name": 'Moritz Leuenberger'
+- model: feeds.Feed
+  pk: 103
+  fields:
+    "feed_url": 'http://imgriff.com/feed/'
+    "name": 'imgriff.com'
+- model: feeds.Feed
+  pk: 104
+  fields:
+    "feed_url": 'http://www.toolblog.de/feed/'
+    "name": 'ToolBlog'
+- model: feeds.Feed
+  pk: 105
+  fields:
+    "feed_url": 'http://www.blatternet.de/feed/'
+    "name": 'blatternet - Zeitmanagement leicht gemacht'
+- model: feeds.Feed
+  pk: 106
+  fields:
+    "feed_url": 'http://feeds.feedburner.com/zeitblueten-blog'
+    "name": 'Zeitblüten'
+- model: feeds.Feed
+  pk: 107
+  fields:
+    "feed_url": 'https://github.com/blog.atom'
+    "name": 'The GitHub Blog'
+- model: feeds.Feed
+  pk: 108
+  fields:
+    "feed_url": 'http://www.ieee.org/rss/?feedId=News_Release'
+    "name": 'IEEE.org - News Releases'
+- model: feeds.Feed
+  pk: 109
+  fields:
+    "feed_url": 'http://csdl.computer.org/rss/tcc.xml'
+    "name": 'IEEE Transactions on Cloud Computing'
+- model: feeds.Feed
+  pk: 110
+  fields:
+    "feed_url": 'http://ieeexplore.ieee.org/rss/TOC34.XML'
+    "name": 'Pattern Analysis and Machine Intelligence, IEEE Transactions on - new TOC'
+- model: feeds.Feed
+  pk: 111
+  fields:
+    "feed_url": 'http://feeds2.feedburner.com/IeeeSpectrum'
+    "name": 'IEEE Spectrum Recent Content'
+- model: feeds.Feed
+  pk: 112
+  fields:
+    "feed_url": 'http://feeds.laughingsquid.com/laughingsquid'
+    "name": 'Laughing Squid'
+- model: feeds.Feed
+  pk: 113
+  fields:
+    "feed_url": 'http://www.kraftfuttermischwerk.de/blogg/?feed=rss2'
+    "name": 'Das Kraftfuttermischwerk'
+- model: feeds.Feed
+  pk: 114
+  fields:
+    "feed_url": 'http://schleckysilberstein.de/feed/'
+    "name": 'Schlecky Silberstein'
+- model: feeds.Feed
+  pk: 115
+  fields:
+    "feed_url": 'http://www.nerdcore.de/wp/feed/'
+    "name": 'Nerdcore'
+- model: feeds.Feed
+  pk: 116
+  fields:
+    "feed_url": 'http://www.schleckysilberstein.com/feed/'
+    "name": "Schlecky Silberstein – Une source d'inspiration"
+- model: feeds.Feed
+  pk: 117
+  fields:
+    "feed_url": 'http://www.wosolldasallesenden.de/feed/'
+    "name": 'Wo soll das alles enden?!'
+- model: feeds.Feed
+  pk: 118
+  fields:
+    "feed_url": 'http://www.best-practice-business.de/blog/?feed=rss2'
+    "name": 'www.best-practice-business.de/blog'
+- model: feeds.Feed
+  pk: 119
+  fields:
+    "feed_url": 'http://www.gruenderszene.de/?feed=rss2'
+    "name": 'Gründerszene.de - Infos für Gründer, Unternehmer, StartUps | Gründerszene'
+- model: feeds.Feed
+  pk: 120
+  fields:
+    "feed_url": 'http://feeds.feedburner.com/Internetmarketing-newsde'
+    "name": 'Internetmarketing-News.de'
+- model: feeds.Feed
+  pk: 121
+  fields:
+    "feed_url": 'http://feeds.feedburner.com/DoingBussinessOnFacebook'
+    "name": 'Futurebiz.de - Facebook & Social Media Marketing'
+- model: feeds.Feed
+  pk: 122
+  fields:
+    "feed_url": 'http://www.connectedmarketing.de/cm/index.rdf'
+    "name": 'ConnectedMarketing.de'
+- model: feeds.Feed
+  pk: 124
+  fields:
+    "feed_url": 'http://www.agilesoc.com/feed/'
+    "name": 'AgileSoC'
+- model: feeds.Feed
+  pk: 125
+  fields:
+    "feed_url": 'http://feeds.agilesoftwaredevelopment.com/AgileSoftwareDevelopment'
+    "name": 'Agile Software Development'
+- model: feeds.Feed
+  pk: 126
+  fields:
+    "feed_url": 'http://feeds.feedburner.com/agilescout'
+    "name": 'Agile Scout'
+- model: feeds.Feed
+  pk: 127
+  fields:
+    "feed_url": 'http://agilesysadmin.net/articles.xml'
+    "name": 'Agile Sysadmin'
+- model: feeds.Feed
+  pk: 128
+  fields:
+    "feed_url": 'http://agilesolutionspace.blogspot.com/feeds/posts/default'
+    "name": 'Exploring Agile Solutions'
+- model: feeds.Feed
+  pk: 129
+  fields:
+    "feed_url": 'http://www.sueddeutsche.de/app/service/rss/tt/tt.xml'
+    "name": 'Topthemen / sueddeutsche.de'
+- model: feeds.Feed
+  pk: 130
+  fields:
+    "feed_url": 'http://www3.tagesschau.de/xml/tagesschau-meldungen/'
+    "name": 'tagesschau.de - Die Nachrichten der ARD'
+- model: feeds.Feed
+  pk: 131
+  fields:
+    "feed_url": 'http://www.heute.de/ZDFheute/infoservices/rss-feed'
+    "name": 'heute-Nachrichten'
+- model: feeds.Feed
+  pk: 132
+  fields:
+    "feed_url": 'http://www.heise.de/newsticker/heise.rdf'
+    "name": 'heise online News'
+- model: feeds.Feed
+  pk: 133
+  fields:
+    "feed_url": 'http://www.faz.net/s/Rub/Tpl~Epartner~SRss_.xml'
+    "name": 'Aktuell - FAZ.NET'
+- model: feeds.Feed
+  pk: 134
+  fields:
+    "feed_url": 'http://pyfound.blogspot.com/feeds/posts/default'
+    "name": 'Python Software Foundation News'
+- model: feeds.Feed
+  pk: 135
+  fields:
+    "feed_url": 'http://feeds.feedburner.com/nomore-cubes'
+    "name": 'No more cubes.'
+- model: feeds.Feed
+  pk: 136
+  fields:
+    "feed_url": 'http://feeds.feedburner.com/BeerFoodCat'
+    "name": 'Beer, Food & Cat'
+- model: feeds.Feed
+  pk: 137
+  fields:
+    "feed_url": 'http://scienceblogs.de/astrodicticum-simplex/feed/'
+    "name": 'Astrodicticum Simplex'
+- model: feeds.Feed
+  pk: 138
+  fields:
+    "feed_url": 'http://www.python.org/channews.rdf'
+    "name": 'Python News'
+- model: feeds.Feed
+  pk: 139
+  fields:
+    "feed_url": 'http://www.pythonware.com/daily/rss.xml'
+    "name": 'Daily Python-URL! (from the Secret Labs)'
+- model: feeds.Feed
+  pk: 140
+  fields:
+    "feed_url": 'http://planet.python.org/rss10.xml'
+    "name": 'Planet Python'
+- model: feeds.Feed
+  pk: 141
+  fields:
+    "feed_url": 'http://blog-de.python.org/feeds/posts/default'
+    "name": 'Python Insider DE'
+- model: feeds.Feed
+  pk: 142
+  fields:
+    "feed_url": 'http://python-dev.blogspot.com/feeds/posts/default'
+    "name": 'Python Developer'
+- model: feeds.Feed
+  pk: 143
+  fields:
+    "feed_url": 'http://www.djangoproject.com/rss/weblog/'
+    "name": 'The Django weblog'
+- model: feeds.Feed
+  pk: 144
+  fields:
+    "feed_url": 'http://jacobian.org/feed/'
+    "name": 'Jacob Kaplan-Moss'

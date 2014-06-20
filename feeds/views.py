@@ -52,7 +52,7 @@ class HomeView(TemplateView):
 class OptionsView(LoginRequiredMixin, UpdateView):
     model = Options
     template_name = "feeds/options.html"
-    form_class = OptionsForm
+    # form_class = OptionsForm
     success_url = "planet:options"
 
     def get_object(self, queryset=None):
