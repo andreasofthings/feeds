@@ -15,7 +15,7 @@ import feedparser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
-from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class SiteManager(models.Manager):
@@ -691,7 +691,7 @@ class OptionsManager(models.Manager):
 
 
 class Options(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     number_initially_displayed = models.IntegerField(default=10)
     number_additionally_displayed = models.IntegerField(default=5)
     max_entries_saved = models.IntegerField(default=100)
