@@ -9,7 +9,8 @@
 {%endblock%}
 
 {% block appmenu %}
-<ul class="nav nav-tabs">
+<div class="row">
+    <ul class="nav nav-tabs">
     <li><a href="{% url "planet:home" %}">Home</a></li>
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -36,6 +37,7 @@
         </ul>
     </li>
 </ul>
+</div>
 {% endblock %}
 
 {%block content%}
