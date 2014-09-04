@@ -35,3 +35,4 @@ Quick start
 
 .. _Documentation: http://feeds.readthedocs.org/en/latest/
 .. _feedburner: http://www.feedburner.com
+.. _buildbot: https://angry-planet.com/buildbot
