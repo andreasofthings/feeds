@@ -10,8 +10,7 @@ services:
 
 # List the versions of Django you'd like to test against
 env:
-  - DJANGO="Django>=1.6.4"
-  - DJANGO="https://github.com/django/django/archive/1.7b4.tar.gz#egg=Django"
+  - DJANGO="Django>=1.7"
 
 install: 
    # Install the dependencies the app itself has
