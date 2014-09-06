@@ -5,11 +5,9 @@
 # http://andreas.neumeier.org/piwik/?module=API&method=VisitsSummary.getVisits&segment=pageUrl==/node/7/&format=json&idSite=10&period=week&date=today&token_auth=9ac687240bcc056c6c4d62ebbcc48d3e
 
 
-import httplib2
-import urlparse
-import urllib, urllib2
+import httplib2, urllib
 
-from django.conf import settings 
+from django.conf import settings
 
 PIWIK_SERVER = getattr(settings, 'PIWIK_SERVER', "default_value")
 PIWIK_SITEID = getattr(settings, 'PIWIK_SITEID', "default_value")
@@ -119,7 +117,7 @@ class Piwik:
         'SitesManager.getIpsForRange', #  (ipRange) [ No example available ]
         'SitesManager.setGlobalExcludedIps', #  (excludedIps) [ No example
         'SitesManager.getExcludedQueryParametersGlobal', #  () [ Example in
-        'SitesManager.setGlobalExcludedQueryParameters', # 
+        'SitesManager.setGlobalExcludedQueryParameters', #
         'SitesManager.getExcludedIpsGlobal', #  () [ Example in [274]XML,
         'SitesManager.getDefaultCurrency', #  () [ Example in [277]XML, [278]Json,
         'SitesManager.setDefaultCurrency', #  (defaultCurrency) [ No example
@@ -208,7 +206,7 @@ class Piwik:
             return content
         else:
             raise "wurst"
-   
+
 
     def getPageVisits(self, page):
         result = self.call('VisitsSummary.getVisits', segment="pageUrl==%s"%(page))
