@@ -10,8 +10,7 @@ services:
 
 # List the versions of Django you'd like to test against
 env:
-  - DJANGO="Django>=1.6.4"
-  - DJANGO="https://github.com/django/django/archive/1.7b4.tar.gz#egg=Django"
+  - DJANGO="Django>=1.7"
 
 install: 
    # Install the dependencies the app itself has
@@ -26,7 +25,9 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 # Tell Travis how to run the test script itself
-script: coverage run --source=feeds feedtest.py -m py.test
+script: 
+  - coverage run --source=feeds feedtest.py -m py.test
+  - sleep 2
 after_success:
   - coveralls
   - python webhook.py
