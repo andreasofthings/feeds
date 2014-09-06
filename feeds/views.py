@@ -68,6 +68,17 @@ class OptionsView(LoginRequiredMixin, UpdateView):
         return super(OptionsView, self).form_valid(form)
 
 
+def opml_import(opml):
+    for i in opml:
+        if len(i) > 0:
+            opml_import(i)
+        else:
+            if 'type' in i and i.type == 'rss':
+                f, c = Feed.objects.get_or_create(url=i.url)
+                if c:
+                    f.save()
+
+
 class OPMLView(FormView):
     """
     View to allow import of OPML Files.
@@ -78,18 +89,8 @@ class OPMLView(FormView):
     template_name = "feeds/opml.html"
     success_url = "planet:home"
 
-    def _import(self, opml):
-        for i in opml:
-            if len(i) > 0:
-                self._import(i)
-            else:
-                if 'type' in i and i.type == 'rss':
-                    f, c = Feed.objects.get_or_create(url=i.url)
-                    if c:
-                        f.save()
-
     def form_valid(self, form):
-        self._import(opml.from_string(self.request.FILES['opml'].read()))
+        opml_import(opml.from_string(self.request.FILES['opml'].read()))
         return super(OPMLView, self).form_valid(form)
 
 
