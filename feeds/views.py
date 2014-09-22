@@ -9,7 +9,10 @@ views for feeds
 
 """
 
-import simplejson as json
+try:
+    import json
+except:
+    import simplejson as json
 from datetime import datetime, timedelta
 from django import forms
 from django.core.urlresolvers import reverse

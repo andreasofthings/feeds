@@ -1,11 +1,12 @@
-#ToDo: rename to stats or somethign
+# ToDo: rename to stats or somethign
 
 
 # http://andreas.neumeier.org/piwik/?module=API&method=getDefaultMetrics&segment=pageUrl==/node/3&format=json&idSite=10&token_auth=9ac687241bcc056c6c4d62ebbcc48d3e
 # http://andreas.neumeier.org/piwik/?module=API&method=VisitsSummary.getVisits&segment=pageUrl==/node/7/&format=json&idSite=10&period=week&date=today&token_auth=9ac687240bcc056c6c4d62ebbcc48d3e
 
 
-import httplib2, urllib
+import httplib2
+import urllib
 
 from django.conf import settings
 
@@ -14,9 +15,10 @@ PIWIK_SITEID = getattr(settings, 'PIWIK_SITEID', "default_value")
 PIWIK_TOKEN = getattr(settings, 'PIWIK_TOKEN', "default_value")
 
 try:
-    from django.utils import simplejson
+    import json
 except:
-    import simplejson
+    import simplejson as json
+
 
 class Piwik:
     server = ""
@@ -25,12 +27,12 @@ class Piwik:
 
     available_methods = (
         'VisitsSummary.getVisits',
-        'API.getDefaultMetrics', # () [ Example in [42]XML, [43]Json, [44]Tsv
-        'API.getDefaultProcessedMetrics', # () [ Example in [45]XML, [46]Json,
-        'API.getDefaultMetricsDocumentation', # () [ Example in [48]XML, [49]Json,
-        'API.getSegmentsMetadata', # (idSites = 'Array') [ Example in [51]XML,
-        'API.getVisitEcommerceStatusFromId', # (id) [ No example available ]
-        'API.getVisitEcommerceStatus', #  (status) [ No example available ]
+        'API.getDefaultMetrics',  # () [ Example in [42]XML, [43]Json, [44]Tsv
+        'API.getDefaultProcessedMetrics',  # () [ Example in [45]XML, [46]Json,
+        'API.getDefaultMetricsDocumentation',  # () [ Example in [48]XML, [49]Json,
+        'API.getSegmentsMetadata',  # (idSites = 'Array') [ Example in [51]XML,
+        'API.getVisitEcommerceStatusFromId',  # (id) [ No example available ]
+        'API.getVisitEcommerceStatus',  #  (status) [ No example available ]
         'API.getLogoUrl', #  (pathOnly = '') [ Example in [54]XML, [55]Json,
         'API.getHeaderLogoUrl', #  (pathOnly = '') [ Example in [57]XML, [58]Json,
         'API.getMetadata', #  (idSite, apiModule, apiAction, apiParameters =

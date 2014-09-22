@@ -15,7 +15,10 @@ This module takes care of everything that is not client/customer facing.
 import logging
 import types
 import httplib2
-import simplejson
+try:
+    import json
+except:
+    import simplejson as json
 import feedparser
 try:
     from urllib.parse import urlparse
@@ -43,7 +46,7 @@ from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 
 from feeds.tools import mtime, getText
 from feeds.models import Feed, Post, Tag, TaggedPost
-from feeds.models import FeedStats, FeedEntryStats
+from feeds.models import FeedEntryStats
 
 
 @shared_task
@@ -157,7 +160,7 @@ def entry_update_twitter(entry_id):
     resp, content = http.request(query, "GET")
 
     if 'status' in resp and resp['status'] == "200":
-        result = simplejson.loads(content)
+        result = json.loads(content)
         entry.tweets = result['count']
         entry.save()
     else:
@@ -241,12 +244,12 @@ def entry_update_googleplus(entry_id):
     resp, content = http.request(
         queryurl,
         method="POST",
-        body=simplejson.dumps(params),
+        body=json.dumps(params),
         headers=headers
     )
 
     if 'status' in resp and resp['status'] == "200":
-        result = simplejson.loads(content)
+        result = json.loads(content)
         try:
             entry.plus1 = int(
                 result['result']['metadata']['globalCounts']['count']
@@ -572,7 +575,12 @@ def aggregate():
     )()
 
 
+@shared_task
 def cronjob():
-    result = aggregate()
-    fr = FeedStats(**result)
-    fr.save()
+    """
+    Dummy, until further infrastructure update.
+    """
+    return 1
+    # result = aggregate()
+    # fr = FeedStats(**result)
+    # fr.save()
