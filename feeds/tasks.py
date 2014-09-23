@@ -43,9 +43,11 @@ from feeds.piwik import Piwik
 from feeds import USER_AGENT
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
+from feeds import CRON_OK, CRON_ERR
 
 from feeds.tools import mtime, getText
 from feeds.models import Feed, Post, Tag, TaggedPost
+from feeds.models import FeedStats
 from feeds.models import FeedEntryStats
 
 
@@ -472,7 +474,7 @@ def feed_refresh(feed_id):
         return FEED_SAME
 
     if 'bozo' in fpf:
-        logger.debug(
+        logger.error(
             "[%d] !BOZO! Feed is not well formed: %s",
             feed.id,
             feed.name
@@ -484,10 +486,10 @@ def feed_refresh(feed_id):
     feed.title = fpf.feed.get('title', '')[0:254]
     feed.tagline = fpf.feed.get('tagline', '')
     feed.link = fpf.feed.get('link', '')
-    feed.last_checked = datetime.now()
     guids = get_guids(fpf.entries)
 
     feed.save()
+    """This should also update `feeds.last_checked`."""
 
     if guids:
         """
@@ -549,11 +551,26 @@ def aggregate_stats(result_list):
         FEED_ERREXC: 0
     }
     result.update(Counter(result_list))
+    """Add upp all fields in the `result_list`-argument."""
+
+    stat = FeedStats()
+    """New instance of `py:mod:feeds.models.FeedStats` to keep the result."""
+    stat.feed_ok = result[FEED_OK]
+    stat.feed_same = result[FEED_SAME]
+    stat.feed_errparse = result[FEED_ERRPARSE]
+    stat.feed_errhttp = result[FEED_ERRHTTP]
+    stat.feed_errexc = result[FEED_ERREXC]
+    stat.save()
+    """
+    ToDo: `py:mod:feeds.models.FeedStats` should rather
+    accept the dict as input.
+    """
+
     return result
 
 
 @shared_task
-def aggregate():
+def cronjob():
     """
     aggregate feeds
 
@@ -567,20 +584,15 @@ def aggregate():
     .. codeauthor:: Andreas Neumeier
     """
     logger = logging.getLogger(__name__)
-    feeds = Feed.objects.filter(is_active=True)
-    logger.debug("processing %s feeds", feeds.count())
-    return chord(
-        (feed_refresh.s(i.id) for i in feeds),
-        aggregate_stats.s()
-    )()
-
-
-@shared_task
-def cronjob():
-    """
-    Dummy, until further infrastructure update.
-    """
-    return 1
-    # result = aggregate()
-    # fr = FeedStats(**result)
-    # fr.save()
+    logger.debug("-- started --")
+    r = CRON_ERR
+    try:
+        feeds = Feed.objects.filter(is_active=True)
+        c = chord(
+            (feed_refresh.s(i.id) for i in feeds),
+            aggregate_stats.s()
+        )
+        r = c()
+    except Exception, e:
+        logger.debug("Exception: %s", str(e))
+    return r

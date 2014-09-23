@@ -31,13 +31,17 @@ feeds (feedburner like), displaying all with Chartjs_.
 """
 
 USER_AGENT = ""
+
 ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR = range(4)
+
 FEED_OK = 'feed_ok'
 FEED_SAME = 'feed_same'
 FEED_ERRPARSE = 'feed_errparse'
 FEED_ERRHTTP = 'feed_errhttp'
 FEED_ERREXC = 'feed_errexc'
 
-version_info = (0, 9, 6)
+CRON_OK, CRON_FAIL, CRON_ERR, CRON_RES = range(4)
+
+version_info = (0, 9, 7)
 __version__ = ".".join(map(str, version_info))
 SERVER_SOFTWARE = "feeds/%s" % __version__

@@ -11,6 +11,7 @@ Stores as much as possible coming out of the feed.
 .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
 """
 
+import logging
 import feedparser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -381,10 +382,17 @@ class Feed(models.Model):
         max_length=50,
         blank=True
     )
+
     last_checked = models.DateTimeField(
         _('last checked'),
         null=True,
-        blank=True
+        blank=True,
+        auto_now=True
+    )
+
+    check_interval = models.IntegerField(
+        _('Interval in Minutes between checks.'),
+        default=5
     )
 
     announce_posts = models.BooleanField(default=False)
