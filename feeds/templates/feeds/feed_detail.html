@@ -12,21 +12,22 @@ Feed: {{ object }}
           <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider"></span></li>
             <li><a href="{% url "planet:feed-home" %}">Feeds</a> <span class="divider"></span></li>
-            {% if object %}<li><a href="{% url "planet:feed-view" object.id %}">{{ object.shortname }}</a> <span class="divider"></span></li>{% endif %}
+            <li><a href="{% url "planet:feed-view" object.id %}">{{ object }}</a> <span class="divider"></span></li>
             <li class="active">You are here</li>
           </ul>
 {%endblock%}
 
 {%block content%}
-<div class="hero-unit">
-<h3>
-{{object}}
-{% if user.is_authenticated %}
-  {% if perms.feeds.can_refresh_feed %}<a href="{{object.get_absolute_url}}refresh" class="btn btn-mini feeds-tooltip" title="refresh feed"><i class="icon-refresh"></i></a>{% endif %}
-  {% if perms.feeds.change_feed %}<a href="{{object.get_absolute_url}}update" class="btn btn-mini feeds-tooltip" title="edit feed"><i class="icon-edit"></i></a>{% endif %}
-  {% if perms.feeds.delete_feed %}<a href="{{object.get_absolute_url}}delete" class="btn btn-mini feeds-tooltip"  title="trash feed"><i class="icon-trash"></i></a>{% endif %}
-{% endif %}
-</h3>
+<div class="row">
+    <div class="hero-unit"> 
+        <h3> {{object}} </h3>
+        <h4>
+        {% if user.is_authenticated %}
+        {% if perms.feeds.can_refresh_feed %}<a href="{{object.get_absolute_url}}refresh" class="btn btn-mini feeds-tooltip" role="button" title="refresh feed"><span class="glyphicon glyphicon-refresh"></span></a>{% endif %}
+        {% if perms.feeds.change_feed %}<a href="{{object.get_absolute_url}}update" class="btn btn-mini feeds-tooltip" role="button" title="edit feed"><span class="glyphicon glyphicon-edit"></span></a>{% endif %}
+        {% if perms.feeds.delete_feed %}<a href="{{object.get_absolute_url}}delete" class="btn btn-mini feeds-tooltip"  role="button" title="trash feed"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}
+        {% endif %}
+    </div>
 </div>
 <div class="row">
     <div class="span7">

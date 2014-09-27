@@ -10,33 +10,33 @@
 
 {% block appmenu %}
 <div class="row">
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs" role="tablist">
     <li><a href="{% url "planet:home" %}">Home</a></li>
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
             Feeds<span class="caret"></span>
         </a>
-        <ul class="dropdown-menu">
-        <a href="{% url "planet:feed-home" %}">Home</a>
+        <ul class="dropdown-menu" role="menu">
+            <li><a href="{% url "planet:feed-home" %}">Home</a></li>
         </ul>
     </li>
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
             Posts<span class="caret"></span>
         </a>
-        <ul class="dropdown-menu">
-        <a href="{% url "planet:post-home" %}">Home</a>
+        <ul class="dropdown-menu" role="menu">
+            <li><a href="{% url "planet:post-home" %}">Home</a></li>
         </ul>
     </li>
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
             Categories<span class="caret"></span>
         </a>
-        <ul class="dropdown-menu">
-            <a href="{% url "planet:category-home"%}">Categories</a>
+        <ul class="dropdown-menu" role="menu">
+            <li><a href="{% url "planet:category-home"%}">Categories</a></li>
         </ul>
-    </li>
-</ul>
+        </li>
+    </ul>
 </div>
 {% endblock %}
 

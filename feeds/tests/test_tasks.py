@@ -74,8 +74,8 @@ class TaskTest(TestCase):
         """
         Test for the `aggregate` function in :py:mod:`feeds.tasks`
         """
-        from feeds.tasks import aggregate
-        result = aggregate.delay()
+        from feeds.tasks import cronjob
+        result = cronjob.delay()
         test_result = result.get()
         self.assertTrue(result.successful())
         self.assertEqual(type(test_result), type({}))

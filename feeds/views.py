@@ -81,6 +81,8 @@ def opml_import(opml):
                 if c:
                     f.save()
 
+    return True
+
 
 class OPMLView(FormView):
     """
