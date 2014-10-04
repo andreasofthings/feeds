@@ -91,6 +91,28 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+      'console': {
+        'level': 'DEBUG',
+        'class': 'logging.StreamHandler',
+        'stream': 'ext://sys.stdout',
+    },
+  },
+    
+  'loggers': {
+    'feeds': {
+      'handlers': ['console'],
+      'level': 'DEBUG',
+      'propagate': True,
+    },
+  },
+}
+
 # Crispy-Forms
 CRISPY_TEMPLATE_PACK = "bootstrap"
 
