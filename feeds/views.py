@@ -28,7 +28,7 @@ from django.utils.timezone import utc
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
 from feeds.models import Options
-from feeds.forms import OptionsForm
+# from feeds.forms import OptionsForm
 from feeds.forms import OPMLForm
 
 from feeds.models import Site, Feed, Post, Category, Tag, PostReadCount
@@ -40,7 +40,6 @@ from django.contrib.formtools.wizard.views import SessionWizardView
 
 from bs4 import BeautifulSoup
 import requests
-import opml
 
 
 class HomeView(TemplateView):
@@ -71,17 +70,18 @@ class OptionsView(LoginRequiredMixin, UpdateView):
         return super(OptionsView, self).form_valid(form)
 
 
-def opml_import(opml):
-    for i in opml:
-        if len(i) > 0:
-            opml_import(i)
+def opml_import(opml, count=0):
+    for node in opml.iter('outline'):
+        name = node.attrib.get('text')
+        url = node.attrib.get('xmlUrl')
+        if name and url:
+            print '  %s :: %s' % (name, url)
+            f, c = Feed.objects.get_or_create(feed_url=url, name=name, short_name=name)
+            print f
+            if c == True:
+                f.save()
         else:
-            if 'type' in i and i.type == 'rss':
-                f, c = Feed.objects.get_or_create(url=i.url)
-                if c:
-                    f.save()
-
-    return True
+            print name
 
 
 class OPMLView(FormView):
@@ -95,7 +95,8 @@ class OPMLView(FormView):
     success_url = "planet:home"
 
     def form_valid(self, form):
-        opml_import(opml.from_string(self.request.FILES['opml'].read()))
+        from xml.etree import ElementTree
+        opml_import(ElementTree.parse(self.request.FILES['opml'].read()))
         return super(OPMLView, self).form_valid(form)
 
 

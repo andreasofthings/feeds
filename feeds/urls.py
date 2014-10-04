@@ -153,12 +153,12 @@ urlpatterns += patterns(
         name="category-add"
     ),
     url(
-        r'^category/(?P<slug>\w+)/$',
+        r'^category/(?P<pk>\w+)/$',
         CategoryDetailView.as_view(),
         name="category-view"
     ),
     url(
-        r'^category/(?P<slug>\w+)/update$',
+        r'^category/(?P<pk>\w+)/update$',
         CategoryUpdateView.as_view(),
         name="category-update"
     ),

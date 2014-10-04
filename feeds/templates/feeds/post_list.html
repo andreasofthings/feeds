@@ -1,5 +1,4 @@
-{% extends "index.html" %}
-{% load comments %}
+{% extends "feeds/index.html" %}
 
 
 {% block content %}
@@ -19,9 +18,6 @@
 {% endif %}
 
 <div class="headermessage">
-  <div>
-    angry planet ist h&auml;sslich und versucht das web zu filtern. haupts&auml;chlich ist es ein experiment. ausserdem ist es meistens kaputt.
-  </div>
   <div>
   Posts in den letzten paar Tagen:
     <ul>
@@ -47,19 +43,6 @@
     <div class="trackbacks">
     </div><!-- trackbacks -->
 
-    <!--
-    <div class="comments">
-      {% get_comment_count for node as comment_count %}
-      <a href="{{node.get_absolute_url }}">{{ comment_count }} Comment(s)</a>
-    </div>
-
-    <div class="commentformsection" id="commentsectionnode{{node.id}}">
-      Leave Comment
-      <div class="commentform" id="commentformnode{{forloop.counter}}">
-        {% render_comment_form for node %}
-      </div>
-    </div>
-  -->
   </div>
   <!-- node -->
 
