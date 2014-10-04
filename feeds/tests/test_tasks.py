@@ -76,8 +76,8 @@ class TaskTest(TestCase):
         """
         from feeds.tasks import cronjob
         test_result = cronjob()
-        # self.assertTrue(result.successful())
-        self.assertEqual(type(test_result), type({}))
+        self.assertTrue(result.successful())
+        # self.assertEqual(type(test_result), type({}))
         self.assertIn(FEED_OK, test_result)
         self.assertIn(FEED_SAME, test_result)
         self.assertIn(FEED_ERRPARSE, test_result)

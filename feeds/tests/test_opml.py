@@ -27,8 +27,7 @@ class TaskOPML(TestCase):
 
     def test_opml_import(self):
         o = open('feeds/tests/data/feedly.opml').read()
-        a = opml.from_string(o)
-        result = opml_import(a)
+        result = opml_import(o)
         self.assertEqual(result, True)
 
     def tearDown(self):
