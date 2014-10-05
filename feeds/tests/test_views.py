@@ -45,17 +45,6 @@ class ViewsAnonymousTest(TestCase):
         self.factory = RequestFactory()
         """Test Client."""
 
-    def test_feed_home(self):
-        """
-        Go to feed-home.
-
-        Assert the returned page comes with "HTTP 200 OK".
-
-        .. todo:: define/document expected result/return values.
-        """
-        result = self.client.get(reverse('planet:feed-home'))
-        self.assertEqual(result.status_code, 200)
-
     def test_feed_options(self):
         """
         Go to the options page.
@@ -381,6 +370,80 @@ class ViewsAnonymousTest(TestCase):
         self.feed_delete()
         # self.feed_refresh()
 
+    def category_home(self):
+        """
+        category-home
+        -------------
+        
+            :url: url(
+                r'^category/$',
+                CategoryListView.as_view(),
+                name="category-home"
+            ),
+
+            Viewing details for a :py:mod:`feeds.models.Category` should be
+            available to the public.
+            
+            Should return 200 for an anonymous user.
+        """
+        result = self.client.get(reverse('planet:category-home'))
+        self.assertEqual(result.status_code, 200)
+    
+    def category_home_paginated(self):
+        """
+        category-home
+        -------------
+        
+            :url: url(
+                r'^category/$',
+                CategoryListView.as_view(),
+                name="category-paginated"
+            ),
+
+            Viewing details for a :py:mod:`feeds.models.Category` should be
+            available to the public.
+            
+            Should return 200 for an anonymous user.
+        """
+        result = self.client.get(reverse('planet:category-home-paginated'))
+        self.assertEqual(result.status_code, 200)
+    
+    def category_view(self):
+        """
+        category-view
+        -------------
+            :url: url(
+                r'^(?P<pk>\d+)/$',
+                CategoryDetailView.as_view(),
+                name="feed-view"
+            ),
+
+            Viewing details for a :py:mod:`feeds.models.Category` should be
+            available to the public.
+
+            Should return 200.
+
+            The `fixture` has a feed with the ID 1.
+        """
+
+        result = self.client.get(reverse('planet:category-view', args=(1,)))
+        self.assertEqual(result.status_code, 200)
+    
+    def test_category_views(self):
+        """
+        Category.
+        =========
+
+        Test Category Views:
+
+        """
+        self.category_home()
+        self.category_home_paginated()
+        self.category_add()
+        self.category_view()
+        self.category_update()
+        self.category_delete()
+    
     def test_sitemap(self):
         client = Client()
         result = client.get("/sitemap.xml")

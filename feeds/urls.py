@@ -162,6 +162,11 @@ urlpatterns += patterns(
         CategoryUpdateView.as_view(),
         name="category-update"
     ),
+    url(
+        r'^category/(?P<pk>\w+)/delete$',
+        CategoryDeleteView.as_view(),
+        name="category-delete"
+    ),
 )
 
 urlpatterns += patterns(
