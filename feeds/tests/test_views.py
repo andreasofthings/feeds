@@ -374,7 +374,7 @@ class ViewsAnonymousTest(TestCase):
         """
         category-home
         -------------
-        
+
             :url: url(
                 r'^category/$',
                 CategoryListView.as_view(),
@@ -383,17 +383,17 @@ class ViewsAnonymousTest(TestCase):
 
             Viewing details for a :py:mod:`feeds.models.Category` should be
             available to the public.
-            
+
             Should return 200 for an anonymous user.
         """
         result = self.client.get(reverse('planet:category-home'))
         self.assertEqual(result.status_code, 200)
-    
+
     def category_home_paginated(self):
         """
         category-home
         -------------
-        
+
             :url: url(
                 r'^category/$',
                 CategoryListView.as_view(),
@@ -402,12 +402,17 @@ class ViewsAnonymousTest(TestCase):
 
             Viewing details for a :py:mod:`feeds.models.Category` should be
             available to the public.
-            
+
             Should return 200 for an anonymous user.
         """
-        result = self.client.get(reverse('planet:category-home-paginated'))
+        result = self.client.get(
+            reverse(
+                'planet:category-home-paginated',
+                args=(1,)
+            )
+        )
         self.assertEqual(result.status_code, 200)
-    
+
     def category_view(self):
         """
         category-view
@@ -428,7 +433,7 @@ class ViewsAnonymousTest(TestCase):
 
         result = self.client.get(reverse('planet:category-view', args=(1,)))
         self.assertEqual(result.status_code, 200)
-    
+
     def test_category_views(self):
         """
         Category.
@@ -439,11 +444,11 @@ class ViewsAnonymousTest(TestCase):
         """
         self.category_home()
         self.category_home_paginated()
-        self.category_add()
+        # self.category_add()
         self.category_view()
-        self.category_update()
-        self.category_delete()
-    
+        # self.category_update()
+        # self.category_delete()
+
     def test_sitemap(self):
         client = Client()
         result = client.get("/sitemap.xml")

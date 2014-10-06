@@ -63,21 +63,16 @@ class TaskTest(TestCase):
         dummy.delay(invocation_time=datetime.now())
         dummy(10)
 
-    def test_cronjob(self):
-        """
-        This is a test for the entire chain.
-        """
-        from feeds.tasks import cronjob
-        cronjob()
-
     def test_aggregate(self):
         """
-        Test for the `aggregate` function in :py:mod:`feeds.tasks`
+        Test for the `cronjob` function in :py:mod:`feeds.tasks`
+
+        This will go through all of the feeds in the fixture.
         """
         from feeds.tasks import cronjob
-        test_result = cronjob()
+        test_result = cronjob().get()
         self.assertTrue(test_result.successful())
-        # self.assertEqual(type(test_result), type({}))
+        self.assertEqual(type(test_result), type({}))
         self.assertIn(FEED_OK, test_result)
         self.assertIn(FEED_SAME, test_result)
         self.assertIn(FEED_ERRPARSE, test_result)

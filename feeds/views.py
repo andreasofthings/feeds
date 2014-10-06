@@ -107,7 +107,8 @@ class OPMLView(FormView):
 
     def form_valid(self, form):
         from xml.etree import ElementTree
-        opml_import(ElementTree.parse(self.request.FILES['opml'].read()))
+        tree = ElementTree.parse(self.request.FILES['opml'])
+        opml_import(tree)
         return super(OPMLView, self).form_valid(form)
 
 

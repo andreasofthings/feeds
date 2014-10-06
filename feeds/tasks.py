@@ -473,7 +473,7 @@ def feed_refresh(feed_id):
         )
         return FEED_SAME
 
-    if 'bozo' in fpf:
+    if 'bozo' in fpf and fpf.bozo == 1:
         logger.error(
             "[%d] !BOZO! Feed is not well formed: %s",
             feed.id,
@@ -584,7 +584,7 @@ def cronjob():
     .. codeauthor:: Andreas Neumeier
     """
     logger = logging.getLogger(__name__)
-    logger.debug("-- started --")
+    logger.debug("-- cronjob started --")
     r = CRON_ERR
     try:
         feeds = Feed.objects.filter(is_active=True)
