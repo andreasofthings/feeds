@@ -23,7 +23,9 @@ from feeds.views import FeedRefreshView
 
 from feeds.views import PostListView, PostDetailView, PostTrackableView
 from feeds.views import CategoryListView, CategoryCreateView
-from feeds.views import CategoryDetailView, CategoryUpdateView
+from feeds.views import CategoryDetailView
+from feeds.views import CategoryUpdateView
+from feeds.views import CategoryDeleteView
 from feeds.views import TagListView, TagDetailView
 from feeds.views import TagCreateView, TagUpdateView
 

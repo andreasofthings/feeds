@@ -13,6 +13,9 @@ try:
     import json
 except:
     import simplejson as json
+
+import logging
+
 from datetime import datetime, timedelta
 from django import forms
 from django.core.urlresolvers import reverse
@@ -71,15 +74,23 @@ class OptionsView(LoginRequiredMixin, UpdateView):
 
 
 def opml_import(opml, count=0):
+    logger = logging.getLogger()
     for node in opml.iter('outline'):
         name = node.attrib.get('text')
         url = node.attrib.get('xmlUrl')
         if name and url:
             print '  %s :: %s' % (name, url)
-            f, c = Feed.objects.get_or_create(feed_url=url, name=name, short_name=name)
+            f, c = Feed.objects.get_or_create(
+                feed_url=url,
+                name=name,
+                short_name=name
+            )
             print f
-            if c == True:
-                f.save()
+            if c:
+                try:
+                    f.save()
+                except Exception as e:
+                    logger.debug(e)
         else:
             print name
 
@@ -387,6 +398,12 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
     form_class = CategoryCreateForm
     model = Category
     initial = {'is_Active': False}
+
+
+class CategoryDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = "feeds.delete_category"
+    model = Category
+    success_url = "planet:category-home"
 
 
 class TagListView(ListView):
