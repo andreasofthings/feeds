@@ -18,9 +18,10 @@
                 <td><a href="{{ o.get_absolute_url }}">{{ o }}</a></td>
                 <td>{{o.post_set.count}}</td>
                 <td>
+                    <a href="{{o.get_absolute_url}}" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "View Category" %}"><span class="glyphicon glyphicon-zoom-in"></span></a>
                     {% if user.is_authenticated %}
-                    {% if perms.feeds.edit_category %}<a href="{{o.get_absolute_url}}update" class="btn btn-xs"><span class="glyphicon glyphicon-edit"></span></a>{% endif %}
-                    {% if perms.feeds.delete_category %}<a href="{{o.get_absolute_url}}delete" class="btn btn-xs"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}
+                    {% if perms.feeds.edit_category %}<a href="{{o.get_absolute_url}}update" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "Edit Category" %}"><span class="glyphicon glyphicon-edit"></span></a>{% endif %}
+                    {% if perms.feeds.delete_category %}<a href="{{o.get_absolute_url}}delete" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "Delete Category" %}"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}
                     {% endif %}
                 </td>
             </tr>
