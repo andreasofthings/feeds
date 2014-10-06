@@ -3,171 +3,205 @@
   fields:
     "feed_url": 'http://www.spvggunterhaching.de/aktuell/news/rss'
     "name": 'spvgg-unterhaching.de'
+    "is_active": True
 - model: feeds.Feed
   pk: 2
   fields:
     "feed_url": 'http://boerse.ard.de/newsticker.jsp'
     "name": 'boerse.ARD.de - Boerse & Geld bei boerse.ARD.de'
+    "is_active": False
 - model: feeds.Feed
   pk: 3
   fields:
     "feed_url": 'http://newsfeed.zeit.de/wirtschaft/index'
     "name": 'ZEIT ONLINE: Wirtschaft'
+    "is_active": False
 - model: feeds.Feed
   pk: 4
   fields:
     "feed_url": 'http://welt.de/wirtschaft/?service=Rss'
     "name": 'DIE WELT - Wirtschaft'
+    "is_active": False
 - model: feeds.Feed
   pk: 5
   fields:
     "feed_url": 'http://www.manager-magazin.de/news/rss/index.xml'
     "name": 'manager magazin'
+    "is_active": False
 - model: feeds.Feed
   pk: 6
   fields:
     "feed_url": 'http://www.handelsblatt.com/rss/HB_Boerse.xml'
     "name": 'Handelsblatt Online - Finanzen'
+    "is_active": False
 - model: feeds.Feed
   pk: 7
   fields:
     "feed_url": 'http://news.google.com/news?hl=en&gl=us&q=SAP%20AG&um=1&ie=UTF-8&output=rss'
     "name": 'SAP AG - Google News'
+    "is_active": False
 - model: feeds.Feed
   pk: 8
   fields:
     "feed_url": 'http://www.phdcomics.com/gradfeed.php'
     "name": 'PHD Comics'
+    "is_active": False
 - model: feeds.Feed
   pk: 9
   fields:
     "feed_url": 'http://feeds.feedburner.com/DilbertDailyStrip'
     "name": 'Dilbert Daily Strip'
+    "is_active": False
 - model: feeds.Feed
   pk: 10
   fields:
     "feed_url": 'http://xkcd.com/rss.xml'
     "name": 'xkcd.com'
+    "is_active": False
 - model: feeds.Feed
   pk: 11
   fields:
     "feed_url": 'http://feeds.feedburner.com/NoMeatAthlete'
     "name": 'No Meat Athlete'
+    "is_active": False
 - model: feeds.Feed
   pk: 12
   fields:
     "feed_url": 'http://twentysixpointtwoormore.blogspot.com/feeds/posts/default'
     "name": 'Shut Up + Run'
+    "is_active": False
 - model: feeds.Feed
   pk: 13
   fields:
     "feed_url": 'http://www.coolrunning.com/engine/affiliate/rssLatest.rss'
     "name": 'Cool Running'
+    "is_active": False
 - model: feeds.Feed
   pk: 14
   fields:
     "feed_url": 'http://skinnyrunner.com/feed/'
     "name": 'SkinnyRunner'
+    "is_active": False
 - model: feeds.Feed
   pk: 15
   fields:
     "feed_url": 'http://running.competitor.com/feed'
     "name": 'Competitor Running'
+    "is_active": False
 - model: feeds.Feed
   pk: 16
   fields:
     "feed_url": 'http://runtrails.blogspot.com/feeds/posts/default'
     "name": "A Trail Runner's Blog"
+    "is_active": False
 - model: feeds.Feed
   pk: 17
   fields:
     "feed_url": 'http://www.hungryrunnergirl.com/feeds/posts/default'
     "name": 'The Hungry Runner Girl'
+    "is_active": False
 - model: feeds.Feed
   pk: 18
   fields:
     "feed_url": 'http://www.runblogger.com/feeds/posts/default'
     "name": 'Runblogger'
+    "is_active": False
 - model: feeds.Feed
   pk: 19
   fields:
     "feed_url": 'http://z.about.com/6/g/running/b/rss2.xml'
     "name": 'About.com Running & Jogging'
+    "is_active": False
 - model: feeds.Feed
   pk: 20
   fields:
     "feed_url": 'http://www.dcrainmaker.com/feeds/posts/default'
     "name": 'DC Rainmaker'
+    "is_active": False
 - model: feeds.Feed
   pk: 21
   fields:
     "feed_url": 'http://feeds.feedburner.com/eatliverun'
     "name": 'Eat, Live, Run'
+    "is_active": False
 - model: feeds.Feed
   pk: 22
   fields:
     "feed_url": 'http://www.irunfar.com/feed'
     "name": 'iRunFar.com'
+    "is_active": False
 - model: feeds.Feed
   pk: 23
   fields:
     "feed_url": 'http://feeds.feedburner.com/DigitalPhotographySchool'
     "name": 'Digital Photography School'
+    "is_active": False
 - model: feeds.Feed
   pk: 24
   fields:
     "feed_url": 'http://sla.ckers.org/forum/rss.php?16'
     "name": 'Web Application Security Forum - SQL and Code Injection'
+    "is_active": False
 - model: feeds.Feed
   pk: 25
   fields:
     "feed_url": 'http://iscxml.sans.org/rssfeed.xml'
     "name": 'SANS Internet Storm Center, InfoCON: green'
+    "is_active": False
 - model: feeds.Feed
   pk: 26
   fields:
     "feed_url": 'http://feeds.feedburner.com/darknethackers'
     "name": 'Darknet - The Darkside'
+    "is_active": False
 - model: feeds.Feed
   pk: 27
   fields:
     "feed_url": 'http://www.topix.net/rss/science/cryptography'
     "name": 'Cryptography News'
+    "is_active": False
 - model: feeds.Feed
   pk: 28
   fields:
     "feed_url": 'http://seclists.org/rss/bugtraq.rss'
     "name": 'Bugtraq'
+    "is_active": False
 - model: feeds.Feed
   pk: 29
   fields:
     "feed_url": 'http://www.webappsec.org/rss/websecurity.rss'
     "name": 'websecurity January 2013 Archive'
+    "is_active": False
 - model: feeds.Feed
   pk: 30
   fields:
     "feed_url": 'http://www.securiteam.com/securiteam.rss'
     "name": 'SecuriTeam'
+    "is_active": False
 - model: feeds.Feed
   pk: 31
   fields:
     "feed_url": 'http://packetstormsecurity.org/headlines.xml'
     "name": 'News ≈ Packet Storm'
+    "is_active": False
 - model: feeds.Feed
   pk: 32
   fields:
     "feed_url": 'https://financialcryptography.com/index.rdf'
     "name": 'Financial Cryptography'
+    "is_active": False
 - model: feeds.Feed
   pk: 33
   fields:
     "feed_url": 'http://blogs.technet.com/security/rss.xml'
     "name": 'Microsoft Security Blog'
+    "is_active": False
 - model: feeds.Feed
   pk: 34
   fields:
     "feed_url": 'http://feeds.feedburner.com/ZDI-Upcoming-Advisories'
     "name": 'ZDI: Upcoming Advisories'
+    "is_active": False
 - model: feeds.Feed
   pk: 35
   fields:
