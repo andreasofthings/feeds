@@ -565,7 +565,6 @@ def aggregate_stats(result_list):
     ToDo: `py:mod:feeds.models.FeedStats` should rather
     accept the dict as input.
     """
-
     return result
 
 
@@ -585,14 +584,12 @@ def cronjob():
     """
     logger = logging.getLogger(__name__)
     logger.debug("-- cronjob started --")
-    r = CRON_ERR
     try:
         feeds = Feed.objects.filter(is_active=True)
         c = chord(
             (feed_refresh.s(i.id) for i in feeds),
             aggregate_stats.s()
         )
-        r = c()
+        return c()
     except Exception, e:
         logger.debug("Exception: %s", str(e))
-    return r
