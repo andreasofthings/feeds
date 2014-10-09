@@ -482,7 +482,7 @@ def feed_refresh(feed_id):
         return FEED_ERRPARSE
 
     feed.etag = fpf.get('etag', '')
-    feed.last_modified = mtime(fpf.modified)
+    feed.last_modified = fpf.get('modified', '')
     feed.title = fpf.feed.get('title', '')[0:254]
     feed.tagline = fpf.feed.get('tagline', '')
     feed.link = fpf.feed.get('link', '')
@@ -584,12 +584,14 @@ def cronjob():
     """
     logger = logging.getLogger(__name__)
     logger.debug("-- cronjob started --")
+    result = {}
     try:
         feeds = Feed.objects.filter(is_active=True)
         c = chord(
             (feed_refresh.s(i.id) for i in feeds),
             aggregate_stats.s()
         )
-        return c()
+        result = c()
     except Exception, e:
         logger.debug("Exception: %s", str(e))
+    return result.get()
