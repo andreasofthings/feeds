@@ -26,8 +26,9 @@ class TaskOPML(TestCase):
         pass
 
     def test_opml_import(self):
-        o = open('feeds/tests/data/feedly.opml')
-        result = opml_import(o)
+        from xml.etree import ElementTree
+        tree = ElementTree.parse(open('feeds/tests/data/feedly.opml'))
+        result = opml_import(tree)
         self.assertEqual(result, True)
 
     def tearDown(self):

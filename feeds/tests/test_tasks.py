@@ -70,7 +70,7 @@ class TaskTest(TestCase):
         This will go through all of the feeds in the fixture.
         """
         from feeds.tasks import cronjob
-        test_result = cronjob()
+        test_result = cronjob.delay()
         # self.assertTrue(test_result.successful())
         self.assertEqual(type(test_result), type({}))
         self.assertIn(FEED_OK, test_result)

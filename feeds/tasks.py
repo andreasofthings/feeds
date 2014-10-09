@@ -587,11 +587,10 @@ def cronjob():
     result = {}
     try:
         feeds = Feed.objects.filter(is_active=True)
-        c = chord(
+        result = chord(
             (feed_refresh.s(i.id) for i in feeds),
             aggregate_stats.s()
-        )
-        result = c()
+        )()
     except Exception, e:
         logger.debug("Exception: %s", str(e))
     return result.get()
