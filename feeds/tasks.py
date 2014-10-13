@@ -43,9 +43,9 @@ from feeds.piwik import Piwik
 from feeds import USER_AGENT
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
-from feeds import CRON_OK, CRON_ERR
+# from feeds import CRON_OK, CRON_ERR
 
-from feeds.tools import mtime, getText
+from feeds.tools import getText
 from feeds.models import Feed, Post, Tag, TaggedPost
 from feeds.models import FeedStats
 from feeds.models import FeedEntryStats
@@ -415,6 +415,7 @@ def entry_process(entry, feed_id, postdict, fpf):
     return True
 
 
+@shared_task
 def feed_stats(result_list):
     """
     this function is supposed to collect all the return
@@ -488,9 +489,6 @@ def feed_refresh(feed_id):
     feed.link = fpf.feed.get('link', '')
     guids = get_guids(fpf.entries)
 
-    feed.save()
-    """This should also update `feeds.last_checked`."""
-
     if guids:
         """
         fetch posts that we have on file already
@@ -509,19 +507,11 @@ def feed_refresh(feed_id):
         """
         postdict = {}
 
-    for entry in fpf.entries:
-        try:
-            # feed_id, options, entry, postdict, fpf
-            logger.debug("spawning task: %s %s" % (entry.title, feed_id))
-            r = chord(entry_process(
-                entry,
-                feed_id,
-                postdict,
-                fpf
-            ), feed_stats.s())()
-            FeedEntryStats(feed_id, r).save()
-        except Exception as e:
-            logger.debug("could not spawn task: %s" % (str(e)))
+    result = chord(
+        (entry_process.s(entry, feed_id, postdict, fpf) for entry in fpf.entries),
+        feed_stats.s()
+    )()
+    FeedEntryStats(feed_id, result.get()).save()
 
     feed.save()
     logger.info(
