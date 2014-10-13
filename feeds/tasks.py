@@ -482,7 +482,7 @@ def feed_refresh(feed_id):
         return FEED_ERRPARSE
 
     feed.etag = fpf.get('etag', '')
-    feed.last_modified = fpf.get('modified', '')
+    feed.last_modified = fpf.get('modified', '2000-01-01 00:00')
     feed.title = fpf.feed.get('title', '')[0:254]
     feed.tagline = fpf.feed.get('tagline', '')
     feed.link = fpf.feed.get('link', '')

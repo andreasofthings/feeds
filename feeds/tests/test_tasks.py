@@ -72,7 +72,7 @@ class TaskTest(TestCase):
         from feeds.tasks import cronjob
         test_result = cronjob.delay()
         # self.assertTrue(test_result.successful())
-        self.assertEqual(type(test_result), type({}))
+        self.assertEqual(type(test_result.get()), type({}))
         self.assertIn(FEED_OK, test_result)
         self.assertIn(FEED_SAME, test_result)
         self.assertIn(FEED_ERRPARSE, test_result)

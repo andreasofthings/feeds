@@ -27,7 +27,7 @@ class ViewsAnonymousTest(TestCase):
     .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
 
-    fixtures = ['Feed.yaml', 'Categories.yaml',]
+    fixtures = ['Feed.yaml', 'Categories.yaml', ]
 
     def setUp(self):
         """
@@ -689,9 +689,6 @@ class TestFeedViewsWithCredentials(TestCase):
         c.login(username=self.username, password=self.password)
         feed_id = Feed.objects.all()[0].id
         result = c.get(reverse('planet:feed-refresh', args=(feed_id,)))
+        expected = reverse('planet:feed-view', args=(feed_id,))
         self.assertEqual(result.status_code, 302)
-        self.assertRedirects(result,
-                             reverse('planet:feed-view',
-                                     args=(feed_id,)
-                                     )
-                             )
+        self.assertRedirects(result, expected)
