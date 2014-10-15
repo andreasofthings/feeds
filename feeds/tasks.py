@@ -508,10 +508,11 @@ def feed_refresh(feed_id):
         postdict = {}
 
     result = chord(
-        (entry_process.s(entry, feed_id, postdict, fpf) for entry in fpf.entries),
+        (entry_process.s(
+            entry, feed.id, postdict, fpf) for entry in fpf.entries),
         feed_stats.s()
     )()
-    FeedEntryStats(feed_id, result.get()).save()
+    FeedEntryStats(feed, result.get()).save()
 
     feed.save()
     logger.info(
