@@ -32,7 +32,10 @@ feeds (feedburner like), displaying all with Chartjs_.
 
 USER_AGENT = ""
 
-ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR = range(4)
+ENTRY_NEW = 'entry_new'
+ENTRY_UPDATED = 'entry_updated'
+ENTRY_SAME = 'entry_same'
+ENTRY_ERR = 'entry_err'
 
 FEED_OK = 'feed_ok'
 FEED_SAME = 'feed_same'

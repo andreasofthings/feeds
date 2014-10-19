@@ -512,7 +512,16 @@ def feed_refresh(feed_id):
             entry, feed.id, postdict, fpf) for entry in fpf.entries),
         feed_stats.s()
     )()
-    FeedEntryStats(feed, result.get()).save()
+    """Chord to asynchronously process all entries in parsed feed."""
+
+    stat = FeedEntryStats()
+    stat.feed = feed
+    result_dict = result.get()
+    stat.entry_new = result_dict[ENTRY_NEW]
+    stat.entry_new = result_dict[ENTRY_SAME]
+    stat.entry_new = result_dict[ENTRY_UPDATED]
+    stat.entry_new = result_dict[ENTRY_ERR]
+    stat.save()
 
     feed.save()
     logger.info(

@@ -97,20 +97,20 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-      'console': {
-        'level': 'DEBUG',
-        'class': 'logging.StreamHandler',
-        'stream': 'ext://sys.stdout',
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'stream': 'ext://sys.stdout',
+        },
     },
-  },
-    
-  'loggers': {
-    'feeds': {
-      'handlers': ['console'],
-      'level': 'DEBUG',
-      'propagate': True,
+
+    'loggers': {
+        'feeds': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     },
-  },
 }
 
 # Crispy-Forms
@@ -132,4 +132,4 @@ CELERY_ALWAYS_EAGER = True
 CELERY_RESULT_BACKEND = "amqp"
 
 # Feeds
-FEED_POST_SOCIAL = False
+FEEDS_POST_SOCIAL = False

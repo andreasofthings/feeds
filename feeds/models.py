@@ -19,6 +19,9 @@ from django.template.defaultfilters import slugify
 from django.conf import settings
 
 
+logger = logging.getLogger(__name__)
+
+
 class SiteManager(models.Manager):
     """
     :py:mod:`SiteManager` provide extra functions.
@@ -605,11 +608,10 @@ class FeedEntryStats(models.Model):
     """
     feed = models.ForeignKey(Feed)
     collected = models.DateTimeField(auto_now_add=True)
-    entry_ok = models.IntegerField(default=0)
+    entry_new = models.IntegerField(default=0)
+    entry_same = models.IntegerField(default=0)
+    entry_updated = models.IntegerField(default=0)
     entry_err = models.IntegerField(default=0)
-
-    def __init__(self, feed_id, stats):
-        self.feed = feed_id
 
 
 class FeedStats(models.Model):
