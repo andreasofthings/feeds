@@ -8,6 +8,8 @@ Feeds
 .. image:: https://coveralls.io/repos/aneumeier/feeds/badge.png 
    :target: https://coveralls.io/r/aneumeier/feeds 
 
+[![ReviewNinja](http://app.review.ninja/assets/images/wereviewninja-32.png)](http://app.review.ninja/aneumeier/feeds)
+
 Feeds aims to be a feed aggregator, readed and potentially a replacement for feedburner_. 
 
 It is realized as a Django app. It takes feeds in any format `feedparser` can understand and aims to reproduce identical but trackable feeds, augmented with feedbrater information.
