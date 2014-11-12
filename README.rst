@@ -8,7 +8,8 @@ Feeds
 .. image:: https://coveralls.io/repos/aneumeier/feeds/badge.png 
    :target: https://coveralls.io/r/aneumeier/feeds 
 
-[![ReviewNinja](http://app.review.ninja/assets/images/wereviewninja-32.png)](http://app.review.ninja/aneumeier/feeds)
+.. image:: http://app.review.ninja/assets/images/wereviewninja-32.png
+   :target: http://app.review.ninja/aneumeier/feeds
 
 Feeds aims to be a feed aggregator, readed and potentially a replacement for feedburner_. 
 
