@@ -26,6 +26,7 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
 # Tell Travis how to run the test script itself
 script:
+  - python manage.py migrate
   - coverage run --source=feeds feedtest.py -m py.test
   - sleep 2
 after_success:
