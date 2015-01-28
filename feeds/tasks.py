@@ -402,7 +402,7 @@ def entry_process(entry, feed_id, postdict, fpf):
 
     p.save()
 
-    if settings.FEED_POST_SOCIAL:
+    if settings.FEEDS_POST_SOCIAL:
         entry_update_social.apply_async((p.id,), countdown=2)
 
     if created and 'tags' in entry:

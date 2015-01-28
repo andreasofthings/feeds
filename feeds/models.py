@@ -420,7 +420,7 @@ class Feed(models.Model):
             self.language = f.feed.language
         if not self.slug:
             self.slug = slugify(self.name)
-        super(Feed, self).save(args, kwargs)
+        super(Feed, self).save(*args, **kwargs)
 
     class Meta:
         """
