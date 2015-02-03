@@ -83,7 +83,6 @@ def opml_import(opml, count=0):
             f, c = Feed.objects.get_or_create(
                 feed_url=url,
                 name=name,
-                short_name=name
             )
             print f
             if c:
