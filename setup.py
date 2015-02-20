@@ -31,7 +31,9 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
     install_requires=[
-        'feedparser>=5.1.2',
+        'beautifulsoup4>=4.2.1',
+        'django-braces>=1.0.0',
         'django-crispy-forms>=1.2.3',
+        'feedparser>=5.1.2',
     ],
 )
