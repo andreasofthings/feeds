@@ -32,5 +32,6 @@ setup(
     ],
     install_requires=[
         'feedparser>=5.1.2',
+        'django-crispy-forms>=1.2.3',
     ],
 )
