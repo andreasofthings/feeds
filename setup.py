@@ -30,7 +30,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
-    depends=[
+    install_requires=[
         'feedparser>=5.1.2',
-    ]
+    ],
 )
