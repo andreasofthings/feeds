@@ -44,6 +44,11 @@ from django.contrib.formtools.wizard.views import SessionWizardView
 from bs4 import BeautifulSoup
 import requests
 
+from rest_framework import mixins, viewsets
+
+from .models import Job
+from .serializers import JobSerializer
+
 
 class HomeView(TemplateView):
     """
@@ -447,3 +452,14 @@ class TagUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """
     permission_required = "feeds.update_tag"
     model = Tag
+
+
+class JobViewSet(mixins.CreateModelMixin,
+                 mixins.ListModelMixin,
+                 mixins.RetrieveModelMixin,
+                 viewsets.GenericViewSet):
+    """
+    API endpoint that allows jobs to be viewed or created.
+    """
+    queryset = Job.objects.all()
+    serializer_class = JobSerializer

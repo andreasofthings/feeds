@@ -50,6 +50,30 @@ from feeds.tools import getText
 from feeds.models import Feed, Post, Tag, TaggedPost
 from feeds.models import FeedStats
 from feeds.models import FeedEntryStats
+from functools import wraps
+
+from .models import Job
+
+
+def update_job(fn):
+    """Decorator that will update Job with result of the function"""
+    # wraps will make the name and docstring of fn available for introspection
+    @wraps(fn)
+    def wrapper(job_id, *args, **kwargs):
+        job = Job.objects.get(id=job_id)
+        job.status = 'started'
+        job.save()
+        try:
+            # execute the function fn
+            result = fn(*args, **kwargs)
+            job.result = result
+            job.status = 'finished'
+            job.save()
+        except:
+            job.result = None
+            job.status = 'failed'
+            job.save()
+    return wrapper
 
 
 @shared_task
@@ -566,3 +590,9 @@ def cronjob():
     except Exception, e:
         logger.debug("Exception: %s", str(e))
     return result.get()
+
+
+# mapping from names to tasks
+TASK_MAPPING = {
+    'cronjob': cronjob
+}
