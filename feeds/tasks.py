@@ -41,8 +41,6 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.conf import settings
 
-from feeds.piwik import Piwik
-
 from feeds import USER_AGENT
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
@@ -264,28 +262,6 @@ def entry_update_googleplus(entry_id):
         logger.debug("stop: counting +1s. Got none. Something weird happened.")
 
 
-@shared_task(time_limit=10)
-def entry_update_pageviews(entry_id):
-    """
-    get pageviews from piwik
-    """
-    logger = logging.getLogger(__name__)
-    logger.debug("start: get local pageviews")
-
-    if not entry_id:
-        logger.error("can't get local pageviews for non-post. pk is empty.")
-        return
-
-    entry = Post.objects.get(pk=entry_id)
-
-    piwik = Piwik()
-    pageurl = "http://angry-planet.com%s" % (entry.get_absolute_url())
-    entry.pageviews = piwik.getPageActions(pageurl)
-    entry.save()
-    logger.debug("stop: get local pageviews. got %s.", entry.pageviews)
-    return entry.pageviews
-
-
 @shared_task
 def tsum(numbers):
     return sum(numbers)
@@ -313,9 +289,6 @@ def entry_update_social(entry_id):
         header.append(f)
     if settings.FEED_POST_UPDATE_GOOGLEPLUS:
         f = (entry_update_googleplus.subtask((p.id, )))
-        header.append(f)
-    if settings.FEED_POST_UPDATE_PAGEVIEWS:
-        f = (entry_update_pageviews.subtask((p.id, )))
         header.append(f)
 
     callback = tsum.s()
