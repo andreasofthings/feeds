@@ -14,12 +14,15 @@ This module takes care of everything that is not client/customer facing.
 
 import logging
 import types
-import httplib2
+import requests
+
 try:
     import json
 except:
     import simplejson as json
+
 import feedparser
+
 try:
     from urllib.parse import urlparse
     from urllib.quote import quote
@@ -155,18 +158,17 @@ def entry_update_twitter(entry_id):
         return
 
     entry = Post.objects.get(pk=entry_id)
-    http = httplib2.Http()
     twitter_count = "http://urls.api.twitter.com/1/urls/count.json?url=%s"
     query = twitter_count % (entry.link)
 
-    resp, content = http.request(query, "GET")
+    resp = requests.get(query)
 
-    if 'status' in resp and resp['status'] == "200":
-        result = json.loads(content)
+    if resp.status_code == 200:
+        result = json.loads(resp.text)
         entry.tweets = result['count']
         entry.save()
     else:
-        logger.debug("status error: %s: %s", resp, content)
+        logger.debug("status error: %s: %s", resp.status_code, resp.text)
 
     logger.debug("stop: counting tweets. got %s", entry.tweets)
     return entry.tweets
@@ -189,11 +191,10 @@ def entry_update_facebook(entry_id):
     fb_sql = """select like_count, share_count from link_stat where url='%s'"""
     query_sql = fb_sql % (entry.link)
     query_url = fb_api % (quote(query_sql))
-    http = httplib2.Http()
-    resp, content = http.request(query_url, "GET")
+    resp, content = requests.get(query_url)
 
-    if 'status' in resp and resp['status'] == "200":
-        xml = parseString(content)
+    if resp.status_code == 200:
+        xml = parseString(resp.text)
         for i in xml.getElementsByTagName("link_stat"):
             for j in i.getElementsByTagName("like_count"):
                 entry.likes = int(getText(j.childNodes))
@@ -221,7 +222,6 @@ def entry_update_googleplus(entry_id):
         logger.error("can't count +1s for non-post. pk is empty.")
         return
 
-    http = httplib2.Http()
     entry = Post.objects.get(pk=entry_id)
 
     queryurl = "https://clients6.google.com/rpc"
@@ -243,15 +243,14 @@ def entry_update_googleplus(entry_id):
         'Content-type': 'application/json',
     }
 
-    resp, content = http.request(
+    resp, content = requests.post(
         queryurl,
-        method="POST",
-        body=json.dumps(params),
+        data=json.dumps(params),
         headers=headers
     )
 
-    if 'status' in resp and resp['status'] == "200":
-        result = json.loads(content)
+    if resp.status_code == 200:
+        result = json.loads(resp.text)
         try:
             entry.plus1 = int(
                 result['result']['metadata']['globalCounts']['count']
