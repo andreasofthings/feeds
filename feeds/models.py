@@ -13,13 +13,16 @@ Stores as much as possible coming out of the feed.
 
 import logging
 import feedparser
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.conf import settings
 
-from managers import SiteManager, TagManager, CategoryManager
-from managers import FeedManager, PostReadCountManager, OptionsManager
+from .managers import SiteManager, TagManager, CategoryManager
+from .managers import FeedManager, PostReadCountManager, OptionsManager
+
+from .tasks import TASK_MAPPING
 
 logger = logging.getLogger(__name__)
 
@@ -27,10 +30,8 @@ logger = logging.getLogger(__name__)
 class Job(models.Model):
     """Class describing a computational job"""
 
-    # currently, available types of job are:
-    TYPES = (
-        ('aggregate', 'aggregate'),
-    )
+    # currently, available types of job are the same as TASK_MAPPING
+    TYPES = TASK_MAPPING
 
     # list of statuses that job can have
     STATUSES = (
