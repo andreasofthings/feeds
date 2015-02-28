@@ -22,8 +22,6 @@ from django.conf import settings
 from .managers import SiteManager, TagManager, CategoryManager
 from .managers import FeedManager, PostReadCountManager, OptionsManager
 
-from .tasks import TASK_MAPPING
-
 logger = logging.getLogger(__name__)
 
 
@@ -31,7 +29,9 @@ class Job(models.Model):
     """Class describing a computational job"""
 
     # currently, available types of job are the same as TASK_MAPPING
-    TYPES = TASK_MAPPING
+    TYPES = (
+        ('cronjob', 'cronjob')
+    )
 
     # list of statuses that job can have
     STATUSES = (
