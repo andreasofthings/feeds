@@ -5,7 +5,7 @@
 # http://andreas.neumeier.org/piwik/?module=API&method=VisitsSummary.getVisits&segment=pageUrl==/node/7/&format=json&idSite=10&period=week&date=today&token_auth=9ac687240bcc056c6c4d62ebbcc48d3e
 
 
-import httplib2
+import requests
 import urllib
 
 from django.conf import settings
@@ -14,22 +14,18 @@ PIWIK_SERVER = getattr(settings, 'PIWIK_SERVER', "default_value")
 PIWIK_SITEID = getattr(settings, 'PIWIK_SITEID', "default_value")
 PIWIK_TOKEN = getattr(settings, 'PIWIK_TOKEN', "default_value")
 
-try:
-    import json
-except:
-    import simplejson as json
-
 
 class Piwik:
     server = ""
     siteid = ""
     token_auth = ""
 
-    available_methods = (
+    available_methods =
+    (
         'VisitsSummary.getVisits',
         'API.getDefaultMetrics',  # () [ Example in [42]XML, [43]Json, [44]Tsv
         'API.getDefaultProcessedMetrics',  # () [ Example in [45]XML, [46]Json,
-        'API.getDefaultMetricsDocumentation',  # () [ Example in [48]XML, [49]Json,
+        'API.getDefaultMetricsDocumentation',  #()[Example in [48]XML, [49]Json,
         'API.getSegmentsMetadata',  # (idSites = 'Array') [ Example in [51]XML,
         'API.getVisitEcommerceStatusFromId',  # (id) [ No example available ]
         'API.getVisitEcommerceStatus',  #  (status) [ No example available ]
@@ -201,11 +197,11 @@ class Piwik:
         if segment is not None:
             params['segment'] = segment
 
-        h = httplib2.Http()
-        resp, content = h.request("%s?%s"%(self.server, urllib.urlencode(params)), "GET")
+        query = """%s?%s"""%(self.server, urllib.urlencode(params))
+        resp = requests.get(query)
 
-        if resp.has_key('status') and resp['status'] == "200":
-            return content
+        if resp.response_code == 200:
+            return resp.text
         else:
             raise "wurst"
 
