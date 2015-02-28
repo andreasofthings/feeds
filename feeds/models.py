@@ -30,7 +30,7 @@ class Job(models.Model):
 
     # currently, available types of job are the same as TASK_MAPPING
     TYPES = (
-        ('cronjob', 'cronjob')
+        ('cronjob', 'cronjob'),
     )
 
     # list of statuses that job can have
