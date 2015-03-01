@@ -232,7 +232,7 @@ router.register(r'jobs', JobViewSet)
 
 urlpatterns += patterns(
     '',
-    url(r'^', include(router.urls)),
+    url(r'^', include(router.urls, namespace='feeds')),
     url(
         r'^api-auth/',
         include(
