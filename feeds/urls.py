@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim: ts=4 et sw=4 sts=4
 
-from django.conf.urls import url, patterns, include
+from django.conf.urls import url, patterns
 
 from feeds.views import HomeView
 from feeds.views import OptionsView
@@ -221,25 +221,8 @@ urlpatterns += patterns(
 )
 
 #
-# API
+# Legacy API
 #
-from .views import JobViewSet
-from rest_framework import routers
-
-router = routers.DefaultRouter()
-# register job endpoint in the router
-router.register(r'jobs', JobViewSet)
-
-urlpatterns += patterns(
-    '',
-    url(r'^', include(router.urls, namespace='feeds')),
-    url(
-        r'^api-auth/',
-        include(
-            'rest_framework.urls',
-            namespace='rest_framework')
-    ),
-)
 
 from api_views import UserSubscriptions
 
