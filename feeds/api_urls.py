@@ -3,7 +3,7 @@ from django.conf.urls import url, include, patterns
 #
 # API
 #
-from .views import JobViewSet
+from .api_views import JobViewSet
 from rest_framework import routers
 
 router = routers.DefaultRouter()
