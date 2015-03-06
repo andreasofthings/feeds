@@ -4,7 +4,9 @@ from rest_framework.throttling import UserRateThrottle
 from rest_framework import mixins, viewsets
 
 from .models import Options, Feed, Job
-from .serializers import SubscriptionSerializer, JobSerializer
+from .serializers import SubscriptionSerializer
+from .serializers import FeedSerializer
+from .serializers import JobSerializer
 
 
 class JobViewSet(mixins.CreateModelMixin,
@@ -16,6 +18,19 @@ class JobViewSet(mixins.CreateModelMixin,
     """
     queryset = Job.objects.all()
     serializer_class = JobSerializer
+
+
+class FeedThrottle(UserRateThrottle):
+    rate = "1/second"
+
+
+class FeedViewSet(mixins.ListModelMixin,
+                  viewsets.GenericViewSet):
+    """
+    API endpoint that allows feeds to be listed.
+    """
+    queryset = Feed.objects.all()
+    serializer_class = FeedSerializer
 
 
 class SubscriptionThrottle(UserRateThrottle):

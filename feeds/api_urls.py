@@ -4,11 +4,13 @@ from django.conf.urls import url, include, patterns
 # API
 #
 from .api_views import JobViewSet
+from .api_views import FeedViewSet
 from rest_framework import routers
 
 router = routers.DefaultRouter()
 # register job endpoint in the router
 router.register(r'jobs', JobViewSet)
+router.register(r'feeds', FeedViewSet)
 
 urlpatterns = patterns(
     '',

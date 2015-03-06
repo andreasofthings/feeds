@@ -532,7 +532,7 @@ def feed_refresh(feed_id):
 @shared_task
 def aggregate_stats(result_list):
     """
-    Callback function for the `chord` in :py:mod:`feeds.tasks.aggregate`.
+    Callback function for the `chord` in :py:mod:`feeds.tasks.cronjob`.
 
     Input: `result_list` will be a list of values from enum(FEED)
 
