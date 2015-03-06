@@ -213,7 +213,7 @@ def entry_update_facebook(entry_id):
     fb_sql = """select like_count, share_count from link_stat where url='%s'"""
     query_sql = fb_sql % (entry.link)
     query_url = fb_api % (quote(query_sql))
-    resp, content = requests.get(query_url)
+    resp = requests.get(query_url)
 
     if resp.status_code == 200:
         xml = parseString(resp.text)
