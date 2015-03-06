@@ -24,11 +24,14 @@ class FeedThrottle(UserRateThrottle):
     rate = "1/second"
 
 
-class FeedViewSet(mixins.ListModelMixin,
+class FeedViewSet(mixins.CreateModelMixin,
+                  mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
                   viewsets.GenericViewSet):
     """
     API endpoint that allows feeds to be listed.
     """
+    throttle_class = (FeedThrottle,)
     queryset = Feed.objects.all()
     serializer_class = FeedSerializer
 
