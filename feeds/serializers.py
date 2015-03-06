@@ -10,7 +10,7 @@ class JobSerializer(serializers.HyperlinkedModelSerializer):
 class FeedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feed
-        fields = ('name', )
+        fields = ('name', 'url', )
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):

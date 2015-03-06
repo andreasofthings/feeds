@@ -565,7 +565,7 @@ def aggregate_stats(result_list):
 
 
 @shared_task
-def cronjob():
+def cronjob(max=0):
     """
     aggregate feeds
 
@@ -583,6 +583,8 @@ def cronjob():
     result = {}
     try:
         feeds = Feed.objects.filter(is_active=True)
+        if max > 0:
+            feeds = feeds[:max]
         result = chord(
             (feed_refresh.s(i.id) for i in feeds),
             aggregate_stats.s()
@@ -594,5 +596,6 @@ def cronjob():
 
 # mapping from names to tasks
 TASK_MAPPING = {
-    'cronjob': cronjob
+    'cronjob': cronjob,
+    'feed_refresh': feed_refresh,
 }

@@ -31,6 +31,7 @@ class Job(models.Model):
     # currently, available types of job are the same as TASK_MAPPING
     TYPES = (
         ('cronjob', 'cronjob'),
+        ('feed_refresh', 'feed_refresh'),
     )
 
     # list of statuses that job can have
@@ -410,7 +411,7 @@ class Feed(models.Model):
             self.language = f.feed.language
         if not self.slug:
             self.slug = slugify(self.name)
-        super(Feed, self).save(*args, **kwargs)
+        return super(Feed, self).save(*args, **kwargs)
 
     class Meta:
         """
