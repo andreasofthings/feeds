@@ -232,7 +232,11 @@ class Feed(models.Model):
     - results from social updates
     - calculated values
     """
-    site = models.ForeignKey(Site, null=True)
+    site = models.ForeignKey(
+        Site,
+        blank=True,
+        null=True
+    )
     feed_url = models.URLField(
         _('feed url'),
         unique=True
