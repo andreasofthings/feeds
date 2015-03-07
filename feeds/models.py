@@ -408,7 +408,7 @@ class Feed(models.Model):
         if not self.name and 'title' in f.feed:
             self.name = f.feed.title
         if not self.short_name and 'title' in f.feed:
-            self.short_name = f.feed.title
+            self.short_name = f.feed.title[:128]
         if not self.link and hasattr(f.feed, 'link'):
             self.link = f.feed.link
         if hasattr(f.feed, 'language'):
