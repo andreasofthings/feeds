@@ -407,7 +407,7 @@ class Feed(models.Model):
         f = feedparser.parse(self.feed_url)
         if not self.name and 'title' in f.feed:
             self.name = f.feed.title
-        if not self.short_name:
+        if not self.short_name and 'title' in f.feed:
             self.short_name = f.feed.title
         if not self.link and hasattr(f.feed, 'link'):
             self.link = f.feed.link

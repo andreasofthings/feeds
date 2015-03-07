@@ -328,13 +328,19 @@ def entry_update_social(entry_id):
 @shared_task
 def entry_tags(post_id, tags):
     """
+    collect tags per post and do the postprocessing.
     """
     logger = logging.getLogger(__name__)
-    logger.info("start: entry tagging (%s)", post_id)
     if not post_id:
         logger.error("Cannot tag Post (%s)", post_id)
         return
-    p = Post.objects.get(pk=post_id)
+    try:
+        p = Post.objects.get(pk=post_id)
+    except p.DoesNotExist:
+        logger.error("Does not exist (%s)", post_id)
+
+    logger.info("start: entry tagging post '%s' (%s)", p.title, post_id)
+
     if tags is not "" and isinstance(tags, types.ListType):
         new_tags = 0
         for tag in tags:
