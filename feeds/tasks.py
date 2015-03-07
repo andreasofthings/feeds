@@ -433,6 +433,7 @@ def feed_stats(result_list):
 
 
 @shared_task
+@update_job
 def feed_refresh(feed_id):
     """
     refresh entries for `feed_id`
@@ -565,6 +566,7 @@ def aggregate_stats(result_list):
 
 
 @shared_task
+@update_job
 def cronjob(max=0):
     """
     aggregate feeds
