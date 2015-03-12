@@ -10,8 +10,7 @@ services:
 
 # List the versions of Django you'd like to test against
 env:
-  - DJANGO="Django>=1.7"
-  - TRAVIS="True"
+  - DJANGO="Django>=1.7" TRAVIS="True"
 
 install:
    # Install the dependencies the app itself has
