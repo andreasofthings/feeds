@@ -378,7 +378,7 @@ class Feed(models.Model):
         if not self.link and hasattr(f.feed, 'link'):
             self.link = f.feed.link
         if hasattr(f.feed, 'language'):
-            self.language = f.feed.language
+          self.language = f.feed.language[:8]
         if not self.slug:
             self.slug = slugify(self.name)
         return super(Feed, self).save(*args, **kwargs)
