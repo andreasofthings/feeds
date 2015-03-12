@@ -13,6 +13,8 @@ This module takes care of everything that is not client/customer facing.
 """
 
 import logging
+logger = logging.getLogger(__name__)
+
 import types
 import requests
 
@@ -44,36 +46,12 @@ from django.conf import settings
 from feeds import USER_AGENT
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
-# from feeds import CRON_OK, CRON_ERR
+from feeds import CRON_OK, CRON_ERR
 
-from feeds.tools import getText
-from feeds.models import Feed, Post, Tag, TaggedPost
-from feeds.models import FeedStats
-from feeds.models import FeedEntryStats
-from functools import wraps
-
-from .models import Job
-
-
-def update_job(fn):
-    """Decorator that will update Job with result of the function"""
-    # wraps will make the name and docstring of fn available for introspection
-    @wraps(fn)
-    def wrapper(job_id, *args, **kwargs):
-        job = Job.objects.get(id=job_id)
-        job.status = 'started'
-        job.save()
-        try:
-            # execute the function fn
-            result = fn(*args, **kwargs)
-            job.result = result
-            job.status = 'finished'
-            job.save()
-        except:
-            job.result = None
-            job.status = 'failed'
-            job.save()
-    return wrapper
+from .tools import getText
+from .models import Feed, Post, Tag, TaggedPost
+from .models import FeedStats
+from .models import FeedEntryStats
 
 
 @shared_task
@@ -439,12 +417,16 @@ def feed_stats(result_list):
 
 
 @shared_task
-@update_job
 def feed_refresh(feed_id):
     """
     refresh entries for `feed_id`
 
     .. todo:: returns `FEED_OK`
+
+    This should return either:
+    `FEED_OK`: for any feed that was processed without an issue.
+    `FEED_SAME`: for any feed that did not have an update.
+    `FEED_ERRPARSE`: for any feed that could not be parsed.
 
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
@@ -541,9 +523,12 @@ def aggregate_stats(result_list):
     """
     Callback function for the `chord` in :py:mod:`feeds.tasks.cronjob`.
 
-    Input: `result_list` will be a list of values from enum(FEED)
+    Input::
+      `result_list` will be a list of values from enum(FEED)
+      It will list all results from :py:mod:`feeds.tasks.feed_refresh`
 
-    Summarize the number of values and store into a dict.
+    Summarize the number of values and store into a dict. For later
+    the result is stored in :py:mod:`feeds.models.FeedStats`.
     """
     from collections import Counter
     result = {
@@ -572,34 +557,36 @@ def aggregate_stats(result_list):
 
 
 @shared_task
-@update_job
-def cronjob(max=0):
+def cronjob(max_feeds=0):
     """
     aggregate feeds
 
     type: celery task
 
-    find all tasks that are marked for beta access
+    Find all tasks that are marked for beta access
 
-    returns a result_dict (FEED_OK/FEED_SAME/FEED_ERR), that
-    comes from :py:mod:`feeds.tasks.aggregate_stats`
+    param:: max_feeds
+      Check at most max_feeds
+
+    Returns a CRON_OK for no problems.
+    Returns CRON_ERR when a problem occured.
 
     .. codeauthor:: Andreas Neumeier
     """
-    logger = logging.getLogger(__name__)
     logger.debug("-- cronjob started --")
     result = {}
     try:
         feeds = Feed.objects.filter(is_active=True)
-        if max > 0:
-            feeds = feeds[:max]
+        if max_feeds > 0:
+            feeds = feeds[:max_feeds]
         result = chord(
             (feed_refresh.s(i.id) for i in feeds),
             aggregate_stats.s()
         )()
     except Exception, e:
         logger.debug("Exception: %s", str(e))
-    return result.get()
+        return CRON_ERR
+    return CRON_OK
 
 
 # mapping from names to tasks

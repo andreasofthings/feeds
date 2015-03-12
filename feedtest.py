@@ -3,8 +3,10 @@
 import os
 import sys
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.settings'
-
+if 'TRAVIS' in os.environ:
+  os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.travis-settings'
+else:
+  os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.settings'
 
 if __name__ == '__main__':
     """

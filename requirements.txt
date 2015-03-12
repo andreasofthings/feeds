@@ -15,5 +15,5 @@ pyaml==14.05.6
 
 # Testing
 celery>=3.1.10
-MySQL-python>=1.2.5
+#MySQL-python>=1.2.5
 selenium==2.42.0

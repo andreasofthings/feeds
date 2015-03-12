@@ -1,10 +1,5 @@
 from rest_framework import serializers
-from .models import Feed, Job
-
-
-class JobSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Job
+from .models import Feed
 
 
 class FeedSerializer(serializers.ModelSerializer):
