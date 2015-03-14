@@ -57,8 +57,6 @@ ROOT_URLCONF = 'tests.urls'
 
 WSGI_APPLICATION = 'tests.wsgi.application'
 
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
 
@@ -85,7 +83,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'console': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
             'stream': 'ext://sys.stdout',
         },
