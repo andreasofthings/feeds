@@ -596,6 +596,7 @@ def cronjob(max_feeds=0):
         )()
     except Exception, e:
         logger.debug("Exception: %s", str(e))
+        print e
         return CRON_ERR
     return CRON_OK
 

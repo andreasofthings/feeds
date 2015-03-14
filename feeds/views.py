@@ -91,6 +91,7 @@ def opml_import(opml, count=0):
                     logger.debug(e)
         else:
             print name
+    return True
 
 
 class OPMLView(FormView):
@@ -446,5 +447,3 @@ class TagUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """
     permission_required = "feeds.update_tag"
     model = Tag
-
-
