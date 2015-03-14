@@ -221,7 +221,7 @@ urlpatterns += patterns(
 )
 
 #
-# API
+# Legacy API
 #
 
 from api_views import UserSubscriptions

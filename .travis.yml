@@ -10,12 +10,13 @@ services:
 
 # List the versions of Django you'd like to test against
 env:
-  - DJANGO="Django>=1.7"
+  - DJANGO="Django>=1.7" TRAVIS="True"
 
 install:
    # Install the dependencies the app itself has
    # which in this case I choose to keep in a requirements file
  - pip install -r requirements.txt
+ - pip install MySQL-python
  - pip install coveralls
    # Install whatever version of Django that's listed above
    # Travis is currently working on

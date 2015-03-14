@@ -11,7 +11,8 @@ import feedparser
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
+from feeds import FEED_OK
+from feeds import CRON_OK
 from feeds.models import Feed, Post
 
 
@@ -71,13 +72,7 @@ class TaskTest(TestCase):
         """
         from feeds.tasks import cronjob
         test_result = cronjob.delay()
-        # self.assertTrue(test_result.successful())
-        self.assertEqual(type(test_result.result), type({}))
-        self.assertIn(FEED_OK, test_result)
-        self.assertIn(FEED_SAME, test_result)
-        self.assertIn(FEED_ERRPARSE, test_result)
-        self.assertIn(FEED_ERRHTTP, test_result)
-        self.assertIn(FEED_ERREXC, test_result)
+        self.assertEqual(test_result.result, CRON_OK)
 
     def test_count_tweets(self):
         """

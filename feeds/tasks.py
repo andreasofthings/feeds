@@ -13,13 +13,18 @@ This module takes care of everything that is not client/customer facing.
 """
 
 import logging
+logger = logging.getLogger(__name__)
+
 import types
-import httplib2
+import requests
+
 try:
     import json
 except:
     import simplejson as json
+
 import feedparser
+
 try:
     from urllib.parse import urlparse
     from urllib.quote import quote
@@ -38,17 +43,15 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.conf import settings
 
-from feeds.piwik import Piwik
-
 from feeds import USER_AGENT
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
-# from feeds import CRON_OK, CRON_ERR
+from feeds import CRON_OK, CRON_ERR
 
-from feeds.tools import getText
-from feeds.models import Feed, Post, Tag, TaggedPost
-from feeds.models import FeedStats
-from feeds.models import FeedEntryStats
+from .tools import getText
+from .models import Feed, Post, Tag, TaggedPost
+from .models import FeedStats
+from .models import FeedEntryStats
 
 
 @shared_task
@@ -155,18 +158,17 @@ def entry_update_twitter(entry_id):
         return
 
     entry = Post.objects.get(pk=entry_id)
-    http = httplib2.Http()
     twitter_count = "http://urls.api.twitter.com/1/urls/count.json?url=%s"
     query = twitter_count % (entry.link)
 
-    resp, content = http.request(query, "GET")
+    resp = requests.get(query)
 
-    if 'status' in resp and resp['status'] == "200":
-        result = json.loads(content)
+    if resp.status_code == 200:
+        result = json.loads(resp.text)
         entry.tweets = result['count']
         entry.save()
     else:
-        logger.debug("status error: %s: %s", resp, content)
+        logger.debug("status error: %s: %s", resp.status_code, resp.text)
 
     logger.debug("stop: counting tweets. got %s", entry.tweets)
     return entry.tweets
@@ -189,11 +191,10 @@ def entry_update_facebook(entry_id):
     fb_sql = """select like_count, share_count from link_stat where url='%s'"""
     query_sql = fb_sql % (entry.link)
     query_url = fb_api % (quote(query_sql))
-    http = httplib2.Http()
-    resp, content = http.request(query_url, "GET")
+    resp = requests.get(query_url)
 
-    if 'status' in resp and resp['status'] == "200":
-        xml = parseString(content)
+    if resp.status_code == 200:
+        xml = parseString(resp.text)
         for i in xml.getElementsByTagName("link_stat"):
             for j in i.getElementsByTagName("like_count"):
                 entry.likes = int(getText(j.childNodes))
@@ -221,7 +222,6 @@ def entry_update_googleplus(entry_id):
         logger.error("can't count +1s for non-post. pk is empty.")
         return
 
-    http = httplib2.Http()
     entry = Post.objects.get(pk=entry_id)
 
     queryurl = "https://clients6.google.com/rpc"
@@ -243,15 +243,14 @@ def entry_update_googleplus(entry_id):
         'Content-type': 'application/json',
     }
 
-    resp, content = http.request(
+    resp, content = requests.post(
         queryurl,
-        method="POST",
-        body=json.dumps(params),
+        data=json.dumps(params),
         headers=headers
     )
 
-    if 'status' in resp and resp['status'] == "200":
-        result = json.loads(content)
+    if resp.status_code == 200:
+        result = json.loads(resp.text)
         try:
             entry.plus1 = int(
                 result['result']['metadata']['globalCounts']['count']
@@ -263,28 +262,6 @@ def entry_update_googleplus(entry_id):
             raise KeyError(e)
     else:
         logger.debug("stop: counting +1s. Got none. Something weird happened.")
-
-
-@shared_task(time_limit=10)
-def entry_update_pageviews(entry_id):
-    """
-    get pageviews from piwik
-    """
-    logger = logging.getLogger(__name__)
-    logger.debug("start: get local pageviews")
-
-    if not entry_id:
-        logger.error("can't get local pageviews for non-post. pk is empty.")
-        return
-
-    entry = Post.objects.get(pk=entry_id)
-
-    piwik = Piwik()
-    pageurl = "http://angry-planet.com%s" % (entry.get_absolute_url())
-    entry.pageviews = piwik.getPageActions(pageurl)
-    entry.save()
-    logger.debug("stop: get local pageviews. got %s.", entry.pageviews)
-    return entry.pageviews
 
 
 @shared_task
@@ -315,9 +292,6 @@ def entry_update_social(entry_id):
     if settings.FEED_POST_UPDATE_GOOGLEPLUS:
         f = (entry_update_googleplus.subtask((p.id, )))
         header.append(f)
-    if settings.FEED_POST_UPDATE_PAGEVIEWS:
-        f = (entry_update_pageviews.subtask((p.id, )))
-        header.append(f)
 
     callback = tsum.s()
     result = chord(header)(callback)
@@ -332,13 +306,19 @@ def entry_update_social(entry_id):
 @shared_task
 def entry_tags(post_id, tags):
     """
+    collect tags per post and do the postprocessing.
     """
     logger = logging.getLogger(__name__)
-    logger.info("start: entry tagging (%s)", post_id)
     if not post_id:
         logger.error("Cannot tag Post (%s)", post_id)
         return
-    p = Post.objects.get(pk=post_id)
+    try:
+        p = Post.objects.get(pk=post_id)
+    except p.DoesNotExist:
+        logger.error("Does not exist (%s)", post_id)
+
+    logger.info("start: entry tagging post '%s' (%s)", p.title, post_id)
+
     if tags is not "" and isinstance(tags, types.ListType):
         new_tags = 0
         for tag in tags:
@@ -443,6 +423,11 @@ def feed_refresh(feed_id):
 
     .. todo:: returns `FEED_OK`
 
+    This should return either:
+    `FEED_OK`: for any feed that was processed without an issue.
+    `FEED_SAME`: for any feed that did not have an update.
+    `FEED_ERRPARSE`: for any feed that could not be parsed.
+
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
     logger = logging.getLogger(__name__)
@@ -536,11 +521,14 @@ def feed_refresh(feed_id):
 @shared_task
 def aggregate_stats(result_list):
     """
-    Callback function for the `chord` in :py:mod:`feeds.tasks.aggregate`.
+    Callback function for the `chord` in :py:mod:`feeds.tasks.cronjob`.
 
-    Input: `result_list` will be a list of values from enum(FEED)
+    Input::
+      `result_list` will be a list of values from enum(FEED)
+      It will list all results from :py:mod:`feeds.tasks.feed_refresh`
 
-    Summarize the number of values and store into a dict.
+    Summarize the number of values and store into a dict. For later
+    the result is stored in :py:mod:`feeds.models.FeedStats`.
     """
     from collections import Counter
     result = {
@@ -569,28 +557,40 @@ def aggregate_stats(result_list):
 
 
 @shared_task
-def cronjob():
+def cronjob(max_feeds=0):
     """
     aggregate feeds
 
     type: celery task
 
-    find all tasks that are marked for beta access
+    Find all tasks that are marked for beta access
 
-    returns a result_dict (FEED_OK/FEED_SAME/FEED_ERR), that
-    comes from :py:mod:`feeds.tasks.aggregate_stats`
+    param:: max_feeds
+      Check at most max_feeds
+
+    Returns a CRON_OK for no problems.
+    Returns CRON_ERR when a problem occured.
 
     .. codeauthor:: Andreas Neumeier
     """
-    logger = logging.getLogger(__name__)
     logger.debug("-- cronjob started --")
     result = {}
     try:
         feeds = Feed.objects.filter(is_active=True)
+        if max_feeds > 0:
+            feeds = feeds[:max_feeds]
         result = chord(
             (feed_refresh.s(i.id) for i in feeds),
             aggregate_stats.s()
         )()
     except Exception, e:
         logger.debug("Exception: %s", str(e))
-    return result.get()
+        return CRON_ERR
+    return CRON_OK
+
+
+# mapping from names to tasks
+TASK_MAPPING = {
+    'cronjob': cronjob,
+    'feed_refresh': feed_refresh,
+}

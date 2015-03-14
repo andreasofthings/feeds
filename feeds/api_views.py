@@ -1,9 +1,27 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
+from rest_framework import mixins, viewsets
 
-from feeds.models import Options, Feed
-from feeds.serializers import SubscriptionSerializer
+from .models import Options, Feed
+from .serializers import SubscriptionSerializer
+from .serializers import FeedSerializer
+
+
+class FeedThrottle(UserRateThrottle):
+    rate = "1/second"
+
+
+class FeedViewSet(mixins.CreateModelMixin,
+                  mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
+                  viewsets.GenericViewSet):
+    """
+    API endpoint that allows feeds to be listed.
+    """
+    throttle_class = (FeedThrottle,)
+    queryset = Feed.objects.all()
+    serializer_class = FeedSerializer
 
 
 class SubscriptionThrottle(UserRateThrottle):

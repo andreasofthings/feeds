@@ -15,6 +15,7 @@ except:
     import simplejson as json
 
 import logging
+logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
 from django import forms
@@ -74,18 +75,15 @@ class OptionsView(LoginRequiredMixin, UpdateView):
 
 
 def opml_import(opml, count=0):
-    logger = logging.getLogger()
     for node in opml.iter('outline'):
         name = node.attrib.get('text')
         url = node.attrib.get('xmlUrl')
         if name and url:
-            print '  %s :: %s' % (name, url)
+            logger.debug('  %s :: %s', name, url)
             f, c = Feed.objects.get_or_create(
                 feed_url=url,
                 name=name,
-                short_name=name
             )
-            print f
             if c:
                 try:
                     f.save()
@@ -448,3 +446,5 @@ class TagUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """
     permission_required = "feeds.update_tag"
     model = Tag
+
+
