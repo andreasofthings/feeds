@@ -62,7 +62,7 @@ def dummy(x=10, *args, **kwargs):
     it returns True
     """
     from time import sleep
-    logger = logging.getLogger(__name__)
+
     if 'invocation_time' in kwargs:
         logger.debug(
             "task was delayed for %s",
@@ -113,7 +113,6 @@ def twitter_post(post_id):
     """
     announce track and artist on twitter
     """
-    logger = logging.getLogger(__name__)
     logger.debug("twittering new post")
     if not post_id:
         """
@@ -150,7 +149,6 @@ def entry_update_twitter(entry_id):
     count tweets
 
     """
-    logger = logging.getLogger(__name__)
     logger.debug("start: counting tweets")
 
     if not entry_id:
@@ -179,7 +177,6 @@ def entry_update_facebook(entry_id):
     """
     count facebook shares & likes
     """
-    logger = logging.getLogger(__name__)
 
     if not entry_id:
         logger.error("can't count shares&likes for non-post. pk is empty.")
@@ -215,7 +212,6 @@ def entry_update_googleplus(entry_id):
     """
     plus 1
     """
-    logger = logging.getLogger(__name__)
     logger.debug("start: counting +1s")
 
     if not entry_id:
@@ -271,7 +267,6 @@ def tsum(numbers):
 
 @shared_task
 def entry_update_social(entry_id):
-    logger = logging.getLogger(__name__)
 
     logger.debug("start: social scoring")
 
@@ -308,7 +303,6 @@ def entry_tags(post_id, tags):
     """
     collect tags per post and do the postprocessing.
     """
-    logger = logging.getLogger(__name__)
     if not post_id:
         logger.error("Cannot tag Post (%s)", post_id)
         return
@@ -356,12 +350,17 @@ def entry_process(entry, feed_id, postdict, fpf):
      - 'title_detail'
      - 'link'
      - 'id'
+
+    returnvalue::
+         Either ENTRY_NEW
     """
 
-    logger = logging.getLogger(__name__)
-    logger.debug("start: entry")
     feed = Feed.objects.get(pk=feed_id)
+
+    logger.debug("start: entry-processing")
     logger.debug("Keys in entry '%s': %s", entry.title, entry.keys())
+
+    result = ENTRY_SAME
 
     p, created = Post.objects.get_or_create(
         feed=feed,
@@ -373,12 +372,17 @@ def entry_process(entry, feed_id, postdict, fpf):
     if created:
         p.save()
         logger.debug("'%s' is a new entry (%s)", entry.title, p.id)
+        result = ENTRY_NEW
 
     if hasattr(entry, 'link'):
-        p.link = entry.link
+        if p.link is not entry.link:
+            p.link = entry.link
+            result = ENTRY_UPDATED
 
     if hasattr(entry, 'content'):
-        p.content = entry.content[0].value
+        if p.content is not entry.content[0].value:
+            p.content = entry.content[0].value
+            result = ENTRY_UPDATED
 
     p.save()
 
@@ -392,11 +396,11 @@ def entry_process(entry, feed_id, postdict, fpf):
         twitter_post.apply_async((p.id,), countdown=2)
 
     logger.debug("stop: entry")
-    return True
+    return result
 
 
 @shared_task
-def feed_stats(result_list):
+def feed_stats(result_list, feed_id):
     """
     this function is supposed to collect all the return
     values from `entry_process`. That function will return either:
@@ -406,13 +410,22 @@ def feed_stats(result_list):
         ENTRY_ERR
     """
     from collections import Counter
-    feed_stats = {
+    stats = {
         ENTRY_NEW: 0,
         ENTRY_UPDATED: 0,
         ENTRY_SAME: 0,
         ENTRY_ERR: 0
     }
-    result = feed_stats.update(Counter(result_list))
+    result = stats.update(Counter(result_list))
+
+    stat = FeedEntryStats()
+    stat.feed = Feed.objects.get(pk=feed_id)
+    stat.entry_new = result[ENTRY_NEW]
+    stat.entry_same = result[ENTRY_SAME]
+    stat.entry_updated = result[ENTRY_UPDATED]
+    stat.entry_err = result[ENTRY_ERR]
+    stat.save()
+
     return result
 
 
@@ -492,21 +505,19 @@ def feed_refresh(feed_id):
         """
         postdict = {}
 
-    result = chord(
-        (entry_process.s(
-            entry, feed.id, postdict, fpf) for entry in fpf.entries),
-        feed_stats.s()
-    )()
+    try:
+        result = chord(
+            (
+                entry_process.s(
+                    entry, feed.id, postdict, fpf
+                )
+                for entry in fpf.entries
+            ),
+            feed_stats.s(feed.id)
+        )()
+    except:
+        return FEED_ERREXC
     """Chord to asynchronously process all entries in parsed feed."""
-
-    stat = FeedEntryStats()
-    stat.feed = feed
-    result_dict = result.get()
-    stat.entry_new = result_dict[ENTRY_NEW]
-    stat.entry_new = result_dict[ENTRY_SAME]
-    stat.entry_new = result_dict[ENTRY_UPDATED]
-    stat.entry_new = result_dict[ENTRY_ERR]
-    stat.save()
 
     feed.save()
     logger.info(
@@ -585,5 +596,6 @@ def cronjob(max_feeds=0):
         )()
     except Exception, e:
         logger.debug("Exception: %s", str(e))
+        print e
         return CRON_ERR
     return CRON_OK
