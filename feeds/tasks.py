@@ -587,10 +587,3 @@ def cronjob(max_feeds=0):
         logger.debug("Exception: %s", str(e))
         return CRON_ERR
     return CRON_OK
-
-
-# mapping from names to tasks
-TASK_MAPPING = {
-    'cronjob': cronjob,
-    'feed_refresh': feed_refresh,
-}
