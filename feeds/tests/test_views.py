@@ -608,7 +608,7 @@ class TestAllViewsLoggedIn(TestCase):
         manually refresh a feed
         """
         c = Client()
-        feed_id = Feed.objects.all()[0].id
+        feed_id = Feed.objects.get()[0].pk
         result = c.get(reverse('planet:feed-refresh', args=(feed_id,)))
         self.assertEqual(result.status_code, 302)
 
