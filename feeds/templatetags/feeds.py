@@ -12,7 +12,7 @@ class RecentPostNode(template.Node):
     """
     def __init__(self, feed, count=5):
         self.feed = template.Variable(feed)
-        self.count = template.Variable(count)
+        self.count = int(count)
 
     def render(self, context):
         recent = Post.objects.get(

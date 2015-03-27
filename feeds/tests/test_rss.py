@@ -13,10 +13,17 @@ from feeds.models import Feed
 
 class TestRSS(TestCase):
 
-    fixtures = ["Feed.yaml", ]
+    fixtures = ["Feed_all.yaml", ]
 
     def test_rss(self):
         c = Client()
-        f = Feed.objects.all()[0].pk
-        r = c.get(reverse('planet:rss', kwargs={'feed_id':f,}))
+        feeds = Feed.objects.all()
+        r = c.get(
+            reverse(
+                'planet:rss',
+                kwargs={
+                    'feed_id': feeds[0].pk,
+                }
+            )
+        )
         self.assertEquals(r.status_code, 200)

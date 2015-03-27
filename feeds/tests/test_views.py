@@ -27,7 +27,7 @@ class ViewsAnonymousTest(TestCase):
     .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
 
-    fixtures = ['Feed.yaml', 'Categories.yaml', ]
+    fixtures = ['Feed_all.yaml', 'Categories.yaml', ]
 
     def setUp(self):
         """
