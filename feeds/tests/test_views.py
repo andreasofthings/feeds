@@ -608,8 +608,8 @@ class TestAllViewsLoggedIn(TestCase):
         manually refresh a feed
         """
         c = Client()
-        feed = Feed.objects.all()[0]
-        result = c.get(reverse('planet:feed-refresh', args=(feed.pk,)))
+        feeds = Feed.objects.all()
+        result = c.get(reverse('planet:feed-refresh', args=(feeds[0].pk,)))
         self.assertEqual(result.status_code, 302)
 
     def test_create_post(self):
@@ -631,7 +631,7 @@ class TestFeedViewsWithCredentials(TestCase):
     py:mod:`feeds.models.Feed`, that require proper cedentials.
     """
 
-    fixtures = ['Feed.yaml', ]
+    fixtures = ['Feed_all.yaml', ]
 
     username = "john"
     password = "password"
@@ -674,8 +674,8 @@ class TestFeedViewsWithCredentials(TestCase):
         """
         c = Client()
         c.login(username=self.username, password=self.password)
-        feed = Feed.objects.all()[0]
-        result = c.post(reverse('planet:feed-update', args=(feed.pk,)),
+        feeds = Feed.objects.all()
+        result = c.post(reverse('planet:feed-update', args=(feeds[0].pk,)),
                         {'feed_url': "http://spiegel.de/index.rss"}
                         )
         self.assertEquals(result.status_code, 302)
@@ -687,8 +687,8 @@ class TestFeedViewsWithCredentials(TestCase):
         """
         c = Client()
         c.login(username=self.username, password=self.password)
-        feed = Feed.objects.all()[0]
-        result = c.get(reverse('planet:feed-refresh', args=(feed.pk,)))
-        expected = reverse('planet:feed-view', args=(feed.pk,))
+        feeds = Feed.objects.all()
+        result = c.get(reverse('planet:feed-refresh', args=(feeds[0].pk,)))
+        expected = reverse('planet:feed-view', args=(feeds[0].pk,))
         self.assertEqual(result.status_code, 302)
         self.assertRedirects(result, expected)
