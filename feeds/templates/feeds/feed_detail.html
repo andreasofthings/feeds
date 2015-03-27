@@ -42,12 +42,6 @@ Feed: {{ object }}
 
 
   {% block additional_scripts_end %}
-    <script type="text/javascript">
-    {% autoescape off %}
-    var data = {{ data }};
-    {% endautoescape %}
-    </script>
-    <script defer src="{{ STATIC_URL }}feeds/chart.js"></script>
     <script defer src="{{ STATIC_URL }}feeds/feed_detail.js"> </script>
   {% endblock %}
 

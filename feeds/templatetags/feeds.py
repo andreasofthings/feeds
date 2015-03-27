@@ -15,10 +15,13 @@ class RecentPostNode(template.Node):
         self.count = int(count)
 
     def render(self, context):
-        recent = Post.objects.get(
-            feed_id=self.feed.resolve(context)
-        ).order_by(-'created')
-        return recent[self.count.resolve(context)]
+        try:
+            recent = Post.objects.get(
+                feed_id=self.feed.resolve(context)
+            ).order_by(-'created')
+        except Post.DoesNotExist:
+            return Post.objects.none()
+        return recent[self.count]
 
 
 @register.tag('recent_posts')

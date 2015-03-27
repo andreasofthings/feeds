@@ -9,15 +9,9 @@ views for feeds
 
 """
 
-try:
-    import json
-except:
-    import simplejson as json
-
 import logging
 logger = logging.getLogger(__name__)
 
-from datetime import datetime, timedelta
 from django import forms
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
@@ -27,7 +21,6 @@ from django.views.generic import CreateView, UpdateView
 from django.views.generic import DeleteView, RedirectView
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.utils.timezone import utc
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
@@ -237,48 +230,6 @@ class FeedDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(FeedDetailView, self).get_context_data(**kwargs)
-        clickdata = []
-        contentdata = []
-        labels = []
-        now = datetime.utcnow().replace(tzinfo=utc)
-
-        clicklist = PostReadCount.objects.filter(
-            post__feed__id=self.kwargs['pk']
-        )
-        import random
-        for i in range(24):
-            upper_offset = now - timedelta(hours=i)
-            lower_offset = now - timedelta(hours=i+1)
-            if clicklist:
-                clickdata.append(
-                    clicklist.filter(
-                        created__gte=lower_offset
-                    ).filter(
-                        created__lte=upper_offset
-                    ).count())
-            else:
-                clickdata.append(0)
-            contentdata.append(random.Random().randint(0, 7))
-            labels.append("%s:00" % (str(lower_offset.hour)))
-
-        chartdata = {
-            'labels': labels,
-            'datasets': [{
-                'fillColor': "rgba(220,220,220,0.5)",
-                'strokeColor': "rgba(220,220,220,1)",
-                'pointColor': "rgba(220,220,220,1)",
-                'pointStrokeColor': "#fff",
-                'data': contentdata,
-            }, {
-                'fillColor': "rgba(200,200,250,0.5)",
-                'strokeColor': "rgba(220,220,220,1)",
-                'pointColor': "rgba(220,220,220,1)",
-                'pointStrokeColor': "#fff",
-                'data': clickdata,
-            },
-            ]
-        }
-        context['data'] = json.dumps(chartdata)
         return context
 
 
