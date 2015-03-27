@@ -19,7 +19,7 @@ Feed: {{ object }}
 
 {%block content%}
 <div class="row">
-    <div class="hero-unit"> 
+    <div class="hero-unit">
         <h3> {{object}} </h3>
         <h4>
         {% if user.is_authenticated %}
@@ -34,11 +34,6 @@ Feed: {{ object }}
         <canvas id="chart"  width="600" height="240"></canvas>
     </div>
     <div class="span5">
-    <table class="table table-condensed table-hover">
-    {% for post in top5 %}
-    <tr><td><a href="{{ post.get_absolute_url }}">{{ post }}</a></td></tr>
-    {% endfor %}
-    </table>
     </div>
 </div>
 {%endblock%}

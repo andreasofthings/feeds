@@ -608,8 +608,8 @@ class TestAllViewsLoggedIn(TestCase):
         manually refresh a feed
         """
         c = Client()
-        feed_id = Feed.objects.get()[0].pk
-        result = c.get(reverse('planet:feed-refresh', args=(feed_id,)))
+        feed = Feed.objects.all()[0]
+        result = c.get(reverse('planet:feed-refresh', args=(feed.pk,)))
         self.assertEqual(result.status_code, 302)
 
     def test_create_post(self):
@@ -674,8 +674,8 @@ class TestFeedViewsWithCredentials(TestCase):
         """
         c = Client()
         c.login(username=self.username, password=self.password)
-        f = Feed.objects.all()[0].pk
-        result = c.post(reverse('planet:feed-update', args=(f,)),
+        feed = Feed.objects.all()[0]
+        result = c.post(reverse('planet:feed-update', args=(feed.pk,)),
                         {'feed_url': "http://spiegel.de/index.rss"}
                         )
         self.assertEquals(result.status_code, 302)
@@ -687,8 +687,8 @@ class TestFeedViewsWithCredentials(TestCase):
         """
         c = Client()
         c.login(username=self.username, password=self.password)
-        feed_id = Feed.objects.all()[0].id
-        result = c.get(reverse('planet:feed-refresh', args=(feed_id,)))
-        expected = reverse('planet:feed-view', args=(feed_id,))
+        feed = Feed.objects.all()[0]
+        result = c.get(reverse('planet:feed-refresh', args=(feed.pk,)))
+        expected = reverse('planet:feed-view', args=(feed.pk,))
         self.assertEqual(result.status_code, 302)
         self.assertRedirects(result, expected)

@@ -279,7 +279,6 @@ class FeedDetailView(DetailView):
             ]
         }
         context['data'] = json.dumps(chartdata)
-        context['top5'] = Post.objects.filter(feed__id=self.kwargs['pk'])[:5]
         return context
 
 
