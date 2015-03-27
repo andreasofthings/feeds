@@ -1,4 +1,5 @@
 {%extends 'feeds/index.html'%}
+{% load feeds %}
 
 {% block additional_scripts_start %}
   <link rel="stylesheet" type="text/css" hrf="{{ STATIC_URL }}jqplot/jquery.jqplot.min.css" />
@@ -34,6 +35,7 @@ Feed: {{ object }}
         <canvas id="chart"  width="600" height="240"></canvas>
     </div>
     <div class="span5">
+      {% recent_posts %}
     </div>
 </div>
 {%endblock%}
