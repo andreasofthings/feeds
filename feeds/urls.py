@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim: ts=4 et sw=4 sts=4
 
-from django.conf.urls import url, patterns
+from django.conf.urls import url, patterns, include
 
 from feeds.views import HomeView
 from feeds.views import OptionsView
@@ -38,6 +38,7 @@ urlpatterns = patterns(
     url(r'^$', HomeView.as_view(), name="home"),
     url(r'^options$', OptionsView.as_view(), name="options"),
     url(r'^opml$', OPMLView.as_view(), name="opml"),
+    url(r'^search/', include('haystack.urls')),
 )
 
 urlpatterns += patterns(

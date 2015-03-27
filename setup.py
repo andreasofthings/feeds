@@ -36,5 +36,8 @@ setup(
         'django-crispy-forms>=1.2.3',
         'feedparser>=5.1.2',
         'requests>=2.2.1'
+        'django-haystack>=2.3.1',
+        'djangorestframework>=3.0.3',
+        'elasticsearch==1.4.0',
     ],
 )
