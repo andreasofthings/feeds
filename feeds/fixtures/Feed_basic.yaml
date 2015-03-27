@@ -1,0 +1,12 @@
+- model: feeds.Feed
+  pk: 1
+  fields:
+    "feed_url": 'http://www.spvggunterhaching.de/aktuell/news/rss'
+    "name": 'spvgg-unterhaching.de'
+    "is_active": True
+- model: feeds.Feed
+  pk: 2
+  fields:
+    "feed_url": 'https://blog.neumeier.org/feed/rss'
+    "name": 'No more cubes.'
+    "is_active": True

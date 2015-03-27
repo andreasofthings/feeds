@@ -31,7 +31,7 @@ class ModelTest(TestCase):
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
     fixtures = [
-        "Feed.yaml",
+        "Feed_all.yaml",
         "Site.yaml",
         "Tags.yaml",
         "Categories.yaml",
