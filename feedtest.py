@@ -2,11 +2,12 @@
 
 import os
 import sys
+import MySQLdb
 
 if 'TRAVIS' in os.environ:
-  os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.travis-settings'
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.travis-settings'
 else:
-  os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.settings'
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.settings'
 
 if __name__ == '__main__':
     """
@@ -18,6 +19,13 @@ if __name__ == '__main__':
     if hasattr(django, 'setup'):
         django.setup()
     from django.test.runner import DiscoverRunner
-    failures = DiscoverRunner().run_tests(("feeds",), verbosity=2)
+    failures = None
+    try:
+        failures = DiscoverRunner().run_tests(("feeds",), verbosity=2)
+    except MySQLdb.OperationalError, e:
+        if e[0] == 2006:
+            print("MySQL has gone away.")
+        else:
+            raise MySQLdb.OperationalError(e)
     if failures:
         sys.exit(failures)
