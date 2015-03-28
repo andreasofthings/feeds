@@ -29,7 +29,7 @@ class RecentPostNode(template.Node):
         try:
             recent = Post.objects.filter(
                 feed=feed
-            ).order_by(-'created')
+            ).order_by('-created')
         except Post.DoesNotExist:
             return Post.objects.none()
         return recent[self.count]

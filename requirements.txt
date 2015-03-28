@@ -5,12 +5,10 @@ django-crispy-forms>=1.2.3
 djangorestframework
 feedparser>=5.1.2
 django-haystack
-httplib2>=0.7.5
 opml==0.5
 requests>=2.2.1
 simplejson>=2.6.2
 twitter>=1.9.2
-Whoosh==2.6.0
 pyaml==14.05.6
 
 # Testing
