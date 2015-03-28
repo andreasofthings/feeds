@@ -417,7 +417,13 @@ def feed_stats(result_list, feed_id):
         ENTRY_ERR: 0
     }
     result = stats.update(Counter(result_list))
-
+    stat = FeedEntryStats()
+    stat.feed = Feed.objects.get(pk=feed_id)
+    stat.entry_new = result[ENTRY_NEW]
+    stat.entry_same = result[ENTRY_SAME]
+    stat.entry_updated = result[ENTRY_UPDATED]
+    stat.entry_err = result[ENTRY_ERR]
+    stat.save()
     return result
 
 
@@ -511,14 +517,6 @@ def feed_refresh(feed_id):
         return FEED_ERREXC
     """Chord to asynchronously process all entries in parsed feed."""
 
-    stat = FeedEntryStats()
-    stat.feed = feed
-    stat.entry_new = result[ENTRY_NEW]
-    stat.entry_same = result[ENTRY_SAME]
-    stat.entry_updated = result[ENTRY_UPDATED]
-    stat.entry_err = result[ENTRY_ERR]
-    stat.save()
-
     feed.save()
     logger.info(
         "Feed '%s' had %s new entries",
@@ -551,6 +549,18 @@ def aggregate_stats(result_list):
     }
     result.update(Counter(result_list))
     """Add upp all fields in the `result_list`-argument."""
+    stat = FeedStats()
+    """
+    New instance of `py:mod:feeds.models.FeedStats` to keep the result.
+    ToDo: `py:mod:feeds.models.FeedStats` should rather
+    accept the dict as input.
+    """
+    stat.feed_ok = result[FEED_OK]
+    stat.feed_same = result[FEED_SAME]
+    stat.feed_errparse = result[FEED_ERRPARSE]
+    stat.feed_errhttp = result[FEED_ERRHTTP]
+    stat.feed_errexc = result[FEED_ERREXC]
+    stat.save()
     return result
 
 
@@ -581,18 +591,6 @@ def cronjob(max_feeds=0):
             (feed_refresh.s(i.id) for i in feeds),
             aggregate_stats.s()
         )()
-        stat = FeedStats()
-        """
-        New instance of `py:mod:feeds.models.FeedStats` to keep the result.
-        ToDo: `py:mod:feeds.models.FeedStats` should rather
-        accept the dict as input.
-        """
-        stat.feed_ok = result[FEED_OK]
-        stat.feed_same = result[FEED_SAME]
-        stat.feed_errparse = result[FEED_ERRPARSE]
-        stat.feed_errhttp = result[FEED_ERRHTTP]
-        stat.feed_errexc = result[FEED_ERREXC]
-        stat.save()
     except Exception, e:
         logger.debug("Exception: %s", str(e))
         print e

@@ -27,7 +27,7 @@ class RecentPostNode(template.Node):
                 self.feed, type(self.feed)
             )
         try:
-            recent = Post.objects.get(
+            recent = Post.objects.filter(
                 feed=feed
             ).order_by(-'created')
         except Post.DoesNotExist:
