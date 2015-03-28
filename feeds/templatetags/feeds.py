@@ -1,5 +1,5 @@
 from django import template
-from ..models import Post
+from ..models import Feed, Post
 
 register = template.Library()
 
@@ -16,8 +16,20 @@ class RecentPostNode(template.Node):
 
     def render(self, context):
         try:
+            feed = self.feed.resolve(context)
+        except:
+            Feed.MultipleObjectsReturned
+            raise template.TemplateSyntaxError(
+                """
+                'recent_posts' template tag requires 'feed' as first argument.
+                Got this instead:
+                %r (type: %r)
+                """ %
+                self.feed, type(self.feed)
+            )
+        try:
             recent = Post.objects.get(
-                feed_id=self.feed.resolve(context)
+                feed=feed
             ).order_by(-'created')
         except Post.DoesNotExist:
             return Post.objects.none()
