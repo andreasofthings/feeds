@@ -5,6 +5,7 @@ django-crispy-forms>=1.2.3
 djangorestframework
 feedparser>=5.1.2
 django-haystack
+elasticsearch==1.4.0
 opml==0.5
 requests>=2.2.1
 simplejson>=2.6.2
