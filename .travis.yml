@@ -7,6 +7,7 @@ python:
 
 services:
   - rabbitmq
+  - elasticsearch
 
 # List the versions of Django you'd like to test against
 env:
