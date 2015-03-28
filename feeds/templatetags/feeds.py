@@ -32,7 +32,11 @@ class RecentPostNode(template.Node):
             ).order_by('-created')
         except Post.DoesNotExist:
             return Post.objects.none()
-        return recent[self.count]
+        if self.count < recent.count():
+            result_count = self.count
+        else:
+            result_count = recent.count()
+        return recent[result_count]
 
 
 @register.tag('recent_posts')

@@ -27,5 +27,6 @@ if __name__ == '__main__':
             print("MySQL has gone away.")
         else:
             raise MySQLdb.OperationalError(e)
+    return
     if failures:
         sys.exit(failures)

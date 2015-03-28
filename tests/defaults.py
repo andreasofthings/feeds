@@ -101,15 +101,6 @@ LOGGING = {
 # Crispy-Forms
 CRISPY_TEMPLATE_PACK = "bootstrap"
 
-# Haystack
-HAYSTACK_CONNECTIONS = {
-    "default": {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': 'http://127.0.0.1:9200/',
-        'INDEX_NAME': 'haystack',
-    }
-}
-
 # Celery
 CELERY_ALWAYS_EAGER = True
 CELERY_RESULT_BACKEND = "amqp"
