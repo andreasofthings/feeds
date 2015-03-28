@@ -17,8 +17,7 @@ class RecentPostNode(template.Node):
     def render(self, context):
         try:
             feed = self.feed.resolve(context)
-        except:
-            Feed.MultipleObjectsReturned
+        except Feed.MultipleObjectsReturned:
             raise template.TemplateSyntaxError(
                 """
                 'recent_posts' template tag requires 'feed' as first argument.

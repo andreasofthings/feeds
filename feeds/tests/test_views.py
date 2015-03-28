@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 
 from django.contrib.auth.models import User, Permission
 
-from feeds.models import Feed, Post
+from feeds.models import Feed, Post, Category
 
 
 class ViewsAnonymousTest(TestCase):
@@ -27,7 +27,10 @@ class ViewsAnonymousTest(TestCase):
     .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
 
-    fixtures = ['Feed_all.yaml', 'Categories.yaml', ]
+    fixtures = [
+        'Feed_all.yaml',
+        'Categories.yaml',
+    ]
 
     def setUp(self):
         """
@@ -430,8 +433,13 @@ class ViewsAnonymousTest(TestCase):
 
             The `fixture` has a feed with the ID 1.
         """
-
-        result = self.client.get(reverse('planet:category-view', args=(1,)))
+        category = Category.objects.all()
+        result = self.client.get(
+            reverse(
+                'planet:category-view',
+                args=(category[0].pk,)
+            )
+        )
         self.assertEqual(result.status_code, 200)
 
     def test_category_views(self):
