@@ -36,7 +36,7 @@ class RecentPostNode(template.Node):
             result_count = self.count
         else:
             result_count = recent.count()
-        return recent[result_count]
+        return recent[:result_count]
 
 
 @register.tag('recent_posts')
