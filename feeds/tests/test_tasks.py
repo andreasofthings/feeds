@@ -5,6 +5,9 @@
 """
 """
 
+import logging
+logger = logging.getLogger(__name__)
+
 from datetime import datetime
 import feedparser
 
@@ -100,11 +103,12 @@ class TaskTest(TestCase):
 
     def test_entry_process(self):
         from feeds.tasks import entry_process
-        f = Feed.objects.all()[0]
-        feed = feedparser.parse(f.feed_url)
-        self.assertGreater(len(feed.entries), 0)
-        for entry in feed.entries:
-            result = entry_process(entry, f.id, None, None)
+        feeds = Feed.objects.all()
+        parsed = feedparser.parse(feeds[0].feed_url)
+        logger.info("Parsed %s", feeds[0].feed_url)
+        self.assertGreater(len(parsed.entries), 0)
+        for entry in parsed.entries:
+            result = entry_process(entry, feeds[0].id, None, None)
             self.assertEqual(result, ENTRY_UPDATED)
 
     def tearDown(self):
