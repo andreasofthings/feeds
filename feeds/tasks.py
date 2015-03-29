@@ -423,24 +423,29 @@ def feed_stats(result_list, feed_id):
     return result
 
 
-@shared_task
-def feed_refresh(feed_id):
+def postdict(feed, uids=None):
     """
-    refresh entries for `feed_id`
-
-    .. todo:: returns `FEED_OK`
-
-    This should return either:
-    `FEED_OK`: for any feed that was processed without an issue.
-    `FEED_SAME`: for any feed that did not have an update.
-    `FEED_ERRPARSE`: for any feed that could not be parsed.
-
-    .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
+    fetch posts that we have on file already
     """
-    logger = logging.getLogger(__name__)
+    if uids is not None:
+        result = dict(
+            [(post.guid, post) for post in Post.objects.filter(
+                feed=feed.id
+            ).filter(
+                guid__in=uids
+            )]
+        )
+        logger.debug("postdict keys: %s", postdict.keys())
+    else:
+        """
+        we didn't find any guids. leave postdict empty
+        """
+        result = {}
+    return result
 
+
+def feed_parse(feed_id):
     feed = Feed.objects.get(pk=feed_id)
-
     try:
         if feed.ignore_ca is True:
             """
@@ -462,12 +467,33 @@ def feed_refresh(feed_id):
             feed.feed_url,
             str(e)
         )
-        return FEED_ERRPARSE
+        raise e
+    return fpf
 
-    if 'status' not in fpf or fpf.status >= 400:
+
+@shared_task
+def feed_refresh(feed_id):
+    """
+    refresh entries for `feed_id`
+
+    .. todo:: returns `FEED_OK`
+
+    This should return either:
+    `FEED_OK`: for any feed that was processed without an issue.
+    `FEED_SAME`: for any feed that did not have an update.
+    `FEED_ERRPARSE`: for any feed that could not be parsed.
+
+    .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
+    """
+
+    feed = Feed.objects.get(pk=feed_id)
+
+    parsed = feed_parse(feed_id)
+
+    if 'status' not in parsed or parsed.status >= 400:
         return FEED_ERRHTTP
 
-    if fpf.status is 304:
+    if parsed.status is 304:
         logger.debug(
             "[%d] Feed did not change: %s",
             feed.id,
@@ -475,7 +501,7 @@ def feed_refresh(feed_id):
         )
         return FEED_SAME
 
-    if 'bozo' in fpf and fpf.bozo == 1:
+    if 'bozo' in parsed and parsed.bozo == 1:
         logger.error(
             "[%d] !BOZO! Feed is not well formed: %s",
             feed.id,
@@ -483,38 +509,24 @@ def feed_refresh(feed_id):
         )
         return FEED_ERRPARSE
 
-    feed.etag = fpf.get('etag', '')
-    feed.last_modified = fpf.get('modified', '2000-01-01 00:00')
-    feed.title = fpf.feed.get('title', '')[0:254]
-    feed.tagline = fpf.feed.get('tagline', '')
-    feed.link = fpf.feed.get('link', '')
-    guids = get_guids(fpf.entries)
+    feed.etag = parsed.get('etag', '')
+    feed.last_modified = parsed.get('modified', '2000-01-01 00:00')
+    feed.title = parsed.feed.get('title', '')[0:254]
+    feed.tagline = parsed.feed.get('tagline', '')
+    feed.link = parsed.feed.get('link', '')
+
+    guids = get_guids(parsed.entries)
 
     if guids:
-        """
-        fetch posts that we have on file already
-        """
-        postdict = dict(
-            [(post.guid, post) for post in Post.objects.filter(
-                feed=feed.id
-            ).filter(
-                guid__in=guids
-            )]
-        )
-        logger.debug("postdict keys: %s", postdict.keys())
-    else:
-        """
-        we didn't find any guids. leave postdict empty
-        """
-        postdict = {}
+        posts = postdict(feed, guids)
 
     try:
         result = chord(
             (
                 entry_process.s(
-                    entry, feed.id, postdict, fpf
+                    entry, feed.id, posts, parsed
                 )
-                for entry in fpf.entries
+                for entry in parsed.entries
             ),
             feed_stats.s(feed.id)
         )()
@@ -601,7 +613,7 @@ def cronjob(max_feeds=0):
         print e
         return CRON_ERR
 
-    if (sum(result.values() == result[FEED_OK])):
+    if (sum(result.get().values() == result[FEED_OK])):
         return CRON_OK
     else:
         return CRON_FAIL
