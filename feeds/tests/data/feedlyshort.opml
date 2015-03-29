@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<opml version="1.0">
+    <head>
+        <title>Andreas subscriptions in feedly Cloud</title>
+    </head>
+    <body>
+        <outline text="Sport" title="Sport">
+            <outline type="rss" text="spvgg-unterhaching.de" title="spvgg-unterhaching.de" xmlUrl="http://www.spvggunterhaching.de/aktuell/news/rss" htmlUrl="http://www.spvggunterhaching.de/aktuell/news/"/>
+        </outline>
+        <outline text="Web Comics" title="Web Comics">
+            <outline type="rss" text="xkcd.com" title="xkcd.com" xmlUrl="http://xkcd.com/rss.xml" htmlUrl="http://xkcd.com/"/>
+        </outline>
+        <outline text="Photografie" title="Photografie">
+            <outline type="rss" text="Digital Photography School" title="Digital Photography School" xmlUrl="http://feeds.feedburner.com/DigitalPhotographySchool" htmlUrl="http://digital-photography-school.com"/>
+        </outline>
+        <outline type="rss" text="No more cubes." title="No more cubes." xmlUrl="http://feeds.feedburner.com/nomore-cubes" htmlUrl="http://blog.neumeier.org"/>
+    </body>
+</opml>

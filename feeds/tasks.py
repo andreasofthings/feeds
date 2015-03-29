@@ -423,7 +423,7 @@ def feed_stats(result_list, feed_id):
     return result
 
 
-def postdict(feed, uids=None):
+def feed_postdict(feed, uids=None):
     """
     fetch posts that we have on file already
     """
@@ -435,7 +435,7 @@ def postdict(feed, uids=None):
                 guid__in=uids
             )]
         )
-        logger.debug("postdict keys: %s", postdict.keys())
+        logger.debug("postdict keys: %s", result.keys())
     else:
         """
         we didn't find any guids. leave postdict empty
@@ -518,7 +518,7 @@ def feed_refresh(feed_id):
     guids = get_guids(parsed.entries)
 
     if guids:
-        posts = postdict(feed, guids)
+        posts = feed_postdict(feed, guids)
 
     try:
         result = chord(

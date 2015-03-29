@@ -2,9 +2,9 @@
 
 import os
 import sys
-import MySQLdb
 
 if 'TRAVIS' in os.environ:
+    import MySQLdb
     os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.travis-settings'
 else:
     os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.settings'

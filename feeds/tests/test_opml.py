@@ -27,7 +27,7 @@ class TaskOPML(TestCase):
     def test_opml_import(self):
         if 'TRAVIS' not in os.environ:
             from xml.etree import ElementTree
-            tree = ElementTree.parse(open('feeds/tests/data/feedly.opml'))
+            tree = ElementTree.parse(open('feeds/tests/data/feedlyshort.opml'))
             result = opml_import(tree)
             self.assertEqual(result, True)
         else:

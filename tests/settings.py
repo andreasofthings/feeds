@@ -18,7 +18,7 @@ DATABASES = {
 HAYSTACK_CONNECTIONS = {
     "default": {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'URL': 'http://127.0.0.1:9200/',
+        'PATH': '.',
         'INDEX_NAME': 'haystack',
     }
 }
