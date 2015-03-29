@@ -8,7 +8,6 @@ django-haystack
 elasticsearch==1.4.0
 opml==0.5
 requests>=2.2.1
-simplejson>=2.6.2
 twitter>=1.9.2
 pyaml==14.05.6
 

@@ -17,11 +17,7 @@ logger = logging.getLogger(__name__)
 
 import types
 import requests
-
-try:
-    import json
-except:
-    import simplejson as json
+import json
 
 import feedparser
 
@@ -446,6 +442,15 @@ def feed_refresh(feed_id):
     feed = Feed.objects.get(pk=feed_id)
 
     try:
+        if feed.ignore_ca is True:
+            """
+            If feed.ignore_ca is True, turn off CA verification.
+            """
+            import ssl
+            if hasattr(ssl, '_create_unverified_context'):
+                ssl._create_default_https_context = \
+                    ssl._create_unverified_context
+
         fpf = feedparser.parse(
             feed.feed_url,
             agent=USER_AGENT,

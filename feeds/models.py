@@ -359,6 +359,12 @@ class Feed(models.Model):
         default=5
     )
 
+    ignore_ca = models.BooleanField(
+        _('Indicates whether certificate for this feed is from a trusted CA'),
+        default=True
+    )
+    """Do (not) verify certificate authenticity."""
+
     announce_posts = models.BooleanField(default=False)
     """Whether to socially announce new articles posts"""
 
@@ -378,7 +384,7 @@ class Feed(models.Model):
         if not self.link and hasattr(f.feed, 'link'):
             self.link = f.feed.link
         if hasattr(f.feed, 'language'):
-          self.language = f.feed.language[:8]
+            self.language = f.feed.language[:8]
         if not self.slug:
             self.slug = slugify(self.name)
         return super(Feed, self).save(*args, **kwargs)
