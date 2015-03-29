@@ -521,7 +521,7 @@ def feed_refresh(feed_id):
     logger.info(
         "Feed '%s' had %s new entries",
         feed.title,
-        feed_stats[ENTRY_NEW]
+        result[ENTRY_NEW]
     )
     logger.debug("stop")
     return FEED_OK
