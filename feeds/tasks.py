@@ -46,7 +46,7 @@ from django.conf import settings
 from feeds import USER_AGENT
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
-from feeds import CRON_OK, CRON_ERR
+from feeds import CRON_OK, CRON_FAIL, CRON_ERR
 
 from .tools import getText
 from .models import Feed, Post, Tag, TaggedPost
@@ -595,4 +595,8 @@ def cronjob(max_feeds=0):
         logger.debug("Exception: %s", str(e))
         print e
         return CRON_ERR
-    return CRON_OK
+
+    if (sum(result.values() == result[FEED_OK])):
+        return CRON_OK
+    else:
+        return CRON_FAIL
