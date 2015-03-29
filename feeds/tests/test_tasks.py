@@ -102,6 +102,7 @@ class TaskTest(TestCase):
         from feeds.tasks import entry_process
         f = Feed.objects.all()[0]
         feed = feedparser.parse(f.feed_url)
+        self.assertGreater(len(feed.entries), 0)
         for entry in feed.entries:
             result = entry_process(entry, f.id, None, None)
             self.assertEqual(result, ENTRY_UPDATED)
