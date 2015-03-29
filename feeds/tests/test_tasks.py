@@ -104,6 +104,10 @@ class TaskTest(TestCase):
     def test_entry_process(self):
         from feeds.tasks import entry_process
         feeds = Feed.objects.all()
+        import ssl
+        if hasattr(ssl, '_create_unverified_context'):
+            ssl._create_default_https_context = \
+                ssl._create_unverified_context
         parsed = feedparser.parse(feeds[0].feed_url)
         logger.info("Parsed %s", feeds[0].feed_url)
         if len(parsed.entries) == 0:
