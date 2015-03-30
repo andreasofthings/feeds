@@ -328,8 +328,31 @@ def entry_tags(post_id, tags):
     logger.debug("stop: entry tagging")
 
 
+def entry_postprocess(id, entry, created):
+    """
+    Postprocess any new posts.
+
+    That is, in particular:
+        - collect social stats
+        - collect tags
+        - announce socially
+
+    """
+
+    post = Post.objects.get(pk=id)
+
+    if settings.FEEDS_POST_SOCIAL:
+        entry_update_social.apply_async((post.id,), countdown=2)
+
+    if created and 'tags' in entry:
+        entry_tags.apply_async((post.id, entry['tags'],), countdown=2)
+
+    if created and post.feed.announce_posts:
+        twitter_post.apply_async((post.id,), countdown=2)
+
+
 @shared_task
-def entry_process(entry, feed_id, postdict, fpf):
+def entry_process(entry, feed_id, postdict):
     """
     Receive Entry, process
 
@@ -366,9 +389,14 @@ def entry_process(entry, feed_id, postdict, fpf):
     )
 
     if created:
-        p.save()
-        logger.debug("'%s' is a new entry (%s)", entry.title, p.id)
         result = ENTRY_NEW
+        logger.info(
+            "'%s' is a new entry for feed %s (%s)",
+            entry.title,
+            feed_id,
+            p.id
+        )
+        p.save()
 
     if hasattr(entry, 'link'):
         if p.link is not entry.link:
@@ -382,14 +410,8 @@ def entry_process(entry, feed_id, postdict, fpf):
 
     p.save()
 
-    if settings.FEEDS_POST_SOCIAL:
-        entry_update_social.apply_async((p.id,), countdown=2)
-
-    if created and 'tags' in entry:
-        entry_tags.apply_async((p.id, entry['tags'],), countdown=2)
-
-    if created and p.feed.announce_posts:
-        twitter_post.apply_async((p.id,), countdown=2)
+    if result == ENTRY_NEW:
+        entry_postprocess(p.id, entry, created)
 
     logger.debug("stop: entry")
     return result
@@ -425,7 +447,8 @@ def feed_stats(result_list, feed_id):
 
 def feed_postdict(feed, uids=None):
     """
-    fetch posts that we have on file already
+    fetch posts that we have on file already and return a dictionary
+    with all uids/posts as key/value pairs.
     """
     if uids is not None:
         result = dict(
@@ -514,6 +537,7 @@ def feed_refresh(feed_id):
     feed.title = parsed.feed.get('title', '')[0:254]
     feed.tagline = parsed.feed.get('tagline', '')
     feed.link = parsed.feed.get('link', '')
+    feed.save()
 
     guids = get_guids(parsed.entries)
 
@@ -524,7 +548,7 @@ def feed_refresh(feed_id):
         result = chord(
             (
                 entry_process.s(
-                    entry, feed.id, posts, parsed
+                    entry, feed.id, posts
                 )
                 for entry in parsed.entries
             ),
@@ -534,11 +558,10 @@ def feed_refresh(feed_id):
         return FEED_ERREXC
     """Chord to asynchronously process all entries in parsed feed."""
 
-    feed.save()
     logger.info(
-        "Feed '%s' had %s new entries",
+        "Feed '%s' returned %s",
         feed.title,
-        result[ENTRY_NEW]
+        result.result
     )
     logger.debug("stop")
     return FEED_OK

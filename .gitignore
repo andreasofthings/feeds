@@ -12,4 +12,5 @@ feeds.egg-info/*
 .ropeproject
 feeds/.ropeproject
 *.pot
-.pypirc 
+.pypirc
+myapp_test

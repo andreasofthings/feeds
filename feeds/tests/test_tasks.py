@@ -114,7 +114,7 @@ class TaskTest(TestCase):
             logger.info(parsed)
         self.assertGreater(len(parsed.entries), 0)
         for entry in parsed.entries:
-            result = entry_process(entry, feeds[0].id, None, None)
+            result = entry_process(entry, feeds[0].id, None)
             self.assertEqual(result, ENTRY_UPDATED)
 
     def tearDown(self):
