@@ -79,7 +79,7 @@ class TaskTest(TestCase):
         """
         from feeds.tasks import cronjob
         test_result = cronjob.delay()
-        self.assertEqual(test_result.result, CRON_OK)
+        self.assertEqual(test_result.get(), CRON_OK)
 
     def test_count_tweets(self):
         """
