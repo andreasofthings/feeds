@@ -6,7 +6,6 @@
 Test the recursive opml import.
 """
 
-import os
 from feeds.views import opml_import
 from django.test import TestCase
 
@@ -25,14 +24,10 @@ class TaskOPML(TestCase):
         pass
 
     def test_opml_import(self):
-        if 'TRAVIS' not in os.environ:
-            from xml.etree import ElementTree
-            tree = ElementTree.parse(open('feeds/tests/data/feedlyshort.opml'))
-            result = opml_import(tree)
-            self.assertEqual(result, True)
-        else:
-            """Don't test this in Travis."""
-            self.assertTrue(True)
+        from xml.etree import ElementTree
+        tree = ElementTree.parse(open('feeds/tests/data/feedlyshort.opml'))
+        result = opml_import(tree)
+        self.assertEqual(result, True)
 
     def tearDown(self):
         pass

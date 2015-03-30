@@ -110,8 +110,6 @@ class TaskTest(TestCase):
                 ssl._create_unverified_context
         parsed = feedparser.parse(feeds[0].feed_url)
         logger.info("Parsed %s", feeds[0].feed_url)
-        if len(parsed.entries) == 0:
-            logger.info(parsed)
         self.assertGreater(len(parsed.entries), 0)
         for entry in parsed.entries:
             result = entry_process(entry, feeds[0].id, None)
