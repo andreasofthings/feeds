@@ -390,7 +390,7 @@ def entry_process(entry, feed_id, postdict):
 
     if created:
         result = ENTRY_NEW
-        logger.info(
+        logger.debug(
             "'%s' is a new entry for feed %s (%s)",
             entry.title,
             feed_id,
@@ -428,13 +428,13 @@ def feed_stats(result_list, feed_id):
         ENTRY_ERR
     """
     from collections import Counter
-    stats = {
+    result = {
         ENTRY_NEW: 0,
         ENTRY_UPDATED: 0,
         ENTRY_SAME: 0,
         ENTRY_ERR: 0
     }
-    result = stats.update(Counter(result_list))
+    result.update(Counter(result_list))
     stat = FeedEntryStats()
     stat.feed = Feed.objects.get(pk=feed_id)
     stat.entry_new = result[ENTRY_NEW]
@@ -558,7 +558,7 @@ def feed_refresh(feed_id):
         return FEED_ERREXC
     """Chord to asynchronously process all entries in parsed feed."""
 
-    logger.info(
+    logger.debug(
         "Feed '%s' returned %s",
         feed.title,
         result.result
@@ -636,7 +636,4 @@ def cronjob(max_feeds=0):
         print e
         return CRON_ERR
 
-    if (sum(result.get().values() == result[FEED_OK])):
-        return CRON_OK
-    else:
-        return CRON_FAIL
+    return CRON_OK
