@@ -475,6 +475,7 @@ def feed_parse(feed_id):
             If feed.ignore_ca is True, turn off CA verification.
             """
             import ssl
+            ssl_context = ssl._create_default_https_context
             if hasattr(ssl, '_create_unverified_context'):
                 ssl._create_default_https_context = \
                     ssl._create_unverified_context
@@ -484,6 +485,8 @@ def feed_parse(feed_id):
             agent=USER_AGENT,
             etag=feed.etag
         )
+        if feed.ignore_ca is True:
+            ssl._create_default_https_context = ssl_context
     except Exception as e:
         logger.error(
             'Feedparser Error: (%s) cannot be parsed: %s',
