@@ -410,7 +410,7 @@ def entry_process(entry, feed_id, postdict):
 
     p.save()
 
-    if result == ENTRY_NEW:
+    if result in (ENTRY_NEW, ENTRY_UPDATED):
         entry_postprocess(p.id, entry, created)
 
     logger.debug("stop: entry")
