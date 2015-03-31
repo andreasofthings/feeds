@@ -608,7 +608,7 @@ def aggregate_stats(result_list):
 
 
 @shared_task
-def cronjob(max_feeds=0):
+def cronjob():
     """
     aggregate feeds
 
@@ -627,9 +627,12 @@ def cronjob(max_feeds=0):
     logger.debug("-- cronjob started --")
     result = {}
     try:
-        feeds = Feed.objects.filter(is_active=True)
-        if max_feeds > 0:
-            feeds = feeds[:max_feeds]
+        max_feeds = 1
+        feeds = Feed.objects.filter(
+            is_active=True
+            ).order_by(
+                'last_checked'
+                )[:max_feeds]
         result = chord(
             (feed_refresh.s(i.id) for i in feeds),
             aggregate_stats.s()
