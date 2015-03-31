@@ -470,7 +470,8 @@ def feed_postdict(feed, uids=None):
 def feed_parse(feed_id):
     feed = Feed.objects.get(pk=feed_id)
     try:
-        if feed.ignore_ca is True:
+        if urlparse(feed.feed_url).scheme == 'https' and \
+                feed.ignore_ca is True:
             """
             If feed.ignore_ca is True, turn off CA verification.
             """
@@ -485,7 +486,9 @@ def feed_parse(feed_id):
             agent=USER_AGENT,
             etag=feed.etag
         )
-        if feed.ignore_ca is True:
+        if urlparse(feed.feed_url).scheme == 'https' and \
+                feed.ignore_ca is True:
+            """Re-Set the default value for ssl."""
             ssl._create_default_https_context = ssl_context
     except Exception as e:
         logger.error(
@@ -641,5 +644,4 @@ def cronjob():
         logger.debug("Exception: %s", str(e))
         print e
         return CRON_ERR
-
     return CRON_OK
