@@ -360,7 +360,7 @@ class Feed(models.Model):
     )
 
     ignore_ca = models.BooleanField(
-        _('Indicates whether certificate for this feed is from a trusted CA'),
+        _('Indicates whether CA for this certificate should be ignored'),
         default=True
     )
     """Do (not) verify certificate authenticity."""

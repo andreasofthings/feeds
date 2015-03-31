@@ -410,7 +410,7 @@ def entry_process(entry, feed_id, postdict):
 
     p.save()
 
-    if result == ENTRY_NEW:
+    if result in (ENTRY_NEW, ENTRY_UPDATED):
         entry_postprocess(p.id, entry, created)
 
     logger.debug("stop: entry")
@@ -475,6 +475,7 @@ def feed_parse(feed_id):
             If feed.ignore_ca is True, turn off CA verification.
             """
             import ssl
+            ssl_context = ssl._create_default_https_context
             if hasattr(ssl, '_create_unverified_context'):
                 ssl._create_default_https_context = \
                     ssl._create_unverified_context
@@ -484,6 +485,8 @@ def feed_parse(feed_id):
             agent=USER_AGENT,
             etag=feed.etag
         )
+        if feed.ignore_ca is True:
+            ssl._create_default_https_context = ssl_context
     except Exception as e:
         logger.error(
             'Feedparser Error: (%s) cannot be parsed: %s',
@@ -605,7 +608,7 @@ def aggregate_stats(result_list):
 
 
 @shared_task
-def cronjob(max_feeds=0):
+def cronjob():
     """
     aggregate feeds
 
@@ -624,9 +627,12 @@ def cronjob(max_feeds=0):
     logger.debug("-- cronjob started --")
     result = {}
     try:
-        feeds = Feed.objects.filter(is_active=True)
-        if max_feeds > 0:
-            feeds = feeds[:max_feeds]
+        max_feeds = 1
+        feeds = Feed.objects.filter(
+            is_active=True
+            ).order_by(
+                'last_checked'
+                )[:max_feeds]
         result = chord(
             (feed_refresh.s(i.id) for i in feeds),
             aggregate_stats.s()

@@ -9,7 +9,7 @@ elasticsearch==1.4.0
 opml==0.5
 requests>=2.2.1
 twitter>=1.9.2
-pyaml==14.05.6
+pyaml
 whoosh
 
 # Testing

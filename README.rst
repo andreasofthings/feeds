@@ -13,8 +13,10 @@ Feeds
   :alt: Documentation Status
 
 
-.. image:: http://app.review.ninja/assets/images/wereviewninja-16.png
+.. image::http://app.review.ninja/assets/images/wereviewninja-32.png
    :target: http://app.review.ninja/aneumeier/feeds
+
+
 
 Feeds aims to be a feed aggregator, readed and potentially a replacement for feedburner_.
 

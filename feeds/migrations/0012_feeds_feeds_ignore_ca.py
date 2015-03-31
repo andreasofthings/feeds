@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='feed',
             name='ignore_ca',
-            field=models.IntegerField(default=True),
+            field=models.BooleanField(default=True),
             preserve_default=True,
         ),
     ]
