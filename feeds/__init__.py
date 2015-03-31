@@ -43,7 +43,10 @@ FEED_ERRPARSE = 'feed_errparse'
 FEED_ERRHTTP = 'feed_errhttp'
 FEED_ERREXC = 'feed_errexc'
 
-CRON_OK, CRON_FAIL, CRON_ERR, CRON_RES = range(4)
+CRON_OK = 'cron_ok'
+CRON_FAIL = 'cron_fail'
+CRON_ERR = 'cron_err'
+CRON_RES = 'cron_res'
 
 version_info = (0, 9, 7)
 __version__ = ".".join(map(str, version_info))
