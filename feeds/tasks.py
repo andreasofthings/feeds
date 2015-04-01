@@ -602,10 +602,7 @@ def cronjob():
 
     type: celery task
 
-    Find all tasks that are marked for beta access
-
-    param:: max_feeds
-      Check at most max_feeds
+    Find all feeds.
 
     Returns a CRON_OK for no problems.
     Returns CRON_ERR when a problem occured.

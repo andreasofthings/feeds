@@ -237,11 +237,6 @@ class Feed(models.Model):
         related_name="category_feeds",
         blank=True,
     )
-    beta = models.BooleanField(
-        _('is beta'),
-        default=False,
-        help_text=_('If beta, celery pipeline.')
-    )
     has_no_guid = models.BooleanField(
         _('has no guid'),
         default=False,
