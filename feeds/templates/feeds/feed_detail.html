@@ -20,23 +20,29 @@ Feed: {{ object }}
 
 {%block content%}
 <div class="row">
+  <div class="span7">
     <div class="hero-unit">
         <h3> {{object}} </h3>
         <h4>
         {% if user.is_authenticated %}
-        {% if perms.feeds.can_refresh_feed %}<a href="{{object.get_absolute_url}}refresh" class="btn btn-mini feeds-tooltip" role="button" title="refresh feed"><span class="glyphicon glyphicon-refresh"></span></a>{% endif %}
-        {% if perms.feeds.change_feed %}<a href="{{object.get_absolute_url}}update" class="btn btn-mini feeds-tooltip" role="button" title="edit feed"><span class="glyphicon glyphicon-edit"></span></a>{% endif %}
-        {% if perms.feeds.delete_feed %}<a href="{{object.get_absolute_url}}delete" class="btn btn-mini feeds-tooltip"  role="button" title="trash feed"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}
+          {% if perms.feeds.can_refresh_feed %}<a href="{{object.get_absolute_url}}refresh" class="btn btn-mini feeds-tooltip" role="button" title="refresh feed"><span class="glyphicon glyphicon-refresh"></span></a>{% endif %}
+          {% if perms.feeds.change_feed %}<a href="{{object.get_absolute_url}}update" class="btn btn-mini feeds-tooltip" role="button" title="edit feed"><span class="glyphicon glyphicon-edit"></span></a>{% endif %}
+          {% if perms.feeds.delete_feed %}<a href="{{object.get_absolute_url}}delete" class="btn btn-mini feeds-tooltip"  role="button" title="trash feed"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}
         {% endif %}
     </div>
+  </div>
 </div>
 <div class="row">
-    <div class="span7">
-        <canvas id="chart"  width="600" height="240"></canvas>
-    </div>
-    <div class="span5">
-      {% recent_posts object %}
-    </div>
+  <div class="span7">
+    <canvas id="chart"  width="600" height="240"></canvas>
+  </div>
+  <div class="span5">
+    <ul>
+      {% for post in recent_posts object %}
+      <li></li>
+      {% endfor %}
+    </ul>
+  </div>
 </div>
 {%endblock%}
 
