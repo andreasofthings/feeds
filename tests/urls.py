@@ -15,27 +15,29 @@ sitemaps = {
     'post': PostSitemap,
 }
 
-urlpatterns = patterns('',
-                       url(r'^feeds/',
-                           include(
-                               'feeds.urls',
-                               namespace="planet",
-                               app_name="planet"
-                           )
-                           ),
-                       url(
-                           r'^testfeed1',
-                           TemplateView.as_view(
-                               template_name="test/feed1.html"
-                           )
-                       ),
-                       url(
-                           r'^accounts/login/',
-                           TemplateView.as_view(
-                               template_name="feeds/index.html"
-                           )
-                       ),
-                       )
+urlpatterns = patterns(
+    '',
+    url(r'^feeds/',
+        include(
+            'feeds.urls',
+            namespace="planet",
+            app_name="planet"
+        )
+        ),
+    url(r'^feedapi/', include('feeds.api_urls')),
+    url(
+        r'^testfeed1',
+        TemplateView.as_view(
+            template_name="test/feed1.html"
+        )
+    ),
+    url(
+        r'^accounts/login/',
+        TemplateView.as_view(
+            template_name="feeds/index.html"
+        )
+    ),
+)
 
 from django.contrib.sitemaps import views as sitemaps_views
 from django.views.decorators.cache import cache_page

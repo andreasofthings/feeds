@@ -41,7 +41,7 @@ class ApiTest(TestCase):
         """
         request subscription, expect a list of all feeds in json
         """
-        response = self.client.get(reverse("categories-list"))
+        response = self.client.get(reverse('category-list'))
         self.assertEqual(response.status_code,  200)
 
     def test_subscription_anonymous(self):
