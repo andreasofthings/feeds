@@ -11,6 +11,7 @@ requests>=2.2.1
 twitter>=1.9.2
 pyaml
 whoosh
+timestring==1.6.2
 
 # Testing
 celery>=3.1.10
