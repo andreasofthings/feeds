@@ -378,13 +378,13 @@ def entry_process(entry, feed_id, postdict):
     feed = Feed.objects.get(pk=feed_id)
 
     logger.debug("start: entry-processing")
-    logger.debug("Keys in entry '%s': %s", entry.title, entry.keys())
 
     result = ENTRY_SAME
 
     p, created = Post.objects.get_or_create(
         feed=feed,
         title=entry.title,
+        content=entry.content,
         guid=get_entry_guid(entry, feed_id),
         published=True
     )
@@ -402,12 +402,14 @@ def entry_process(entry, feed_id, postdict):
     if hasattr(entry, 'link'):
         if p.link is not entry.link:
             p.link = entry.link
-            result = ENTRY_UPDATED
+            if not created:
+                result = ENTRY_UPDATED
 
     if hasattr(entry, 'content'):
         if p.content is not entry.content[0].value:
             p.content = entry.content[0].value
-            result = ENTRY_UPDATED
+            if not created:
+                result = ENTRY_UPDATED
 
     p.save()
 
@@ -525,7 +527,7 @@ def feed_refresh(feed_id):
 
     feed.etag = parsed.get('etag', '')
     feed.last_modified = str(timestring.Date(
-        parsed.get('modified', '2000-01-01 00:00')
+        parsed.get('modified', '2000-01-01 00:00 GMT')
     ))
     feed.title = parsed.feed.get('title', '')[0:254]
     feed.tagline = parsed.feed.get('tagline', '')
@@ -551,7 +553,7 @@ def feed_refresh(feed_id):
         return FEED_ERREXC
     """Chord to asynchronously process all entries in parsed feed."""
 
-    logger.debug(
+    logger.info(
         "Feed '%s' returned %s",
         feed.title,
         result.result
