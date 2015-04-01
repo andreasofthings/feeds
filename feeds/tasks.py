@@ -468,29 +468,13 @@ def feed_postdict(feed, uids=None):
     return result
 
 
-def feed_parse(feed_id):
-    feed = Feed.objects.get(pk=feed_id)
+def feed_parse(feed):
     try:
-        if urlparse(feed.feed_url).scheme == 'https' and \
-                feed.ignore_ca is True:
-            """
-            If feed.ignore_ca is True, turn off CA verification.
-            """
-            import ssl
-            ssl_context = ssl._create_default_https_context
-            if hasattr(ssl, '_create_unverified_context'):
-                ssl._create_default_https_context = \
-                    ssl._create_unverified_context
-
         fpf = feedparser.parse(
             feed.feed_url,
             agent=USER_AGENT,
             etag=feed.etag
         )
-        if urlparse(feed.feed_url).scheme == 'https' and \
-                feed.ignore_ca is True:
-            """Re-Set the default value for ssl."""
-            ssl._create_default_https_context = ssl_context
     except Exception as e:
         logger.error(
             'Feedparser Error: (%s) cannot be parsed: %s',
@@ -518,7 +502,7 @@ def feed_refresh(feed_id):
 
     feed = Feed.objects.get(pk=feed_id)
 
-    parsed = feed_parse(feed_id)
+    parsed = feed_parse(feed)
 
     if 'status' not in parsed or parsed.status >= 400:
         return FEED_ERRHTTP
