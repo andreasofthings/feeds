@@ -39,5 +39,6 @@ setup(
         'django-haystack>=2.3.1',
         'djangorestframework>=3.0.3',
         'elasticsearch==1.4.0',
+        'timestring==1.6.2',
     ],
 )

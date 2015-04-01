@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 import types
 import requests
 import json
-
+import timestring
 import feedparser
 
 try:
@@ -524,7 +524,9 @@ def feed_refresh(feed_id):
         return FEED_ERRPARSE
 
     feed.etag = parsed.get('etag', '')
-    feed.last_modified = parsed.get('modified', '2000-01-01 00:00')
+    feed.last_modified = str(timestring.Date(
+        parsed.get('modified', '2000-01-01 00:00')
+    ))
     feed.title = parsed.feed.get('title', '')[0:254]
     feed.tagline = parsed.feed.get('tagline', '')
     feed.link = parsed.feed.get('link', '')
