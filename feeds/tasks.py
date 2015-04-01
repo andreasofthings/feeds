@@ -341,13 +341,14 @@ def entry_postprocess(id, entry, created):
 
     post = Post.objects.get(pk=id)
 
-    if settings.FEEDS_POST_SOCIAL:
+    if settings.FEEDS_UPDATE_SOCIAL:
         entry_update_social.apply_async((post.id,), countdown=2)
 
     if created and 'tags' in entry:
         entry_tags.apply_async((post.id, entry['tags'],), countdown=2)
 
-    if created and post.feed.announce_posts:
+    if settings.FEEDS_POST_SOCIAL and \
+            created and post.feed.announce_posts:
         twitter_post.apply_async((post.id,), countdown=2)
 
 
