@@ -34,7 +34,7 @@ from xml.dom.minidom import parseString
 
 from celery import shared_task
 from celery import chord
-from celery import SoftTimeLimitExceeded
+from celery.exceptions import SoftTimeLimitExceeded
 
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
