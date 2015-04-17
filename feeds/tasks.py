@@ -34,6 +34,7 @@ from xml.dom.minidom import parseString
 
 from celery import shared_task
 from celery import chord
+from celery import SoftTimeLimitExceeded
 
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
@@ -378,13 +379,15 @@ def entry_process(entry, feed_id, postdict):
     feed = Feed.objects.get(pk=feed_id)
 
     logger.debug("start: entry-processing")
+    logger.info("feed-id: %s", feed_id)
+    logger.info("entry: %s", entry)
+    logger.info("postdict: %s", postdict)
 
     result = ENTRY_SAME
 
     p, created = Post.objects.get_or_create(
         feed=feed,
         title=entry.title,
-        content=entry.content,
         guid=get_entry_guid(entry, feed_id),
         published=True
     )
@@ -397,6 +400,7 @@ def entry_process(entry, feed_id, postdict):
             feed_id,
             p.id
         )
+        p.content = entry.content
         p.save()
 
     if hasattr(entry, 'link'):
@@ -411,12 +415,11 @@ def entry_process(entry, feed_id, postdict):
             if not created:
                 result = ENTRY_UPDATED
 
-    p.save()
-
     if result in (ENTRY_NEW, ENTRY_UPDATED):
         entry_postprocess(p.id, entry, created)
 
     logger.debug("stop: entry")
+    p.save()
     return result
 
 
@@ -453,6 +456,7 @@ def feed_postdict(feed, uids=None):
     fetch posts that we have on file already and return a dictionary
     with all uids/posts as key/value pairs.
     """
+    logger.debug("-- start --")
     if uids is not None:
         result = dict(
             [(post.guid, post) for post in Post.objects.filter(
@@ -467,10 +471,12 @@ def feed_postdict(feed, uids=None):
         we didn't find any guids. leave postdict empty
         """
         result = {}
+    logger.debug("-- end --")
     return result
 
 
 def feed_parse(feed):
+    logger.debug("-- start --")
     try:
         fpf = feedparser.parse(
             feed.feed_url,
@@ -484,7 +490,25 @@ def feed_parse(feed):
             str(e)
         )
         raise e
+    logger.debug("-- end --")
     return fpf
+
+
+def feed_update(feed, parsed):
+    """
+    Update `feed` with values from `parsed`
+    """
+    logger.debug("-- start --")
+    feed.etag = parsed.get('etag', '')
+    feed.last_modified = str(timestring.Date(
+        parsed.get('modified', '2000-01-01 00:00 GMT')
+    ))
+    feed.title = parsed.feed.get('title', '')[0:254]
+    feed.tagline = parsed.feed.get('tagline', '')
+    feed.link = parsed.feed.get('link', '')
+    feed.save()
+    logger.debug("-- end --")
+    return feed
 
 
 @shared_task
@@ -501,6 +525,7 @@ def feed_refresh(feed_id):
 
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
+    logger.debug("-- start --")
 
     feed = Feed.objects.get(pk=feed_id)
 
@@ -525,14 +550,7 @@ def feed_refresh(feed_id):
         )
         return FEED_ERRPARSE
 
-    feed.etag = parsed.get('etag', '')
-    feed.last_modified = str(timestring.Date(
-        parsed.get('modified', '2000-01-01 00:00 GMT')
-    ))
-    feed.title = parsed.feed.get('title', '')[0:254]
-    feed.tagline = parsed.feed.get('tagline', '')
-    feed.link = parsed.feed.get('link', '')
-    feed.save()
+    feed = feed_update(feed, parsed)
 
     guids = get_guids(parsed.entries)
 
@@ -549,7 +567,12 @@ def feed_refresh(feed_id):
             ),
             feed_stats.s(feed.id)
         )()
+    except SoftTimeLimitExceeded as timeout:
+        logger.info("SoftTimeLimitExceeded: %s", timeout)
+        logger.debug("-- end (ERR) --")
+        return FEED_ERREXC
     except:
+        logger.debug("-- end (ERR) --")
         return FEED_ERREXC
     """Chord to asynchronously process all entries in parsed feed."""
 
@@ -558,7 +581,7 @@ def feed_refresh(feed_id):
         feed.title,
         result.result
     )
-    logger.debug("stop")
+    logger.debug("-- end --")
     return FEED_OK
 
 
@@ -574,6 +597,7 @@ def aggregate_stats(result_list):
     Summarize the number of values and store into a dict. For later
     the result is stored in :py:mod:`feeds.models.FeedStats`.
     """
+    logger.debug("-- started --")
     from collections import Counter
     result = {
         FEED_OK: 0,
@@ -596,6 +620,7 @@ def aggregate_stats(result_list):
     stat.feed_errhttp = result[FEED_ERRHTTP]
     stat.feed_errexc = result[FEED_ERREXC]
     stat.save()
+    logger.debug("-- end --")
     return result
 
 
@@ -613,7 +638,7 @@ def cronjob():
 
     .. codeauthor:: Andreas Neumeier
     """
-    logger.debug("-- cronjob started --")
+    logger.debug("-- started --")
     result = {}
     try:
         max_feeds = 1
@@ -626,8 +651,10 @@ def cronjob():
             (feed_refresh.s(i.id) for i in feeds),
             aggregate_stats.s()
         )()
+    except SoftTimeLimitExceeded as timeout:
+        logger.info("SoftTimeLimitExceeded: %s", timeout)
     except Exception, e:
         logger.debug("Exception: %s", str(e))
-        print e
         return CRON_ERR
+    logger.debug("-- end --")
     return CRON_OK

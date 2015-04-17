@@ -14,7 +14,7 @@ import feedparser
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from feeds import ENTRY_UPDATED
+from feeds import ENTRY_NEW, ENTRY_SAME
 from feeds import FEED_OK
 from feeds import CRON_OK
 from feeds.models import Feed, Post
@@ -104,15 +104,14 @@ class TaskTest(TestCase):
     def test_entry_process(self):
         from feeds.tasks import entry_process
         feeds = Feed.objects.all()
-        import ssl
-        if hasattr(ssl, '_create_unverified_context'):
-            ssl._create_default_https_context = \
-                ssl._create_unverified_context
         parsed = feedparser.parse(feeds[0].feed_url)
         self.assertGreater(len(parsed.entries), 0)
         for entry in parsed.entries:
             result = entry_process(entry, feeds[0].id, None)
-            self.assertEqual(result, ENTRY_UPDATED)
+            self.assertEqual(result, ENTRY_NEW)
+        for entry in parsed.entries:
+            result = entry_process(entry, feeds[0].id, None)
+            self.assertEqual(result, ENTRY_SAME)
 
     def tearDown(self):
         pass
