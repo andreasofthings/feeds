@@ -12,6 +12,7 @@ twitter>=1.9.2
 pyaml
 whoosh
 timestring==1.6.2
+django-formtools
 
 # Testing
 celery>=3.1.10

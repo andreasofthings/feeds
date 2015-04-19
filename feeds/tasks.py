@@ -88,22 +88,6 @@ def get_entry_guid(entry, feed_id=None):
     return entry.get('id', guid)
 
 
-def get_guids(entries, feed_has_no_guid=False):
-    """
-    return a list of all GUIDs of posts in list of entries.
-    """
-    guids = []
-    for entry in entries:
-        guid = ""
-        if entry.get('id', ''):
-            guid = entry.get('id', '')
-        elif entry.link or feed_has_no_guid:
-            guid = entry.link
-        elif entry.title:
-            guid = entry.title
-        guids.append(entry.get('id', guid))
-    return guids
-
 
 @shared_task
 def twitter_post(post_id):
@@ -380,7 +364,7 @@ def entry_process(entry, feed_id, postdict):
 
     logger.debug("start: entry-processing")
     logger.info("feed-id: %s", feed_id)
-    logger.info("entry: %s", entry)
+    logger.info("entry: %s", str(entry)[:40])
     logger.info("postdict: %s", postdict)
 
     result = ENTRY_SAME
@@ -402,6 +386,12 @@ def entry_process(entry, feed_id, postdict):
         )
         p.content = entry.content
         p.save()
+        logger.info(
+                "Saved '%s', new entry for feed %s (%s)",
+                entry.title,
+                feed_id,
+                p.id
+            )
 
     if hasattr(entry, 'link'):
         if p.link is not entry.link:
@@ -476,6 +466,9 @@ def feed_postdict(feed, uids=None):
 
 
 def feed_parse(feed):
+    """
+    Parse feed and catch the most common problems
+    """
     logger.debug("-- start --")
     try:
         fpf = feedparser.parse(
@@ -510,6 +503,22 @@ def feed_update(feed, parsed):
     logger.debug("-- end --")
     return feed
 
+
+def guids(entries, feed_has_no_guid=False):
+    """
+    return a list of all GUIDs of posts in list of entries.
+    """
+    guids = []
+    for entry in entries:
+        guid = ""
+        if entry.get('id', ''):
+            guid = entry.get('id', '')
+        elif entry.link or feed_has_no_guid:
+            guid = entry.link
+        elif entry.title:
+            guid = entry.title
+        guids.append(entry.get('id', guid))
+    return guids
 
 @shared_task
 def feed_refresh(feed_id):
@@ -552,16 +561,13 @@ def feed_refresh(feed_id):
 
     feed = feed_update(feed, parsed)
 
-    guids = get_guids(parsed.entries)
-
-    if guids:
-        posts = feed_postdict(feed, guids)
+    postdict = feed_postdict(feed, guids(parsed.entries))
 
     try:
         result = chord(
             (
                 entry_process.s(
-                    entry, feed.id, posts
+                    entry, feed.id, postdict
                 )
                 for entry in parsed.entries
             ),

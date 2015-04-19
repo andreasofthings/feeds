@@ -33,7 +33,7 @@ from feeds.forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
 from feeds.forms import FeedUpdateForm, CategoryUpdateForm
 from feeds.forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
 
-from django.contrib.formtools.wizard.views import SessionWizardView
+from formtools.wizard.views import SessionWizardView
 
 from bs4 import BeautifulSoup
 import requests
@@ -53,6 +53,7 @@ class OptionsView(LoginRequiredMixin, UpdateView):
     template_name = "feeds/options.html"
     # form_class = OptionsForm
     success_url = "planet:options"
+    fields = ('number_initially_displayed',)
 
     def get_object(self, queryset=None):
         obj, created = Options.objects.get_or_create(user=self.request.user)
