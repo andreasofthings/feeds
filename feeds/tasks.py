@@ -82,22 +82,27 @@ def dummy(x=10, *args, **kwargs):
     return True
 
 
-def get_entry_guid(entry, feed_id=None):
+def entry_guid(entry, feed_has_no_guid=None):
     """
     Get an individual guid for an entry
     """
-    guid = None
-    feed = Feed.objects.get(pk=feed_id)
+    guid = ""
 
-    if entry.get('id', ''):
-        guid = entry.get('id', '')
-    elif entry.link or feed.has_no_guid:
+    if entry.link or feed_has_no_guid:
         guid = entry.link
     elif entry.title:
         guid = entry.title
 
     return entry.get('id', guid)
 
+def guids(entries, feed_has_no_guid=False):
+    """
+    return a list of all GUIDs of posts in list of entries.
+    """
+    guids = []
+    for entry in entries:
+        guids.append(entry_guid(entry, feed_has_no_guid))
+    return guids
 
 
 @shared_task
@@ -349,7 +354,7 @@ def entry_postprocess(id, entry, created):
 
 
 @shared_task
-def entry_process(entry, feed_id, postdict):
+def entry_process(feed_id, entry, postdict):
     """
     Receive Entry, process
 
@@ -383,7 +388,7 @@ def entry_process(entry, feed_id, postdict):
     p, created = Post.objects.get_or_create(
         feed=feed,
         title=entry.title,
-        guid=get_entry_guid(entry, feed_id),
+        guid=entry_guid(entry, feed.has_no_guid),
         published=True
     )
 
@@ -424,43 +429,22 @@ def entry_process(entry, feed_id, postdict):
     return result
 
 
-def feed_postdict(feed, uids=None):
+def feed_postdict(feed, uids):
     """
     fetch posts that we have on file already and return a dictionary
     with all uids/posts as key/value pairs.
     """
     logger.debug("-- start --")
-    if uids is not None:
-        result = dict(
-            [(post.guid, post) for post in Post.objects.filter(
-                feed=feed.id
-            ).filter(
-                guid__in=uids
-            )]
-        )
-        logger.debug("postdict keys: %s", result.keys())
-    else:
-        """
-        we didn't find any guids. leave postdict empty
-        """
-        result = {}
+    result = dict(
+        [(post.guid, post) for post in Post.objects.filter(
+            feed=feed
+        ).filter(
+            guid__in=uids
+        )]
+    )
+    logger.debug("postdict keys: %s", result.keys())
     logger.debug("-- end --")
     return result
-
-
-def guids(entries, feed_has_no_guid=False):
-    """
-    return a list of all GUIDs of posts in list of entries.
-    """
-    guids = []
-    for entry in entries:
-        guid = ""
-        if entry.link or feed_has_no_guid:
-            guid = entry.link
-        elif entry.title:
-            guid = entry.title
-        guids.append(entry.get('id', guid))
-    return guids
 
 
 def feed_parse(feed):
@@ -578,13 +562,16 @@ def feed_refresh(feed_id):
 
     feed = feed_update(feed, parsed)
 
-    postdict = feed_postdict(feed, guids(parsed.entries))
+    guid_list = guids(parsed.entries)
+    print guid_list
+    postdict = feed_postdict(feed, guid_list)
+    print postdict
 
     try:
         result = chord(
             (
                 entry_process.s(
-                    entry, feed.id, postdict
+                    feed.id, entry, postdict
                 )
                 for entry in parsed.entries
             ),
