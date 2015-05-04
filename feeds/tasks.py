@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 import types
 import requests
 import json
-import timestring
 import feedparser
 
 try:
@@ -78,15 +77,14 @@ def get_entry_guid(entry, feed_id=None):
     guid = None
     feed = Feed.objects.get(pk=feed_id)
 
-    if entry.get('id', ''):
-        guid = entry.get('id', '')
+    if entry.get('id', None):
+        guid = entry.id
     elif entry.link or feed.has_no_guid:
         guid = entry.link
     elif entry.title:
         guid = entry.title
 
-    return entry.get('id', guid)
-
+    return guid
 
 
 @shared_task
@@ -387,11 +385,11 @@ def entry_process(entry, feed_id, postdict):
         p.content = entry.content
         p.save()
         logger.info(
-                "Saved '%s', new entry for feed %s (%s)",
-                entry.title,
-                feed_id,
-                p.id
-            )
+            "Saved '%s', new entry for feed %s (%s)",
+            entry.title,
+            feed_id,
+            p.id
+        )
 
     if hasattr(entry, 'link'):
         if p.link is not entry.link:
@@ -469,7 +467,6 @@ def feed_parse(feed):
     """
     Parse feed and catch the most common problems
     """
-    logger.debug("-- start --")
     try:
         fpf = feedparser.parse(
             feed.feed_url,
@@ -483,7 +480,6 @@ def feed_parse(feed):
             str(e)
         )
         raise e
-    logger.debug("-- end --")
     return fpf
 
 
@@ -491,16 +487,19 @@ def feed_update(feed, parsed):
     """
     Update `feed` with values from `parsed`
     """
-    logger.debug("-- start --")
-    feed.etag = parsed.get('etag', '')
-    feed.last_modified = str(timestring.Date(
-        parsed.get('modified', '2000-01-01 00:00 GMT')
-    ))
+    feed.last_modified = parsed.feed.updated_parsed
     feed.title = parsed.feed.get('title', '')[0:254]
-    feed.tagline = parsed.feed.get('tagline', '')
+    feed.tagline = parsed.feed.get('subtitle', '')
     feed.link = parsed.feed.get('link', '')
+    feed.language = parsed.feed.get('language', '')
+    feed.copyright = parsed.feed.get('copyright', '')
+    feed.author = parsed.feed.get('author', '')
+    feed.webmaster = parsed.feed.get('webmaster', '')
+    feed.pubdate = parsed.feed.get('pubDate', '')
+    feed.last_modified = parsed.feed.updated_parsed
+    feed.etag = parsed.get('etag', '')
+
     feed.save()
-    logger.debug("-- end --")
     return feed
 
 
@@ -519,6 +518,7 @@ def guids(entries, feed_has_no_guid=False):
             guid = entry.title
         guids.append(entry.get('id', guid))
     return guids
+
 
 @shared_task
 def feed_refresh(feed_id):
