@@ -84,7 +84,7 @@ def opml_import(opml, count=0):
                 except Exception as e:
                     logger.debug(e)
         else:
-            print name
+            logger.debug("Category: %s", name)
     return True
 
 

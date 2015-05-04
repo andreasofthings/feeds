@@ -49,6 +49,23 @@ from .models import Feed, Post, Tag, TaggedPost
 from .models import FeedStats
 from .models import FeedEntryStats
 
+from exceptions import Exception
+
+
+class FeedErrorHTTP(Exception):
+    """
+    Exception when Feed returns an HTTP Error
+    """
+    pass
+
+
+class FeedErrorParse(Exception):
+    pass
+
+
+class FeedSame(Exception):
+    pass
+
 
 @shared_task
 def dummy(x=10, *args, **kwargs):
@@ -70,21 +87,28 @@ def dummy(x=10, *args, **kwargs):
     return True
 
 
-def get_entry_guid(entry, feed_id=None):
+def entry_guid(entry, feed_has_no_guid=None):
     """
     Get an individual guid for an entry
     """
-    guid = None
-    feed = Feed.objects.get(pk=feed_id)
+    guid = ""
 
-    if entry.get('id', None):
-        guid = entry.id
-    elif entry.link or feed.has_no_guid:
+    if entry.link or feed_has_no_guid:
         guid = entry.link
     elif entry.title:
         guid = entry.title
 
-    return guid
+    return entry.get('id', guid)
+
+
+def guids(entries, feed_has_no_guid=False):
+    """
+    return a list of all GUIDs of posts in list of entries.
+    """
+    guids = []
+    for entry in entries:
+        guids.append(entry_guid(entry, feed_has_no_guid))
+    return guids
 
 
 @shared_task
@@ -336,7 +360,7 @@ def entry_postprocess(id, entry, created):
 
 
 @shared_task
-def entry_process(entry, feed_id, postdict):
+def entry_process(feed_id, entry, postdict):
     """
     Receive Entry, process
 
@@ -370,7 +394,7 @@ def entry_process(entry, feed_id, postdict):
     p, created = Post.objects.get_or_create(
         feed=feed,
         title=entry.title,
-        guid=get_entry_guid(entry, feed_id),
+        guid=entry_guid(entry, feed.has_no_guid),
         published=True
     )
 
@@ -411,8 +435,88 @@ def entry_process(entry, feed_id, postdict):
     return result
 
 
+def feed_postdict(feed, uids):
+    """
+    fetch posts that we have on file already and return a dictionary
+    with all uids/posts as key/value pairs.
+    """
+    logger.debug("-- start --")
+    result = dict(
+        [(post.guid, post) for post in Post.objects.filter(
+            feed=feed
+        ).filter(
+            guid__in=uids
+        )]
+    )
+    logger.debug("postdict keys: %s", result.keys())
+    logger.debug("-- end --")
+    return result
+
+
+def feed_parse(feed):
+    """
+    Parse feed and catch the most common problems
+    """
+    try:
+        fpf = feedparser.parse(
+            feed.feed_url,
+            agent=USER_AGENT,
+            etag=feed.etag
+        )
+    except Exception as e:
+        logger.error(
+            'Feedparser Error: (%s) cannot be parsed: %s',
+            feed.feed_url,
+            str(e)
+        )
+        raise e
+
+    if 'status' not in fpf or fpf.status >= 400:
+        raise FeedErrorHTTP
+
+    if 'bozo' in fpf and fpf.bozo == 1:
+        logger.error(
+            "[%d] !BOZO! Feed is not well formed: %s",
+            feed.id,
+            feed.name
+        )
+        raise FeedErrorParse
+
+    if fpf.status is 304:
+        logger.debug(
+            "[%d] Feed did not change: %s",
+            feed.id,
+            feed.name
+        )
+        raise FeedSame
+
+    logger.debug("-- end --")
+    return fpf
+
+
+def feed_update(feed, parsed):
+    """
+    Update `feed` with values from `parsed`
+    """
+    feed.etag = parsed.get('etag', '')
+    feed.last_modified = parsed.feed.updated_parsed
+    feed.title = parsed.feed.get('title', '')[0:254]
+    feed.tagline = parsed.feed.get('subtitle', '')
+    feed.link = parsed.feed.get('link', '')
+    feed.language = parsed.feed.get('language', '')
+    feed.copyright = parsed.feed.get('copyright', '')
+    feed.author = parsed.feed.get('author', '')
+    feed.webmaster = parsed.feed.get('webmaster', '')
+    feed.pubdate = parsed.feed.get('pubDate', '')
+    feed.last_modified = parsed.feed.updated_parsed
+    feed.etag = parsed.get('etag', '')
+
+    feed.save()
+    return feed
+
+
 @shared_task
-def feed_stats(result_list, feed_id):
+def feed_refresh_stats(result_list, feed_id):
     """
     this function is supposed to collect all the return
     values from `entry_process`. That function will return either:
@@ -439,87 +543,6 @@ def feed_stats(result_list, feed_id):
     return result
 
 
-def feed_postdict(feed, uids=None):
-    """
-    fetch posts that we have on file already and return a dictionary
-    with all uids/posts as key/value pairs.
-    """
-    logger.debug("-- start --")
-    if uids is not None:
-        result = dict(
-            [(post.guid, post) for post in Post.objects.filter(
-                feed=feed.id
-            ).filter(
-                guid__in=uids
-            )]
-        )
-        logger.debug("postdict keys: %s", result.keys())
-    else:
-        """
-        we didn't find any guids. leave postdict empty
-        """
-        result = {}
-    logger.debug("-- end --")
-    return result
-
-
-def feed_parse(feed):
-    """
-    Parse feed and catch the most common problems
-    """
-    try:
-        fpf = feedparser.parse(
-            feed.feed_url,
-            agent=USER_AGENT,
-            etag=feed.etag
-        )
-    except Exception as e:
-        logger.error(
-            'Feedparser Error: (%s) cannot be parsed: %s',
-            feed.feed_url,
-            str(e)
-        )
-        raise e
-    return fpf
-
-
-def feed_update(feed, parsed):
-    """
-    Update `feed` with values from `parsed`
-    """
-    feed.last_modified = parsed.feed.updated_parsed
-    feed.title = parsed.feed.get('title', '')[0:254]
-    feed.tagline = parsed.feed.get('subtitle', '')
-    feed.link = parsed.feed.get('link', '')
-    feed.language = parsed.feed.get('language', '')
-    feed.copyright = parsed.feed.get('copyright', '')
-    feed.author = parsed.feed.get('author', '')
-    feed.webmaster = parsed.feed.get('webmaster', '')
-    feed.pubdate = parsed.feed.get('pubDate', '')
-    feed.last_modified = parsed.feed.updated_parsed
-    feed.etag = parsed.get('etag', '')
-
-    feed.save()
-    return feed
-
-
-def guids(entries, feed_has_no_guid=False):
-    """
-    return a list of all GUIDs of posts in list of entries.
-    """
-    guids = []
-    for entry in entries:
-        guid = ""
-        if entry.get('id', ''):
-            guid = entry.get('id', '')
-        elif entry.link or feed_has_no_guid:
-            guid = entry.link
-        elif entry.title:
-            guid = entry.title
-        guids.append(entry.get('id', guid))
-    return guids
-
-
 @shared_task
 def feed_refresh(feed_id):
     """
@@ -538,40 +561,31 @@ def feed_refresh(feed_id):
 
     feed = Feed.objects.get(pk=feed_id)
 
-    parsed = feed_parse(feed)
-
-    if 'status' not in parsed or parsed.status >= 400:
+    try:
+        parsed = feed_parse(feed)
+    except FeedErrorHTTP as e:
         return FEED_ERRHTTP
-
-    if parsed.status is 304:
-        logger.debug(
-            "[%d] Feed did not change: %s",
-            feed.id,
-            feed.name
-        )
+    except FeedErrorParse as e:
+        return FEED_ERRPARSE(e)
+    except FeedSame:
         return FEED_SAME
-
-    if 'bozo' in parsed and parsed.bozo == 1:
-        logger.error(
-            "[%d] !BOZO! Feed is not well formed: %s",
-            feed.id,
-            feed.name
-        )
-        return FEED_ERRPARSE
 
     feed = feed_update(feed, parsed)
 
-    postdict = feed_postdict(feed, guids(parsed.entries))
+    guid_list = guids(parsed.entries)
+    print guid_list
+    postdict = feed_postdict(feed, guid_list)
+    print postdict
 
     try:
         result = chord(
             (
                 entry_process.s(
-                    entry, feed.id, postdict
+                    feed.id, entry, postdict
                 )
                 for entry in parsed.entries
             ),
-            feed_stats.s(feed.id)
+            feed_refresh_stats.s(feed.id)
         )()
     except SoftTimeLimitExceeded as timeout:
         logger.info("SoftTimeLimitExceeded: %s", timeout)

@@ -107,10 +107,10 @@ class TaskTest(TestCase):
         parsed = feedparser.parse(feeds[0].feed_url)
         self.assertGreater(len(parsed.entries), 0)
         for entry in parsed.entries:
-            result = entry_process(entry, feeds[0].id, None)
+            result = entry_process(feeds[0].id, entry, None)
             self.assertEqual(result, ENTRY_NEW)
         for entry in parsed.entries:
-            result = entry_process(entry, feeds[0].id, None)
+            result = entry_process(feeds[0].id, entry, None)
             self.assertEqual(result, ENTRY_SAME)
 
     def tearDown(self):
