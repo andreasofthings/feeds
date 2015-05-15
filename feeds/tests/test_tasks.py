@@ -14,7 +14,7 @@ import feedparser
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from feeds import ENTRY_NEW, ENTRY_SAME
+from feeds import ENTRY_NEW, ENTRY_UPDATED
 from feeds import FEED_OK
 from feeds import CRON_OK
 from feeds.models import Feed, Post
@@ -111,7 +111,7 @@ class TaskTest(TestCase):
             self.assertEqual(result, ENTRY_NEW)
         for entry in parsed.entries:
             result = entry_process(feeds[0].id, entry, None)
-            self.assertEqual(result, ENTRY_SAME)
+            self.assertEqual(result, ENTRY_UPDATED)
 
     def tearDown(self):
         pass

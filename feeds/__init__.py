@@ -48,6 +48,22 @@ CRON_FAIL = 'cron_fail'
 CRON_ERR = 'cron_err'
 CRON_RES = 'cron_res'
 
+
+class FeedErrorHTTP(Exception):
+    """
+    Exception when Feed returns an HTTP Error
+    """
+    pass
+
+
+class FeedErrorParse(Exception):
+    pass
+
+
+class FeedSame(Exception):
+    pass
+
+
 version_info = (0, 9, 7)
 __version__ = ".".join(map(str, version_info))
 SERVER_SOFTWARE = "feeds/%s" % __version__
