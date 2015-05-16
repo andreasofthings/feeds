@@ -278,7 +278,7 @@ class PostListView(ListView):
     paginate_by = 10
     context_object_name = "nodes"
     object_list = "nodes"
-    queryset = Post.objects.order_by('-published')
+    queryset = Post.objects.order_by('-created')
 
 
 class PostDetailView(DetailView):

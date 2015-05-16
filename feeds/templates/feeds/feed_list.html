@@ -1,7 +1,7 @@
 {%extends 'feeds/index.html'%}
 {% load i18n %}
 
-{% block breadcrumbs %}
+{% block breadcrumb %}
           <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider"></span></li>
             <li><a href="{% url "planet:feed-home" %}">Feeds</a> <span class="divider"></span></li>
@@ -26,16 +26,16 @@
                 <th>Posts</th>
                 <th>Edit</th>
             </tr>
-            {% for o in object_list %}
+            {% for feed in feeds %}
             <tr>
-                <td><a href="{{o.get_absolute_url}}">{{ o }}</a></td>
-                <td>{% for cat in o.category.all %}<a href="{{cat.get_absolute_url}}">{{cat}}</a>{% endfor %}</td>
-                <td>{{o.post_set.count}}</td>
+                <td><a href="{{feed.get_absolute_url}}">{{ feed }}</a></td>
+                <td>{% for cat in feed.category.all %}<a href="{{cat.get_absolute_url}}">{{cat}}</a>{% endfor %}</td>
+                <td>{{feed.post_count}}</td>
                 <td>
-                    <a href="{{o.get_absolute_url}}" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "View Feed" %}"><span class="glyphicon glyphicon-zoom-in"></span></a>
+                    <a href="{{feed.get_absolute_url}}" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "View Feed" %}"><span class="glyphicon glyphicon-zoom-in"></span></a>
                     {% if user.is_authenticated %}
-                    {% if perms.feeds.change_feed %}<a href="{{o.get_absolute_url}}update" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "Edit Feed" %}"><span class="glyphicon glyphicon-edit"></span></a>{% endif %}
-                    {% if perms.feeds.delete_feed %}<a href="{{o.get_absolute_url}}delete" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "Delete Feed" %}"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}
+                    {% if perms.feeds.change_feed %}<a href="{{feed.get_absolute_url}}update" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "Edit Feed" %}"><span class="glyphicon glyphicon-edit"></span></a>{% endif %}
+                    {% if perms.feeds.delete_feed %}<a href="{{feed.get_absolute_url}}delete" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "Delete Feed" %}"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}
                     {% endif %}
                 </td>
             </tr>

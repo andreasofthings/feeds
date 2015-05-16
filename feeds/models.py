@@ -413,6 +413,9 @@ class Feed(models.Model):
     def get_absolute_url(self):
         return ('planet:feed-view', [str(self.id)])
 
+    def post_count(self):
+        return self.posts.count()
+
 
 class Post(models.Model):
     """
@@ -481,7 +484,7 @@ class Post(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('post-view', [str(self.id)])
+        return ('planet:post-view', [str(self.id)])
 
     @models.permalink
     def get_trackable_url(self):

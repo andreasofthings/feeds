@@ -15,9 +15,12 @@ This module takes care of everything that is not client/customer facing.
 import logging
 logger = logging.getLogger(__name__)
 
-import time, datetime, feedparser, calendar
+import datetime
+import feedparser
+import calendar
+from collections import Counter
 
-from celery import shared_task, chord
+from celery import shared_task
 from celery.exceptions import SoftTimeLimitExceeded
 
 from feeds import USER_AGENT
@@ -122,24 +125,7 @@ def entry_process(feed_id, entry, postdict):
 
     logger.debug("stop: entry")
     p.save()
-    return result
-
-
-def feed_postdict(feed, uids):
-    """
-    fetch posts that we have on file already and return a dictionary
-    with all uids/posts as key/value pairs.
-    """
-    logger.debug("-- start --")
-    result = dict(
-        [(post.guid, post) for post in Post.objects.filter(
-            feed=feed
-        ).filter(
-            guid__in=uids
-        )]
-    )
-    logger.debug("postdict keys: %s", result.keys())
-    logger.debug("-- end --")
+    print("%s: %s"%(p.title, result))
     return result
 
 
@@ -205,6 +191,22 @@ def feed_update(feed, parsed):
     return feed
 
 
+def feed_postdict(feed, uids):
+    """
+    fetch posts that we have on file already and return a dictionary
+    with all uids/posts as key/value pairs.
+    """
+    all_posts = Post.objects.filter(feed=feed)
+    print("All posts: %s", all_posts)
+    postdict = dict(
+        [(post.guid, post) for post in all_posts.filter(
+            guid__in=uids
+        )]
+    )
+    print("Postdict: %s", postdict)
+    return postdict
+
+
 @shared_task
 def feed_refresh_stats(result_list, feed_id):
     """
@@ -215,7 +217,6 @@ def feed_refresh_stats(result_list, feed_id):
         ENTRY_SAME
         ENTRY_ERR
     """
-    from collections import Counter
     result = {
         ENTRY_NEW: 0,
         ENTRY_UPDATED: 0,
@@ -263,20 +264,28 @@ def feed_refresh(feed_id):
     feed = feed_update(feed, parsed)
 
     guid_list = guids(parsed.entries)
-    print guid_list
+    print("guid_list %s", guid_list)
     postdict = feed_postdict(feed, guid_list)
-    print postdict
 
     try:
-        result = chord(
+        result = Counter(
             (
-                entry_process.s(
-                    feed.id, entry, postdict
-                )
-                for entry in parsed.entries
-            ),
-            feed_refresh_stats.s(feed.id)
-        )()
+                entry_process(feed.id, entry, postdict)
+                for
+                entry
+                in
+                parsed.entries
+            )
+        )
+        # result = chord(
+        #    (
+        #        entry_process.s(
+        #            feed.id, entry, postdict
+        #        )
+        #        for entry in parsed.entries
+        #    ),
+        #    feed_refresh_stats.s(feed.id)
+        # )()
     except SoftTimeLimitExceeded as timeout:
         logger.info("SoftTimeLimitExceeded: %s", timeout)
         logger.debug("-- end (ERR) --")
@@ -289,7 +298,7 @@ def feed_refresh(feed_id):
     logger.info(
         "Feed '%s' returned %s",
         feed.title,
-        result.result
+        result
     )
     logger.debug("-- end --")
     return FEED_OK
