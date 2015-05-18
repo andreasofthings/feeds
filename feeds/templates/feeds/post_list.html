@@ -3,23 +3,31 @@
 
 {% block content %}
 
-{% if paginator %}
-<div class="pagination"> <span class="step-links">
-        {% if paginator.has_previous %}
-            <a href="?p={{ paginator.previous_page_number }}">previous</a>
+<div class="row pagination">
+  <div class="col-md-12"><span class="step-links">
+
+      <nav>
+
+      <ul class="pager">
+
+        {% if page_obj.has_previous %}
+        <li class="previous"><a href="{% url "planet:post-home" page_obj.previous_page_number %}"><span aria-hidden="true">&larr;</span> Older</a></li>
         {% endif %}
         <span class="current">
-            Page {{ paginator.page_number }} of {{ paginator.num_pages }}.
+            Page {{ page_obj.number }} of {{ page_obj.count }}.
         </span>
-        {% if paginator.has_next %}
-            <a href="?p={{ paginator.next_page_number }}">next</a>
+        {% if page_obj.has_next %}
+        <li class="next"><a href="{% url "planet:post-home" page_obj.next_page_number %}">Newer <span aria-hidden="true">&rarr;</span></a></li>
         {% endif %}
-</span></div>
-{% endif %}
 
-<div class="headermessage">
-  <div>
-  Posts in den letzten paar Tagen:
+      </ul>
+
+      </nav>
+  </span></div>
+</div>
+
+<div class="row headermessage">
+  <div class="col-md-12">
     <ul>
     {% for feed in feeds %}
       <li><a href="{{ feed.get_absolute_url }}">{{ feed.shortname }}</a> {{ feed.post_set.count }}</li>
@@ -28,16 +36,18 @@
   </div>
 </div>
 
-{% for node in object_list %}
-  <div class="node">
+
+<div class="row">
+{% for node in nodes %}
+  <div class="col-md-12 node">
     <div>
       <h3>
         <a href="{{node.post.feed.link}}" alt="{{node.post.feed.title}}">{{node.post.feed.title}}</a>
       </h3>
-      <h1>
+      <h2>
         <a href="{{node.get_absolute_url }}">{{ node.title }}</a>
-      </h1>
-      <h5>{{ node.created }}</h5>
+      </h2>
+      <h5>{{ node.updated }}</h5>
     </div>
 
     <div class="trackbacks">
@@ -46,7 +56,8 @@
   </div>
   <!-- node -->
 
-{% endfor %}
+  {% endfor %}
+</div>
 
 {% if nodes.paginator %}
 <div class="pagination"> <span class="step-links">

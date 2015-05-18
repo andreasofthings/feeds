@@ -18,7 +18,7 @@ class PostInline(admin.TabularInline):
     """
     model = Post
     fields = ('title', 'tweets', 'shares', 'likes')
-    ordering = ('-created',)
+    ordering = ('-published',)
     readonly_fields = ('title', 'tweets', 'shares', 'likes')
     can_delete = False
 
@@ -79,7 +79,8 @@ class PostAdmin(admin.ModelAdmin):
     """
     list_display = (
         'title',
-        'created',
+        'published',
+        'updated',
         'tweets',
         'blogs',
         'plus1',

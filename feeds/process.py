@@ -15,6 +15,7 @@ This module takes care of everything that is not client/customer facing.
 import logging
 logger = logging.getLogger(__name__)
 
+import time
 import datetime
 import feedparser
 import calendar
@@ -55,8 +56,7 @@ def guids(entries, feed_has_no_guid=False):
     return guids
 
 
-@shared_task
-def entry_process(feed_id, entry, postdict):
+def entry_process(feed, entry, postdict):
     """
     Receive Entry, process
 
@@ -78,10 +78,8 @@ def entry_process(feed_id, entry, postdict):
          Either ENTRY_NEW
     """
 
-    feed = Feed.objects.get(pk=feed_id)
-
     logger.debug("start: entry-processing")
-    logger.info("feed-id: %s", feed_id)
+    logger.info("feed-id: %s", feed.id)
     logger.info("entry: %s", str(entry)[:40])
     logger.info("postdict: %s", postdict)
 
@@ -91,7 +89,6 @@ def entry_process(feed_id, entry, postdict):
         feed=feed,
         title=entry.title,
         guid=entry_guid(entry, feed.has_no_guid),
-        published=True
     )
 
     if created:
@@ -99,15 +96,18 @@ def entry_process(feed_id, entry, postdict):
         logger.debug(
             "'%s' is a new entry for feed %s (%s)",
             entry.title,
-            feed_id,
+            feed.id,
             p.id
         )
         p.content = entry.content
+        p.published = datetime.datetime.utcfromtimestamp(
+            calendar.timegm(entry.published_parsed)
+        )
         p.save()
         logger.info(
             "Saved '%s', new entry for feed %s (%s)",
             entry.title,
-            feed_id,
+            feed.id,
             p.id
         )
 
@@ -117,15 +117,9 @@ def entry_process(feed_id, entry, postdict):
             if not created:
                 result = ENTRY_UPDATED
 
-    if hasattr(entry, 'content'):
-        if p.content is not entry.content[0].value:
-            p.content = entry.content[0].value
-            if not created:
-                result = ENTRY_UPDATED
-
     logger.debug("stop: entry")
     p.save()
-    print("%s: %s"%(p.title, result))
+    print("%s: %s" % (p.title, result))
     return result
 
 
@@ -158,7 +152,7 @@ def feed_parse(feed):
         )
         raise FeedErrorParse
 
-    if fpf.status is 304:
+    if fpf.status == 304:
         logger.debug(
             "[%d] Feed did not change: %s",
             feed.id,
@@ -175,8 +169,13 @@ def feed_update(feed, parsed):
     Update `feed` with values from `parsed`
     """
     feed.etag = parsed.get('etag', '')
+    feed.pubdate = parsed.feed.get('pubDate', '')
+    print("%s"%(feed.pubdate))
+    print parsed
     feed.last_modified = datetime.datetime.utcfromtimestamp(
-        calendar.timegm(parsed.feed.updated_parsed)
+        calendar.timegm(
+            parsed.feed.get('updated_parsed', feed.pubdate)
+        )
     )
     feed.title = parsed.feed.get('title', '')[0:254]
     feed.tagline = parsed.feed.get('subtitle', '')
@@ -185,7 +184,6 @@ def feed_update(feed, parsed):
     feed.copyright = parsed.feed.get('copyright', '')
     feed.author = parsed.feed.get('author', '')
     feed.webmaster = parsed.feed.get('webmaster', '')
-    feed.pubdate = parsed.feed.get('pubDate', '')
 
     feed.save()
     return feed
@@ -270,28 +268,20 @@ def feed_refresh(feed_id):
     try:
         result = Counter(
             (
-                entry_process(feed.id, entry, postdict)
+                entry_process(feed, entry, postdict)
                 for
                 entry
                 in
                 parsed.entries
             )
         )
-        # result = chord(
-        #    (
-        #        entry_process.s(
-        #            feed.id, entry, postdict
-        #        )
-        #        for entry in parsed.entries
-        #    ),
-        #    feed_refresh_stats.s(feed.id)
-        # )()
     except SoftTimeLimitExceeded as timeout:
         logger.info("SoftTimeLimitExceeded: %s", timeout)
         logger.debug("-- end (ERR) --")
         return FEED_ERREXC
-    except:
+    except Exception as e:
         logger.debug("-- end (ERR) --")
+        raise e
         return FEED_ERREXC
     """Chord to asynchronously process all entries in parsed feed."""
 

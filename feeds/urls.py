@@ -19,7 +19,10 @@ from feeds.views import FeedDetailView
 from feeds.views import FeedUpdateView
 from feeds.views import FeedDeleteView
 from feeds.views import FeedRefreshView
+from feeds.views import FeedSubscribeView
+from feeds.views import FeedUnSubscribeView
 
+from feeds.views import FeedSubscriptionsView
 
 from feeds.views import PostListView, PostDetailView, PostTrackableView
 from feeds.views import CategoryListView, CategoryCreateView
@@ -113,12 +116,36 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     '',
     url(
+        r'^feed/(?P<pk>\d+)/subscribe/$',
+        FeedSubscribeView.as_view(),
+        name="feed-subscribe"
+    ),
+    url(
+        r'^feed/(?P<pk>\d+)/unsubscribe/$',
+        FeedUnSubscribeView.as_view(),
+        name="feed-unsubscribe"
+    ),
+    url(
+        r'^feed/subscriptions/$',
+        FeedSubscriptionsView.as_view(),
+        name="feed-subscriptions"
+    ),
+)
+
+urlpatterns += patterns(
+    '',
+    url(
         r'^(?P<pk>\d+)/$',
         PostDetailView.as_view(),
         name="post-view"
     ),
     url(
         r'^p/$',
+        PostListView.as_view(),
+        name="post-home"
+    ),
+    url(
+        r'^p/page(?P<page>[0-9]+)/$',
         PostListView.as_view(),
         name="post-home"
     ),

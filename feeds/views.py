@@ -25,10 +25,11 @@ from django.shortcuts import get_object_or_404
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
 from feeds.models import Options
-# from feeds.forms import OptionsForm
+from feeds.forms import OptionsForm
 from feeds.forms import OPMLForm
 
-from feeds.models import Site, Feed, Post, Category, Tag, PostReadCount
+from feeds.models import Site, Feed, Post, Subscription
+from feeds.models import Category, Tag, PostReadCount
 from feeds.forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
 from feeds.forms import FeedUpdateForm, CategoryUpdateForm
 from feeds.forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
@@ -51,9 +52,10 @@ class HomeView(TemplateView):
 class OptionsView(LoginRequiredMixin, UpdateView):
     model = Options
     template_name = "feeds/options.html"
-    # form_class = OptionsForm
-    success_url = "planet:options"
-    fields = ('number_initially_displayed',)
+    form_class = OptionsForm
+
+    def get_success_url(self):
+        return reverse('planet:options')
 
     def get_object(self, queryset=None):
         obj, created = Options.objects.get_or_create(user=self.request.user)
@@ -270,6 +272,49 @@ class FeedRefreshView(LoginRequiredMixin, RedirectView):
         return reverse('planet:feed-view', args=(pk,))
 
 
+class FeedSubscribeView(LoginRequiredMixin, RedirectView):
+    """
+    Subscribe user to a feed
+    """
+    permanent = False
+
+    def get_redirect_url(self, pk):
+        user = Options.objects.get(user=self.request.user)
+        feed = Feed.objects.get(pk=pk)
+        s, created = Subscription.objects.get_or_create(user=user, feed=feed)
+        if created:
+            s.save()
+        return reverse('planet:feed-view', args=(pk,))
+
+
+class FeedUnSubscribeView(LoginRequiredMixin, RedirectView):
+    """
+    UnSubscribe user to a feed
+    """
+    permanent = False
+
+    def get_redirect_url(self, pk):
+        user = Options.objects.get(user=self.request.user)
+        feed = Feed.objects.get(pk=pk)
+        s = Subscription.objects.get(user=user, feed=feed)
+        s.delete()
+        return reverse('planet:feed-view', args=(pk,))
+
+
+class FeedSubscriptionsView(LoginRequiredMixin, ListView):
+    """
+    One users subscriptions
+    """
+    model = Feed
+    context_object_name = "feeds"
+    template_name = "feeds/feed_subscriptions.html"
+
+    def get_queryset(self):
+        user = Options.objects.get(user=self.request.user)
+        queryset = Feed.objects.filter(feed_subscription__user=user)
+        return queryset
+
+
 class PostListView(ListView):
     """
     List Posts
@@ -277,8 +322,8 @@ class PostListView(ListView):
     model = Post
     paginate_by = 10
     context_object_name = "nodes"
-    object_list = "nodes"
-    queryset = Post.objects.order_by('-created')
+    # object_list = "nodes"
+    queryset = Post.objects.order_by('-published')
 
 
 class PostDetailView(DetailView):

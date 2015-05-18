@@ -29,14 +29,14 @@ class RecentPostNode(template.Node):
         try:
             recent = Post.objects.filter(
                 feed=feed
-            ).order_by('-created')
+            ).order_by('-published')
         except Post.DoesNotExist:
             return Post.objects.none()
         if self.count < recent.count():
             result_count = self.count
         else:
             result_count = recent.count()
-        return recent[:result_count]
+        return str(recent[:result_count])
 
 
 @register.tag('recent_posts')

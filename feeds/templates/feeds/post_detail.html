@@ -22,10 +22,13 @@
 <script src="http://angry-planet.com/star/script.js" type="text/javascript"></script>
 <div id="angry-planet-star"></div>
 
-<div itemscope itemtype="http://schema.org/Article">
-  <h4>{{ node.created }}</h4>
-  <h1><a href="{{node.link}}" itemprop="headline">{{ node.title }}</a></h1>
-
+<div itemscope itemtype="http://schema.org/Article" class="row">
+  <div class="row">
+    <div class="col-md-12">
+      <h4>{{ node.updated }}</h4>
+      <h2><a href="{{node.link}}" itemprop="headline">{{ node.title }}</a></h2>
+    </div>
+  </div>
   <div class="row">
     <div class="col-md-12">
       <p class="pull-right">via: <a href="{{node.feed.link}}" itemprop="url">{{node.feed.name}}</a></p>
@@ -35,7 +38,7 @@
 
   <div class ="row">
     <div class="col-md-8" itemprop="text">
-      {{ node.content|safe }}
+      <!-- {# node.content|safe #} -->
     </div>
 
     <div class="col-md-4">

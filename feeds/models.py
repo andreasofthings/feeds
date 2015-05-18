@@ -414,7 +414,16 @@ class Feed(models.Model):
         return ('planet:feed-view', [str(self.id)])
 
     def post_count(self):
+        """
+        Return the number of posts in this feed.
+        """
         return self.posts.count()
+
+    def subscriber_count(self):
+        """
+        Return the number of subscribers for this feed.
+        """
+        return self.feed_subscription.count()
 
 
 class Post(models.Model):
@@ -446,18 +455,8 @@ class Post(models.Model):
         db_index=True,
         unique=True
     )
-    created = models.DateTimeField(_('pubDate'), auto_now_add=True)
-
-    published = models.BooleanField(default=False)
-
-    last_modified = models.DateTimeField(null=True, blank=True)
-    """.. todo::  this is unused, remove? """
-
-    date_modified = models.DateTimeField(
-        _('date modified'),
-        null=True,
-        blank=True
-    )
+    published = models.DateTimeField(_('pubDate'))
+    updated = models.DateTimeField(_('last_updated'))
 
     tags = models.ManyToManyField(
         Tag,
@@ -657,6 +656,9 @@ class Subscription(models.Model):
         verbose_name=_('Feed Subscription'),
         related_name='feed_subscription'
     )
+
+    class Meta:
+        unique_together = (("user", "feed"),)
 
     def __unicode__(self):
         return u'%s subscribed [%s]' % (self.user, self.feed)
