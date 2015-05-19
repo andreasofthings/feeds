@@ -16,7 +16,7 @@ class Command(BaseCommand):
             except Feed.DoesNotExist:
                 raise CommandError('Feed "%s" does not exist' % feed_id)
 
-            feed_refresh(feed.id)
+            result = feed_refresh(feed.id)
             feed.save()
 
-            self.stdout.write('Successfully refreshed feed "%s"' % feed_id)
+            self.stdout.write('Refresh "%s" returned "%s"' % (feed, result))

@@ -1,7 +1,12 @@
 from django.contrib import admin
 
-from feeds.models import Site, Feed, Post, FeedPostCount, Category, Tag
-from feeds.forms import FeedAdminForm
+from models.site import Site
+from models.feed import Feed
+from models.post import Post
+from models.stats import FeedPostCount
+from models.category import Category
+from models.tag import Tag
+from .forms import FeedAdminForm
 
 
 class FeedInline(admin.TabularInline):

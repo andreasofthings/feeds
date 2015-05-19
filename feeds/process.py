@@ -15,7 +15,6 @@ This module takes care of everything that is not client/customer facing.
 import logging
 logger = logging.getLogger(__name__)
 
-import time
 import datetime
 import feedparser
 import calendar
@@ -99,17 +98,22 @@ def entry_process(feed, entry, postdict):
             feed.id,
             p.id
         )
-        p.content = entry.content
-        p.published = datetime.datetime.utcfromtimestamp(
-            calendar.timegm(entry.published_parsed)
-        )
-        p.save()
-        logger.info(
-            "Saved '%s', new entry for feed %s (%s)",
-            entry.title,
-            feed.id,
-            p.id
-        )
+        try:
+            p.content = entry.content
+            p.published = datetime.datetime.utcfromtimestamp(
+                calendar.timegm(entry.published_parsed)
+            )
+            print (p.published)
+            p.save()
+        except Exception as e:
+            print e
+        finally:
+            logger.info(
+                "Saved '%s', new entry for feed %s (%s)",
+                entry.title,
+                feed.id,
+                p.id
+            )
 
     if hasattr(entry, 'link'):
         if p.link is not entry.link:
@@ -170,7 +174,7 @@ def feed_update(feed, parsed):
     """
     feed.etag = parsed.get('etag', '')
     feed.pubdate = parsed.feed.get('pubDate', '')
-    print("%s"%(feed.pubdate))
+    print("%s" % (feed.pubdate))
     print parsed
     feed.last_modified = datetime.datetime.utcfromtimestamp(
         calendar.timegm(
@@ -283,7 +287,6 @@ def feed_refresh(feed_id):
         logger.debug("-- end (ERR) --")
         raise e
         return FEED_ERREXC
-    """Chord to asynchronously process all entries in parsed feed."""
 
     logger.info(
         "Feed '%s' returned %s",
