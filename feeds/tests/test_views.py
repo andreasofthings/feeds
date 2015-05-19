@@ -5,6 +5,8 @@
 """
 """
 
+from datetime import datetime
+
 from django.test import TestCase, Client, RequestFactory
 from django.core.urlresolvers import reverse
 
@@ -630,7 +632,10 @@ class TestAllViewsLoggedIn(TestCase):
         We use fixtures, so we can assume there are feeds.
         """
         with self.assertNumQueries(1):
-            Post.objects.create(feed=feed)
+            Post.objects.create(
+                feed=feed,
+                published=datetime.now()
+            )
 
 
 class TestFeedViewsWithCredentials(TestCase):
