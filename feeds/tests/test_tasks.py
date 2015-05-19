@@ -12,7 +12,6 @@ from datetime import datetime
 import feedparser
 
 from django.test import TestCase
-from django.core.urlresolvers import reverse
 
 from feeds import ENTRY_NEW, ENTRY_UPDATED
 from feeds import FEED_OK
@@ -30,38 +29,13 @@ class TaskTest(TestCase):
     fixtures = [
         'Site.yaml',
         'Feed_basic.yaml',
+        'Post.yaml',
     ]
 
     def setUp(self):
         """
         Set up enivironment to test models.
         """
-
-        self.feed1 = Feed(
-            feed_url=reverse('planet:rss1'),
-            name="rss1",
-            short_name="rss1"
-        )
-        self.feed1.save()
-
-        self.feed2 = Feed(
-            feed_url=reverse('planet:rss2'),
-            name="rss2",
-            short_name="rss2"
-        )
-        self.feed2.save()
-
-        self.post1 = Post(
-            feed=self.feed1,
-            link="http://localhost/post1"
-        )
-        self.post1.save()
-
-        self.post2 = Post(
-            feed=self.feed2,
-            link="http://localhost/post2"
-        )
-        self.post2.save()
 
     def test_task_time(self):
         """
