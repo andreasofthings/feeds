@@ -19,4 +19,7 @@ class Command(BaseCommand):
             result = feed_refresh(feed.id)
             feed.save()
 
-            self.stdout.write('Refresh "%s" returned "%s"' % (feed, result))
+            self.stdout.write('Refresh "%s" returned "%s"' % (
+                str(feed),
+                str(result)
+            ))

@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from models.site import Site
-from models.feed import Feed
-from models.post import Post
-from models.stats import FeedPostCount
-from models.category import Category
-from models.tag import Tag
+from .models.site import Site
+from .models.feed import Feed
+from .models.post import Post
+from .models.stats import FeedPostCount
+from .models.category import Category
+from .models.tag import Tag
 from .forms import FeedAdminForm
 
 

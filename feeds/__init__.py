@@ -32,16 +32,16 @@ feeds (feedburner like), displaying all with Chartjs_.
 
 USER_AGENT = ""
 
-ENTRY_NEW = 'entry_new'
-ENTRY_UPDATED = 'entry_updated'
-ENTRY_SAME = 'entry_same'
-ENTRY_ERR = 'entry_err'
+ENTRY_NEW = u'entry_new'
+ENTRY_UPDATED = u'entry_updated'
+ENTRY_SAME = u'entry_same'
+ENTRY_ERR = u'entry_err'
 
-FEED_OK = 'feed_ok'
-FEED_SAME = 'feed_same'
-FEED_ERRPARSE = 'feed_errparse'
-FEED_ERRHTTP = 'feed_errhttp'
-FEED_ERREXC = 'feed_errexc'
+FEED_OK = u'feed_ok'
+FEED_SAME = u'feed_same'
+FEED_ERRPARSE = u'feed_errparse'
+FEED_ERRHTTP = u'feed_errhttp'
+FEED_ERREXC = u'feed_errexc'
 
 CRON_OK = 'cron_ok'
 CRON_FAIL = 'cron_fail'

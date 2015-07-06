@@ -103,7 +103,6 @@ def entry_process(feed, entry, postdict):
             p.published = datetime.datetime.utcfromtimestamp(
                 calendar.timegm(entry.published_parsed)
             )
-            print (p.published)
             p.save()
         except Exception as e:
             print e
@@ -123,7 +122,6 @@ def entry_process(feed, entry, postdict):
 
     logger.debug("stop: entry")
     p.save()
-    print("%s: %s" % (p.title, result))
     return result
 
 
@@ -175,7 +173,6 @@ def feed_update(feed, parsed):
     feed.etag = parsed.get('etag', '')
     feed.pubdate = parsed.feed.get('pubDate', '')
     print("%s" % (feed.pubdate))
-    print parsed
     feed.last_modified = datetime.datetime.utcfromtimestamp(
         calendar.timegm(
             parsed.feed.get('updated_parsed', feed.pubdate)
@@ -199,13 +196,11 @@ def feed_postdict(feed, uids):
     with all uids/posts as key/value pairs.
     """
     all_posts = Post.objects.filter(feed=feed)
-    print("All posts: %s", all_posts)
     postdict = dict(
         [(post.guid, post) for post in all_posts.filter(
             guid__in=uids
         )]
     )
-    print("Postdict: %s", postdict)
     return postdict
 
 
@@ -266,7 +261,6 @@ def feed_refresh(feed_id):
     feed = feed_update(feed, parsed)
 
     guid_list = guids(parsed.entries)
-    print("guid_list %s", guid_list)
     postdict = feed_postdict(feed, guid_list)
 
     try:

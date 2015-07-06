@@ -48,7 +48,7 @@ class RssFeed(NewsFeed):
         """
         get the actual feed-entries for `obj`
         """
-        result = Post.objects.filter(feed=obj).order_by('-created')
+        result = Post.objects.filter(feed=obj).order_by('-updated')
         return result
 
     def title(self, obj):

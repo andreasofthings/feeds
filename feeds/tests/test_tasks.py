@@ -76,7 +76,7 @@ class TaskTest(TestCase):
         self.assertEqual(type(FEED_OK), type(result))
 
     def test_entry_process(self):
-        from feeds.tasks import entry_process
+        from feeds.process import entry_process
         feeds = Feed.objects.all()
         parsed = feedparser.parse(feeds[0].feed_url)
         self.assertGreater(len(parsed.entries), 0)
