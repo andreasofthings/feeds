@@ -249,6 +249,67 @@ class Feed(models.Model):
     def get_absolute_url(self):
         return ('planet:feed-view', [str(self.id)])
 
+    def update(self, parsed):
+        """
+        Update `feed` with values from `parsed`
+        """
+        self.etag = parsed.get('etag', '')
+        self.pubdate = parsed.feed.get('pubDate', '')
+        self.last_modified = datetime.datetime.utcfromtimestamp(
+            calendar.timegm(
+                parsed.feed.get('updated_parsed', feed.pubdate)
+            )
+        )
+        self.title = parsed.feed.get('title', '')[0:254]
+        self.tagline = parsed.feed.get('subtitle', '')
+        self.link = parsed.feed.get('link', '')
+        self.language = parsed.feed.get('language', '')
+        self.copyright = parsed.feed.get('copyright', '')
+        self.author = parsed.feed.get('author', '')
+        self.webmaster = parsed.feed.get('webmaster', '')
+
+
+    def refresh(self):
+        """
+        Refresh feed from `self.link`
+        """
+        logger.debug("-- start --")
+        from .process import feed_parse
+        try:
+            parsed = feed_parse(self)
+        except FeedErrorHTTP as e:
+            return FEED_ERRHTTP
+        except FeedErrorParse as e:
+            return FEED_ERRPARSE
+        except FeedSame:
+            return FEED_SAME
+        self.update(parsed)
+        guid_list = guids(parsed.entries)
+        postdict = feed_postdict(feed, guid_list)
+        try:
+            result = Counter(
+                (
+                    entry_process(feed.id, entry, postdict)
+                    for
+                    entry
+                    in
+                    parsed.entries
+                )
+            )
+        except SoftTimeLimitExceeded as timeout:
+            logger.info("SoftTimeLimitExceeded: %s", timeout)
+            logger.debug("-- end (ERR) --")
+            return FEED_ERREXC
+        except Exception as e:
+            logger.debug("-- end (ERR) --")
+            raise e
+            return FEED_ERREXC
+
+        logger.info( "Feed '%s' returned %s", feed.title, result )
+        logger.debug("-- end --")
+        return FEED_OK
+
+
     def post_count(self):
         """
         Return the number of posts in this feed.

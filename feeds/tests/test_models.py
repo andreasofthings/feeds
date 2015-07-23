@@ -97,6 +97,13 @@ class ModelTest(TestCase):
         .. todo:: self.assertContains won't work for what is being tested here.
         """
 
+    def test_feed(self):
+        """
+        Test a :py:mod:`feeds:models.Feed`
+        """
+        feed = Feed.objects.filter(is_active=True)
+        self.assertEquals(feed[0].refresh(), FEED_OK)
+
     def tearDown(self):
         """
         Clean up environment after model tests

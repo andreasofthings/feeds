@@ -50,6 +50,9 @@ class CategoryAdmin(admin.ModelAdmin):
     """
     pass
 
+def refresh_feed(modeladmin, request, queryset):
+    queryset.update(status='p')
+refresh_feed.short_description = "Refresh selected feeds"
 
 class FeedAdmin(admin.ModelAdmin):
     """
