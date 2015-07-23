@@ -24,15 +24,15 @@ from django.shortcuts import get_object_or_404
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
-from feeds.models import Options
-from feeds.forms import OptionsForm
-from feeds.forms import OPMLForm
+from .models import Options
+from .forms import OptionsForm
+from .forms import OPMLForm
 
-from feeds.models import Site, Feed, Post, Subscription
-from feeds.models import Category, Tag, PostReadCount
-from feeds.forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
-from feeds.forms import FeedUpdateForm, CategoryUpdateForm
-from feeds.forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
+from .models import Site, Feed, Post, Subscription
+from .models import Category, Tag, PostReadCount
+from .forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
+from .forms import FeedUpdateForm, CategoryUpdateForm
+from .forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
 
 from formtools.wizard.views import SessionWizardView
 
