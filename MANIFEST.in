@@ -1,8 +1,10 @@
 include LICENSE
 recursive-include feeds/templates/feeds *
+recursive-include feeds/templates *
 recursive-include feeds/templatetags *
 recursive-include feeds/migrations *
 recursive-include feeds/models *
 recursive-include feeds/static *
+recursive-include feeds *
 recursive-include docs/source *
 include docs/Makefile
