@@ -2,6 +2,7 @@ include LICENSE
 recursive-include feeds/templates/feeds *
 recursive-include feeds/templatetags *
 recursive-include feeds/migrations *
+recursive-include feeds/models *
 recursive-include feeds/static *
-include docs/Makefile
 recursive-include docs/source *
+include docs/Makefile
