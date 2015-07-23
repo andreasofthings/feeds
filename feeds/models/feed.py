@@ -249,6 +249,38 @@ class Feed(models.Model):
     def get_absolute_url(self):
         return ('planet:feed-view', [str(self.id)])
 
+    def _entry_guid(self, entry):
+        """
+        Get an individual guid for an entry
+        """
+        guid = ""
+
+        if entry.link:
+            guid = entry.link
+        elif entry.title:
+            guid = entry.title
+
+        return entry.get('id', guid)
+
+    def _guids(self, entries):
+        guids = []
+        for entry in entries:
+            guids.append(self._entry_guid(entry))
+        return guids
+
+    def _feed_postdict(feed, uids):
+        """
+        fetch posts that we have on file already and return a dictionary
+        with all uids/posts as key/value pairs.
+        """
+        all_posts = Post.objects.filter(feed=feed)
+        postdict = dict(
+            [(post.guid, post) for post in all_posts.filter(
+                guid__in=uids
+            )]
+        )
+        return postdict
+
     def update(self, parsed):
         """
         Update `feed` with values from `parsed`
@@ -284,8 +316,8 @@ class Feed(models.Model):
         except FeedSame:
             return FEED_SAME
         self.update(parsed)
-        guid_list = guids(parsed.entries)
-        postdict = feed_postdict(feed, guid_list)
+        guid_list = self._guids(parsed.entries)
+        postdict = self._feed_postdict(feed, guid_list)
         try:
             result = Counter(
                 (

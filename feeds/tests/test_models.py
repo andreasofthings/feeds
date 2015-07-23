@@ -9,7 +9,7 @@ Tests for the "feeds" app.
 
 from django.test import TestCase, Client
 
-from feeds.models import Category
+from feeds.models import Category, Feed
 
 
 class ModelTest(TestCase):
