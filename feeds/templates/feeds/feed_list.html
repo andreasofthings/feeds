@@ -47,8 +47,8 @@
 </div>
 
 {% if is_paginated %}
-  <div class="pagination pagination-mini pagination-centered">
-    <ul>
+  <nav>
+    <ul class="pagination pagination-mini pagination-centered">
       {% if page_obj.has_previous %}
         <li class="active"><a href="{% url "planet:feed-home-paginated" page_obj.previous_page_number %}"> previous</a></li>
       {% else %}
@@ -69,7 +69,7 @@
         <li class="disabled"><a href="#">next</a></li>
       {% endif %}
     </ul>
-  </div>
+  </nav>
 {% endif %}
 
 {%endblock%}
