@@ -18,9 +18,12 @@ Feeds
 
 
 
-Feeds aims to be a feed aggregator, readed and potentially a replacement for feedburner_.
+Feeds aims to be a feed aggregator, readerubscription service, and potentially
+a replacement for feedburner_.
 
-It is realized as a Django app. It takes feeds in any format `feedparser` can understand and aims to reproduce identical but trackable feeds, augmented with feedbrater information.
+It is realized as a Django app. It takes feeds in any format `feedparser` can
+understand and aims to reproduce identical but trackable feeds, augmented with
+feedbrater information.
 
 Source for Documentation_ is in the "docs" directory.
 
@@ -34,17 +37,31 @@ Quick start
           'feeds',
       )
 
-2a. Include the feeds URLconf in your project urls.py like this::
+2. URL configuration
 
-            url(r'^feeds/', include( 'feeds.urls', namespace="planet", app_name="planet")),
+   a. Include the feeds URLconf in your project urls.py like this::
 
-   Mind the namespace.
 
-2b. For the API, also include the following URLs::
+            urlpatterns = patterns(
+                '',
+                ...
+                url(r'^feeds/', include( 'feeds.urls', namespace="planet", app_name="planet")),
+            )
 
-              url(r'^feedapi/', include('feeds.api_urls')),
 
-In this case, mind the absence of an namespace.
+      Mind the namespace.
+
+   b. For the API, also include the following URLs::
+
+            urlpatterns = patterns(
+                '',
+                ...
+                url(r'^feeds/', include( 'feeds.urls', namespace="planet", app_name="planet")),
+                url(r'^feedapi/', include('feeds.api_urls')),
+            )
+
+
+      In this case, mind the absence of an namespace.
 
 
 3. Run `python manage.py syncdb` to create the feeds models.
@@ -52,4 +69,3 @@ In this case, mind the absence of an namespace.
 
 .. _Documentation: http://feeds.readthedocs.org/en/latest/
 .. _feedburner: http://www.feedburner.com
-.. _buildbot: https://angry-planet.com/buildbot

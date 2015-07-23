@@ -25,8 +25,6 @@ install:
    # Travis is currently working on
  - pip install -q $DJANGO
 before_script:
-  - echo "[server]\nmax_allowed_packet=64M" | sudo tee -a /etc/mysql/my.cnf
-  - sudo service mysql reload
   - mysql -e 'create database myapp_test;'
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
