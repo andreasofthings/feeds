@@ -53,7 +53,7 @@ class Post(models.Model):
         unique=True
     )
     published = models.DateTimeField(_('pubDate'))
-    updated = models.DateTimeField(_('last_updated'), AUTO_NOW=True)
+    updated = models.DateTimeField(_('last_updated'), auto_now=True)
 
     tags = models.ManyToManyField(
         Tag,
