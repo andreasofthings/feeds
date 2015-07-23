@@ -13,16 +13,21 @@ Stores as much as possible coming out of the feed.
 
 import logging
 import feedparser
+import datetime
+import calendar
+from collections import Counter
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
+from .. import USER_AGENT
+from .. import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 from ..managers import FeedManager
 from ..feedexceptions import FeedErrorHTTP, FeedErrorParse, FeedSame
 from .site import Site
 from .category import Category
-
+from .post import Post
 
 logger = logging.getLogger(__name__)
 
@@ -270,12 +275,12 @@ class Feed(models.Model):
             guids.append(self._entry_guid(entry))
         return guids
 
-    def _feed_postdict(feed, uids):
+    def _postdict(self, uids):
         """
         fetch posts that we have on file already and return a dictionary
         with all uids/posts as key/value pairs.
         """
-        all_posts = Post.objects.filter(feed=feed)
+        all_posts = Post.objects.filter(feed=self)
         postdict = dict(
             [(post.guid, post) for post in all_posts.filter(
                 guid__in=uids
@@ -291,7 +296,7 @@ class Feed(models.Model):
         self.pubdate = parsed.feed.get('pubDate', '')
         self.last_modified = datetime.datetime.utcfromtimestamp(
             calendar.timegm(
-                parsed.feed.get('updated_parsed', feed.pubdate)
+                parsed.feed.get('updated_parsed', self.pubdate)
             )
         )
         self.title = parsed.feed.get('title', '')[0:254]
@@ -312,7 +317,7 @@ class Feed(models.Model):
         except Exception as e:
             logger.error(
                 'Feedparser Error: (%s) cannot be parsed: %s',
-                feed.feed_url,
+                self.feed_url,
                 str(e)
             )
             raise e
@@ -323,16 +328,16 @@ class Feed(models.Model):
         if 'bozo' in fpf and fpf.bozo == 1:
             logger.error(
                 "[%d] !BOZO! Feed is not well formed: %s",
-                feed.id,
-                feed.name
+                self.id,
+                self.name
             )
             raise FeedErrorParse
 
         if fpf.status == 304:
             logger.debug(
                 "[%d] Feed did not change: %s",
-                feed.id,
-                feed.name
+                self.id,
+                self.name
             )
             raise FeedSame
 
@@ -354,30 +359,25 @@ class Feed(models.Model):
             return FEED_SAME
         self.update(parsed)
         guid_list = self._guids(parsed.entries)
-        postdict = self._feed_postdict(feed, guid_list)
+        postdict = self.__postdict(guid_list)
         try:
             result = Counter(
                 (
-                    entry_process(feed.id, entry, postdict)
+                    e, created = Entry.objects.from_feedparser(self.id, entry, postdict)
                     for
                     entry
                     in
                     parsed.entries
                 )
             )
-        except SoftTimeLimitExceeded as timeout:
-            logger.info("SoftTimeLimitExceeded: %s", timeout)
-            logger.debug("-- end (ERR) --")
-            return FEED_ERREXC
         except Exception as e:
             logger.debug("-- end (ERR) --")
             raise e
             return FEED_ERREXC
 
-        logger.info( "Feed '%s' returned %s", feed.title, result )
+        logger.info("Feed '%s' returned %s", self.title, result)
         logger.debug("-- end --")
         return FEED_OK
-
 
     def post_count(self):
         """
