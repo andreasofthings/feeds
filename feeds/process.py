@@ -59,6 +59,11 @@ def entry_process(feed, entry, postdict):
     """
     Receive Entry, process
 
+    ..arguments:
+        feed: feed-ID
+        entry: actual Entry
+        postdict: ?
+
     entry has these keys: (Spiegel.de)
      - 'summary_detail'
      - 'published'
@@ -78,7 +83,7 @@ def entry_process(feed, entry, postdict):
     """
 
     logger.debug("start: entry-processing")
-    logger.info("feed-id: %s", feed.id)
+    logger.info("feed-id: %s", feed)
     logger.info("entry: %s", str(entry)[:40])
     logger.info("postdict: %s", postdict)
 
