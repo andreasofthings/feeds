@@ -29,7 +29,7 @@ class TaskTest(TestCase):
     fixtures = [
         'Site.yaml',
         'Feed_basic.yaml',
-        'Post.yaml',
+        'Posts.yaml',
     ]
 
     def setUp(self):
@@ -65,8 +65,8 @@ class TaskTest(TestCase):
 
     def test_count_share_like(self):
         from feeds.tasks import entry_update_facebook
-        post = Post.objects.all()[0]
-        result = entry_update_facebook.delay(post.pk)
+        posts = Post.objects.all()
+        result = entry_update_facebook.delay(posts[0].pk)
         self.assertEqual(result.get(), True)
 
     def test_feed_refresh(self):
