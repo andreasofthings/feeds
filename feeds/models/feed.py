@@ -155,10 +155,12 @@ class Feed(models.Model):
         max_length=200,
         blank=True
     )
+
     image_link = models.URLField(
         _('image_link'),
         blank=True
     )
+
     image_url = models.URLField(
         _('image_url'),
         blank=True

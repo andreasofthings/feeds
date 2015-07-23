@@ -73,7 +73,7 @@ class OptionsViewsTest(TestCase):
                 'submit': "Submit",
             },
         )
-        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.status_code, 302)
         self.assertNumQueries(1)
 
         request = self.factory.get(
