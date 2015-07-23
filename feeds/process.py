@@ -55,7 +55,7 @@ def guids(entries, feed_has_no_guid=False):
     return guids
 
 
-def entry_process(feed, entry, postdict):
+def entry_process(feedid, entry, postdict):
     """
     Receive Entry, process
 
@@ -83,11 +83,13 @@ def entry_process(feed, entry, postdict):
     """
 
     logger.debug("start: entry-processing")
-    logger.info("feed-id: %s", feed)
+    logger.info("feed-id: %s", feedid)
     logger.info("entry: %s", str(entry)[:40])
     logger.info("postdict: %s", postdict)
 
     result = ENTRY_SAME
+
+    feed = Feed.objects.get(pk=feedid)
 
     p, created = Post.objects.get_or_create(
         feed=feed,
@@ -103,21 +105,17 @@ def entry_process(feed, entry, postdict):
             feed.id,
             p.id
         )
-        try:
-            p.content = entry.content
-            p.published = datetime.datetime.utcfromtimestamp(
-                calendar.timegm(entry.published_parsed)
-            )
-            p.save()
-        except Exception as e:
-            print e
-        finally:
-            logger.info(
-                "Saved '%s', new entry for feed %s (%s)",
-                entry.title,
-                feed.id,
-                p.id
-            )
+        p.content = entry.content
+        p.published = datetime.datetime.utcfromtimestamp(
+            calendar.timegm(entry.published_parsed)
+        )
+        p.save()
+        logger.info(
+            "Saved '%s', new entry for feed %s (%s)",
+            entry.title,
+            feed.id,
+            p.id
+        )
 
     if hasattr(entry, 'link'):
         if p.link is not entry.link:
