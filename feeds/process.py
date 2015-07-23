@@ -95,6 +95,9 @@ def entry_process(feedid, entry, postdict):
         feed=feed,
         title=entry.title,
         guid=entry_guid(entry, feed.has_no_guid),
+        published=datetime.datetime.utcfromtimestamp(
+            calendar.timegm(entry.published_parsed)
+        )
     )
 
     if created:
@@ -106,9 +109,6 @@ def entry_process(feedid, entry, postdict):
             p.id
         )
         p.content = entry.content
-        p.published = datetime.datetime.utcfromtimestamp(
-            calendar.timegm(entry.published_parsed)
-        )
         p.save()
         logger.info(
             "Saved '%s', new entry for feed %s (%s)",
