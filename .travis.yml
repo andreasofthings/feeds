@@ -1,9 +1,11 @@
 # Tell Travis you want a Python environment to test in
+sudo: false
 language: python
 
 # List the versions of Python you'd like to test against
 python:
   - "2.7"
+  - "3.4"
 
 services:
   - rabbitmq
@@ -11,7 +13,7 @@ services:
 
 # List the versions of Django you'd like to test against
 env:
-  - DJANGO="Django>=1.7" TRAVIS="True"
+  - DJANGO="Django>=1.8" TRAVIS="True"
 
 install:
    # Install the dependencies the app itself has
@@ -31,7 +33,6 @@ before_script:
 # Tell Travis how to run the test script itself
 script:
   - coverage run --source=feeds feedtest.py -m py.test
-  - sleep 2
 after_success:
   - coveralls
   - python webhook.py
