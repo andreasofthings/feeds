@@ -26,7 +26,8 @@ from celery.exceptions import SoftTimeLimitExceeded
 from feeds import USER_AGENT
 from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
-from feeds import FeedErrorHTTP, FeedErrorParse, FeedSame
+
+from .exceptions import FeedErrorHTTP, FeedErrorParse, FeedSame
 from .models import Feed, Post
 from .models import FeedEntryStats
 

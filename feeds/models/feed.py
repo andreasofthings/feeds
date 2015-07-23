@@ -19,8 +19,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
 from ..managers import FeedManager
+from ..exceptions import FeedErrorHTTP, FeedErrorParse, FeedSame
 from .site import Site
 from .category import Category
+
 
 logger = logging.getLogger(__name__)
 
