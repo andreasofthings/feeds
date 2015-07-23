@@ -19,6 +19,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
 from ..managers import FeedManager
+from ..process import feed_parse, entry_process
 from .site import Site
 from .category import Category
 
@@ -306,7 +307,6 @@ class Feed(models.Model):
         Refresh feed from `self.link`
         """
         logger.debug("-- start --")
-        from .process import feed_parse
         try:
             parsed = feed_parse(self)
         except FeedErrorHTTP as e:
