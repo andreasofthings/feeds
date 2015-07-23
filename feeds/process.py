@@ -257,7 +257,7 @@ def feed_refresh(feed_id):
     except FeedErrorHTTP as e:
         return FEED_ERRHTTP
     except FeedErrorParse as e:
-        return FEED_ERRPARSE(e)
+        return FEED_ERRPARSE
     except FeedSame:
         return FEED_SAME
 
