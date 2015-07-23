@@ -19,7 +19,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
 from ..managers import FeedManager
-from ..process import feed_parse, entry_process
 from .site import Site
 from .category import Category
 
@@ -301,6 +300,42 @@ class Feed(models.Model):
         self.author = parsed.feed.get('author', '')
         self.webmaster = parsed.feed.get('webmaster', '')
 
+    def parse(self):
+        try:
+            fpf = feedparser.parse(
+                self.feed_url,
+                agent=USER_AGENT,
+                etag=self.etag
+            )
+        except Exception as e:
+            logger.error(
+                'Feedparser Error: (%s) cannot be parsed: %s',
+                feed.feed_url,
+                str(e)
+            )
+            raise e
+
+        if 'status' not in fpf or fpf.status >= 400:
+            raise FeedErrorHTTP
+
+        if 'bozo' in fpf and fpf.bozo == 1:
+            logger.error(
+                "[%d] !BOZO! Feed is not well formed: %s",
+                feed.id,
+                feed.name
+            )
+            raise FeedErrorParse
+
+        if fpf.status == 304:
+            logger.debug(
+                "[%d] Feed did not change: %s",
+                feed.id,
+                feed.name
+            )
+            raise FeedSame
+
+        logger.debug("-- end --")
+        return fpf
 
     def refresh(self):
         """
@@ -308,7 +343,7 @@ class Feed(models.Model):
         """
         logger.debug("-- start --")
         try:
-            parsed = feed_parse(self)
+            parsed = self.parse()
         except FeedErrorHTTP as e:
             return FEED_ERRHTTP
         except FeedErrorParse as e:
