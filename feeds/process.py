@@ -269,7 +269,7 @@ def feed_refresh(feed_id):
     try:
         result = Counter(
             (
-                entry_process(feed, entry, postdict)
+                entry_process(feed.id, entry, postdict)
                 for
                 entry
                 in

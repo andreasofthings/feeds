@@ -5,7 +5,6 @@ language: python
 # List the versions of Python you'd like to test against
 python:
   - "2.7"
-  - "3.4"
 
 services:
   - rabbitmq
