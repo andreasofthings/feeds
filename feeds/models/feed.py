@@ -302,7 +302,13 @@ class Feed(models.Model):
             title=entry.title,
             guid=self._entry_guid(entry),
             published=datetime.datetime.utcfromtimestamp(
-                calendar.timegm(entry.published_parsed)
+                calendar.timegm(
+                    entry.get('published_parsed',
+                              entry.get(
+                                  'created_parsed', datetime.now()
+                              )
+                              )
+                )
             )
         )
         if created:
@@ -446,7 +452,7 @@ class Feed(models.Model):
 
         logger.info("Feed '%s' returned %s", self.title, result)
         logger.debug("-- end --")
-        self.errors=0
+        self.errors = 0
         self.save()
         return FEED_OK
 
