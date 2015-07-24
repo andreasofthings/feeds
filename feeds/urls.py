@@ -147,7 +147,7 @@ urlpatterns += patterns(
     url(
         r'^p/page(?P<page>[0-9]+)/$',
         PostListView.as_view(),
-        name="post-home"
+        name="post-home-paginated"
     ),
 )
 
