@@ -13,6 +13,7 @@ Stores as much as possible coming out of the feed.
 
 import logging
 import feedparser
+from feedparser import CharacterEncodingOverride
 import datetime
 import calendar
 from collections import Counter
@@ -210,21 +211,7 @@ class Feed(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Need to update items before saving?
-
-        .. todo: This is for sure flaky.
         """
-        f = feedparser.parse(self.feed_url)
-        if not self.name and 'title' in f.feed:
-            self.name = f.feed.title
-        if not self.short_name and 'title' in f.feed:
-            self.short_name = f.feed.title[:50]
-        if not self.link and hasattr(f.feed, 'link'):
-            self.link = f.feed.link
-        if hasattr(f.feed, 'language'):
-            self.language = f.feed.language[:8]
-        if not self.slug:
-            self.slug = slugify(self.name)
         return super(Feed, self).save(*args, **kwargs)
 
     class Meta:
@@ -351,6 +338,17 @@ class Feed(models.Model):
         """
         Update `feed` with values from `parsed`
         """
+        if not self.name and 'title' in parsed.feed:
+            self.name = parsed.feed.title
+        if not self.short_name and 'title' in parsed.feed:
+            self.short_name = parsed.feed.title[:50]
+        if not self.link and hasattr(parsed.feed, 'link'):
+            self.link = parsed.feed.link
+        if hasattr(parsed.feed, 'language'):
+            self.language = parsed.feed.language[:8]
+        if not self.slug:
+            self.slug = slugify(self.name)
+
         self.etag = parsed.get('etag', '')
         self.pubdate = parsed.feed.get('pubDate', '')
         self.last_modified = datetime.datetime.utcfromtimestamp(
@@ -390,7 +388,7 @@ class Feed(models.Model):
                 self.id,
                 self.name
             )
-            if type(fpf.bozo_exception) is feedparser.CharacterEncodingOverride:
+            if type(fpf.bozo_exception) is CharacterEncodingOverride:
                 logger.error("CharacterEncodingOverride, trying to continue")
                 pass
             else:
@@ -420,6 +418,7 @@ class Feed(models.Model):
             return FEED_ERRPARSE
         except FeedSame:
             return FEED_SAME
+
         try:
             self.update(parsed)
         finally:
@@ -427,6 +426,7 @@ class Feed(models.Model):
             Make sure timestamp is touched
             """
             self.save()
+
         guid_list = self._guids(parsed.entries)
         postdict = self._postdict(guid_list)
         try:
