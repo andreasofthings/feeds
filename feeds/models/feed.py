@@ -333,7 +333,7 @@ class Feed(models.Model):
         logger.info(
             "Saved '%s', new entry for feed %s (%s)",
             entry.title,
-            feed.id,
+            self.id,
             p.id
         )
 
@@ -346,7 +346,6 @@ class Feed(models.Model):
         logger.debug("stop: entry")
         p.save()
         return result
-
 
     def update(self, parsed):
         """
