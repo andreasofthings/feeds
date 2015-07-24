@@ -305,7 +305,7 @@ class Feed(models.Model):
                 calendar.timegm(
                     entry.get('published_parsed',
                               entry.get(
-                                  'created_parsed', datetime.now()
+                                  'created_parsed', datetime.datetime.now()
                               )
                               )
                 )
