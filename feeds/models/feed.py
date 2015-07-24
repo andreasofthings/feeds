@@ -279,13 +279,11 @@ class Feed(models.Model):
         fetch posts that we have on file already and return a dictionary
         with all uids/posts as key/value pairs.
         """
-        all_posts = Post.objects.filter(feed=self)
-        postdict = dict(
-            [(post.guid, post) for post in all_posts.filter(
+        return dict(
+            [(post.guid, post) for post in self.posts().filter(
                 guid__in=uids
             )]
         )
-        return postdict
 
     def from_feedparser(self, entry, postdict):
         """
