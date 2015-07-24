@@ -280,7 +280,7 @@ class Feed(models.Model):
         with all uids/posts as key/value pairs.
         """
         return dict(
-            [(post.guid, post) for post in self.posts().filter(
+            [(post.guid, post) for post in self.posts.filter(
                 guid__in=uids
             )]
         )
