@@ -36,12 +36,22 @@ from feeds.views import SiteSubmitWizardView, SiteSubmitForms
 
 from feeds.rss import RssFeed
 
+from sitemaps import PostSitemap
+from django.contrib.sitemaps.views import sitemap
+
+sitemaps = {
+    'posts': PostSitemap,
+}
+
+
 urlpatterns = patterns(
     '',
     url(r'^$', HomeView.as_view(), name="home"),
     url(r'^options$', OptionsView.as_view(), name="options"),
     url(r'^opml$', OPMLView.as_view(), name="opml"),
     url(r'^search/', include('haystack.urls')),
+    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
+        name='django.contrib.sitemaps.views.sitemap')
 )
 
 urlpatterns += patterns(
