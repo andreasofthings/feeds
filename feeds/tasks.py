@@ -332,11 +332,11 @@ def aggregate_stats(result_list):
 
 
 @shared_task
-def feed_refresh(feed):
+def feed_refresh(pk):
     """
     Wrap Feed.refresh() to allow async execution in Celery.
     """
-    return Feed.objects.get(pk=feed).refresh()
+    return Feed.objects.get(pk=pk).refresh()
 
 
 @shared_task

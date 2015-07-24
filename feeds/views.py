@@ -269,7 +269,7 @@ class FeedRefreshView(LoginRequiredMixin, RedirectView):
 
     def get_redirect_url(self, pk):
         from feeds.tasks import feed_refresh
-        feed_refresh.delay(Feed.objects.get(pk=pk))
+        feed_refresh.delay(pk)
         return reverse('planet:feed-view', args=(pk,))
 
 
