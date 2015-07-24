@@ -355,23 +355,23 @@ def cronjob():
     """
     logger.debug("-- started --")
     result = {}
-    try:
-        max_feeds = 1
+    max_feeds = 1
+    feeds = Feed.objects.filter(
+        is_active=True
+        ).filter(
+            errors__lte=3
+        ).filter(
+            last_checked__eq=None
+        )[:max_feeds]
+    if feeds is None:
         feeds = Feed.objects.filter(
             is_active=True
             ).filter(
                 errors__lte=3
-            ).filter(
-                last_checked__eq=None
-            )[:max_feeds]
-        if feeds is None:
-            feeds = Feed.objects.filter(
-                is_active=True
-                ).filter(
-                    errors__lte=3
-                ).order_by(
-                    'last_checked'
-                    )[:max_feeds]
+            ).order_by(
+                'last_checked'
+                )[:max_feeds]
+    try:
         result = chord(
             (feed_refresh.s(i.id) for i in feeds),
             aggregate_stats.s()
