@@ -80,6 +80,7 @@ class FeedAdmin(admin.ModelAdmin):
         'name',
         'is_active',
         'announce_posts',
+        'errors',
         'slug',
         'title',
         'last_modified',
