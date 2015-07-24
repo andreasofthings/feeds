@@ -332,7 +332,7 @@ class Feed(models.Model):
         p.save()
         logger.info(
             "Saved '%s', new entry for feed %s (%s)",
-            entry.title,
+            p.title,
             self.id,
             p.id
         )
