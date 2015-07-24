@@ -20,6 +20,7 @@ from django.db.models import Max
 
 from feeds.models import Feed, Post, Category, Tag
 
+
 class FeedSitemap(Sitemap):
     """
     SiteMap for Feeds
@@ -37,6 +38,7 @@ class FeedSitemap(Sitemap):
     def lastmod(self, obj):
         return obj.last_modified
 
+
 class PostSitemap(Sitemap):
     """
     SiteMap for Posts
@@ -51,13 +53,13 @@ class PostSitemap(Sitemap):
     """
 
     def changefreq(self, obj):
-        if obj.created > timezone.now()-timedelta(hours=1):
+        if obj.published > timezone.now()-timedelta(hours=1):
             return "hourly"
-        if obj.created > timezone.now()-timedelta(days=1):
+        if obj.published > timezone.now()-timedelta(days=1):
             return "daily"
-        if obj.created > timezone.now()-timedelta(days=7):
+        if obj.published > timezone.now()-timedelta(days=7):
             return "weekly"
-        if obj.created > timezone.now()-timedelta(days=31):
+        if obj.published > timezone.now()-timedelta(days=31):
             return "monthly"
         return "yearly"
 
@@ -77,7 +79,8 @@ class PostSitemap(Sitemap):
         return Post.objects.all()
 
     def lastmod(self, obj):
-        return obj.created
+        return obj.published
+
 
 class CategorySitemap(Sitemap):
     """
@@ -96,6 +99,7 @@ class CategorySitemap(Sitemap):
     def lastmod(self, obj):
         return datetime.now()
 
+
 class TagSitemap(Sitemap):
     """
     SiteMap for Tags
@@ -109,7 +113,6 @@ class TagSitemap(Sitemap):
         if obj.touched > timezone.now()-timedelta(days=7):
             return "weekly"
         return "monthly"
-
 
     def priority(self, obj):
         posts_per_tag = obj.posts().count()
