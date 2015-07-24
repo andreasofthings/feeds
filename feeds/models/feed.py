@@ -420,7 +420,7 @@ class Feed(models.Model):
             return FEED_SAME
         self.update(parsed)
         guid_list = self._guids(parsed.entries)
-        postdict = self.__postdict(guid_list)
+        postdict = self._postdict(guid_list)
         try:
             result = Counter(
                 (
