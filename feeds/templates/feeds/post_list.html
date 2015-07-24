@@ -3,28 +3,27 @@
 
 {% block content %}
 
-<div class="row pagination">
-  <div class="col-md-12"><span class="step-links">
-
-      <nav>
-
-      <ul class="pager">
-
-        {% if page_obj.has_previous %}
+{% if is_paginated %}
+<nav>
+  <ul class="pagination">
+      {% if page_obj.has_previous %}
         <li class="previous"><a href="{% url "planet:post-home" page_obj.previous_page_number %}"><span aria-hidden="true">&larr;</span> Older</a></li>
+      {% else %}
+        <li class="disabled"><a href="#">previous</a></li>
+      {% endif %}
+      {% for page in  page_obj.paginator.page_range %}
+        {% if page == page_obj.number %}
+          <li class="disabled"><a href="#">{{ page }}</a></li>
+        {% else %}
+          <li class="active"><a href="{% url "planet:post-home-paginated" page %}">{{ page }}</a></li>
         {% endif %}
-        <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.count }}.
-        </span>
-        {% if page_obj.has_next %}
+      {% endfor %}
+      {% if page_obj.has_next %}
         <li class="next"><a href="{% url "planet:post-home" page_obj.next_page_number %}">Newer <span aria-hidden="true">&rarr;</span></a></li>
-        {% endif %}
-
-      </ul>
-
-      </nav>
-  </span></div>
-</div>
+      {% endif %}
+  </ul>
+</nav>
+{% endif %}
 
 <div class="row headermessage">
   <div class="col-md-12">
@@ -37,8 +36,8 @@
 </div>
 
 
-<div class="row">
 {% for node in nodes %}
+<div class="row">
   <div class="col-md-12 node">
     <div>
       <h3>
@@ -55,23 +54,7 @@
 
   </div>
   <!-- node -->
-
-  {% endfor %}
 </div>
-
-{% if nodes.paginator %}
-<div class="pagination"> <span class="step-links">
-        {% if nodes.has_previous %}
-            <a href="?p={{ nodes.previous_page_number }}">previous</a>
-        {% endif %}
-        <span class="current">
-            Page {{ nodes.number }} of {{ nodes.paginator.num_pages }}.
-        </span>
-        {% if nodes.has_next %}
-            <a href="?p={{ nodes.next_page_number }}">next</a>
-        {% endif %}
-</span> </div>
-{% endif %}
+  {% endfor %}
 
 {% endblock %}
-
