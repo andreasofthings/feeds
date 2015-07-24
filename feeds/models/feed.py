@@ -339,7 +339,7 @@ class Feed(models.Model):
         Update `feed` with values from `parsed`
         """
         if not self.name and 'title' in parsed.feed:
-            self.name = parsed.feed.title
+            self.name = parsed.feed.title[:100]
         if not self.short_name and 'title' in parsed.feed:
             self.short_name = parsed.feed.title[:50]
         if not self.link and hasattr(parsed.feed, 'link'):
@@ -356,13 +356,12 @@ class Feed(models.Model):
                 parsed.feed.get('updated_parsed', self.pubdate)
             )
         )
-        self.title = parsed.feed.get('title', '')[0:254]
-        self.tagline = parsed.feed.get('subtitle', '')
-        self.link = parsed.feed.get('link', '')
-        self.language = parsed.feed.get('language', '')
-        self.copyright = parsed.feed.get('copyright', '')
-        self.author = parsed.feed.get('author', '')
-        self.webmaster = parsed.feed.get('webmaster', '')
+        self.title = parsed.feed.get('title', '')[0:200]
+        self.tagline = parsed.feed.get('subtitle', '')[:64]
+        self.language = parsed.feed.get('language', '')[:64]
+        self.copyright = parsed.feed.get('copyright', '')[:64]
+        self.author = parsed.feed.get('author', '')[:64]
+        self.webmaster = parsed.feed.get('webmaster', '')[:64]
 
     def parse(self):
         try:
