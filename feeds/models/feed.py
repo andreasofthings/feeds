@@ -78,7 +78,7 @@ class Feed(models.Model):
         _('Has errors'),
         default=0,
         help_text=_("""
-                    Remember errors for a feed, and don´t try again if a
+                    Remember errors for a feed, and don't try again if a
                     threshold is met
                     """)
     )
@@ -446,6 +446,8 @@ class Feed(models.Model):
 
         logger.info("Feed '%s' returned %s", self.title, result)
         logger.debug("-- end --")
+        self.errors=0
+        self.save()
         return FEED_OK
 
     def post_count(self):
