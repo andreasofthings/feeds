@@ -31,8 +31,8 @@ class RecentPostNode(template.Node):
                 feed=feed
             ).order_by('-published')[:self.max_posts]
         except Post.DoesNotExist:
-            return Post.objects.none()
-        return recent[:result_count]
+            recent = Post.objects.none()
+        return recent
 
 
 @register.tag('recent_posts')
