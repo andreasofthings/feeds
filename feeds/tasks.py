@@ -44,7 +44,6 @@ from feeds import CRON_OK, CRON_ERR
 from .tools import getText
 from .models import Feed, Post, Tag, TaggedPost
 from .models import FeedStats
-from .process import feed_refresh
 
 from exceptions import Exception
 
@@ -330,6 +329,14 @@ def aggregate_stats(result_list):
     stat.save()
     logger.debug("-- end --")
     return result
+
+
+@shared_task
+def feed_refresh(feed):
+    """
+    Wrap Feed.refresh() to allow async execution in Celery.
+    """
+    return Feed.objects.get(pk=feed).refresh()
 
 
 @shared_task
