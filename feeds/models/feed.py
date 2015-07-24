@@ -411,7 +411,7 @@ class Feed(models.Model):
         try:
             parsed = self.parse()
         except FeedErrorHTTP as e:
-            self.error = self.error+1
+            self.errors = self.errors+1
             self.save()
             return FEED_ERRHTTP
         except FeedErrorParse as e:
