@@ -27,7 +27,6 @@ from ..managers import FeedManager
 from ..feedexceptions import FeedErrorHTTP, FeedErrorParse, FeedSame
 from .site import Site
 from .category import Category
-from .post import Post
 
 logger = logging.getLogger(__name__)
 
@@ -307,13 +306,13 @@ class Feed(models.Model):
         - 'title_detail'
         - 'link'
         - 'id'
-    
+
         returnvalue::
             Either ENTRY_NEW, ENTRY_UPDATE
         """
         result = ENTRY_SAME
 
-        p, created = Post.objects.get_or_create(
+        p, created = self.posts.get_or_create(
             feed=self,
             title=entry.title,
             guid=entry_guid(entry, feed.has_no_guid),
