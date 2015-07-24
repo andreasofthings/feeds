@@ -388,9 +388,10 @@ class Feed(models.Model):
 
         if 'bozo' in fpf and fpf.bozo == 1:
             logger.error(
-                "[%d] !BOZO! Feed is not well formed: %s",
+                "[%d] !BOZO! Feed '%s' is not well formed: %s",
                 self.id,
-                self.name
+                self.name,
+                fpf.bozo_exception
             )
             if type(fpf.bozo_exception) is CharacterEncodingOverride:
                 logger.error("CharacterEncodingOverride, trying to continue")
