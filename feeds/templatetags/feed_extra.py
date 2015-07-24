@@ -12,7 +12,7 @@ class RecentPostNode(template.Node):
     """
     def __init__(self, feed, count=5):
         self.feed = template.Variable(feed)
-        self.count = int(count)
+        self.max_posts = int(count)
 
     def render(self, context):
         try:
@@ -29,14 +29,10 @@ class RecentPostNode(template.Node):
         try:
             recent = Post.objects.filter(
                 feed=feed
-            ).order_by('-published')
+            ).order_by('-published')[:self.max_posts]
         except Post.DoesNotExist:
             return Post.objects.none()
-        if self.count < recent.count():
-            result_count = self.count
-        else:
-            result_count = recent.count()
-        return str(recent[:result_count])
+        return recent[:result_count]
 
 
 @register.tag('recent_posts')
@@ -48,10 +44,10 @@ def recent_posts(parser, token):
     Templatetag to render recent posts for a feed.
     """
     try:
-        tag_name, feed = token.split_contents()
+        tag_name, feed, max_posts = token.split_contents()
     except ValueError:
         raise template.TemplateSyntaxError(
-            "%r tag requires exactly one argument" %
+            "%r tag requires two arguments" %
             token.contents.split()[0]
         )
-    return RecentPostNode(feed)
+    return RecentPostNode(feed, max_posts)
