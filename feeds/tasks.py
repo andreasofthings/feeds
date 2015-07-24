@@ -361,7 +361,7 @@ def cronjob():
         ).filter(
             errors__lte=3
         ).filter(
-            last_checked__eq=None
+            last_checked__isnull=True
         )[:max_feeds]
     if feeds is None:
         feeds = Feed.objects.filter(
