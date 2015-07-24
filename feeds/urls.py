@@ -36,7 +36,7 @@ from feeds.views import SiteSubmitWizardView, SiteSubmitForms
 
 from feeds.rss import RssFeed
 
-from sitemaps import PostSitemap
+from sitemap import PostSitemap
 from django.contrib.sitemaps.views import sitemap
 
 sitemaps = {
