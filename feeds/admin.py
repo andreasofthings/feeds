@@ -50,9 +50,12 @@ class CategoryAdmin(admin.ModelAdmin):
     """
     pass
 
+
 def refresh_feed(modeladmin, request, queryset):
-    queryset.update(status='p')
+    for feed in queryset:
+        feed.refresh()
 refresh_feed.short_description = "Refresh selected feeds"
+
 
 class FeedAdmin(admin.ModelAdmin):
     """
@@ -79,6 +82,7 @@ class FeedAdmin(admin.ModelAdmin):
     inlines = [
         PostInline,
     ]
+    actions = [refresh_feed]
 
 
 class PostAdmin(admin.ModelAdmin):
