@@ -63,7 +63,7 @@ activate_feed.short_description = "Activate selected feeds"
 
 def deactivate_feed(modeladmin, request, queryset):
     queryset.update(is_active=False)
-activate_feed.short_description = "Deactivate selected feeds"
+deactivate_feed.short_description = "Deactivate selected feeds"
 
 
 class FeedAdmin(admin.ModelAdmin):
