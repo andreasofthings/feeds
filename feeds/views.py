@@ -323,8 +323,7 @@ class PostListView(ListView):
     model = Post
     paginate_by = 10
     context_object_name = "nodes"
-    # object_list = "nodes"
-    queryset = Post.objects.order_by('-published')
+    queryset = Post.objects.order_by('published')
 
 
 class PostDetailView(DetailView):
