@@ -359,6 +359,8 @@ def cronjob():
         max_feeds = 1
         feeds = Feed.objects.filter(
             is_active=True
+            ).filter(
+                errors__lte=3
             ).order_by(
                 'last_checked'
                 )[:max_feeds]
