@@ -397,7 +397,8 @@ class Feed(models.Model):
                 logger.error("CharacterEncodingOverride, trying to continue")
                 pass
             else:
-                raise FeedErrorParse
+
+                raise FeedErrorParse(fpf.bozo_exception)
 
         if fpf.status == 304:
             logger.debug(
@@ -419,9 +420,11 @@ class Feed(models.Model):
             parsed = self.parse()
         except FeedErrorHTTP as e:
             self.errors = self.errors+1
-            self.save()
+            self.save() # touch timestamp
             return FEED_ERRHTTP
         except FeedErrorParse as e:
+            self.errors = self.errors+1
+            self.save() # touch timestamp
             return FEED_ERRPARSE
         except FeedSame:
             return FEED_SAME
