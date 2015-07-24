@@ -390,7 +390,11 @@ class Feed(models.Model):
                 self.id,
                 self.name
             )
-            raise FeedErrorParse
+            if type(fpf.bozo_exception) is feedparser.CharacterEncodingOverride:
+                logger.error("CharacterEncodingOverride, trying to continue")
+                pass
+            else:
+                raise FeedErrorParse
 
         if fpf.status == 304:
             logger.debug(
