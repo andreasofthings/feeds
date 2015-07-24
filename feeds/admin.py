@@ -66,6 +66,11 @@ def deactivate_feed(modeladmin, request, queryset):
 deactivate_feed.short_description = "Deactivate selected feeds"
 
 
+def reset_feed_errors(modeladmin, request, queryset):
+    queryset.update(errors=0)
+reset_feed_errors.short_description = "Reset Feed-errors."
+
+
 class FeedAdmin(admin.ModelAdmin):
     """
     Feed admin options
@@ -90,7 +95,7 @@ class FeedAdmin(admin.ModelAdmin):
     inlines = [
         PostInline,
     ]
-    actions = [activate_feed, deactivate_feed, refresh_feed]
+    actions = [activate_feed, deactivate_feed, refresh_feed, reset_feed_errors]
 
 
 class PostAdmin(admin.ModelAdmin):
