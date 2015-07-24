@@ -24,12 +24,11 @@ from celery import shared_task
 from celery.exceptions import SoftTimeLimitExceeded
 
 from feeds import USER_AGENT
-from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME, ENTRY_ERR
+from feeds import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 
 from .feedexceptions import FeedErrorHTTP, FeedErrorParse, FeedSame
 from .models import Feed, Post
-from .models import FeedEntryStats
 
 
 def entry_guid(entry, feed_has_no_guid=None):
@@ -208,88 +207,61 @@ def feed_postdict(feed, uids):
     return postdict
 
 
-@shared_task
-def feed_refresh_stats(result_list, feed_id):
-    """
-    this function is supposed to collect all the return
-    values from `entry_process`. That function will return either:
-        ENTRY_NEW
-        ENTRY_UPDATED
-        ENTRY_SAME
-        ENTRY_ERR
-    """
-    result = {
-        ENTRY_NEW: 0,
-        ENTRY_UPDATED: 0,
-        ENTRY_SAME: 0,
-        ENTRY_ERR: 0
-    }
-    result.update(Counter(result_list))
-    stat = FeedEntryStats()
-    stat.feed = Feed.objects.get(pk=feed_id)
-    stat.entry_new = result[ENTRY_NEW]
-    stat.entry_same = result[ENTRY_SAME]
-    stat.entry_updated = result[ENTRY_UPDATED]
-    stat.entry_err = result[ENTRY_ERR]
-    stat.save()
-    return result
-
-
-@shared_task
-def feed_refresh(feed_id):
-    """
-    refresh entries for `feed_id`
-
-    .. todo:: returns `FEED_OK`
-
-    This should return either:
-    `FEED_OK`: for any feed that was processed without an issue.
-    `FEED_SAME`: for any feed that did not have an update.
-    `FEED_ERRPARSE`: for any feed that could not be parsed.
-
-    .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
-    """
-    logger.debug("-- start --")
-
-    feed = Feed.objects.get(pk=feed_id)
-
-    try:
-        parsed = feed_parse(feed)
-    except FeedErrorHTTP as e:
-        return FEED_ERRHTTP
-    except FeedErrorParse as e:
-        return FEED_ERRPARSE
-    except FeedSame:
-        return FEED_SAME
-
-    feed = feed_update(feed, parsed)
-
-    guid_list = guids(parsed.entries)
-    postdict = feed_postdict(feed, guid_list)
-
-    try:
-        result = Counter(
-            (
-                entry_process(feed.id, entry, postdict)
-                for
-                entry
-                in
-                parsed.entries
-            )
-        )
-    except SoftTimeLimitExceeded as timeout:
-        logger.info("SoftTimeLimitExceeded: %s", timeout)
-        logger.debug("-- end (ERR) --")
-        return FEED_ERREXC
-    except Exception as e:
-        logger.debug("-- end (ERR) --")
-        raise e
-        return FEED_ERREXC
-
-    logger.info(
-        "Feed '%s' returned %s",
-        feed.title,
-        result
-    )
-    logger.debug("-- end --")
-    return FEED_OK
+#@shared_task
+#def feed_refresh(feed_id):
+#    """
+#    refresh entries for `feed_id`
+#
+#    .. todo:: returns `FEED_OK`
+#
+#    This should return either:
+#    `FEED_OK`: for any feed that was processed without an issue.
+#    `FEED_SAME`: for any feed that did not have an update.
+#    `FEED_ERRPARSE`: for any feed that could not be parsed.
+#
+#    .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
+#    """
+#    logger.debug("-- start --")
+#
+#    feed = Feed.objects.get(pk=feed_id)
+#
+#    try:
+#        parsed = feed_parse(feed)
+#    except FeedErrorHTTP as e:
+#        return FEED_ERRHTTP
+#    except FeedErrorParse as e:
+#        return FEED_ERRPARSE
+#    except FeedSame:
+#        return FEED_SAME
+#
+#    feed = feed_update(feed, parsed)
+#
+#    guid_list = guids(parsed.entries)
+#    postdict = feed_postdict(feed, guid_list)
+#
+#    try:
+#        result = Counter(
+#            (
+#                entry_process(feed.id, entry, postdict)
+#                for
+#                entry
+#                in
+#                parsed.entries
+#            )
+#        )
+#    except SoftTimeLimitExceeded as timeout:
+#        logger.info("SoftTimeLimitExceeded: %s", timeout)
+#        logger.debug("-- end (ERR) --")
+#        return FEED_ERREXC
+#    except Exception as e:
+#        logger.debug("-- end (ERR) --")
+#        raise e
+#        return FEED_ERREXC
+#
+#    logger.info(
+#        "Feed '%s' returned %s",
+#        feed.title,
+#        result
+#    )
+#    logger.debug("-- end --")
+#    return FEED_OK

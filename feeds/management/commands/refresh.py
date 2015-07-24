@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
 from feeds.models import Feed
-from feeds.process import feed_refresh
 
 
 class Command(BaseCommand):
@@ -16,8 +15,7 @@ class Command(BaseCommand):
             except Feed.DoesNotExist:
                 raise CommandError('Feed "%s" does not exist' % feed_id)
 
-            result = feed_refresh(feed.id)
-            feed.save()
+            result = feed.refresh()
 
             self.stdout.write('Refresh "%s" returned "%s"' % (
                 str(feed),
