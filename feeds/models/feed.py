@@ -314,8 +314,8 @@ class Feed(models.Model):
         p, created = self.posts.get_or_create(
             feed=self,
             title=entry.title,
-            guid=entry_guid(entry, feed.has_no_guid),
-                published=datetime.datetime.utcfromtimestamp(
+            guid=self._entry_guid(entry),
+            published=datetime.datetime.utcfromtimestamp(
                 calendar.timegm(entry.published_parsed)
             )
         )
