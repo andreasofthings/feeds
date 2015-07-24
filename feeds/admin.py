@@ -52,9 +52,18 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 def refresh_feed(modeladmin, request, queryset):
-    for feed in queryset:
-        feed.refresh()
+    queryset.refresh()
 refresh_feed.short_description = "Refresh selected feeds"
+
+
+def activate_feed(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+activate_feed.short_description = "Activate selected feeds"
+
+
+def deactivate_feed(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+activate_feed.short_description = "Deactivate selected feeds"
 
 
 class FeedAdmin(admin.ModelAdmin):
@@ -75,14 +84,13 @@ class FeedAdmin(admin.ModelAdmin):
         'name',
     )
     list_editable = (
-        'is_active',
         'announce_posts',
     )
     list_filter = ('category', 'is_active', 'slug')
     inlines = [
         PostInline,
     ]
-    actions = [refresh_feed]
+    actions = [activate_feed, deactivate_feed, refresh_feed]
 
 
 class PostAdmin(admin.ModelAdmin):
