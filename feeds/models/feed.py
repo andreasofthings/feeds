@@ -288,6 +288,68 @@ class Feed(models.Model):
         )
         return postdict
 
+    def from_feedparser(self, entry, postdict):
+        """
+        Receive Entry, process
+        ..arguments:
+            entry: actual Entry
+            postdict: ?
+        entry has these keys: (Spiegel.de)
+        - 'summary_detail'
+        - 'published'
+        - 'published_parsed'
+        - 'links'
+        - 'title'
+        - 'tags'
+        - 'summary'
+        - 'content'
+        - 'guidislink'
+        - 'title_detail'
+        - 'link'
+        - 'id'
+    
+        returnvalue::
+            Either ENTRY_NEW, ENTRY_UPDATE
+        """
+        result = ENTRY_SAME
+
+        p, created = Post.objects.get_or_create(
+            feed=self,
+            title=entry.title,
+            guid=entry_guid(entry, feed.has_no_guid),
+                published=datetime.datetime.utcfromtimestamp(
+                calendar.timegm(entry.published_parsed)
+            )
+        )
+        if created:
+            result = ENTRY_NEW
+            p.save()
+            logger.debug(
+                "'%s' is a new entry for feed %s (%s)",
+                entry.title,
+                self.id,
+                p.id
+            )
+        p.content = entry.content
+        p.save()
+        logger.info(
+            "Saved '%s', new entry for feed %s (%s)",
+            entry.title,
+            feed.id,
+            p.id
+        )
+
+        if hasattr(entry, 'link'):
+            if p.link is not entry.link:
+                p.link = entry.link
+                if not created:
+                    result = ENTRY_UPDATED
+
+        logger.debug("stop: entry")
+        p.save()
+        return result
+
+
     def update(self, parsed):
         """
         Update `feed` with values from `parsed`
@@ -363,7 +425,7 @@ class Feed(models.Model):
         try:
             result = Counter(
                 (
-                    e, created = Entry.objects.from_feedparser(self.id, entry, postdict)
+                    self.from_feedparser(entry, postdict)
                     for
                     entry
                     in
