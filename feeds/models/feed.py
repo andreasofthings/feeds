@@ -74,19 +74,18 @@ class Feed(models.Model):
         default=True,
         help_text=_('If disabled, this feed will not be further updated.')
     )
+    errors = models.IntegerField(
+        _('Has errors'),
+        default=0,
+        help_text=_("""
+                    Remember errors for a feed, and don´t try again if a
+                    threshold is met
+                    """)
+    )
     category = models.ManyToManyField(
         Category,
         related_name="category_feeds",
         blank=True,
-    )
-    has_no_guid = models.BooleanField(
-        _('has no guid'),
-        default=False,
-        help_text=_("""
-                    This feed doesn't have a proper guid.
-                    Use something else instead.
-                    """
-                    )
     )
 
     # <rss><channel>
@@ -406,12 +405,14 @@ class Feed(models.Model):
 
     def refresh(self):
         """
-        Refresh feed from `self.link`
+        Refresh feed.
         """
         logger.debug("-- start --")
         try:
             parsed = self.parse()
         except FeedErrorHTTP as e:
+            self.error = self.error+1
+            self.save()
             return FEED_ERRHTTP
         except FeedErrorParse as e:
             return FEED_ERRPARSE
