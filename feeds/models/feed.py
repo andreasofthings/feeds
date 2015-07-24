@@ -23,6 +23,7 @@ from django.template.defaultfilters import slugify
 
 from .. import USER_AGENT
 from .. import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
+from .. import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME
 from ..managers import FeedManager
 from ..feedexceptions import FeedErrorHTTP, FeedErrorParse, FeedSame
 from .site import Site
