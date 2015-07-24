@@ -379,7 +379,7 @@ def cronjob():
     except SoftTimeLimitExceeded as timeout:
         logger.info("SoftTimeLimitExceeded: %s", timeout)
     except Exception, e:
-        logger.debug("Exception: %s", str(e))
+        logger.error("Exception: %s", str(e))
         return CRON_ERR
     logger.debug("-- end --")
     return CRON_OK
