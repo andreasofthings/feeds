@@ -76,15 +76,14 @@ class TaskTest(TestCase):
         self.assertEqual(type(FEED_OK), type(result))
 
     def test_entry_process(self):
-        from feeds.process import entry_process
         feeds = Feed.objects.all()
         parsed = feedparser.parse(feeds[0].feed_url)
         self.assertGreater(len(parsed.entries), 0)
         for entry in parsed.entries:
-            result = entry_process(feeds[0].id, entry, None)
+            result = feeds[0].from_feedparser(entry, None)
             self.assertEqual(result, ENTRY_NEW)
         for entry in parsed.entries:
-            result = entry_process(feeds[0].id, entry, None)
+            result = feeds[0].from_feedparser(entry, None)
             self.assertEqual(result, ENTRY_UPDATED)
 
     def tearDown(self):
