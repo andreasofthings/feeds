@@ -231,7 +231,7 @@ class FeedDetailView(DetailView):
     """
     model = Feed
     context_object_name = "feed"
-    
+
     def get_context_data(self, *args, **kwargs):
         context = super(FeedDetailView, self).get_context_data(**kwargs)
         return context
@@ -269,7 +269,7 @@ class FeedRefreshView(LoginRequiredMixin, RedirectView):
 
     def get_redirect_url(self, pk):
         from feeds.tasks import feed_refresh
-        feed_refresh.delay(feed_id=pk)
+        feed_refresh.delay(Feed.objects.get(pk=pk))
         return reverse('planet:feed-view', args=(pk,))
 
 
