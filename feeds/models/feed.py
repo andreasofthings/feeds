@@ -420,7 +420,13 @@ class Feed(models.Model):
             return FEED_ERRPARSE
         except FeedSame:
             return FEED_SAME
-        self.update(parsed)
+        try:
+            self.update(parsed)
+        finally:
+            """
+            Make sure timestamp is touched
+            """
+            self.save()
         guid_list = self._guids(parsed.entries)
         postdict = self._postdict(guid_list)
         try:
