@@ -92,7 +92,7 @@ class FeedControlsNode(template.Node):
         </a>
         """ % (absolute_url, _('View Feed'))
         subscribe_button = """
-        <a href="%ssubscribe" class="btn btn-mini feeds-tooltip" role="button"
+        <a href="%s" class="btn btn-mini feeds-tooltip" role="button"
         title="%s">
         <span class="glyphicon glyphicon-ok-circle"></span>
         </a>
@@ -101,7 +101,7 @@ class FeedControlsNode(template.Node):
             _('Subscribe to Feed')
         )
         unsubscribe_button = """
-        <a href="%sunsubscribe" class="btn btn-mini feeds-tooltip"
+        <a href="%s" class="btn btn-mini feeds-tooltip"
         role="button" title="%s">
         <span class="glyphicon glyphicon-remove-circle"></span>
         </a>
@@ -110,23 +110,32 @@ class FeedControlsNode(template.Node):
             _('Unsubscribe from Feed')
         )
         refresh_button = """
-        <a href="%srefresh" class="btn btn-mini feeds-tooltip" role="button"
+        <a href="%s" class="btn btn-mini feeds-tooltip" role="button"
         title="%s">
         <span class="glyphicon glyphicon-refresh"></span>
         </a>
-        """ % (absolute_url, _('Refresh Feed'))
-        change_button = """
-        <a href="%supdate" class="btn btn-mini feeds-tooltip" role="button"
+        """ % (
+            reverse('planet:feed-refresh', kwargs={'pk': feed.pk}),
+            _('Refresh Feed')
+        )
+        update_button = """
+        <a href="%s" class="btn btn-mini feeds-tooltip" role="button"
         title="%s">
         <span class="glyphicon glyphicon-edit"></span>
         </a>
-        """ % (absolute_url, _('Change Feed'))
+        """ % (
+            reverse('planet:feed-update', kwargs={'pk': feed.pk}),
+            _('Update Feed')
+        )
         delete_button = """
         <a href="%sdelete" class="btn btn-xs" role="button"
         data-toggle="tooltip" data-placement="top" title="%s">
         <span class="glyphicon glyphicon-trash"></span>
         </a>
-        """ % (absolute_url, _('Delete Feed'))
+        """ % (
+            reverse('planet:feed-delete', kwargs={'pk': feed.pk}),
+            _('Delete Feed')
+        )
 
         result = view_button
         if user.is_authenticated:
@@ -138,7 +147,7 @@ class FeedControlsNode(template.Node):
             if user.has_perm('can_refresh_feed', feed):
                 result += refresh_button
             if user.has_perm('change_feed', feed):
-                result += change_button
+                result += update_button
             if user.has_perm('delete_feed', feed):
                 result += delete_button
         return result
