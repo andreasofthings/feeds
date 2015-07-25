@@ -80,9 +80,6 @@ class FeedControlsNode(template.Node):
             )
 
         user = template.resolve_variable('user', context)
-        options = Options.objects.get(user=user)
-        is_subscribed = \
-            Subscription.objects.filter(user=options, feed=feed).exists()
         absolute_url = feed.get_absolute_url()
 
         view_button = """
@@ -139,6 +136,9 @@ class FeedControlsNode(template.Node):
 
         result = view_button
         if user.is_authenticated:
+            options = Options.objects.get(user=user)
+            is_subscribed = \
+                Subscription.objects.filter(user=options, feed=feed).exists()
             if user.has_perm('can_subscribe', feed):
                 if is_subscribed:
                     result += unsubscribe_button

@@ -320,7 +320,9 @@ class Feed(models.Model):
                 self.id,
                 p.id
             )
-        p.content = entry.content
+        p.content = entry.get('content', '')
+        """ToDo: get other content instead."""
+
         p.save()
         logger.info(
             "Saved '%s', new entry for feed %s (%s)",
@@ -420,11 +422,11 @@ class Feed(models.Model):
             parsed = self.parse()
         except FeedErrorHTTP as e:
             self.errors = self.errors+1
-            self.save() # touch timestamp
+            self.save()  # touch timestamp
             return FEED_ERRHTTP
         except FeedErrorParse as e:
             self.errors = self.errors+1
-            self.save() # touch timestamp
+            self.save()  # touch timestamp
             return FEED_ERRPARSE
         except FeedSame:
             return FEED_SAME
