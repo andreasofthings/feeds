@@ -77,12 +77,16 @@ class FeedControlsNode(template.Node):
         result = """
           <a href="{{feed.get_absolute_url}}" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "View Feed" %}"><span class="glyphicon glyphicon-zoom-in"></span></a>
           {% if user.is_authenticated %}
+          {% if perms.feeds.can_subscribe %}
+          <a href="{{feed.get_absolute_url}}subscribe" class="btn btn-mini feeds-tooltip" role="button" title="subscribe to feed"><span class="glyphicon glyphicon-ok-circle"></span></a>
+          <a href="{{feed.get_absolute_url}}unsubscribe" class="btn btn-mini feeds-tooltip" role="button" title="unsibscribe from feed"><span class="glyphicon glyphicon-remove-circle"></span></a>
+          {% endif %}
           {% if perms.feeds.can_refresh_feed %}<a href="{{feed.get_absolute_url}}refresh" class="btn btn-mini feeds-tooltip" role="button" title="refresh feed"><span class="glyphicon glyphicon-refresh"></span></a>{% endif %}
           {% if perms.feeds.change_feed %}<a href="{{feed.get_absolute_url}}update" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "Edit Feed" %}"><span class="glyphicon glyphicon-edit"></span></a>{% endif %}
           {% if perms.feeds.delete_feed %}<a href="{{feed.get_absolute_url}}delete" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "Delete Feed" %}"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}
           {% endif %}
           """
-          return result
+        return result
 
 
 @register.tag('feed_controls')
