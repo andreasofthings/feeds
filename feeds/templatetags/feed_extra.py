@@ -78,11 +78,12 @@ class FeedControlsNode(template.Node):
                 self.feed, type(self.feed)
             )
         absolute_url = feed.get_absolute_url()
+        perms = context.request.perms
         is_authenticated = context.request.user.is_authenticated
-        can_subscribe = context.request.perms.feeds.can_subscribe
-        can_refresh_feed = context.request.perms.feeds.can_refresh_feed
-        change_feed = context.request.perms.feed.change_feed
-        delete_feed = context.request.perms.feed.delete_feed
+        can_subscribe = perms.feed.can_subscribe
+        can_refresh_feed = perms.feed.can_refresh_feed
+        change_feed = perms.feed.change_feed
+        delete_feed = perms.feed.delete_feed
 
         view_button = """
         <a href="%s" class="btn btn-xs" role="button"
