@@ -24,6 +24,7 @@ Feed: {{ feed }}
     <div class="hero-unit">
         <h3> {{feed}} </h3>
         <h4>
+          {% feed_controls feed %}
         {% if user.is_authenticated %}
           {% if perms.feeds.can_refresh_feed %}<a href="{{feed.get_absolute_url}}refresh" class="btn btn-mini feeds-tooltip" role="button" title="refresh feed"><span class="glyphicon glyphicon-refresh"></span></a>{% endif %}
           {% if perms.feeds.change_feed %}<a href="{{feed.get_absolute_url}}update" class="btn btn-mini feeds-tooltip" role="button" title="edit feed"><span class="glyphicon glyphicon-edit"></span></a>{% endif %}
@@ -38,7 +39,7 @@ Feed: {{ feed }}
   </div>
   <div class="span5">
     <ul>
-      {% recent_posts feed 5 %}
+      {% recent_posts feed 5  %}
     </ul>
   </div>
 </div>
