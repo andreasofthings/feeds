@@ -1,7 +1,7 @@
 from django import template
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-
+from django.contrib.auth.models import AnonymousUser
 
 from ..models import Feed, Post, Subscription, Options
 
@@ -135,7 +135,7 @@ class FeedControlsNode(template.Node):
         )
 
         result = view_button
-        if user.is_authenticated:
+        if user.is_authenticated and user is not AnonymousUser:
             options = Options.objects.get(user=user)
             is_subscribed = \
                 Subscription.objects.filter(user=options, feed=feed).exists()
