@@ -90,13 +90,13 @@ class FeedControlsNode(template.Node):
         """ % (absolute_url, _('View Feed'))
         subscribe_button = """
         <a href="%ssubscribe" class="btn btn-mini feeds-tooltip" role="button"
-        title="subscribe to feed">
+        title="%s">
         <span class="glyphicon glyphicon-ok-circle"></span>
         </a>
         """ % (absolute_url, _('Subscribe to Feed'))
         unsubscribe_button = """
         <a href="%sunsubscribe" class="btn btn-mini feeds-tooltip"
-        role="button" title="subscribe to feed">
+        role="button" title="%s">
         <span class="glyphicon glyphicon-remove-circle"></span>
         </a>
         """ % (absolute_url, _('Unsubscribe to Feed'))
