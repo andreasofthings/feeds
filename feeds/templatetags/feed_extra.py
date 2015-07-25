@@ -77,14 +77,10 @@ class FeedControlsNode(template.Node):
                 """ %
                 self.feed, type(self.feed)
             )
+        user = template.resolve_variable('user', context)
+        perms = template.resolve_variable('perms', context)
+
         absolute_url = feed.get_absolute_url()
-        request = context.request
-        perms = request.perms
-        is_authenticated = context.request.user.is_authenticated
-        can_subscribe = perms.feed.can_subscribe
-        can_refresh_feed = perms.feed.can_refresh_feed
-        change_feed = perms.feed.change_feed
-        delete_feed = perms.feed.delete_feed
 
         view_button = """
         <a href="%s" class="btn btn-xs" role="button"
@@ -124,15 +120,15 @@ class FeedControlsNode(template.Node):
         """ % (absolute_url, _('Delete Feed'))
 
         result = view_button
-        if is_authenticated:
-            if can_subscribe:
+        if user.is_authenticated:
+            if perms.feed.can_subscribe:
                 result += subscribe_button
                 result += unsubscribe_button
-            if can_refresh_feed:
+            if perms.feed.can_refresh_feed:
                 result += refresh_button
-            if change_feed:
+            if perms.feed.change_feed:
                 result += change_button
-            if delete_feed:
+            if perms.feed.delete_feed:
                 result += delete_button
         return result
 
