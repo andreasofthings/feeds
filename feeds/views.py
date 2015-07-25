@@ -309,7 +309,7 @@ class FeedSubscriptionsView(LoginRequiredMixin, ListView):
     """
     model = Feed
     context_object_name = "feeds"
-    template_name = "feeds/feed_subscriptions.html"
+    template_name = "feeds/feed_list.html"
 
     def get_queryset(self):
         user = Options.objects.get(user=self.request.user)
