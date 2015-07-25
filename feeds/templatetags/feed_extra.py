@@ -121,14 +121,14 @@ class FeedControlsNode(template.Node):
 
         result = view_button
         if user.is_authenticated:
-            if perms.feed.can_subscribe:
+            if perms.feeds.can_subscribe:
                 result += subscribe_button
                 result += unsubscribe_button
-            if perms.feed.can_refresh_feed:
+            if perms.feeds.can_refresh_feed:
                 result += refresh_button
-            if perms.feed.change_feed:
+            if perms.feeds.change_feed:
                 result += change_button
-            if perms.feed.delete_feed:
+            if perms.feeds.delete_feed:
                 result += delete_button
         return result
 
