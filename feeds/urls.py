@@ -36,6 +36,9 @@ from feeds.views import SiteSubmitWizardView, SiteSubmitForms
 
 from feeds.rss import RssFeed
 
+from api_views import UserSubscriptions
+from django.views.generic import TemplateView
+
 from sitemap import PostSitemap
 from django.contrib.sitemaps.views import sitemap
 
@@ -242,7 +245,6 @@ urlpatterns += patterns(
 # RSS
 #
 
-from django.views.generic import TemplateView
 
 urlpatterns += patterns(
     '',
@@ -261,8 +263,6 @@ urlpatterns += patterns(
 #
 # Legacy API
 #
-
-from api_views import UserSubscriptions
 
 urlpatterns += patterns(
     '',
