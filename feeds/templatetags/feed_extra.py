@@ -78,7 +78,7 @@ class FeedControlsNode(template.Node):
                 self.feed, type(self.feed)
             )
         user = template.resolve_variable('user', context)
-        perms = template.resolve_variable('perms', context)
+        perms = user.perms
 
         absolute_url = feed.get_absolute_url()
 
@@ -120,7 +120,6 @@ class FeedControlsNode(template.Node):
         """ % (absolute_url, _('Delete Feed'))
 
         result = view_button
-        p = perms.__dict__
         if user.is_authenticated:
             if perms.feeds.can_subscribe:
                 result += subscribe_button
