@@ -78,7 +78,8 @@ class FeedControlsNode(template.Node):
                 self.feed, type(self.feed)
             )
         absolute_url = feed.get_absolute_url()
-        perms = context.request.perms
+        request = context.request
+        perms = request.perms
         is_authenticated = context.request.user.is_authenticated
         can_subscribe = perms.feed.can_subscribe
         can_refresh_feed = perms.feed.can_refresh_feed
