@@ -97,7 +97,7 @@ class FeedControlsNode(template.Node):
         <span class="glyphicon glyphicon-ok-circle"></span>
         </a>
         """ % (
-            reverse('feed-subscribe', kwargs={'pk': feed.pk}),
+            reverse('planet:feed-subscribe', kwargs={'pk': feed.pk}),
             _('Subscribe to Feed')
         )
         unsubscribe_button = """
@@ -106,7 +106,7 @@ class FeedControlsNode(template.Node):
         <span class="glyphicon glyphicon-remove-circle"></span>
         </a>
         """ % (
-            reverse('feed-unsubscribe', kwargs={'pk': feed.pk}),
+            reverse('planet:feed-unsubscribe', kwargs={'pk': feed.pk}),
             _('Unsubscribe from Feed')
         )
         refresh_button = """
