@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 
 
-from ..models import Feed, Post, Subscription
+from ..models import Feed, Post, Subscription, Options
 
 register = template.Library()
 
@@ -80,8 +80,9 @@ class FeedControlsNode(template.Node):
             )
 
         user = template.resolve_variable('user', context)
+        options = Options.objects.get(user=user)
         is_subscribed = \
-            Subscription.objects.filter(user=user, feed=feed).exists()
+            Subscription.objects.filter(user=options, feed=feed).exists()
         absolute_url = feed.get_absolute_url()
 
         view_button = """
