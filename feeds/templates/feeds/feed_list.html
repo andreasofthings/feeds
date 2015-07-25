@@ -34,15 +34,7 @@
                 <td>{% for cat in feed.category.all %}<a href="{{cat.get_absolute_url}}">{{cat}}</a>{% endfor %}</td>
                 <td>{{feed.post_count}}</td>
                 <td>{{feed.subscriber_count}}</td>
-                <td>
-                  {% feed_controls feed %}
-                    <a href="{{feed.get_absolute_url}}" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "View Feed" %}"><span class="glyphicon glyphicon-zoom-in"></span></a>
-                    {% if user.is_authenticated %}
-                    {% if perms.feeds.can_refresh_feed %}<a href="{{feed.get_absolute_url}}refresh" class="btn btn-mini feeds-tooltip" role="button" title="refresh feed"><span class="glyphicon glyphicon-refresh"></span></a>{% endif %}
-                    {% if perms.feeds.change_feed %}<a href="{{feed.get_absolute_url}}update" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "Edit Feed" %}"><span class="glyphicon glyphicon-edit"></span></a>{% endif %}
-                    {% if perms.feeds.delete_feed %}<a href="{{feed.get_absolute_url}}delete" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "Delete Feed" %}"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}
-                    {% endif %}
-                </td>
+                <td> {% feed_controls feed %} </td>
             </tr>
             {% endfor %}
         </table>

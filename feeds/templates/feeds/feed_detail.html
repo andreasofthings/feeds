@@ -33,7 +33,7 @@ Feed: {{ feed }}
   </div>
   <div class="span5">
     <ul>
-    {% for post in feed.posts %}
+    {% for post in feed.posts.all %}
     <li>{{post}}</li>
     {%endfor%}
     </ul>

@@ -6,7 +6,9 @@ helper functions for angryplanet.feeds
 """
 
 import sys
-import time, datetime
+import time
+import datetime
+
 
 def getText(nodelist):
     """
@@ -18,8 +20,9 @@ def getText(nodelist):
             Result.append(node.data)
     return ''.join(Result)
 
+
 def encode(tstr):
-    """ 
+    """
     Encodes a unicode string in utf-8
     """
     if not tstr:
@@ -31,16 +34,23 @@ def encode(tstr):
         # it's already UTF8.. sigh
         return tstr.decode('utf-8').encode('utf-8')
 
+
 def prints(tstr):
     """
     lovely unicode
     """
-    sys.stdout.write('%s\n' % (tstr.encode(sys.getdefaultencoding(),
-                         'replace')))
+    sys.stdout.write(
+        '%s\n' % (
+            tstr.encode(
+                sys.getdefaultencoding(),
+                'replace'))
+        )
     sys.stdout.flush()
 
+
 def mtime(ttime):
-    """ datetime auxiliar function.
+    """
+    datetime auxiliar function.
     """
     if type(ttime) == 'str':
         argtime = time.localtime(ttime.split())
@@ -51,7 +61,7 @@ def mtime(ttime):
         mktime = time.mktime(argtime)
     except TypeError, e:
         raise e
-    
+
     try:
         return datetime.datetime.fromtimestamp(mktime)
     except Exception, e:
@@ -59,4 +69,3 @@ def mtime(ttime):
 
 
 # vim: ts=4 et sw=4 sts=4
-

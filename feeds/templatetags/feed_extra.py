@@ -1,8 +1,9 @@
 from django import template
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 
 
-from ..models import Feed, Post
+from ..models import Feed, Post, Subscription
 
 register = template.Library()
 
@@ -77,8 +78,10 @@ class FeedControlsNode(template.Node):
                 """ %
                 self.feed, type(self.feed)
             )
-        user = template.resolve_variable('user', context)
 
+        user = template.resolve_variable('user', context)
+        is_subscribed = \
+            Subscription.objects.filter(user=user, feed=feed).exists()
         absolute_url = feed.get_absolute_url()
 
         view_button = """
@@ -92,13 +95,19 @@ class FeedControlsNode(template.Node):
         title="%s">
         <span class="glyphicon glyphicon-ok-circle"></span>
         </a>
-        """ % (absolute_url, _('Subscribe to Feed'))
+        """ % (
+            reverse('feed-subscribe', {'pk': feed.pk}),
+            _('Subscribe to Feed')
+        )
         unsubscribe_button = """
         <a href="%sunsubscribe" class="btn btn-mini feeds-tooltip"
         role="button" title="%s">
         <span class="glyphicon glyphicon-remove-circle"></span>
         </a>
-        """ % (absolute_url, _('Unsubscribe to Feed'))
+        """ % (
+            reverse('feed-unsubscribe', {'pk': feed.pk}),
+            _('Unsubscribe from Feed')
+        )
         refresh_button = """
         <a href="%srefresh" class="btn btn-mini feeds-tooltip" role="button"
         title="%s">
@@ -121,8 +130,10 @@ class FeedControlsNode(template.Node):
         result = view_button
         if user.is_authenticated:
             if user.has_perm('can_subscribe', feed):
-                result += subscribe_button
-                result += unsubscribe_button
+                if is_subscribed:
+                    result += unsubscribe_button
+                else:
+                    result += subscribe_button
             if user.has_perm('can_refresh_feed', feed):
                 result += refresh_button
             if user.has_perm('change_feed', feed):

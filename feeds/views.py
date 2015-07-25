@@ -10,7 +10,6 @@ views for feeds
 """
 
 import logging
-logger = logging.getLogger(__name__)
 
 from django import forms
 from django.core.urlresolvers import reverse
@@ -38,6 +37,8 @@ from formtools.wizard.views import SessionWizardView
 
 from bs4 import BeautifulSoup
 import requests
+
+logger = logging.getLogger(__name__)
 
 
 class HomeView(TemplateView):
