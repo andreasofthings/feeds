@@ -357,7 +357,7 @@ def cronjob():
     logger.debug("-- started --")
     result = {}
     max_feeds = 1
-    qs =  Feed.objects.filter(
+    qs = Feed.objects.filter(
             is_active=True
         ).filter(
             errors__lte=3
@@ -365,7 +365,7 @@ def cronjob():
     feeds = qs.filter(
             last_checked__isnull=True
         )
-    if not feeds.exist():
+    if not feeds.exists():
         feeds = qs.order_by(
                 'last_checked'
                 )

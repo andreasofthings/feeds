@@ -24,9 +24,18 @@ logger = logging.getLogger(__name__)
 
 
 class Options(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    number_initially_displayed = models.IntegerField(default=10)
-    number_additionally_displayed = models.IntegerField(default=5)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        help_text=_("User")
+    )
+    number_initially_displayed = models.IntegerField(
+        default=10,
+        help_text=_('Paginate by')
+    )
+    number_additionally_displayed = models.IntegerField(
+        default=5,
+        help_text=_('ToDo')
+    )
     max_entries_saved = models.IntegerField(default=100)
 
     objects = OptionsManager()
@@ -37,4 +46,4 @@ class Options(models.Model):
         verbose_name_plural = "options"
 
     def __unicode__(self):
-        return u'Options'
+        return u'%s Options' % self.user

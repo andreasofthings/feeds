@@ -82,60 +82,41 @@ class FeedControlsNode(template.Node):
         user = template.resolve_variable('user', context)
         absolute_url = feed.get_absolute_url()
 
-        view_button = """
+        button = """
         <a href="%s" class="btn btn-xs" role="button"
         data-toggle="tooltip" data-placement="top" title="%s">
-        <span class="glyphicon glyphicon-zoom-in"></span>
+        <span class="glyphicon glyphicon-%s"></span>
         </a>
-        """ % (absolute_url, _('View Feed'))
-        subscribe_button = """
-        <a href="%s" class="btn btn-mini feeds-tooltip" role="button"
-        title="%s">
-        <span class="glyphicon glyphicon-ok-circle"></span>
-        </a>
-        """ % (
+        """
+        view_button = button % (absolute_url, _('View Feed'), 'zoom-in')
+        subscribe_button = button % (
             reverse('planet:feed-subscribe', kwargs={'pk': feed.pk}),
-            _('Subscribe to Feed')
+            _('Subscribe to Feed'),
+            'ok-circle'
         )
-        unsubscribe_button = """
-        <a href="%s" class="btn btn-mini feeds-tooltip"
-        role="button" title="%s">
-        <span class="glyphicon glyphicon-remove-circle"></span>
-        </a>
-        """ % (
+        unsubscribe_button = button % (
             reverse('planet:feed-unsubscribe', kwargs={'pk': feed.pk}),
-            _('Unsubscribe from Feed')
+            _('Unsubscribe from Feed'),
+            'remove-circle'
         )
-        refresh_button = """
-        <a href="%s" class="btn btn-mini feeds-tooltip" role="button"
-        title="%s">
-        <span class="glyphicon glyphicon-refresh"></span>
-        </a>
-        """ % (
+        refresh_button = button % (
             reverse('planet:feed-refresh', kwargs={'pk': feed.pk}),
-            _('Refresh Feed')
+            _('Refresh Feed'),
+            'refresh'
         )
-        update_button = """
-        <a href="%s" class="btn btn-mini feeds-tooltip" role="button"
-        title="%s">
-        <span class="glyphicon glyphicon-edit"></span>
-        </a>
-        """ % (
+        update_button = button % (
             reverse('planet:feed-update', kwargs={'pk': feed.pk}),
-            _('Update Feed')
+            _('Update Feed'),
+            'edit'
         )
-        delete_button = """
-        <a href="%sdelete" class="btn btn-xs" role="button"
-        data-toggle="tooltip" data-placement="top" title="%s">
-        <span class="glyphicon glyphicon-trash"></span>
-        </a>
-        """ % (
+        delete_button = button % (
             reverse('planet:feed-delete', kwargs={'pk': feed.pk}),
-            _('Delete Feed')
+            _('Delete Feed'),
+            'trash'
         )
 
         result = view_button
-        if user.is_authenticated and user is not AnonymousUser:
+        if user is not AnonymousUser and user.is_authenticated:
             options = Options.objects.get(user=user)
             is_subscribed = \
                 Subscription.objects.filter(user=options, feed=feed).exists()
