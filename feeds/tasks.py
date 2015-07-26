@@ -13,7 +13,6 @@ This module takes care of everything that is not client/customer facing.
 """
 
 import logging
-logger = logging.getLogger(__name__)
 
 import types
 import requests
@@ -46,6 +45,8 @@ from .models import Feed, Post, Tag, TaggedPost
 from .models import FeedStats
 
 from exceptions import Exception
+
+logger = logging.getLogger(__name__)
 
 
 @shared_task
@@ -356,24 +357,21 @@ def cronjob():
     logger.debug("-- started --")
     result = {}
     max_feeds = 1
-    feeds = Feed.objects.filter(
-        is_active=True
+    qs =  Feed.objects.filter(
+            is_active=True
         ).filter(
             errors__lte=3
-        ).filter(
+        )
+    feeds = qs.filter(
             last_checked__isnull=True
-        )[:max_feeds]
-    if feeds is None:
-        feeds = Feed.objects.filter(
-            is_active=True
-            ).filter(
-                errors__lte=3
-            ).order_by(
+        )
+    if not feeds.exist():
+        feeds = qs.order_by(
                 'last_checked'
-                )[:max_feeds]
+                )
     try:
         result = chord(
-            (feed_refresh.s(i.id) for i in feeds),
+            (feed_refresh.s(i.id) for i in feeds[:max_feeds]),
             aggregate_stats.s()
         )()
     except SoftTimeLimitExceeded as timeout:
