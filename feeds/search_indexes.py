@@ -3,7 +3,7 @@ from .models import Feed, Post, Tag
 
 
 class FeedIndex(indexes.SearchIndex):
-    title = indexes.CharField(document=True, use_template=True)
+    text = indexes.CharField(document=True, use_template=True)
     name = indexes.CharField()
     short_name = indexes.CharField()
     tagline = indexes.CharField()
@@ -13,7 +13,7 @@ class FeedIndex(indexes.SearchIndex):
 
 
 class PostIndex(indexes.SearchIndex, indexes.Indexable):
-    title = indexes.CharField(document=True, use_template=True)
+    text = indexes.CharField(document=True, use_template=True)
     author = indexes.CharField()
 
     def get_model(self):
@@ -25,7 +25,7 @@ class PostIndex(indexes.SearchIndex, indexes.Indexable):
 
 
 class TagIndex(indexes.SearchIndex):
-    title = indexes.CharField(document=True, use_template=True)
+    text = indexes.CharField(document=True, use_template=True)
     author = indexes.CharField()
 
     def get_model(self):
