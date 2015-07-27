@@ -361,12 +361,12 @@ class Feed(models.Model):
         try:
             self.last_modified = datetime.datetime.utcfromtimestamp(
                 calendar.timegm(
-                    parsed.feed.get('updated_parsed', self.pubdate)
+                    parsed.feed.get('updated_parsed', self.updated)
                 )
             )
         except ValueError as e:
             logger.error(e)
-            logger.error(parsed.feed.updated_parsed)
+            logger.error(parsed.feed.updated)
         self.title = parsed.feed.get('title', '')[0:200]
         self.tagline = parsed.feed.get('subtitle', '')[:64]
         self.language = parsed.feed.get('language', '')[:64]
