@@ -39,6 +39,51 @@ class Feed(models.Model):
     - metadata for processing
     - results from social updates
     - calculated values
+
+    Coming from `feedparser`:
+        bozo
+        bozo_exception
+        encoding
+        etag
+        feed.author
+        feed.author_detail
+        feed.cloud
+        feed.contributors
+        feed.docs
+        feed.errorreportsto
+        feed.generator
+        feed.generator_detail
+        feed.icon
+        feed.id
+        feed.image
+        feed.info
+        feed.info_detail
+        feed.language
+        feed.license
+        feed.link
+        feed.links
+        feed.logo
+        feed.published
+        feed.published_parsed
+        feed.publisher
+        feed.publisher_detail
+        feed.rights
+        feed.rights_detail
+        feed.subtitle
+        feed.subtitle_detail
+        feed.tags
+        feed.textinput
+        feed.title
+        feed.title_detail
+        feed.ttl
+        feed.updated
+        feed.updated_parsed
+        headers
+        href
+        modified
+        namespaces
+        status
+        version
     """
     site = models.ForeignKey(
         Site,
