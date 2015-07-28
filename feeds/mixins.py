@@ -9,12 +9,9 @@
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
-from django.contrib.auth.views import redirect_to_login
-from braces.views import AccessMixin
-
-from django.exceptions import ImproperlyConfigured, PermissionDenied
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
+from braces.views import UserPassesTestMixin
 
 
 def google_required(func):
@@ -38,47 +35,15 @@ def google_required(func):
     return _view
 
 
-class UserAgentRequiredMixin(AccessMixin):
+class UserAgentRequiredMixin(UserPassesTestMixin):
     user_agent = None  # Default required agent to none
 
-    def dispatch(self, request, *args, **kwargs):
+    def test_func(self, request):
         """
-        check user authentication
-        if not authenticated
             check for useragent
         """
 
-        if self.user_agent is None:
-            raise ImproperlyConfigured("'UserAgentRequiredMixin' requires "
-                                       "'user_agent' attribute to be set.")
-
-        if not request.user.is_authenticated():
-            """
-            Check to see if the request's user ha$s the required permission.
-            """
-            if 'HTTP_USER_AGENT' in request.META:
-                agent = request.META['HTTP_USER_AGENT']
-            else:
-                if self.raise_exception:  # *and* if an exception was desired
-                    raise PermissionDenied
-                else:
-                    return redirect_to_login(request.get_full_path(),
-                                             self.get_login_url(),
-                                             self.get_redirect_field_name())
-
-            if self.user_agent not in agent:
-                if self.raise_exception:  # *and* if an exception was desired
-                    raise PermissionDenied
-                else:
-                    return redirect_to_login(request.get_full_path(),
-                                             self.get_login_url(),
-                                             self.get_redirect_field_name())
-
-            return super(UserAgentRequiredMixin, self).dispatch(
-                request,
-                *args,
-                **kwargs
-            )
+        return 'google' in str(request.META['HTTP_USER_AGENT']).lower()
 
 
 class FeedsLevelOneMixin(LoginRequiredMixin):
