@@ -121,13 +121,14 @@ class FeedControlsNode(template.Node):
         )
 
         result = view_button
+        is_subscribed = False
         if user is not AnonymousUser and user.is_authenticated():
             try:
                 options = Options.objects.get(user=user)
+                is_subscribed = \
+                    Subscription.objects.filter(user=options, feed=feed).exists()
             except Options.DoesNotExist:
                 result += options_dialog
-            is_subscribed = \
-                Subscription.objects.filter(user=options, feed=feed).exists()
             if user.has_perm('can_subscribe', feed):
                 if is_subscribed:
                     result += unsubscribe_button
