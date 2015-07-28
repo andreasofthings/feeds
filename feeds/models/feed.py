@@ -476,6 +476,10 @@ class Feed(models.Model):
         Refresh feed.
         """
         logger.debug("-- start --")
+        if self.last_checked + 300 < datetime.datetime.now():
+            logger.debug("tried too quick. aborting.")
+            return FEED_SAME
+
         try:
             parsed = self.parse()
         except FeedErrorHTTP as e:
