@@ -34,6 +34,8 @@ from feeds.views import TagCreateView, TagUpdateView
 
 from feeds.views import SiteSubmitWizardView, SiteSubmitForms
 
+from feeds.views import BackupView
+
 from feeds.rss import RssFeed
 
 from api_views import UserSubscriptions
@@ -239,6 +241,14 @@ urlpatterns += patterns(
         TagUpdateView.as_view(),
         name="tag-update"
     ),
+)
+
+#
+# Backup
+#
+
+urlpatterns += patterns(
+    url(r'^backup/$', BackupView.as_view(), name="backup"),
 )
 
 #
