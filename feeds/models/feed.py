@@ -413,7 +413,7 @@ class Feed(models.Model):
 
                         parsed.feed.get(
                             'updated',
-                            datetime.datetime.now()
+                            datetime.datetime.now().timetuple()
                         )
                         )
                 )
