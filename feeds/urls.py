@@ -248,6 +248,7 @@ urlpatterns += patterns(
 #
 
 urlpatterns += patterns(
+    '',
     url(r'^backup/$', BackupView.as_view(), name="backup"),
 )
 
