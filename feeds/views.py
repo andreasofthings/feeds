@@ -13,6 +13,7 @@ import logging
 
 from django import forms
 from django.core.urlresolvers import reverse
+from django.views.generic import View
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic import DetailView, ListView
@@ -444,3 +445,21 @@ class TagUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """
     permission_required = "feeds.update_tag"
     model = Tag
+
+
+class BackupView(LoginRequiredMixin, View):
+    """
+    Dump all Feed Data.
+    Just in case.
+    """
+    def GET(self, request):
+        from django.core import serializers
+        data = serializers.serialize("xml", Feed.objects.all())
+        from models.File import FileModel
+        from django.core.files import File
+        with open('/tmp/hello.world', 'w') as f:
+                    myfile = File(f)
+                    myfile.write(data)
+                    f = FileModel()
+                    f.data = myfile
+                    f.save()

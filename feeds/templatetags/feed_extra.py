@@ -116,7 +116,7 @@ class FeedControlsNode(template.Node):
         )
 
         result = view_button
-        if user is not AnonymousUser and user.is_authenticated:
+        if user is not AnonymousUser and user.is_authenticated():
             options = Options.objects.get(user=user)
             is_subscribed = \
                 Subscription.objects.filter(user=options, feed=feed).exists()
