@@ -6,7 +6,7 @@
 """
 
 from django.test import TestCase, Client
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
 
 
@@ -39,6 +39,8 @@ class BackupTest(TestCase):
             self.password
         )
         """Test user."""
+        permission = Permission.objects.get(codename="backup_feed")
+        self.user.user_permissions.add(permission)
 
     def test_backup(self):
         """
@@ -48,4 +50,3 @@ class BackupTest(TestCase):
         self.client.login(username=self.username, password=self.password)
         result = self.client.get(reverse('planet:backup'))
         self.assertEqual(result.status_code, 200)
-

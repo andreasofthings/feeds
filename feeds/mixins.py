@@ -51,4 +51,4 @@ class FeedsLevelOneMixin(LoginRequiredMixin):
 
 
 class FeedsLevelTwoMixin(PermissionRequiredMixin, FeedsLevelOneMixin):
-    permission_required = "feeds.add_site"
+    permission_required = "feeds.backup_feed"

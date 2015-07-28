@@ -270,7 +270,9 @@ class Feed(models.Model):
         verbose_name_plural = _('feeds')
         ordering = ('name', 'feed_url',)
         permissions = (
-            ("can_refresh_feed", "Can refresh feed"),
+            ("can_refresh_feed", _("Can refresh feed")),
+            ("can_subscribe_feed", _("Can subscribe to feed")),
+            ("can_backup_feed", _("Can backup feeds")),
         )
 
     def __unicode__(self):
