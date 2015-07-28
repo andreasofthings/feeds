@@ -6,6 +6,7 @@
 """
 
 from django.test import TestCase, Client
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
 
@@ -21,6 +22,9 @@ class BackupTest(TestCase):
         'Categories.yaml',
     ]
 
+    username = "john"
+    password = "password"
+
     def setUp(self):
         """
         Set up environment.
@@ -29,8 +33,19 @@ class BackupTest(TestCase):
         self.client = Client()
         """Test Client."""
 
+        self.user = User.objects.create_user(
+            self.username,
+            'lennon@thebeatles.com',
+            self.password
+        )
+        """Test user."""
+
     def test_backup(self):
         """
         """
         result = self.client.get(reverse('planet:backup'))
+        self.assertEqual(result.status_code, 302)
+        self.client.login(username=self.username, password=self.password)
+        result = self.client.get(reverse('planet:backup'))
         self.assertEqual(result.status_code, 200)
+

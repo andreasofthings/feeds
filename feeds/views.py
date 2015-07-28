@@ -33,6 +33,7 @@ from .models import Category, Tag, PostReadCount
 from .forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
 from .forms import FeedUpdateForm, CategoryUpdateForm
 from .forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
+from .mixins import FeedsLevelTwoMixin
 
 from formtools.wizard.views import SessionWizardView
 
@@ -444,7 +445,7 @@ class TagUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Tag
 
 
-class BackupView(LoginRequiredMixin, View):
+class BackupView(FeedsLevelTwoMixin, View):
     """
     Dump all Feed Data.
     Just in case.
