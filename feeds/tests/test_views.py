@@ -268,6 +268,21 @@ class ViewsAnonymousTest(TestCase):
         )
         self.assertEqual(result.status_code, 200)
 
+    def feed_subscription(self):
+        """
+        feed-subscription
+        ---------
+            :url: url(
+                r'^list/$',
+                FeedSubscriptionView.as_view(),
+                name="feed-subscription"
+                )
+
+            Should return 302 for an anonymous user.
+        """
+        result = self.client.get(reverse('planet:feed-subscription'))
+        self.assertEqual(result.status_code, 302)
+
     def feed_add(self):
         """
         feed-add
@@ -541,6 +556,21 @@ class TestAllViewsLoggedIn(TestCase):
                 args=("1",)
             )
         )
+        self.assertEqual(result.status_code, 200)
+
+    def feed_subscription(self):
+        """
+        feed-subscription
+        ---------
+            :url: url(
+                r'^list/$',
+                FeedSubscriptionView.as_view(),
+                name="feed-subscription"
+                )
+
+            Should return 200 for an authenticated user.
+        """
+        result = self.client.get(reverse('planet:feed-subscription'))
         self.assertEqual(result.status_code, 200)
 
     def test_feed_add(self):
