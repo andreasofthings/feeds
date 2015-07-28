@@ -406,7 +406,14 @@ class Feed(models.Model):
         try:
             self.last_modified = datetime.datetime.utcfromtimestamp(
                 calendar.timegm(
-                    parsed.feed.get('updated_parsed', self.updated)
+                    parsed.feed.get(
+                        'updated_parsed',
+
+                        parsed.feed.get(
+                            'updated',
+                            datetime.datetime.now()
+                        )
+                        )
                 )
             )
         except ValueError as e:

@@ -14,6 +14,8 @@ from braces.views import AccessMixin
 
 from django.exceptions import ImproperlyConfigured, PermissionDenied
 
+from braces.views import LoginRequiredMixin, PermissionRequiredMixin
+
 
 def google_required(func):
     """
@@ -52,7 +54,7 @@ class UserAgentRequiredMixin(AccessMixin):
 
         if not request.user.is_authenticated():
             """
-            Check to see if the request's user has the required permission.
+            Check to see if the request's user ha$s the required permission.
             """
             if 'HTTP_USER_AGENT' in request.META:
                 agent = request.META['HTTP_USER_AGENT']
@@ -77,3 +79,11 @@ class UserAgentRequiredMixin(AccessMixin):
                 *args,
                 **kwargs
             )
+
+
+class FeedsLevelOneMixin(LoginRequiredMixin):
+    pass
+
+
+class FeedsLevelTwoMixin(PermissionRequiredMixin, FeedsLevelOneMixin):
+    permission_required = "feeds.add_site"

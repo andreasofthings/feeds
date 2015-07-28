@@ -114,10 +114,18 @@ class FeedControlsNode(template.Node):
             _('Delete Feed'),
             'trash'
         )
+        options_dialog = button % (
+            reverse('planet:options'),
+            _('User Options'),
+            'cog',
+        )
 
         result = view_button
         if user is not AnonymousUser and user.is_authenticated():
-            options = Options.objects.get(user=user)
+            try:
+                options = Options.objects.get(user=user)
+            except Options.DoesNotExist:
+                result += options_dialog
             is_subscribed = \
                 Subscription.objects.filter(user=options, feed=feed).exists()
             if user.has_perm('can_subscribe', feed):
