@@ -450,7 +450,7 @@ class BackupView(FeedsLevelTwoMixin, View):
     Dump all Feed Data.
     Just in case.
     """
-    def GET(self, request):
+    def get(self, request):
         from django.core import serializers
         data = serializers.serialize("xml", Feed.objects.all())
         from models.files import FileModel
