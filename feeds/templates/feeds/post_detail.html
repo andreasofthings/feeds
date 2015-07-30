@@ -24,15 +24,23 @@
 
 <div itemscope itemtype="http://schema.org/Article" class="row">
   <div class="row">
-    <div class="col-md-12">
-      <h4>{{ node.updated }}</h4>
+    <div class="col-md-8">
+      <h5>{{ node.updated }}</h5>
       <h2><a href="{{node.link}}" itemprop="headline">{{ node.title }}</a></h2>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-12">
-      <p class="pull-right">via: <a href="{{node.feed.link}}" itemprop="url">{{node.feed.name}}</a></p>
-      {% if node.tags %}<p>Tags: <meta itemprop="keywords">{% for t in node.tags.all %}<a href="{{ t.get_absolute_url }}">{{t}}</a> {% endfor %}</meta></p>{% endif %}
+    <div class="col-md-4">
+      <p>via: <a href="{{node.feed.link}}" itemprop="url">{{node.feed.name}}</a></p>
+    <div class="col-md-4">
+      {% if node.tags %}
+      <p>
+      <meta itemprop="keywords">
+      {% for t in node.tags.all %}<a href="{{ t.get_absolute_url }}">{{t}}</a>
+      {% endfor %}
+      </meta></p>
+      {% endif %}
+    </div>
     </div>
   </div>
 
@@ -42,28 +50,7 @@
     </div>
 
     <div class="col-md-4">
-      <div class="row">
-        <div class="col-md-2"><span class="label label-primary">Tweets</span></div>
-        <div class="col-md-2"><span class="label label-primary">Blogs</span></div>
-        <div class="col-md-2"><span class="label label-primary">Likes</span></div>
-        <div class="col-md-2"><span class="label label-primary">Shares</span></div>
-      </div> <!-- /row -->
-      <div class="row">
-        <div class="col-md-2"><center><strong>{{ node.tweets }}<meta itemprop="interactionCount" content="UserTweets:{{ node.tweets }}"/></strong></center></div>
-        <div class="col-md-2"><center><strong>{{ node.blogs }}</strong></center></div>
-        <div class="col-md-2"><center><strong>{{ node.likes }}<meta itemprop="interactionCount" content="UserLikes:{{ node.likes }}"/></strong></center></div>
-        <div class="col-md-2"><center><strong>{{ node.shares }}</strong></center></div>
-      </div> <!-- /row -->
-      <div class="row">
-        <div class="col-md-2"><span class="label label-primary">Plus1</span></div>
-        <div class="col-md-2"><span class="label label-primary">Views</span></div>
-        <div class="col-md-2"><span class="label">xxx</span></div>
-        <div class="col-md-2"><span class="label">xxx</span></div>
-      </div> <!-- /row -->
-      <div class="row">
-        <div class="col-md-2"><center><strong>{{ node.plus1 }} <meta itemprop="interactionCount" content="UserPlusOnes:{{ node.plus1 }}"/></strong></center></div>
-        <div class="col-md-2"><center><strong>{{ node.pageviews }}</strong></center></div>
-      </div> <!-- /row -->
+      {% social post %}
     </div> <!-- span4 -->
   </div> <!-- row -->
 

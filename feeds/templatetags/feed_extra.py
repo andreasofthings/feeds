@@ -161,3 +161,78 @@ def feed_controls(parser, token):
             token.contents.split()[0]
         )
     return FeedControlsNode(feed)
+
+
+class PostSocialNode(template.Node):
+    """
+    renders social values for a post object.
+    """
+    def __init__(self, post):
+        self.post = template.Variable(post)
+
+    def render(self, context):
+        try:
+            post = self.post.resolve(context)
+        except Post.MultipleObjectsReturned:
+            raise template.TemplateSyntaxError(
+                """
+                'social' template tag requires 'post' as first argument.
+                Got this instead:
+                %r (type: %r)
+                """ %
+                self.post, type(self.post)
+            )
+
+        result = """
+      <div class="row">
+        <div class="col-md-2"><span class="label label-primary">Tweets</span></div>
+        <div class="col-md-2"><span class="label label-primary">Blogs</span></div>
+        <div class="col-md-2"><span class="label label-primary">Likes</span></div>
+        <div class="col-md-2"><span class="label label-primary">Shares</span></div>
+      </div> <!-- /row -->
+      <div class="row">
+        <div class="col-md-2"><center><strong>{{ node.tweets }}<meta itemprop="interactionCount" content="UserTweets:{{ node.tweets }}"/></strong></center></div>
+        <div class="col-md-2"><center><strong>{{ node.blogs }}</strong></center></div>
+        <div class="col-md-2"><center><strong>{{ node.likes }}<meta itemprop="interactionCount" content="UserLikes:{{ node.likes }}"/></strong></center></div>
+        <div class="col-md-2"><center><strong>{{ node.shares }}</strong></center></div>
+      </div> <!-- /row -->
+      <div class="row">
+        <div class="col-md-2"><span class="label label-primary">Plus1</span></div>
+        <div class="col-md-2"><span class="label label-primary">Views</span></div>
+        <div class="col-md-2"><span class="label">xxx</span></div>
+        <div class="col-md-2"><span class="label">xxx</span></div>
+      </div> <!-- /row -->
+      <div class="row">
+        <div class="col-md-2"><center><strong>{{ node.plus1 }} <meta itemprop="interactionCount" content="UserPlusOnes:{{ node.plus1 }}"/></strong></center></div>
+        <div class="col-md-2"><center><strong>{{ node.pageviews }}</strong></center></div>
+      </div> <!-- /row -->
+        """ % (
+            post.tweets,
+            post.tweets,
+            post.blogs,
+            post.likes,
+            post.likes,
+            post.shares,
+            post.plus1,
+            post.plus1,
+            post.pageviews,
+        )
+        return result
+
+
+@register.tag('social')
+def social(parser, token):
+    """
+    social
+    ============
+
+    social values for a post
+    """
+    try:
+        tag_name, post = token.split_contents()
+    except ValueError:
+        raise template.TemplateSyntaxError(
+            "%r tag requires one arguments" %
+            token.contents.split()[0]
+        )
+    return PostSocialNode(post)
