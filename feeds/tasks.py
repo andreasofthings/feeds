@@ -169,17 +169,16 @@ def entry_update_facebook(entry_id):
 
 
 @shared_task(time_limit=10)
-def entry_update_googleplus(entry_id):
+def entry_update_googleplus(post_id):
     """
     plus 1
     """
     logger.debug("start: counting +1s")
 
-    if not entry_id:
-        logger.error("can't count +1s for non-post. pk is empty.")
-        return
-
-    entry = Post.objects.get(pk=entry_id)
+    try:
+        p = Post.objects.get(pk=post_id)
+    except p.DoesNotExist:
+        logger.error("Does not exist (%s)", post_id)
 
     queryurl = "https://clients6.google.com/rpc"
     params = {
@@ -187,7 +186,7 @@ def entry_update_googleplus(entry_id):
         "id": "p",
         "params": {
             "nolog": True,
-            "id": "%s" % (entry.link),
+            "id": "%s" % (p.link),
             "source": "widget",
             "userId": "@viewer",
             "groupId": "@self",
@@ -200,25 +199,29 @@ def entry_update_googleplus(entry_id):
         'Content-type': 'application/json',
     }
 
-    resp, content = requests.post(
-        queryurl,
-        data=json.dumps(params),
-        headers=headers
-    )
-
-    if resp.status_code == 200:
-        result = json.loads(resp.text)
-        try:
-            entry.plus1 = int(
-                result['result']['metadata']['globalCounts']['count']
-            )
-            entry.save()
-            logger.debug("stop: counting +1s. Got %s.", entry.plus1)
-            return entry.plus1
-        except KeyError as e:
-            raise KeyError(e)
-    else:
+    try:
+        resp, content = requests.post(
+            queryurl,
+            data=json.dumps(params),
+            headers=headers
+        )
+    except ValueError:
+        logger.error(json.dumps(params))
+        logger.error(headers)
+    except:
         logger.debug("stop: counting +1s. Got none. Something weird happened.")
+    finally:
+        if resp.status_code == 200:
+            result = json.loads(resp.text)
+            try:
+                p.plus1 = int(
+                    result['result']['metadata']['globalCounts']['count']
+                )
+                p.save()
+                logger.debug("stop: counting +1s. Got %s.", p.plus1)
+                return p.plus1
+            except KeyError as e:
+                raise KeyError(e)
 
 
 @shared_task
@@ -270,13 +273,11 @@ def entry_tags(post_id, tags):
     """
     collect tags per post and do the postprocessing.
     """
-    if not post_id:
-        logger.error("Cannot tag Post (%s)", post_id)
-        return
     try:
         p = Post.objects.get(pk=post_id)
     except p.DoesNotExist:
         logger.error("Does not exist (%s)", post_id)
+        return
 
     logger.debug("start: entry tagging post '%s' (%s)", p.title, post_id)
 
