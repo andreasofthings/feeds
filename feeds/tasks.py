@@ -105,7 +105,7 @@ def twitter_post(post_id):
 
 
 @shared_task(time_limit=10)
-def entry_update_twitter(entry_id):
+def post_update_twitter(entry_id):
     """
     count tweets
 
@@ -116,21 +116,21 @@ def entry_update_twitter(entry_id):
         logger.error("can't count tweets for non-post. pk is empty.")
         return
 
-    entry = Post.objects.get(pk=entry_id)
+    post = Post.objects.get(pk=entry_id)
     twitter_count = "http://urls.api.twitter.com/1/urls/count.json?url=%s"
-    query = twitter_count % (entry.link)
+    query = twitter_count % (post.link)
 
     resp = requests.get(query)
 
     if resp.status_code == 200:
         result = json.loads(resp.text)
-        entry.tweets = result['count']
-        entry.save()
+        post.tweets = result['count']
+        post.save()
     else:
         logger.debug("status error: %s: %s", resp.status_code, resp.text)
 
-    logger.debug("stop: counting tweets. got %s", entry.tweets)
-    return entry.tweets
+    logger.debug("stop: counting tweets. got %s", post.tweets)
+    return post.tweets
 
 
 @shared_task(time_limit=10)
@@ -240,7 +240,7 @@ def entry_update_social(entry_id):
     header = []
 
     if settings.FEED_POST_UPDATE_TWITTER:
-        f = (entry_update_twitter.subtask((p.id, )))
+        f = (post_update_twitter.subtask((p.id, )))
         header.append(f)
     if settings.FEED_POST_UPDATE_FACEBOOK:
         f = (entry_update_facebook.subtask((p.id, )))
@@ -379,5 +379,5 @@ def cronjob():
     except Exception, e:
         logger.error("Exception: %s", str(e))
         return CRON_ERR
-    logger.debug("-- end --")
+    logger.debug("-- end (%s) -- " % result)
     return CRON_OK
