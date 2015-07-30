@@ -222,7 +222,16 @@ def entry_update_googleplus(entry_id):
 
 
 @shared_task
-def tsum(numbers):
+def tsum(numbers, post_id):
+    try:
+        p = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        logger.error("Post %s does not exist." % (post_id))
+        return
+
+    p.score = sum(numbers)
+    p.save()
+
     return sum(numbers)
 
 
@@ -249,13 +258,10 @@ def post_update_social(post_id):
         f = (entry_update_googleplus.subtask((p.id, )))
         header.append(f)
 
-    callback = tsum.s()
+    callback = tsum.s(post_id)
     result = chord(header)(callback)
 
-    p.score = result.get(timeout=60)
-    p.save()
-
-    logger.debug("stop: social scoring. got %s" % p.score)
+    logger.debug("stop: social scoring. got %s" % result)
     return p.score
 
 
