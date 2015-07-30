@@ -6,7 +6,7 @@ from .models.post import Post
 from .models.stats import FeedPostCount
 from .models.category import Category
 from .models.tag import Tag
-from .models.file import FileModel
+from .models.files import FileModel
 from .forms import FeedAdminForm
 
 
