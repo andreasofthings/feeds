@@ -423,7 +423,6 @@ class Feed(models.Model):
             logger.error(parsed.feed.updated)
         self.title = parsed.feed.get('title', '')[0:200]
         self.tagline = parsed.feed.get('subtitle', '')[:64]
-        self.language = parsed.feed.get('language', '')[:64]
         self.copyright = parsed.feed.get('copyright', '')[:64]
         self.author = parsed.feed.get('author', '')[:64]
         self.webmaster = parsed.feed.get('webmaster', '')[:64]
