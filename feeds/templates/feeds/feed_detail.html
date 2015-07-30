@@ -20,18 +20,18 @@ Feed: {{ feed }}
 
 {%block content%}
 <div class="row">
-  <div class="md-col-8">
+  <div class="col-md-8">
     <h3> {{feed}} </h3>
   </div>
-  <div class="md-col-4">
+  <div class="col-md-4">
         <p> {% feed_controls feed %} </p>
   </div>
 </div>
 <div class="row">
-  <div class="md-col-7">
+  <div class="col-md-7">
     <canvas id="chart"  width="600" height="240"></canvas>
   </div>
-  <div class="md-col-5">
+  <div class="col-md-5">
     <ul>
     {% for post in feed.posts.all %}
     <li><h5><a href="{{ post.get_absolute_url }}">{{post}}</a><small>{{ post.published }}</small></h5></li>
