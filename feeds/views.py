@@ -453,7 +453,7 @@ class BackupView(FeedsLevelTwoMixin, View):
     def GET(self, request):
         from django.core import serializers
         data = serializers.serialize("xml", Feed.objects.all())
-        from models.File import FileModel
+        from models.files import FileModel
         from django.core.files import File
         with open('/tmp/hello.world', 'w') as f:
                     myfile = File(f)
