@@ -6,7 +6,6 @@
 """
 
 import logging
-logger = logging.getLogger(__name__)
 
 from datetime import datetime
 import feedparser
@@ -17,6 +16,9 @@ from feeds import ENTRY_NEW, ENTRY_UPDATED
 from feeds import FEED_OK
 from feeds import CRON_OK
 from feeds.models import Feed, Post
+
+
+logger = logging.getLogger(__name__)
 
 
 class TaskTest(TestCase):
@@ -58,9 +60,9 @@ class TaskTest(TestCase):
     def test_count_tweets(self):
         """
         """
-        from feeds.tasks import entry_update_twitter
+        from feeds.tasks import post_update_twitter
         post = Post.objects.all()[0]
-        result = entry_update_twitter.delay(post.pk)
+        result = post_update_twitter.delay(post.pk)
         self.assertEqual(result.get(), 0)
 
     def test_count_share_like(self):

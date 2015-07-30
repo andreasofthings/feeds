@@ -227,15 +227,15 @@ def tsum(numbers):
 
 
 @shared_task
-def entry_update_social(entry_id):
+def post_update_social(post_id):
 
     logger.debug("start: social scoring")
 
-    if not entry_id:
-        logger.error("can't do social scoring for non-post. pk is empty.")
+    try:
+        p = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        logger.error("Post %s does not exist." % (post_id))
         return
-
-    p = Post.objects.get(pk=entry_id)
 
     header = []
 
