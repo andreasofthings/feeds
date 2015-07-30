@@ -6,6 +6,7 @@ from .models.post import Post
 from .models.stats import FeedPostCount
 from .models.category import Category
 from .models.tag import Tag
+from .models.file import FileModel
 from .forms import FeedAdminForm
 
 
@@ -120,12 +121,22 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('was_announced', 'feed', 'category', )
 
 
+class FileAdmin(admin.ModelAdmin):
+    """
+    File admin options
+    """
+    list_display = (
+        'title',
+    )
+
+
 class FeedPostCountAdmin(admin.ModelAdmin):
     """
     FeedPostCount admin options
     """
     pass
 
+admin.site.register(FileModel, FileAdmin)
 admin.site.register(Site, SiteAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Tag, TagAdmin)
