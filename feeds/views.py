@@ -451,6 +451,7 @@ class BackupView(FeedsLevelTwoMixin, View):
     Just in case.
     """
     def get(self, request):
+        from django.http import HttpResponse
         from django.core import serializers
         data = serializers.serialize("xml", Feed.objects.all())
         from models.files import FileModel
@@ -462,3 +463,4 @@ class BackupView(FeedsLevelTwoMixin, View):
                     f = FileModel()
                     f.data = myfile
                     f.save()
+        return HttpResponse()
