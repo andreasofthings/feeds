@@ -126,7 +126,7 @@ class FileAdmin(admin.ModelAdmin):
     File admin options
     """
     list_display = (
-        'title',
+        'data',
     )
 
 
