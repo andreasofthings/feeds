@@ -387,7 +387,7 @@ class Feed(models.Model):
         logger.debug("stop: entry")
         p.save()
         from ..tasks import post_update_social
-        post_update_social.delay(p.id)
+        post_update_social(p.id)
         return result
 
     def update(self, parsed):
