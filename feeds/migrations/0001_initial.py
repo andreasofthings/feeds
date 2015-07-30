@@ -58,7 +58,11 @@ class Migration(migrations.Migration):
                 'ordering': ('name', 'feed_url'),
                 'verbose_name': 'feed',
                 'verbose_name_plural': 'feeds',
-                'permissions': (('can_refresh_feed', 'Can refresh feed'),),
+                'permissions': (
+                    ('can_refresh_feed', 'Can refresh feed'),
+                    ('can_subscribe_feed', 'Can subscribe feed'),
+                    ('can_backup_feed', 'Can backup feed'),
+                ),
             },
         ),
         migrations.CreateModel(
