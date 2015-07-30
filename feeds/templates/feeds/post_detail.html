@@ -24,50 +24,39 @@
 <div id="angry-planet-star"></div>
 
 <div itemscope itemtype="http://schema.org/Article" class="row">
-  <div class="row">
-    <div class="col-md-8">
-      <h5>{{ node.updated }}</h5>
-      <h2><a href="{{node.link}}" itemprop="headline">{{ node.title }}</a></h2>
-    </div>
+  <div class="col-md-8">
+    <h5>{{ node.updated }}</h5>
+    <h2><a href="{{node.link}}" itemprop="headline">{{ node.title }}</a></h2>
+    <p>via: <a href="{{node.feed.link}}" itemprop="url">{{node.feed.name}}</a></p>
+    {% if node.tags %}
+    <p>
+    <meta itemprop="keywords">
+    {% for t in node.tags.all %}<a href="{{ t.get_absolute_url }}">{{t}}</a>
+    {% endfor %}
+    </meta></p>
+    {% endif %}
+    <!-- {# node.content|safe #} -->
   </div>
-  <div class="row">
-    <div class="col-md-4">
-      <p>via: <a href="{{node.feed.link}}" itemprop="url">{{node.feed.name}}</a></p>
-    <div class="col-md-4">
-      {% if node.tags %}
-      <p>
-      <meta itemprop="keywords">
-      {% for t in node.tags.all %}<a href="{{ t.get_absolute_url }}">{{t}}</a>
-      {% endfor %}
-      </meta></p>
-      {% endif %}
-    </div>
-    </div>
-  </div>
-
-  <div class ="row">
-    <div class="col-md-8" itemprop="text">
-      <!-- {# node.content|safe #} -->
-    </div>
-
-    <div class="col-md-4">
+  <div class="col-md-4">
+    <div class="row">
+      <div class="col-md-12">
       {% social node %}
-    </div> <!-- span4 -->
-  </div> <!-- row -->
-
-  {% more_like_this node as related_content limit 5 %}
-  {% if related_content %}
-  <div class="row">
-    <div class="col-md-12">
-    <h3>Related:</h3>
-    <ul>
-    {% for obj in related_content %}
-      <li><a href="{{ obj.object.get_absolute_url }}">{{ obj.object }}</a></li>
-    {% endfor%}
-    </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        {% more_like_this node as related_content limit 5 %}
+        {% if related_content %}
+        <h2>Related</h2>
+        <ul>
+        {% for obj in related_content %}
+          <li><a href="{{ obj.object.get_absolute_url }}">{{ obj.object }}</a></li>
+          {% endfor%}
+        </ul>
+        {% endif %}
+      </div>
     </div>
   </div>
-  {% endif %}
 </div> <!-- itemscope -->
 <hr>
 {% endblock %}
