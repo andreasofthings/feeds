@@ -191,10 +191,10 @@ class PostSocialNode(template.Node):
         <div class="col-md-2"><span class="label label-primary">Shares</span></div>
       </div> <!-- /row -->
       <div class="row">
-        <div class="col-md-2"><center><strong>{{ node.tweets }}<meta itemprop="interactionCount" content="UserTweets:{{ node.tweets }}"/></strong></center></div>
-        <div class="col-md-2"><center><strong>{{ node.blogs }}</strong></center></div>
-        <div class="col-md-2"><center><strong>{{ node.likes }}<meta itemprop="interactionCount" content="UserLikes:{{ node.likes }}"/></strong></center></div>
-        <div class="col-md-2"><center><strong>{{ node.shares }}</strong></center></div>
+        <div class="col-md-2"><center><strong>%s<meta itemprop="interactionCount" content="UserTweets:%s"/></strong></center></div>
+        <div class="col-md-2"><center><strong>%s</strong></center></div>
+        <div class="col-md-2"><center><strong>%s<meta itemprop="interactionCount" content="UserLikes:%s"/></strong></center></div>
+        <div class="col-md-2"><center><strong>%s</strong></center></div>
       </div> <!-- /row -->
       <div class="row">
         <div class="col-md-2"><span class="label label-primary">Plus1</span></div>
@@ -203,8 +203,8 @@ class PostSocialNode(template.Node):
         <div class="col-md-2"><span class="label">xxx</span></div>
       </div> <!-- /row -->
       <div class="row">
-        <div class="col-md-2"><center><strong>{{ node.plus1 }} <meta itemprop="interactionCount" content="UserPlusOnes:{{ node.plus1 }}"/></strong></center></div>
-        <div class="col-md-2"><center><strong>{{ node.pageviews }}</strong></center></div>
+        <div class="col-md-2"><center><strong>%s<meta itemprop="interactionCount" content="UserPlusOnes:%s"/></strong></center></div>
+        <div class="col-md-2"><center><strong>%s</strong></center></div>
       </div> <!-- /row -->
         """ % (
             post.tweets,
