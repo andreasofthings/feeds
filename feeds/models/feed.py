@@ -398,8 +398,8 @@ class Feed(models.Model):
             self.short_name = parsed.feed.title[:50]
         if not self.link and hasattr(parsed.feed, 'link'):
             self.link = parsed.feed.link
-        if hasattr(parsed.feed, 'language'):
-            self.language = parsed.feed.language[:7]
+#        if hasattr(parsed.feed, 'language'):
+#            self.language = parsed.feed.language[:7]
         if not self.slug:
             self.slug = slugify(self.name)
 
