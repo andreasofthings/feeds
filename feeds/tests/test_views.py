@@ -38,11 +38,11 @@ class ViewsAnonymousTest(TestCase):
         """
         Set up environment.
         """
-        from feeds.models import Site
-        site = Site(url="https://angry-planet.com/")
+        from feeds.models import WebSite
+        site = WebSite(url="https://angry-planet.com/")
         site.save()
         self.site_id = site.pk
-        """Test Site."""
+        """Test WebSite."""
 
         self.client = Client()
         """Test Client."""
@@ -213,7 +213,7 @@ class ViewsAnonymousTest(TestCase):
         Site.
         =====
 
-        Test the :py:mod:`feeds.models.Site` section from the user-side.
+        Test the :py:mod:`feeds.models.WebSite` section from the user-side.
 
         Access the following pages, in order,
         as defined in :py:mod:`feeds.urls`.
