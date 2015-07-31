@@ -12,11 +12,11 @@ from crispy_forms.layout import Button
 from crispy_forms.layout import Div
 from crispy_forms.bootstrap import FormActions
 
-from feeds.models import Options
-from feeds.models import Site
-from feeds.models import Feed
-from feeds.models import Category
-from feeds.models import Tag
+from .models import Options
+from .models import Site
+from .models import Feed
+from .models import Category
+from .models import Tag
 
 from feeds.validators import SiteField, FeedField
 

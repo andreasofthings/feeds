@@ -4,8 +4,8 @@
 
 from django.conf.urls import url, patterns, include
 
-from feeds.views import HomeView
-from feeds.views import OptionsView
+from .views import HomeView
+from .views import OptionsView
 from feeds.views import OPMLView
 from feeds.views import SiteListView
 from feeds.views import SiteCreateView
