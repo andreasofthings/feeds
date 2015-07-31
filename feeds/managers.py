@@ -10,12 +10,12 @@ Managers
 from django.db import models
 
 
-class SiteManager(models.Manager):
+class WebSiteManager(models.Manager):
     """
-    :py:mod:`SiteManager` provide extra functions.
+    :py:mod:`WebSiteManager` provide extra functions.
     """
     def __init__(self, *args, **kwargs):
-        return super(SiteManager, self).__init__(*args, **kwargs)
+        return super(WebSiteManager, self).__init__(*args, **kwargs)
 
     def get_by_natural_key(self, slug):
         return self.get(slug=slug)
