@@ -16,7 +16,6 @@ import logging
 
 import types
 import requests
-import json
 
 try:
     from urllib.parse import urlparse
@@ -43,7 +42,7 @@ from feeds import CRON_OK, CRON_ERR
 from .tools import getText
 from .models import Feed, Post, Tag, TaggedPost
 from .models import FeedStats
-from .social import tweets
+from .social import tweets, plusone
 
 from exceptions import Exception
 
@@ -169,52 +168,14 @@ def entry_update_googleplus(post_id):
     logger.debug("start: counting +1s")
 
     try:
-        p = Post.objects.get(pk=post_id)
-    except p.DoesNotExist:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
         logger.error("Does not exist (%s)", post_id)
 
-    queryurl = "https://clients6.google.com/rpc"
-    params = {
-        "method": "pos.plusones.get",
-        "id": "p",
-        "params": {
-            "nolog": True,
-            "id": "%s" % (p.link),
-            "source": "widget",
-            "userId": "@viewer",
-            "groupId": "@self",
-        },
-        "jsonrpc": "2.0",
-        "key": "p",
-        "apiVersion": "v1"
-    }
-    headers = {
-        'Content-type': 'application/json',
-    }
+    post.plus1 = plusone(post)
+    post.save()
 
-    try:
-        resp, content = requests.post(
-            queryurl,
-            data=json.dumps(params),
-            headers=headers
-        )
-    except ValueError:
-        logger.error(json.dumps(params))
-        logger.error(headers)
-    except:
-        logger.debug("stop: counting +1s. Got none. Something weird happened.")
-    finally:
-        if resp.status_code == 200:
-            result = json.loads(resp.text)
-            try:
-                p.plus1 = int(
-                    result['result']['metadata']['globalCounts']['count']
-                )
-                p.save()
-                logger.debug("stop: counting +1s. Got %s.", p.plus1)
-                return p.plus1
-            except KeyError as e:
-                raise KeyError(e)
+    return post.plus1
 
 
 @shared_task

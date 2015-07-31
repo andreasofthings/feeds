@@ -17,10 +17,10 @@ class InstallCommand(install):
         Run installation first.
         """
         install.run(self)
-        from django.contrib.auth.models import Group
-        g, created = Group.objects.get_or_create(name="Feeds")
-        if created:
-            g.save()
+        # from django.contrib.auth.models import Group
+        # g, created = Group.objects.get_or_create(name="Feeds")
+        # if created:
+        #     g.save()
 
 
 
@@ -58,7 +58,7 @@ setup(
         'elasticsearch==1.4.0',
         'timestring==1.6.2',
     ],
-    cmdclass={
-        'install': InstallCommand,
-    },
+    #cmdclass={
+    #    'install': InstallCommand,
+    #},
 )
