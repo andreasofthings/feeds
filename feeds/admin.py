@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models.site import Site
+from .models.site import WebSite
 from .models.feed import Feed
 from .models.post import Post
 from .models.stats import FeedPostCount
@@ -29,9 +29,9 @@ class PostInline(admin.TabularInline):
     can_delete = False
 
 
-class SiteAdmin(admin.ModelAdmin):
+class WebSiteAdmin(admin.ModelAdmin):
     """
-    Site Admin Class
+    WebSite Admin Class
     """
     list_display = ('url', 'slug', )
     inlines = [
@@ -137,7 +137,7 @@ class FeedPostCountAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(FileModel, FileAdmin)
-admin.site.register(Site, SiteAdmin)
+admin.site.register(WebSite, WebSiteAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Feed, FeedAdmin)
