@@ -66,6 +66,16 @@ Quick start
 
 3. Run `python manage.py syncdb` to create the feeds models.
 
+4. Dependencies:
+
+`feeds` assumes it will find the following:
+
+  - /static/bs335 for Bootstrap_.
+  - /static/jquery for jquery_.
+  - /static/d3 for D3_.
 
 .. _Documentation: http://feeds.readthedocs.org/en/latest/
 .. _feedburner: http://www.feedburner.com
+.. _Bootstrap: http://www.getbootstrap.com
+.. _jquery: http://www.jquery.com
+.. _D3: http://www.d3js.org
