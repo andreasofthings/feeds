@@ -11,7 +11,13 @@ class CategorySerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ('title', 'link', 'published', )
+        fields = (
+            'id',
+            'feed',
+            'title',
+            'link',
+            'published',
+        )
 
 
 class FeedSerializer(serializers.ModelSerializer):
