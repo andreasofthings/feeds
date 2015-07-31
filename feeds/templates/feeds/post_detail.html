@@ -49,8 +49,8 @@
         {% if related_content %}
         <h2>Related</h2>
         <ul>
-        {% for obj in related_content %}
-          <li><a href="{{ obj.object.get_absolute_url }}">{{ obj.object }}</a></li>
+          {% for obj in related_content %}
+            <li><a href="{{ obj.object.get_absolute_url }}">{{ obj.object }}</a></li>
           {% endfor%}
         </ul>
         {% endif %}

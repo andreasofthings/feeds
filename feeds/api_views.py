@@ -3,14 +3,19 @@ from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
 from rest_framework import mixins, viewsets
 
-from .models import Options, Feed, Category
+from .models import Options, Feed, Post, Category
 from .serializers import SubscriptionSerializer
 from .serializers import CategorySerializer
 from .serializers import FeedSerializer
+from .serializers import PostSerializer
 
 
 class FeedThrottle(UserRateThrottle):
     rate = "1/second"
+
+
+class PostThrottle(UserRateThrottle):
+    rate = "4/second"
 
 
 class CategoryViewSet(mixins.CreateModelMixin,
@@ -23,6 +28,17 @@ class CategoryViewSet(mixins.CreateModelMixin,
     throttle_class = (FeedThrottle,)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+class PostViewSet(mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
+                  viewsets.GenericViewSet):
+    """
+    API endpoint that allows feeds to be listed.
+    """
+    throttle_class = (PostThrottle,)
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
 
 class FeedViewSet(mixins.CreateModelMixin,
