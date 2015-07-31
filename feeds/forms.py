@@ -18,7 +18,7 @@ from .models import Feed
 from .models import Category
 from .models import Tag
 
-from feeds.validators import SiteField, FeedField
+from .validators import SiteField, FeedField
 
 
 class OptionsForm(forms.ModelForm):

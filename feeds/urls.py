@@ -6,42 +6,42 @@ from django.conf.urls import url, patterns, include
 
 from .views import HomeView
 from .views import OptionsView
-from feeds.views import OPMLView
-from feeds.views import SiteListView
-from feeds.views import SiteCreateView
-from feeds.views import SiteDetailView
-from feeds.views import SiteUpdateView
-from feeds.views import SiteDeleteView
+from .views import OPMLView
+from .views import SiteListView
+from .views import SiteCreateView
+from .views import SiteDetailView
+from .views import SiteUpdateView
+from .views import SiteDeleteView
 
-from feeds.views import FeedCreateView
-from feeds.views import FeedListView
-from feeds.views import FeedDetailView
-from feeds.views import FeedUpdateView
-from feeds.views import FeedDeleteView
-from feeds.views import FeedRefreshView
-from feeds.views import FeedSubscribeView
-from feeds.views import FeedUnSubscribeView
+from .views import FeedCreateView
+from .views import FeedListView
+from .views import FeedDetailView
+from .views import FeedUpdateView
+from .views import FeedDeleteView
+from .views import FeedRefreshView
+from .views import FeedSubscribeView
+from .views import FeedUnSubscribeView
 
-from feeds.views import FeedSubscriptionsView
+from .views import FeedSubscriptionsView
 
-from feeds.views import PostListView, PostDetailView, PostTrackableView
-from feeds.views import CategoryListView, CategoryCreateView
-from feeds.views import CategoryDetailView
-from feeds.views import CategoryUpdateView
-from feeds.views import CategoryDeleteView
-from feeds.views import TagListView, TagDetailView
-from feeds.views import TagCreateView, TagUpdateView
+from .views import PostListView, PostDetailView, PostTrackableView
+from .views import CategoryListView, CategoryCreateView
+from .views import CategoryDetailView
+from .views import CategoryUpdateView
+from .views import CategoryDeleteView
+from .views import TagListView, TagDetailView
+from .views import TagCreateView, TagUpdateView
 
-from feeds.views import SiteSubmitWizardView, SiteSubmitForms
+from .views import SiteSubmitWizardView, SiteSubmitForms
 
-from feeds.views import BackupView
+from .views import BackupView
 
-from feeds.rss import RssFeed
+from .rss import RssFeed
 
-from api_views import UserSubscriptions
+from .api_views import UserSubscriptions
+from .sitemap import PostSitemap
+
 from django.views.generic import TemplateView
-
-from sitemap import PostSitemap
 from django.contrib.sitemaps.views import sitemap
 
 sitemaps = {
