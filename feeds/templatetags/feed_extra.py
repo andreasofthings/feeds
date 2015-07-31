@@ -1,11 +1,17 @@
 from django import template
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, Group
 
 from ..models import Feed, Post, Subscription, Options
 
 register = template.Library()
+
+
+@register.filter(name='has_group')
+def has_group(user, group_name):
+    group = Group.objects.get(name=group_name)
+    return True if group in user.groups.all() else False
 
 
 class RecentPostNode(template.Node):
