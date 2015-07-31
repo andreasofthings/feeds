@@ -17,22 +17,25 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
-from ..managers import SiteManager
+from ..managers import WebSiteManager
 
 logger = logging.getLogger(__name__)
 
 
-class Site(models.Model):
-    url = models.URLField(unique=True)
+class WebSite(models.Model):
+    url = models.URLField(
+        unique=True,
+        help_text=_("URL of the Website.")
+    )
     """URL of the `Site`."""
 
     slug = models.SlugField(null=True)
     """Human readble URL component"""
 
-    objects = SiteManager()
+    objects = WebSiteManager()
     """
     Overwrite the inherited manager
-    with the custom :mod:`feeds.models.SiteManager`
+    with the custom :mod:`feeds.models.WebSiteManager`
     """
 
     def save(self, *args, **kwargs):
@@ -42,7 +45,7 @@ class Site(models.Model):
         """
         if not self.slug:
             self.slug = slugify(self.url)
-        return super(Site, self).save(*args, **kwargs)
+        return super(WebSite, self).save(*args, **kwargs)
 
     def __str__(self):
         """

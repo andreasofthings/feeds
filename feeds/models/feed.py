@@ -22,13 +22,14 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
+from .website import WebSite
+from .category import Category
+
 from .. import USER_AGENT
 from .. import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 from .. import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME
 from ..managers import FeedManager
 from ..feedexceptions import FeedErrorHTTP, FeedErrorParse, FeedSame
-from .site import Site
-from .category import Category
 
 logger = logging.getLogger(__name__)
 
@@ -85,8 +86,8 @@ class Feed(models.Model):
         status
         version
     """
-    site = models.ForeignKey(
-        Site,
+    website = models.ForeignKey(
+        WebSite,
         blank=True,
         null=True
     )

@@ -1,7 +1,7 @@
 #! /usr/bin/python
 
 from options import Options
-from site import Site
+from website import WebSite
 from feed import Feed
 from post import Post, TaggedPost
 from category import Category
@@ -10,7 +10,7 @@ from subscription import Subscription
 from stats import PostReadCount, FeedStats, FeedEntryStats
 
 __all__ = [
-    'Site',
+    'WebSite',
     'Feed',
     'FeedStats',
     'FeedEntryStats',
