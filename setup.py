@@ -1,5 +1,6 @@
 import os
 from setuptools import setup
+from setuptools.command.install import install
 
 README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 
@@ -7,6 +8,21 @@ README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 from feeds import __version__
+
+
+class InstallCommand(install):
+    """Customized setuptools install command - prints a friendly greeting."""
+    def run(self):
+        """
+        Run installation first.
+        """
+        install.run(self)
+        from django.contrib.auth.models import Group
+        g, created = Group.objects.get_or_create(name="Feeds")
+        if created:
+            g.save()
+
+
 
 setup(
     name='feeds',
@@ -42,4 +58,7 @@ setup(
         'elasticsearch==1.4.0',
         'timestring==1.6.2',
     ],
+    cmdclass={
+        'install': InstallCommand,
+    },
 )
