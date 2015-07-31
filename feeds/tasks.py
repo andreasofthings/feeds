@@ -43,6 +43,7 @@ from feeds import CRON_OK, CRON_ERR
 from .tools import getText
 from .models import Feed, Post, Tag, TaggedPost
 from .models import FeedStats
+from .social import tweets
 
 from exceptions import Exception
 
@@ -112,22 +113,14 @@ def post_update_twitter(entry_id):
     """
     logger.debug("start: counting tweets")
 
-    if not entry_id:
-        logger.error("can't count tweets for non-post. pk is empty.")
-        return
-
-    post = Post.objects.get(pk=entry_id)
-    twitter_count = "http://urls.api.twitter.com/1/urls/count.json?url=%s"
-    query = twitter_count % (post.link)
-
-    resp = requests.get(query)
-
-    if resp.status_code == 200:
-        result = json.loads(resp.text)
-        post.tweets = result['count']
+    try:
+        post = Post.objects.get(pk=entry_id)
+        post.tweets = tweets(post)
         post.save()
-    else:
-        logger.debug("status error: %s: %s", resp.status_code, resp.text)
+    except Post.DoesNotExist:
+        logger.error("Post %s does not exist")
+    except Exception as e:
+        raise e
 
     logger.debug("stop: counting tweets. got %s", post.tweets)
     return post.tweets
@@ -365,17 +358,17 @@ def cronjob():
     result = {}
     max_feeds = 1
     qs = Feed.objects.filter(
-            is_active=True
+        is_active=True
         ).filter(
             errors__lte=3
         )
     feeds = qs.filter(
-            last_checked__isnull=True
+        last_checked__isnull=True
         )
     if not feeds.exists():
         feeds = qs.order_by(
-                'last_checked'
-                )
+            'last_checked'
+            )
     try:
         result = chord(
             (feed_refresh.s(i.id) for i in feeds[:max_feeds]),
