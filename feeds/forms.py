@@ -13,7 +13,7 @@ from crispy_forms.layout import Div
 from crispy_forms.bootstrap import FormActions
 
 from .models import Options
-from .models import Site
+from .models import WebSite
 from .models import Feed
 from .models import Category
 from .models import Tag
@@ -79,7 +79,7 @@ class SiteCreateForm(forms.ModelForm):
     url = SiteField()
 
     class Meta:
-        model = Site
+        model = WebSite
         fields = ('url', )
 
     def __init__(self, *args, **kwargs):
@@ -107,7 +107,7 @@ class SiteUpdateForm(forms.ModelForm):
     Form to update an existing Site
     """
     class Meta:
-        model = Site
+        model = WebSite
         fields = ('url', )
 
     def __init__(self, *args, **kwargs):
