@@ -28,7 +28,7 @@ from .models import Options
 from .forms import OptionsForm
 from .forms import OPMLForm
 
-from .models import Site, Feed, Post, Subscription
+from .models import WebSite, Feed, Post, Subscription
 from .models import Category, Tag, PostReadCount
 from .forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
 from .forms import FeedUpdateForm, CategoryUpdateForm
@@ -158,7 +158,7 @@ class SiteListView(ListView):
 
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
-    model = Site
+    model = WebSite
     template_name = "feeds/site_list.html"
 
 
@@ -168,12 +168,12 @@ class SiteCreateView(PermissionRequiredMixin, CreateView):
     """
     permission_required = "feeds.add_site"
     form_class = SiteCreateForm
-    model = Site
+    model = WebSite
 
 
 class SiteDetailView(DetailView):
     """
-    Shows Details for one particular :py:mod:`feeds.models.Site`.
+    Shows Details for one particular :py:mod:`feeds.models.WebSite`.
 
     The view is accessible publically.
 
@@ -181,7 +181,7 @@ class SiteDetailView(DetailView):
 
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
-    model = Site
+    model = WebSite
     template_name = "feeds/site_detail.html"
 
 
@@ -191,12 +191,12 @@ class SiteUpdateView(PermissionRequiredMixin, UpdateView):
     """
     permission_required = "feeds.change_site"
     form_class = SiteUpdateForm
-    model = Site
+    model = WebSite
 
 
 class SiteDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = "feeds.delete_site"
-    model = Site
+    model = WebSite
     success_url = "planet:site-home"
 
 
