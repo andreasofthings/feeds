@@ -50,21 +50,24 @@ def plusone(post):
             queryurl,
             data=json.dumps(params),
             headers=headers
-        )
-    except ValueError:
+            )
+        if resp.status_code == 200:
+            result_json = json.loads(resp.text)
+    except ValueError as e:
+        logger.error(e)
         logger.error(json.dumps(params))
         logger.error(headers)
-    except:
-        logger.debug("stop: counting +1s. Got none. Something weird happened.")
+    except Exception as e:
+        logger.error("""stop: counting +1s. Something weird happened.\n
+                     %s
+                     """ % e)
 
-    if resp.status_code == 200:
-        result = json.loads(resp.text)
-        try:
-            post.plus1 = int(
-                result['result']['metadata']['globalCounts']['count']
-            )
-            post.save()
-            logger.debug("stop: counting +1s. Got %s.", post.plus1)
-            return post.plus1
-        except KeyError as e:
-            raise KeyError(e)
+    try:
+        result = int(
+            result_json['result']['metadata']['globalCounts']['count']
+        )
+    except KeyError as e:
+        raise KeyError(e)
+
+    logger.debug("stop: counting +1s. Got %s.", result)
+    return result

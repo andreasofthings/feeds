@@ -172,7 +172,10 @@ def entry_update_googleplus(post_id):
     except Post.DoesNotExist:
         logger.error("Does not exist (%s)", post_id)
 
-    post.plus1 = plusone(post)
+    try:
+        post.plus1 = plusone(post)
+    except:
+        pass
     post.save()
 
     return post.plus1
