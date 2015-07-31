@@ -328,7 +328,7 @@ def cronjob():
         )
     if not feeds.exists():
         feeds = qs.order_by(
-            'last_checked'
+            '-last_checked'
             )
     try:
         result = chord(
