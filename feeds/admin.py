@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models.site import WebSite
+from .models.website import WebSite
 from .models.feed import Feed
 from .models.post import Post
 from .models.stats import FeedPostCount
