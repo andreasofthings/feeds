@@ -42,29 +42,33 @@
 </div>
 
 {% if is_paginated %}
-  <nav>
-    <ul class="pagination pagination-mini pagination-centered">
-      {% if page_obj.has_previous %}
-        <li class="active"><a href="{% url "planet:feed-home-paginated" page_obj.previous_page_number %}"> previous</a></li>
-      {% else %}
-        <li class="disabled"><a href="#">previous</a></li>
-      {% endif %}
+<div class="row">
+    <div class="col-md-12">
+      <nav>
+        <ul class="pagination pagination-mini pagination-centered">
+          {% if page_obj.has_previous %}
+            <li class="active"><a href="{% url "planet:feed-home-paginated" page_obj.previous_page_number %}"> previous</a></li>
+          {% else %}
+            <li class="disabled"><a href="#">previous</a></li>
+          {% endif %}
 
-      {% for page in  page_obj.paginator.page_range %}
-        {% if page == page_obj.number %}
-          <li class="disabled"><a href="#">{{ page }}</a></li>
+        {% for page in  page_obj.paginator.page_range %}
+          {% if page == page_obj.number %}
+            <li class="disabled"><a href="#">{{ page }}</a></li>
+          {% else %}
+            <li class="active"><a href="{% url "planet:feed-home-paginated" page %}">{{ page }}</a></li>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <li class="active"> <a href="{% url "planet:feed-home-paginated" page_obj.next_page_number %}">next</a></li>
         {% else %}
-          <li class="active"><a href="{% url "planet:feed-home-paginated" page %}">{{ page }}</a></li>
+          <li class="disabled"><a href="#">next</a></li>
         {% endif %}
-      {% endfor %}
-
-      {% if page_obj.has_next %}
-        <li class="active"> <a href="{% url "planet:feed-home-paginated" page_obj.next_page_number %}">next</a></li>
-      {% else %}
-        <li class="disabled"><a href="#">next</a></li>
-      {% endif %}
-    </ul>
-  </nav>
+      </ul>
+    </nav>
+  </div>
+</div>
 {% endif %}
 
 {%endblock%}

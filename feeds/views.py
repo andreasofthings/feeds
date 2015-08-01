@@ -222,6 +222,8 @@ class FeedListView(ListView):
     queryset = Feed.objects.all()
 
     def get_paginate_by(self, queryset):
+        if 'paginate_by' in self.request.GET:
+            return int(self.request.GET['paginate_by'])
         return 10
 
 
