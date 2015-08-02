@@ -18,7 +18,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from .feed import Feed
 from .tag import Tag
-from .category import Category
 
 logger = logging.getLogger(__name__)
 
@@ -39,11 +38,6 @@ class Post(models.Model):
     content = models.TextField(_('description'), blank=True)
     author = models.CharField(_('author'), max_length=50, blank=True)
     author_email = models.EmailField(_('author email'), blank=True)
-    category = models.ManyToManyField(
-        Category,
-        related_name="category_posts",
-        blank=True,
-    )
     comments = models.URLField(_('comments'), blank=True)
     # enclosure, see there
     guid = models.CharField(

@@ -40,7 +40,7 @@ class Category(models.Model):
 
     name = models.CharField(
         max_length=200,
-        help_text='Short descriptive name for this category.',
+        help_text=_('Short descriptive name for this category.'),
         unique=True,
     )
 
@@ -65,6 +65,15 @@ class Category(models.Model):
         Return all :py:mod:`feeds.models.Feed`s in this Category.
         """
         return self.category_feeds.all()
+
+    @property
+    def posts(self):
+        """
+        Return all :py:mod:`feeds.models.Post`s for
+        :py:mod:`feeds.models.Feed`s in this category.
+        """
+        result = self.category_feeds.posts()
+        return result
 
     def natural_key(self):
         return (self.name, )
