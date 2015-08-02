@@ -66,9 +66,9 @@ class TaskTest(TestCase):
         self.assertEqual(result.get(), 0)
 
     def test_count_share_like(self):
-        from feeds.tasks import entry_update_facebook
+        from feeds.tasks import post_update_facebook
         posts = Post.objects.all()
-        result = entry_update_facebook.delay(posts[0].pk)
+        result = post_update_facebook.delay(posts[0].pk)
         self.assertEqual(result.get(), True)
 
     def test_feed_refresh(self):

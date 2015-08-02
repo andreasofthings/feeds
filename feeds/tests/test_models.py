@@ -20,7 +20,7 @@ class ModelTest(TestCase):
     :py:mod:`feeds.tests.ModelTest` aims to test following models:
 
     - :py:mod:`feeds.models.SiteManager`
-    - :py:mod:`feeds.models.Site`
+    - :py:mod:`feeds.models.WebSite`
     - :py:mod:`feeds.models.TagManager`
     - :py:mod:`feeds.models.Tag`
     - :py:mod:`feeds.models.CategoryManager`
@@ -46,12 +46,12 @@ class ModelTest(TestCase):
 
     def test_site(self):
         """
-        Create a :py:mod:`feeds.models.Site` Object and verify
+        Create a :py:mod:`feeds.models.WebSite` Object and verify
         it functions properly.
         """
 
-        from feeds.models import Site
-        s = Site(url="https://angry-planet.com/")
+        from feeds.models import WebSite
+        s = WebSite(url="https://angry-planet.com/")
         s.save()
         # self.assertContains( s.get_absolute_url(), s.pk)
         """
