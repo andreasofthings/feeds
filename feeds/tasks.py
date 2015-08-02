@@ -195,7 +195,9 @@ def tsum(numbers, post_id):
         logger.error("Post %s does not exist." % (post_id))
         return
 
-    p.score = sum(numbers)
+    import itertools
+    merged = list(itertools.chain.from_iterable(numbers))
+    p.score = sum(merged)
     p.save()
 
     return sum(numbers)
