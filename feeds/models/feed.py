@@ -19,6 +19,7 @@ import calendar
 from collections import Counter
 
 from django.db import models
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
@@ -257,6 +258,8 @@ class Feed(models.Model):
     def save(self, *args, **kwargs):
         """
         """
+        if self.errors > settings.get('FEEDS_ERROR_THRESHOLD', 3):
+            self.is_active = False
         return super(Feed, self).save(*args, **kwargs)
 
     class Meta:

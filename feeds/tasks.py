@@ -320,7 +320,7 @@ def cronjob():
     """
     logger.debug("-- started --")
     result = {}
-    max_feeds = 1
+    max_feeds = 5
     qs = Feed.objects.filter(
         is_active=True
         ).filter(
@@ -331,7 +331,7 @@ def cronjob():
         )
     if not feeds.exists():
         feeds = qs.order_by(
-            '-last_checked'
+            'last_checked'
             )
     try:
         result = chord(
