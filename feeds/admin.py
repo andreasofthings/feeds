@@ -118,7 +118,7 @@ class PostAdmin(admin.ModelAdmin):
         'was_announced',
         'updated_social',
     )
-    list_filter = ('was_announced', 'feed', 'category', )
+    list_filter = ('was_announced', 'feed', )
 
 
 class FileAdmin(admin.ModelAdmin):
