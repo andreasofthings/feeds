@@ -196,11 +196,16 @@ def tsum(numbers, post_id):
         return
 
     import itertools
-    merged = list(itertools.chain.from_iterable(numbers))
+    try:
+        merged = list(itertools.chain.from_iterable(numbers))
+    except TypeError as e:
+        logger.error(e)
+        logger.error(numbers)
+        return 0
     p.score = sum(merged)
     p.save()
 
-    return sum(numbers)
+    return sum(merged)
 
 
 @shared_task
