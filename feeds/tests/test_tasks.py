@@ -69,7 +69,8 @@ class TaskTest(TestCase):
         from feeds.tasks import post_update_facebook
         posts = Post.objects.all()
         result = post_update_facebook.delay(posts[0].pk)
-        self.assertEqual(result.get(), True)
+        self.assertEqual(type(result.get()), type((0, 0)))
+        self.assertEqual(len(result.get()), len((0, 0)))
 
     def test_feed_refresh(self):
         from feeds.tasks import feed_refresh
