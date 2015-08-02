@@ -108,7 +108,7 @@ def post_update_twitter(entry_id):
 
     try:
         post = Post.objects.get(pk=entry_id)
-        (post.tweets, ) = tweets(post)
+        post.tweets = tweets(post)
         post.save()
     except Post.DoesNotExist:
         logger.error("Post %s does not exist")
@@ -116,7 +116,7 @@ def post_update_twitter(entry_id):
         raise e
 
     logger.debug("stop: counting tweets. got %s", post.tweets)
-    return post.tweets
+    return (post.tweets, )
 
 
 @shared_task(time_limit=10)
@@ -163,7 +163,7 @@ def post_update_linkedin(entry_id):
         "stop: counting linkedin. got %s",
         post.linkedin
     )
-    return post.linkedin
+    return (post.linkedin, )
 
 
 @shared_task(time_limit=10)

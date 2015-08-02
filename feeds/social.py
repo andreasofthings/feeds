@@ -21,7 +21,7 @@ def tweets(post):
     resp = requests.get(query)
 
     if resp.status_code == 200:
-        return (json.loads(resp.text)['count'], )
+        return json.loads(resp.text)['count']
     else:
         raise Exception
 
@@ -33,7 +33,7 @@ def linkedin(post):
     resp = requests.get(query)
 
     if resp.status_code == 200:
-        return (json.loads(resp.text)['count'], )
+        return json.loads(resp.text)['count']
     else:
         raise Exception
 
