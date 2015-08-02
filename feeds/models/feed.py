@@ -258,7 +258,7 @@ class Feed(models.Model):
     def save(self, *args, **kwargs):
         """
         """
-        if self.errors > settings.get('FEEDS_ERROR_THRESHOLD', 3):
+        if self.errors > getattr(settings, 'FEEDS_ERROR_THRESHOLD', 3):
             self.is_active = False
         return super(Feed, self).save(*args, **kwargs)
 
@@ -485,8 +485,11 @@ class Feed(models.Model):
             if self.last_checked + \
                     datetime.timedelta(seconds=300) < datetime.datetime.now():
                 logger.error(
-                    "tried feed %s too quick. aborting.",
-                    self.feed_url
+                    "tried feed %s too quick. aborting. (%s, %s, %s)",
+                    self.feed_url,
+                    self.last_checked,
+                    self.last_checked + datetime.timedelta(seconds=300),
+                    datetime.datetime.now()
                 )
                 return FEED_SAME
 
