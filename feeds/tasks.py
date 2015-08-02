@@ -214,16 +214,16 @@ def post_update_social(post_id):
 
     header = []
 
-    if settings.FEED_POST_UPDATE_TWITTER:
+    if getattr(settings, 'FEED_POST_UPDATE_TWITTER', False):
         f = (post_update_twitter.subtask((p.id, )))
         header.append(f)
-    if settings.FEED_POST_UPDATE_FACEBOOK:
+    if getattr(settings, 'FEED_POST_UPDATE_FACEBOOK', False):
         f = (post_update_facebook.subtask((p.id, )))
         header.append(f)
-    if settings.FEED_POST_UPDATE_LINKEDIN:
+    if getattr(settings, 'FEED_POST_UPDATE_LINKEDIN', False):
         f = (post_update_linkedin.subtask((p.id, )))
         header.append(f)
-    if settings.FEED_POST_UPDATE_GOOGLEPLUS:
+    if getattr(settings, 'FEED_POST_UPDATE_GOOGLEPLUS', False):
         f = (entry_update_googleplus.subtask((p.id, )))
         header.append(f)
 
