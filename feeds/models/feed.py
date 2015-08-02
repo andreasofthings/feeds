@@ -484,7 +484,10 @@ class Feed(models.Model):
         if self.last_checked is not None:
             if self.last_checked + \
                     datetime.timedelta(seconds=300) < datetime.datetime.now():
-                logger.debug("tried too quick. aborting.")
+                logger.error(
+                    "tried feed %s too quick. aborting.",
+                    self.feed_url
+                )
                 return FEED_SAME
 
         try:
