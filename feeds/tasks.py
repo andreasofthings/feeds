@@ -15,18 +15,14 @@ This module takes care of everything that is not client/customer facing.
 import logging
 
 import types
-import requests
 
 try:
     from urllib.parse import urlparse
-    from urllib.quote import quote
 except ImportError:
     import urlparse
-    from urllib import quote
 
 
 from datetime import datetime
-from xml.dom.minidom import parseString
 
 from celery import shared_task
 from celery import chord
@@ -39,10 +35,9 @@ from django.conf import settings
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 from feeds import CRON_OK, CRON_ERR
 
-from .tools import getText
 from .models import Feed, Post, Tag, TaggedPost
 from .models import FeedStats
-from .social import tweets, plusone
+from .social import tweets, facebook, linkedin, plusone
 
 from exceptions import Exception
 
@@ -108,7 +103,6 @@ def twitter_post(post_id):
 def post_update_twitter(entry_id):
     """
     count tweets
-
     """
     logger.debug("start: counting tweets")
 
@@ -126,38 +120,50 @@ def post_update_twitter(entry_id):
 
 
 @shared_task(time_limit=10)
-def entry_update_facebook(entry_id):
+def post_update_facebook(entry_id):
     """
-    count facebook shares & likes
+    count facebook
     """
+    logger.debug("start: counting facebook")
 
-    if not entry_id:
-        logger.error("can't count shares&likes for non-post. pk is empty.")
-        return
+    try:
+        post = Post.objects.get(pk=entry_id)
+        (post.shares, post.likes, bla) = facebook(post)
+        post.save()
+    except Post.DoesNotExist:
+        logger.error("Post %s does not exist")
+    except Exception as e:
+        raise e
 
-    entry = Post.objects.get(pk=entry_id)
-    logger.debug("start: facebook shares & likes for %s...", entry.guid)
-    fb_api = "https://api.facebook.com/method/fql.query?query=%s"
-    fb_sql = """select like_count, share_count from link_stat where url='%s'"""
-    query_sql = fb_sql % (entry.link)
-    query_url = fb_api % (quote(query_sql))
-    resp = requests.get(query_url)
+    logger.debug(
+        "stop: counting tweets. got %s shares and %s likes",
+        post.shares,
+        post.likes
+    )
+    return (post.shares, post.likes)
 
-    if resp.status_code == 200:
-        xml = parseString(resp.text)
-        for i in xml.getElementsByTagName("link_stat"):
-            for j in i.getElementsByTagName("like_count"):
-                entry.likes = int(getText(j.childNodes))
-            for j in i.getElementsByTagName("share_count"):
-                entry.shares = int(getText(j.childNodes))
 
-    entry.save()
+@shared_task(time_limit=10)
+def post_update_linkedin(entry_id):
+    """
+    count linkedin
+    """
+    logger.debug("start: counting linkedin")
 
-    logger.debug("stop: facebook shares & likes. got %s shares and %s likes.",
-                 entry.shares,
-                 entry.likes
-                 )
-    return True
+    try:
+        post = Post.objects.get(pk=entry_id)
+        post.linkedin = linkedin(post)
+        post.save()
+    except Post.DoesNotExist:
+        logger.error("Post %s does not exist")
+    except Exception as e:
+        raise e
+
+    logger.debug(
+        "stop: counting linkedin. got %s",
+        post.linkedin
+    )
+    return post.linkedin
 
 
 @shared_task(time_limit=10)
@@ -212,7 +218,10 @@ def post_update_social(post_id):
         f = (post_update_twitter.subtask((p.id, )))
         header.append(f)
     if settings.FEED_POST_UPDATE_FACEBOOK:
-        f = (entry_update_facebook.subtask((p.id, )))
+        f = (post_update_facebook.subtask((p.id, )))
+        header.append(f)
+    if settings.FEED_POST_UPDATE_LINKEDIN:
+        f = (post_update_linkedin.subtask((p.id, )))
         header.append(f)
     if settings.FEED_POST_UPDATE_GOOGLEPLUS:
         f = (entry_update_googleplus.subtask((p.id, )))

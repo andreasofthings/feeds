@@ -66,6 +66,7 @@ class Post(models.Model):
     blogs = models.IntegerField(default=0)
     plus1 = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
+    linkedin = models.IntegerField(default=0)
     shares = models.IntegerField(default=0)
     pageviews = models.IntegerField(default=0)
     score = models.IntegerField(default=0)

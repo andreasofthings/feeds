@@ -21,8 +21,38 @@ def tweets(post):
     resp = requests.get(query)
 
     if resp.status_code == 200:
-        result = json.loads(resp.text)['count']
-    return result
+        return json.loads(resp.text)['count']
+    else:
+        raise Exception
+
+
+def linkedin(post):
+    linkedin_count = \
+        "http://www.linkedin.com/countserv/count/share?url=%s&format=json"
+    query = linkedin_count % (post.link)
+    resp = requests.get(query)
+
+    if resp.status_code == 200:
+        return json.loads(resp.text)['count']
+    else:
+        raise Exception
+
+
+def facebook(post):
+    facebook_count = \
+        'http://graph.facebook.com/%s'
+    query = facebook_count % (post.link)
+    resp = requests.get(query)
+
+    if resp.status_code == 200:
+        js = json.loads(resp.text)
+        return (
+            js.get('shares', 0),
+            js.get('likes', 0),
+            js.get('comments', 0),
+        )
+    else:
+        raise Exception
 
 
 def plusone(post):
