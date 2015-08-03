@@ -498,6 +498,7 @@ class Feed(models.Model):
             self.save()  # touch timestamp
             return FEED_ERRPARSE
         except FeedSame:
+            self.save() # touch timestamp
             return FEED_SAME
 
         try:
