@@ -237,7 +237,7 @@ class FeedDetailView(DetailView):
     model = Feed
     context_object_name = "feed"
 
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super(FeedDetailView, self).get_context_data(**kwargs)
         return context
 
@@ -373,11 +373,11 @@ class CategoryDetailView(DetailView):
     """
     model = Category
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(FeedDetailView, self).get_context_data(**kwargs)
-        context['top5'] = Post.objects.filter(feeds__category=self.object)
+    def get_context_data(self, **kwargs):
+        context = super(CategoryDetailView, self).get_context_data(**kwargs)
+        context['top5'] = \
+            Post.objects.filter(feeds__category=context['object'])
         return context
-
 
 
 class CategoryUpdateView(LoginRequiredMixin, UpdateView):
