@@ -184,12 +184,6 @@ class Feed(models.Model):
         blank=True
     )
 
-    # Category
-    category = models.ManyToManyField(
-        Category,
-        related_name="category_feeds",
-        blank=True,
-    )
     # generator
     # docs
     # cloud

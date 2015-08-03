@@ -33,21 +33,19 @@
 
 {% for node in nodes %}
 <div class="row">
-    <div class="col-md-3">
-      <h3>
+    <div class="col-md-2">
+      <small>
         <a href="{{node.feed.link}}" alt="{{node.feed.title}}">{{node.feed.title}}</a>
-      </h3>
+      </small>
     </div>
-    <div class="col-md-4">
-      <h2>
-        <a href="{{node.get_absolute_url }}">{{ node.title }}</a>
-      </h2>
-    </div>
-    <div class="col-md-3">
-      <h5>{{ node.updated }}</h5>
+    <div class="col-md-6">
+      <small><a href="{{node.get_absolute_url }}">{{ node.title }}</a></small>
     </div>
     <div class="col-md-2">
-      <h5>{{ node.score }}</h5>
+      <small>{{ node.updated }}</small>
+    </div>
+    <div class="col-md-2">
+      <small>{{ node.score }}</small>
     </div>
 </div>
  {% endfor %}

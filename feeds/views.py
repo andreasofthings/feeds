@@ -373,8 +373,11 @@ class CategoryDetailView(DetailView):
     """
     model = Category
 
-    def dispatch(self, *args, **kwargs):
-        return super(CategoryDetailView, self).dispatch(*args, **kwargs)
+    def get_context_data(self, *args, **kwargs):
+        context = super(FeedDetailView, self).get_context_data(**kwargs)
+        context['top5'] = Post.objects.filter(feeds__category=self.object)
+        return context
+
 
 
 class CategoryUpdateView(LoginRequiredMixin, UpdateView):

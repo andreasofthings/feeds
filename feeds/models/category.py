@@ -69,6 +69,7 @@ class Category(models.Model):
     @property
     def posts(self):
         """
+        ToDo:
         Return all :py:mod:`feeds.models.Post`s for
         :py:mod:`feeds.models.Feed`s in this category.
         """
