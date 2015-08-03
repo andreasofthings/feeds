@@ -33,22 +33,22 @@
 
 {% for node in nodes %}
 <div class="row">
-  <div class="col-md-12 node">
-    <div>
+    <div class="col-md-3">
       <h3>
         <a href="{{node.feed.link}}" alt="{{node.feed.title}}">{{node.feed.title}}</a>
       </h3>
+    </div>
+    <div class="col-md-4">
       <h2>
         <a href="{{node.get_absolute_url }}">{{ node.title }}</a>
       </h2>
+    </div>
+    <div class="col-md-3">
       <h5>{{ node.updated }}</h5>
     </div>
-
-    <div class="trackbacks">
-    </div><!-- trackbacks -->
-
-  </div>
-  <!-- node -->
+    <div class="col-md-2">
+      <h5>{{ node.score }}</h5>
+    </div>
 </div>
  {% endfor %}
 
