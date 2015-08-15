@@ -9,6 +9,9 @@ from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
 from django.contrib import admin
 from feeds.sitemap import PostSitemap, FeedSitemap
+from django.contrib.sitemaps import views as sitemaps_views
+from django.views.decorators.cache import cache_page
+
 
 sitemaps = {
     'feed': FeedSitemap,
@@ -39,9 +42,6 @@ urlpatterns = patterns(
     ),
 )
 
-from django.contrib.sitemaps import views as sitemaps_views
-from django.views.decorators.cache import cache_page
-
 urlpatterns += patterns(
     '',
     url(r'^sitemap\.xml$',
@@ -49,7 +49,8 @@ urlpatterns += patterns(
         {
             'sitemaps': sitemaps,
             'sitemap_url_name': 'sitemaps'
-        }
+        },
+        name="sitemap"
         ),
     url(r'^sitemap-(?P<section>.+)\.xml$',
         cache_page(86400)(sitemaps_views.sitemap),
