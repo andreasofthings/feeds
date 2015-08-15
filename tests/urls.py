@@ -50,14 +50,15 @@ urlpatterns += patterns(
             'sitemaps': sitemaps,
             'sitemap_url_name': 'sitemaps'
         },
-        name="sitemap"
+        name='sitemap'
         ),
     url(r'^sitemap-(?P<section>.+)\.xml$',
         cache_page(86400)(sitemaps_views.sitemap),
         {
             'sitemaps': sitemaps
         },
-        name='sitemaps'),
+        name='sitemaps'
+        ),
     )
 
 urlpatterns += patterns(

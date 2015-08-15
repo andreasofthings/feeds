@@ -18,7 +18,8 @@ class ViewsAnonymousTest(TestCase):
     def test_sitemap(self):
         result = self.client.get(
             reverse(
-                'planet:sitemap',
+                'planet:sitemaps',
+                kwargs={'section': 'post'}
             )
         )
         self.assertEqual(result.status_code, 200)
