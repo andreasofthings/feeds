@@ -96,7 +96,7 @@ class TaskTest(TestCase):
         from feeds.tasks import post_update_social
         post = Post.objects.all()[0]
         result = post_update_social.delay(post.pk)
-        self.assertEqual(result.get(), (0,))
+        self.assertEqual(result.get(), 0)
 
         result = post_update_social.delay(999999)
         self.assertEqual(result.get(), -4)
