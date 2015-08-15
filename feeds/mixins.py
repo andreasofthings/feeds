@@ -52,7 +52,7 @@ class UserAgentRequiredMixin(UserPassesTestMixin):
         ).lower()
 
 
-class PaginationMixin(ListView):
+class PaginationMixin(View):
     def get_paginate_by(self, queryset):
         if 'paginate_by' in self.request.GET:
             return int(self.request.GET['paginate_by'])
