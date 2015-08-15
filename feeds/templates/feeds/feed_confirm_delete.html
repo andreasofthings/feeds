@@ -1,11 +1,19 @@
 {%extends 'feeds/index.html'%}
 
 {%block content%}
-<form method="POST">{% csrf_token %}
-  {% for field in form %}
-      <div class="span3">{{ field.label_tag }}</div>
-  {% endfor %}
-confirm to delete feed: <b>{{ object.name }}</b>
-<input type="submit" value="confirm">
+<div class="row">
+  <form method="POST">{% csrf_token %}
+  <div class="col-md-4 col-md-offset-4">
+      {% for field in form %}
+      <div class="row">
+        <div class="col-md-12">{{ field.label_tag }}</div>
+      </div>
+      {% endfor %}
+  </div>
+  <div class="col-md-4">
+        Confirm to delete feed: <b>{{ object.name }}</b>
+      <input type="submit" value="confirm">
+  </div>
 </form>
+</div>
 {%endblock%}
