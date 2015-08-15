@@ -43,7 +43,11 @@ class UserAgentRequiredMixin(UserPassesTestMixin):
             check for useragent
         """
 
-        return 'google' in str(self.request.META['HTTP_USER_AGENT']).lower()
+        return 'google' in getattr(
+            self.request.META,
+            'HTTP_USER_AGENT',
+            ''
+        ).lower()
 
 
 class FeedsLevelOneMixin(LoginRequiredMixin, UserAgentRequiredMixin):
