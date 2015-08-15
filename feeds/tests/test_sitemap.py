@@ -16,10 +16,5 @@ class ViewsAnonymousTest(TestCase):
         self.client = Client()
 
     def test_sitemap(self):
-        result = self.client.get(
-            reverse(
-                'planet:sitemaps',
-                kwargs={'section': 'post'}
-            )
-        )
+        result = self.client.get('/feeds/sitemap.xml')
         self.assertEqual(result.status_code, 200)
