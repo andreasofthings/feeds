@@ -99,7 +99,7 @@ class TaskTest(TestCase):
         self.assertEqual(result.get(), 0)
 
         result = post_update_social.delay(999999)
-        self.assertEqual(result.get(), -4)
+        self.assertEqual(result.get(), None)
 
     def test_feed_refresh(self):
         from feeds.tasks import feed_refresh
