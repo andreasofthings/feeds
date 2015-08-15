@@ -39,7 +39,7 @@ class BackupTest(TestCase):
             self.password
         )
         """Test user."""
-        permission = Permission.objects.get(codename="can_backup_feed")
+        permission = Permission.objects.get(codename="feeds.can_backup_feed")
         self.user.user_permissions.add(permission)
 
     def test_backup(self):

@@ -9,7 +9,7 @@
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
-from django.contrib.auth.models import AnonymousUser
+# from django.contrib.auth.models import AnonymousUser
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from braces.views import UserPassesTestMixin
@@ -55,9 +55,9 @@ class PaginationMixin(object):
     def get_paginate_by(self, queryset):
         if 'paginate_by' in self.request.GET:
             return int(getattr('paginate_by', self.request.GET, 10))
-        elif type(self.request.user) is not AnonymousUser:
-            if 'number_initially_displayed' in self.request.user.options:
-                return self.request.user.options.number_initially_displayed
+        # elif type(self.request.user) is not AnonymousUser:
+        #    if 'number_initially_displayed' in self.request.user.options:
+        #        return self.request.user.options.number_initially_displayed
         return 10
 
 
