@@ -67,4 +67,4 @@ class FeedsLevelOneMixin(LoginRequiredMixin, UserAgentRequiredMixin):
 
 
 class FeedsLevelTwoMixin(PermissionRequiredMixin, FeedsLevelOneMixin):
-    permission_required = "feeds.can_backup_feed"
+    permission_required = "can_backup_feed"

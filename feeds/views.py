@@ -214,7 +214,7 @@ class FeedCreateView(PermissionRequiredMixin, CreateView):
     initial = {'is_Active': False}
 
 
-class FeedListView(ListView):
+class FeedListView(PaginationMixin, ListView):
     """
     List all registered feeds
 
@@ -222,13 +222,6 @@ class FeedListView(ListView):
     model = Feed
     context_object_name = "feeds"
     queryset = Feed.objects.all()
-
-    def get_paginate_by(self, queryset):
-        if 'paginate_by' in self.request.GET:
-            return int(self.request.GET['paginate_by'])
-        elif 'number_initially_displayed' in self.request.user.options:
-            return self.request.user.options.number_initially_displayed
-        return 10
 
 
 class FeedDetailView(DetailView):
