@@ -38,12 +38,12 @@ def google_required(func):
 class UserAgentRequiredMixin(UserPassesTestMixin):
     user_agent = None  # Default required agent to none
 
-    def test_func(self, request):
+    def test_func(self, user):
         """
             check for useragent
         """
 
-        return 'google' in str(request.META['HTTP_USER_AGENT']).lower()
+        return 'google' in str(self.request.META['HTTP_USER_AGENT']).lower()
 
 
 class FeedsLevelOneMixin(LoginRequiredMixin, UserAgentRequiredMixin):
