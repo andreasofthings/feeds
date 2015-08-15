@@ -112,6 +112,7 @@ def post_update_twitter(entry_id):
         post.save()
     except Post.DoesNotExist:
         logger.error("Post %s does not exist")
+        return (-1, )
     except Exception as e:
         raise e
 
@@ -132,6 +133,7 @@ def post_update_facebook(entry_id):
         post.save()
     except Post.DoesNotExist:
         logger.error("Post %s does not exist")
+        return (-1, -1)
     except Exception as e:
         raise e
 
@@ -156,6 +158,7 @@ def post_update_linkedin(entry_id):
         post.save()
     except Post.DoesNotExist:
         logger.error("Post %s does not exist")
+        return (-1, )
     except Exception as e:
         raise e
 

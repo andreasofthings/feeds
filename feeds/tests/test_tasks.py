@@ -65,12 +65,30 @@ class TaskTest(TestCase):
         result = post_update_twitter.delay(post.pk)
         self.assertEqual(result.get(), (0,))
 
+        result = post_update_twitter.delay(999999)
+        self.assertEqual(result.get(), (-1,))
+
     def test_count_share_like(self):
         from feeds.tasks import post_update_facebook
         posts = Post.objects.all()
         result = post_update_facebook.delay(posts[0].pk)
         self.assertEqual(type(result.get()), type((0, 0)))
         self.assertEqual(len(result.get()), len((0, 0)))
+
+        result = post_update_facebook.delay(9999999)
+        self.assertEqual(type(result.get()), type((0, 0)))
+        self.assertEqual(len(result.get()), len((0, 0)))
+
+    def test_count_linkedin(self):
+        """
+        """
+        from feeds.tasks import post_update_linkedin
+        post = Post.objects.all()[0]
+        result = post_update_linkedin.delay(post.pk)
+        self.assertEqual(result.get(), (0,))
+
+        result = post_update_linkedin.delay(999999)
+        self.assertEqual(result.get(), (-1,))
 
     def test_feed_refresh(self):
         from feeds.tasks import feed_refresh
