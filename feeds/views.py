@@ -34,7 +34,7 @@ from .models import Category, Tag, PostReadCount
 from .forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
 from .forms import FeedUpdateForm, CategoryUpdateForm
 from .forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
-from .mixins import FeedsLevelTwoMixin
+from .mixins import FeedsLevelTwoMixin, PaginationMixin
 
 from formtools.wizard.views import SessionWizardView
 
@@ -325,7 +325,7 @@ class FeedSubscriptionsView(LoginRequiredMixin, ListView):
         return queryset
 
 
-class PostListView(ListView):
+class PostListView(PaginationMixin, ListView):
     """
     List Posts
     """

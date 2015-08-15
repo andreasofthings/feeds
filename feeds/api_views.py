@@ -36,6 +36,9 @@ class PostViewSet(mixins.ListModelMixin,
     """
     API endpoint that allows feeds to be listed.
     """
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
     throttle_class = (PostThrottle,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
