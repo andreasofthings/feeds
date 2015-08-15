@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-07 21:44+0200\n"
+"POT-Creation-Date: 2015-08-15 08:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,95 +18,83 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: models.py:104 models.py:247
-msgid "name"
+#: models/category.py:43
+msgid "Short descriptive name for this category."
 msgstr ""
 
-#: models.py:129 models.py:671
-msgid "tag"
-msgstr ""
-
-#: models.py:130
-msgid "tags"
-msgstr ""
-
-#: models.py:243
+#: models/feed.py:96
 msgid "feed url"
 msgstr ""
 
-#: models.py:253
+#: models/feed.py:100 models/tag.py:37
+msgid "name"
+msgstr ""
+
+#: models/feed.py:106
 msgid "short_name"
 msgstr ""
 
-#: models.py:267
+#: models/feed.py:120
 msgid "is active"
 msgstr ""
 
-#: models.py:269
+#: models/feed.py:122
 msgid "If disabled, this feed will not be further updated."
 msgstr ""
 
-#: models.py:277
-msgid "is beta"
+#: models/feed.py:125
+msgid "Has errors"
 msgstr ""
 
-#: models.py:279
-msgid "If beta, celery pipeline."
-msgstr ""
-
-#: models.py:282
-msgid "has no guid"
-msgstr ""
-
-#: models.py:284
+#: models/feed.py:127
 msgid ""
 "\n"
-"                    This feed doesn't have a proper guid.\n"
-"                    Use something else instead.\n"
+"                    Remember errors for a feed, and don't try again if a\n"
+"                    threshold is met\n"
 "                    "
 msgstr ""
 
-#: models.py:294
+#: models/feed.py:141
 msgid "title"
 msgstr ""
 
-#: models.py:299 models.py:464
+#: models/feed.py:146 models/post.py:37
 msgid "link"
 msgstr ""
 
-#: models.py:303 models.py:465
+#: models/feed.py:150 models/post.py:38
 msgid "description"
 msgstr ""
 
-#: models.py:305
+#: models/feed.py:152
 msgid "Phrase or sentence describing the channel."
 msgstr ""
 
-#: models.py:311
+#: models/feed.py:158
 msgid "language"
 msgstr ""
 
-#: models.py:316
+#: models/feed.py:163
 msgid "copyright"
 msgstr ""
 
-#: models.py:322
+#: models/feed.py:169
 msgid "managingEditor"
 msgstr ""
 
-#: models.py:328
+#: models/feed.py:175
 msgid "webmaster"
 msgstr ""
 
-#: models.py:333 models.py:481
+#: models/feed.py:180 models/post.py:49
 msgid "pubDate"
 msgstr ""
 
-#: models.py:335
+#: models/feed.py:182
 msgid "lastBuildDate"
 msgstr ""
 
-#: models.py:351
+#: models/feed.py:192
 msgid ""
 "\n"
 "          TTL stands for time to live.\n"
@@ -115,76 +103,120 @@ msgid ""
 "          "
 msgstr ""
 
-#: models.py:361
+#: models/feed.py:202
 msgid "image_title"
 msgstr ""
 
-#: models.py:366
+#: models/feed.py:208
 msgid "image_link"
 msgstr ""
 
-#: models.py:370
+#: models/feed.py:213
 msgid "image_url"
 msgstr ""
 
-#: models.py:381
+#: models/feed.py:224
 msgid "etag"
 msgstr ""
 
-#: models.py:387
+#: models/feed.py:230
 msgid "last checked"
 msgstr ""
 
-#: models.py:394
+#: models/feed.py:237
 msgid "Interval in Minutes between checks."
 msgstr ""
 
-#: models.py:430 models.py:458 models.py:574
+#: models/feed.py:242
+msgid "Indicates whether CA for this certificate should be ignored"
+msgstr ""
+
+#: models/feed.py:267 models/post.py:31 models/stats.py:29
 msgid "feed"
 msgstr ""
 
-#: models.py:431
+#: models/feed.py:268
 msgid "feeds"
 msgstr ""
 
-#: models.py:466
+#: models/feed.py:271
+msgid "Can refresh feed"
+msgstr ""
+
+#: models/feed.py:272
+msgid "Can subscribe to feed"
+msgstr ""
+
+#: models/feed.py:273
+msgid "Can backup feeds"
+msgstr ""
+
+#: models/files.py:20
+msgid "data"
+msgstr ""
+
+#: models/options.py:29
+msgid "User"
+msgstr ""
+
+#: models/options.py:33
+msgid "Paginate by"
+msgstr ""
+
+#: models/options.py:37
+msgid "ToDo"
+msgstr ""
+
+#: models/post.py:39
 msgid "author"
 msgstr ""
 
-#: models.py:467
+#: models/post.py:40
 msgid "author email"
 msgstr ""
 
-#: models.py:473
+#: models/post.py:41
 msgid "comments"
 msgstr ""
 
-#: models.py:476
+#: models/post.py:44
 msgid "guid"
 msgstr ""
 
-#: models.py:489
-msgid "date modified"
+#: models/post.py:50
+msgid "last_updated"
 msgstr ""
 
-#: models.py:676
+#: models/post.py:113 models/tag.py:62
+msgid "tag"
+msgstr ""
+
+#: models/post.py:118
 msgid "post"
 msgstr ""
 
-#: models.py:682
+#: models/post.py:124
 msgid "tagged item"
 msgstr ""
 
-#: models.py:683
+#: models/post.py:125
 msgid "tagged node"
 msgstr ""
 
-#: models.py:722
+#: models/subscription.py:31
 msgid "User Subscription"
 msgstr ""
 
-#: models.py:727
+#: models/subscription.py:36
 msgid "Feed Subscription"
+msgstr ""
+
+#: models/tag.py:63
+msgid "tags"
+msgstr ""
+
+#: models/website.py:28
+msgid "URL of the Website."
 msgstr ""
 
 #: templates/feeds/category_list.html:21
@@ -207,27 +239,15 @@ msgstr ""
 msgid "Feeds"
 msgstr ""
 
-#: templates/feeds/feed_list.html:16
+#: templates/feeds/feed_list.html:17
 msgid "Add a new Feed."
 msgstr ""
 
-#: templates/feeds/feed_list.html:16
+#: templates/feeds/feed_list.html:17
 msgid "Add Feed"
 msgstr ""
 
-#: templates/feeds/feed_list.html:35
-msgid "View Feed"
-msgstr ""
-
-#: templates/feeds/feed_list.html:37
-msgid "Edit Feed"
-msgstr ""
-
-#: templates/feeds/feed_list.html:38
-msgid "Delete Feed"
-msgstr ""
-
-#: templates/feeds/home.html:9
+#: templates/feeds/home.html:12
 msgid ""
 "\n"
 "Feeds comes still in the afterwaves of the closure of <i>Google Reader</i>. "
@@ -236,20 +256,31 @@ msgid ""
 "feature-set.\n"
 msgstr ""
 
-#: templates/feeds/home.html:16
+#: templates/feeds/home.html:19
+msgid ""
+"\n"
+"      Please consider becoming a beta tester.\n"
+"        "
+msgstr ""
+
+#: templates/feeds/home.html:30
 msgid "Submit a Site"
 msgstr ""
 
-#: templates/feeds/home.html:17
+#: templates/feeds/home.html:31
 msgid "Feeds overview"
 msgstr ""
 
-#: templates/feeds/home.html:18
+#: templates/feeds/home.html:32
 msgid "Category overview"
 msgstr ""
 
-#: templates/feeds/home.html:19
+#: templates/feeds/home.html:33
 msgid "Tags overview"
+msgstr ""
+
+#: templates/feeds/post_list.html:24 templates/feeds/post_list.html.py:26
+msgid "Newer"
 msgstr ""
 
 #: templates/feeds/site_submit_wizard.html:29
@@ -262,4 +293,32 @@ msgstr ""
 
 #: templates/feeds/site_submit_wizard.html:35
 msgid "submit"
+msgstr ""
+
+#: templatetags/feed_extra.py:100
+msgid "View Feed"
+msgstr ""
+
+#: templatetags/feed_extra.py:103
+msgid "Subscribe to Feed"
+msgstr ""
+
+#: templatetags/feed_extra.py:108
+msgid "Unsubscribe from Feed"
+msgstr ""
+
+#: templatetags/feed_extra.py:113
+msgid "Refresh Feed"
+msgstr ""
+
+#: templatetags/feed_extra.py:118
+msgid "Update Feed"
+msgstr ""
+
+#: templatetags/feed_extra.py:123
+msgid "Delete Feed"
+msgstr ""
+
+#: templatetags/feed_extra.py:128
+msgid "User Options"
 msgstr ""

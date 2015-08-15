@@ -46,7 +46,7 @@ class UserAgentRequiredMixin(UserPassesTestMixin):
         return 'google' in str(request.META['HTTP_USER_AGENT']).lower()
 
 
-class FeedsLevelOneMixin(LoginRequiredMixin):
+class FeedsLevelOneMixin(LoginRequiredMixin, UserAgentRequiredMixin):
     pass
 
 
