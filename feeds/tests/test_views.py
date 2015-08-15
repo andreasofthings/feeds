@@ -735,3 +735,14 @@ class TestFeedViewsWithCredentials(TestCase):
         expected = reverse('planet:feed-view', args=(feeds[0].pk,))
         self.assertEqual(result.status_code, 302)
         self.assertRedirects(result, expected)
+
+    def test_post_list_view(self):
+        """
+        Test PostListView
+        """
+        c = Client()
+        c.login(username=self.username, password=self.password)
+        result = c.get(reverse('planet:post-home'))
+        self.assertEqual(result.status_code, 200)
+        result = c.get(reverse('planet:post-home')+'?paginate_by=15')
+        self.assertEqual(result.status_code, 200)

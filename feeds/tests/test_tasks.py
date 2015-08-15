@@ -90,6 +90,17 @@ class TaskTest(TestCase):
         result = post_update_linkedin.delay(999999)
         self.assertEqual(result.get(), (-1,))
 
+    def test_update_social(self):
+        """
+        """
+        from feeds.tasks import post_update_social
+        post = Post.objects.all()[0]
+        result = post_update_social.delay(post.pk)
+        self.assertEqual(result.get(), (0,))
+
+        result = post_update_social.delay(999999)
+        self.assertEqual(result.get(), -4)
+
     def test_feed_refresh(self):
         from feeds.tasks import feed_refresh
         feed = Feed.objects.all()[0]
