@@ -61,9 +61,9 @@ class PaginationMixin(object):
         return 10
 
 
-class FeedsLevelOneMixin(LoginRequiredMixin, UserAgentRequiredMixin):
+class FeedsLevelOneMixin(LoginRequiredMixin):
     pass
 
 
-class FeedsLevelTwoMixin(PermissionRequiredMixin, FeedsLevelOneMixin):
-    permission_required = "can_backup_feed"
+class FeedsLevelTwoMixin(FeedsLevelOneMixin, PermissionRequiredMixin):
+    permission_required = "feeds.can_backup_feed"
