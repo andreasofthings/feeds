@@ -380,7 +380,7 @@ class CategoryDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(CategoryDetailView, self).get_context_data(**kwargs)
         context['top5'] = \
-            Post.objects.filter(feeds__category=context['object'])
+            Post.objects.filter(feed__category=context['object'])
         return context
 
 

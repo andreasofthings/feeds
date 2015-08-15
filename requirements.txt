@@ -13,7 +13,6 @@ pyaml
 whoosh
 timestring==1.6.2
 django-formtools
-pillow
 
 # Testing
 celery>=3.1.10

@@ -55,7 +55,6 @@ setup(
         'djangorestframework>=3.0.3',
         'elasticsearch==1.4.0',
         'timestring==1.6.2',
-        'pillow'
     ],
     # cmdclass={
     #    'install': InstallCommand,

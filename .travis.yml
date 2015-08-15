@@ -32,4 +32,9 @@ script:
   - coverage run --source=feeds feedtest.py -m py.test
 after_success:
   - coveralls
-  - python webhook.py
+notifications:
+  webhooks:
+    urls:
+      - http://angry-planet.com/webhook/travis
+    on_success: always
+    on_failure: never
