@@ -59,7 +59,7 @@ def recent_posts(parser, token):
     Templatetag to render recent posts for a feed.
     """
     try:
-        tag_name, arg = token.split_contents(None, 1)
+        tag_name, arg = token.contents.split(None, 1)
     except ValueError:
         raise template.TemplateSyntaxError(
             "%r tag requires arguments" %
