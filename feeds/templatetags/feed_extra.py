@@ -1,3 +1,4 @@
+import re
 from django import template
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
@@ -23,9 +24,9 @@ class RecentPostNode(template.Node):
 
     renders recent posts for a feed.(pk)
     """
-    def __init__(self, feed, count=5):
+    def __init__(self, feed, var_name):
         self.feed = template.Variable(feed)
-        self.max_posts = int(count)
+        self.var_name = var_name
 
     def render(self, context):
         try:
@@ -45,10 +46,11 @@ class RecentPostNode(template.Node):
             ).order_by('-published')[:self.max_posts]
         except Post.DoesNotExist:
             recent = Post.objects.none()
-        return recent
+        context[self.var_name] = recent
+        return ''
 
 
-@register.assignment_tag('recent_posts')
+@register.tag('recent_posts')
 def recent_posts(parser, token):
     """
     recent_posts
@@ -57,13 +59,19 @@ def recent_posts(parser, token):
     Templatetag to render recent posts for a feed.
     """
     try:
-        tag_name, feed, max_posts = token.split_contents()
+        tag_name, arg = token.split_contents(None, 1)
     except ValueError:
         raise template.TemplateSyntaxError(
-            "%r tag requires two arguments" %
+            "%r tag requires arguments" %
             token.contents.split()[0]
         )
-    return RecentPostNode(feed, max_posts)
+    m = re.search(r'(.*?) as (\w+)', arg)
+    if not m:
+        raise template.TemplateSyntaxError(
+            "%r tag had invalid arguments" % tag_name
+        )
+    feed, var_name = m.groups()
+    return RecentPostNode(feed, var_name)
 
 
 class FeedControlsNode(template.Node):
