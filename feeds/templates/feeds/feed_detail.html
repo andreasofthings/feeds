@@ -38,7 +38,7 @@ Feed: {{ feed }}
     {%endfor%}
     </ul>
     <ul>
-      {% recent_posts feed 5 as posts %}
+      {% recent_posts feed as posts %}
       {% for post in posts.all %}
       <li><h5><a href="{{ post.get_absolute_url }}">{{post}}</a><small>{{ post.published }}</small></h5></li>
       {%endfor%}
