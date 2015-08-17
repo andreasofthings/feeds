@@ -48,7 +48,7 @@ class RecentPostNode(template.Node):
         return recent
 
 
-@register.tag('recent_posts')
+@register.assignment_tag('recent_posts')
 def recent_posts(parser, token):
     """
     recent_posts
@@ -72,6 +72,14 @@ class FeedControlsNode(template.Node):
 
     renders controls for a feed object.
     """
+
+    button = """
+    <a href="%s" class="btn btn-xs" role="button"
+    data-toggle="tooltip" data-placement="top" title="%s">
+    <span class="glyphicon glyphicon-%s"></span>
+    </a>
+    """
+
     def __init__(self, feed):
         self.feed = template.Variable(feed)
 
@@ -91,39 +99,33 @@ class FeedControlsNode(template.Node):
         user = template.resolve_variable('user', context)
         absolute_url = feed.get_absolute_url()
 
-        button = """
-        <a href="%s" class="btn btn-xs" role="button"
-        data-toggle="tooltip" data-placement="top" title="%s">
-        <span class="glyphicon glyphicon-%s"></span>
-        </a>
-        """
-        view_button = button % (absolute_url, _('View Feed'), 'zoom-in')
-        subscribe_button = button % (
+        view_button = self.button % (absolute_url, _('View Feed'), 'zoom-in')
+        subscribe_button = self.button % (
             reverse('planet:feed-subscribe', kwargs={'pk': feed.pk}),
             _('Subscribe to Feed'),
             'ok-circle'
         )
-        unsubscribe_button = button % (
+        unsubscribe_button = self.button % (
             reverse('planet:feed-unsubscribe', kwargs={'pk': feed.pk}),
             _('Unsubscribe from Feed'),
             'remove-circle'
         )
-        refresh_button = button % (
+        refresh_button = self.button % (
             reverse('planet:feed-refresh', kwargs={'pk': feed.pk}),
             _('Refresh Feed'),
             'refresh'
         )
-        update_button = button % (
+        update_button = self.button % (
             reverse('planet:feed-update', kwargs={'pk': feed.pk}),
             _('Update Feed'),
             'edit'
         )
-        delete_button = button % (
+        delete_button = self.button % (
             reverse('planet:feed-delete', kwargs={'pk': feed.pk}),
             _('Delete Feed'),
             'trash'
         )
-        options_dialog = button % (
+        options_dialog = self.button % (
             reverse('planet:options'),
             _('User Options'),
             'cog',
@@ -133,9 +135,9 @@ class FeedControlsNode(template.Node):
         is_subscribed = False
         if user is not AnonymousUser and user.is_authenticated():
             try:
-                options = Options.objects.get(user=user)
+                opt = Options.objects.get(user=user)
                 is_subscribed = \
-                    Subscription.objects.filter(user=options, feed=feed).exists()
+                    Subscription.objects.filter(user=opt, feed=feed).exists()
             except Options.DoesNotExist:
                 result += options_dialog
             if user.has_perm('can_subscribe', feed):
@@ -193,28 +195,44 @@ class PostSocialNode(template.Node):
             )
 
         result = """
-      <div class="row">
-        <div class="col-md-2"><span class="label label-primary">Tweets</span></div>
-        <div class="col-md-2"><span class="label label-primary">Blogs</span></div>
-        <div class="col-md-2"><span class="label label-primary">Likes</span></div>
-        <div class="col-md-2"><span class="label label-primary">Shares</span></div>
-      </div> <!-- /row -->
-      <div class="row">
-        <div class="col-md-2"><center><strong>%s<meta itemprop="interactionCount" content="UserTweets:%s"/></strong></center></div>
-        <div class="col-md-2"><center><strong>%s</strong></center></div>
-        <div class="col-md-2"><center><strong>%s<meta itemprop="interactionCount" content="UserLikes:%s"/></strong></center></div>
-        <div class="col-md-2"><center><strong>%s</strong></center></div>
-      </div> <!-- /row -->
-      <div class="row">
-        <div class="col-md-2"><span class="label label-primary">Plus1</span></div>
-        <div class="col-md-2"><span class="label label-primary">Views</span></div>
-        <div class="col-md-2"><span class="label">xxx</span></div>
-        <div class="col-md-2"><span class="label">xxx</span></div>
-      </div> <!-- /row -->
-      <div class="row">
-        <div class="col-md-2"><center><strong>%s<meta itemprop="interactionCount" content="UserPlusOnes:%s"/></strong></center></div>
-        <div class="col-md-2"><center><strong>%s</strong></center></div>
-      </div> <!-- /row -->
+  <div class="row">
+    <div class="col-md-2"><span class="label label-primary">Tweets</span></div>
+    <div class="col-md-2"><span class="label label-primary">Blogs</span></div>
+    <div class="col-md-2"><span class="label label-primary">Likes</span></div>
+    <div class="col-md-2"><span class="label label-primary">Shares</span></div>
+  </div> <!-- /row -->
+  <div class="row">
+    <div class="col-md-2">
+        <center><strong>
+        %s<meta itemprop="interactionCount" content="UserTweets:%s"/>
+        </strong></center>
+    </div>
+    <div class="col-md-2">
+        <center><strong>
+        %s
+        </strong></center>
+    </div>
+    <div class="col-md-2">
+        <center><strong>
+        %s<meta itemprop="interactionCount" content="UserLikes:%s"/>
+        </strong></center>
+    </div>
+    <div class="col-md-2"><center><strong>%s</strong></center></div>
+  </div> <!-- /row -->
+  <div class="row">
+    <div class="col-md-2"><span class="label label-primary">Plus1</span></div>
+    <div class="col-md-2"><span class="label label-primary">Views</span></div>
+    <div class="col-md-2"><span class="label">xxx</span></div>
+    <div class="col-md-2"><span class="label">xxx</span></div>
+  </div> <!-- /row -->
+  <div class="row">
+    <div class="col-md-2">
+        <center><strong>
+        %s<meta itemprop="interactionCount" content="UserPlusOnes:%s"/>
+        </strong></center>
+    </div>
+    <div class="col-md-2"><center><strong>%s</strong></center></div>
+  </div> <!-- /row -->
         """ % (
             post.tweets,
             post.tweets,
