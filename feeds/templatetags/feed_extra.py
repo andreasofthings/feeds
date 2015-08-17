@@ -27,6 +27,7 @@ class RecentPostNode(template.Node):
     def __init__(self, feed, var_name):
         self.feed = template.Variable(feed)
         self.var_name = var_name
+        self.max_posts = 5
 
     def render(self, context):
         try:
