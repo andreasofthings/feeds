@@ -1,4 +1,6 @@
 import re
+import datetime
+
 from django import template
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
@@ -272,3 +274,40 @@ def social(parser, token):
             token.contents.split()[0]
         )
     return PostSocialNode(post)
+
+
+class Top5Node(template.Node):
+    def __init__(self, interval, var_name):
+        if "daily" in interval:
+            self.interval = datetime.now() - datetime.timedelta(days=1)
+        else:
+            raise NotImplemented
+        self.var_name = var_name
+
+    def render(self, context):
+        top5 = Post.objects.filter(created__gt=self.interval).order_by('score')
+        context[self.var_name] = top5
+
+
+@register.tag('top5')
+def top5(parser, token):
+    """
+    top5
+    ============
+
+    top 5 post in interval
+    """
+    try:
+        tag_name, arg = token.contents.split(None, 1)
+    except ValueError:
+        raise template.TemplateSyntaxError(
+            "%r tag requires one arguments" %
+            token.contents.split()[0]
+        )
+    m = re.search(r'(.*?) as (\w+)', arg)
+    if not m:
+        raise template.TemplateSyntaxError(
+            "%r tag had invalid arguments" % tag_name
+        )
+    interval, var_name = m.groups()
+    return Top5Node(interval, var_name)
