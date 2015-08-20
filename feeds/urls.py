@@ -43,6 +43,7 @@ from .sitemap import PostSitemap
 
 from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps.views import index as sitemap_index
 from django.views.decorators.cache import cache_page
 
 sitemaps = {
@@ -58,7 +59,7 @@ urlpatterns = patterns(
     url(r'^search/', include('haystack.urls')),
     url(
         r'^sitemap\.xml$',
-        cache_page(86400)(sitemap),
+        cache_page(86400)(sitemap_index),
         {
             'sitemaps': sitemaps,
             'sitemap_url_name': 'sitemaps'
