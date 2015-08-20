@@ -62,7 +62,7 @@ urlpatterns = patterns(
         cache_page(86400)(sitemap_index),
         {
             'sitemaps': sitemaps,
-            'sitemap_url_name': 'sitemaps'
+            'sitemap_url_name': 'planet:sitemaps'
         },
         name='sitemap'
     ),
