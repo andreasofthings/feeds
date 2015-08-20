@@ -27,7 +27,7 @@ class FeedSitemap(Sitemap):
     """
 
     def changefreq(self, obj):
-        last_post = obj.get_model.objects.posts.order_by('-created')[0]
+        last_post = obj.posts.order_by('-created')[0]
         if last_post.created > timezone.now()-timedelta(hours=1):
             return "hourly"
         if last_post.created > timezone.now()-timedelta(days=1):
