@@ -64,7 +64,8 @@ class PostSitemap(Sitemap):
         return "yearly"
 
     def priority(self, obj):
-        maximum = float(Post.objects.all().aggregate(Max('score'))['score__max'])
+        posts = Post.objects.all()
+        maximum = float(posts.aggregate(Max('score'))['score__max'])
         if maximum > 0:
             priority = float(obj.score)/float(maximum)
         else:
@@ -76,7 +77,7 @@ class PostSitemap(Sitemap):
         return priority
 
     def items(self):
-        return Post.objects.all()
+        return Post.objects.filter(score__gt=0)
 
     def lastmod(self, obj):
         return obj.published

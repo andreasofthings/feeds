@@ -498,7 +498,7 @@ class Feed(models.Model):
             self.save()  # touch timestamp
             return FEED_ERRPARSE
         except FeedSame:
-            self.save() # touch timestamp
+            self.save()  # touch timestamp
             return FEED_SAME
 
         try:
@@ -530,6 +530,8 @@ class Feed(models.Model):
         logger.debug("-- end --")
         self.errors = 0
         self.save()
+        from django.contrib.sitemaps import ping_google
+        ping_google()
         return FEED_OK
 
     def post_count(self):

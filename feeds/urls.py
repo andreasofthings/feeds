@@ -39,7 +39,7 @@ from .views import BackupView
 from .rss import RssFeed
 
 from .api_views import UserSubscriptions
-from .sitemap import PostSitemap
+from .sitemap import PostSitemap, FeedSitemap, CategorySitemap, TagSitemap
 
 from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
@@ -47,7 +47,10 @@ from django.contrib.sitemaps.views import index as sitemap_index
 from django.views.decorators.cache import cache_page
 
 sitemaps = {
+    'feeds': FeedSitemap,
     'posts': PostSitemap,
+    'categories': CategorySitemap,
+    'tags': TagSitemap,
 }
 
 
