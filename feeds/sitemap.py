@@ -27,12 +27,12 @@ class FeedSitemap(Sitemap):
     """
 
     def changefreq(self, obj):
-        last_post = obj.posts.order_by('-created')[0]
-        if last_post.created > timezone.now()-timedelta(hours=1):
+        last_post = obj.posts.order_by('-published')[0]
+        if last_post.published > timezone.now()-timedelta(hours=1):
             return "hourly"
-        if last_post.created > timezone.now()-timedelta(days=1):
+        if last_post.published > timezone.now()-timedelta(days=1):
             return "daily"
-        if last_post.created > timezone.now()-timedelta(days=7):
+        if last_post.published > timezone.now()-timedelta(days=7):
             return "weekly"
         return "monthly"
 
