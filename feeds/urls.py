@@ -43,6 +43,7 @@ from .sitemap import PostSitemap
 
 from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
+from django.views.decorators.cache import cache_page
 
 sitemaps = {
     'posts': PostSitemap,
@@ -55,8 +56,23 @@ urlpatterns = patterns(
     url(r'^options$', OptionsView.as_view(), name="options"),
     url(r'^opml$', OPMLView.as_view(), name="opml"),
     url(r'^search/', include('haystack.urls')),
-    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
-        name='django.contrib.sitemaps.views.sitemap')
+    url(
+        r'^sitemap\.xml$',
+        cache_page(86400)(sitemap),
+        {
+            'sitemaps': sitemaps,
+            'sitemap_url_name': 'sitemaps'
+        },
+        name='sitemap'
+    ),
+    url(
+        r'^sitemap-(?P<section>+)\.xml$',
+        cache_page(86400)(sitemap),
+        {
+            'sitemaps': sitemaps
+        },
+        name='sitemaps'
+    )
 )
 
 urlpatterns += patterns(
