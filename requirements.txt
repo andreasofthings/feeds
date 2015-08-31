@@ -1,7 +1,7 @@
 beautifulsoup4>=4.2.1
 django-braces>=1.0.0
 django_celery>=3.1.10
-django-crispy-forms>=1.2.3
+django-crispy-forms
 djangorestframework
 feedparser>=5.1.2
 django-haystack

@@ -22,6 +22,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
+from django.core.urlresolvers import reverse
 
 from .website import WebSite
 from .category import Category
@@ -531,7 +532,7 @@ class Feed(models.Model):
         self.errors = 0
         self.save()
         from django.contrib.sitemaps import ping_google
-        ping_google()
+        ping_google(reverse("planet:sitemap"))
         return FEED_OK
 
     def post_count(self):
