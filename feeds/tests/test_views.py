@@ -82,6 +82,29 @@ class ViewsAnonymousTest(TestCase):
             )
         self.assertEqual(result.status_code, 200)
 
+    def home(self):
+        """
+        home
+        ---------
+            :url: url(r'^$', Home.as_view(), name="home"),
+
+            Should return 200
+        """
+        result = self.client.get(reverse('planet:home'))
+        self.assertEqual(result.status_code, 200)
+
+    def test_views(self):
+        """
+        Views.
+        =====
+
+        Test :py:mod:`feeds.views.Home` section from the user-side.
+
+        Access the following pages, in order,
+        as defined in :py:mod:`feeds.urls`.
+        """
+        self.home()
+
     def site_home(self):
         """
         site-home

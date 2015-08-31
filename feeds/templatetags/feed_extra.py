@@ -1,5 +1,5 @@
 import re
-import datetime
+from datetime import datetime, timedelta
 
 from django import template
 from django.utils.translation import ugettext_lazy as _
@@ -279,7 +279,7 @@ def social(parser, token):
 class Top5Node(template.Node):
     def __init__(self, interval, var_name):
         if "daily" in interval:
-            self.interval = datetime.now() - datetime.timedelta(days=1)
+            self.interval = datetime.now() - timedelta(days=1)
         else:
             raise NotImplemented
         self.var_name = var_name
