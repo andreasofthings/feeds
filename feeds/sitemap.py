@@ -91,6 +91,9 @@ class PostSitemap(Sitemap):
     def lastmod(self, obj):
         return obj.published
 
+    def limit(self):
+        return 1000
+
 
 class CategorySitemap(Sitemap):
     """
