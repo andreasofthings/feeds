@@ -25,7 +25,7 @@ Feeds comes still in the afterwaves of the closure of <i>Google Reader</i>. Even
       {% top5 "daily" as top5 %}
       <ul>
         {% for post in top5 %}
-        <li>{{post}}</li>
+        <li><a href="{{post.get_absolute_url}}">{{post}}</a>{{post.score}}</li>
         {% endfor %}
       </ul>
     </div>

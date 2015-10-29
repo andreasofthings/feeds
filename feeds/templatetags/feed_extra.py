@@ -100,8 +100,9 @@ class FeedControlsNode(template.Node):
         except Feed.MultipleObjectsReturned:
             raise template.TemplateSyntaxError(
                 """
-                'feed_controls' template tag requires 'feed' as first argument.
-                Got this instead:
+                'feed_controls' template tag
+                requires 'feed' as first argument.
+                Got this instead: \n
                 %r (type: %r)
                 """ %
                 self.feed, type(self.feed)
@@ -288,7 +289,7 @@ class Top5Node(template.Node):
         top5 = Post.objects.filter(
             published__gt=self.interval
         ).order_by('score')
-        context[self.var_name] = top5
+        context[self.var_name] = top5[:5]
 
 
 @register.tag('top5')
