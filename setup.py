@@ -55,7 +55,9 @@ setup(
         'djangorestframework>=3.0.3',
         'elasticsearch==1.4.0',
         'timestring==1.6.2',
-        '-e git+https://github.com/aneumeier/python-django-social.git#latest',
+    ],
+    dependency_links=[
+        'https://github.com/aneumeier/python-django-social/tarball/master#egg=latest',
     ],
     # cmdclass={
     #    'install': InstallCommand,
