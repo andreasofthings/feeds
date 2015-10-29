@@ -288,7 +288,7 @@ class Top5Node(template.Node):
     def render(self, context):
         top5 = Post.objects.filter(
             published__gt=self.interval
-        ).order_by('score')
+        ).order_by('-score')
         context[self.var_name] = top5[:5]
 
 
