@@ -37,7 +37,8 @@ from feeds import CRON_OK, CRON_ERR
 
 from .models import Feed, Post, Tag, TaggedPost
 from .models import FeedStats
-from .social import tweets, facebook, linkedin, plusone
+
+from social.get import tweets, facebook, linkedin, plusone
 
 from exceptions import Exception
 

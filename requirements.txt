@@ -13,6 +13,7 @@ pyaml
 whoosh
 timestring==1.6.2
 django-formtools
+git+https://github.com/aneumeier/python-django-social.git#latest
 
 # Testing
 celery>=3.1.10
