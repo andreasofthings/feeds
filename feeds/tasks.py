@@ -109,7 +109,7 @@ def post_update_twitter(entry_id):
 
     try:
         post = Post.objects.get(pk=entry_id)
-        post.tweets = tweets(post)
+        (post.tweets, ) = tweets(post)
         post.save()
     except Post.DoesNotExist:
         logger.error("Post %s does not exist")
@@ -155,7 +155,7 @@ def post_update_linkedin(entry_id):
 
     try:
         post = Post.objects.get(pk=entry_id)
-        post.linkedin = linkedin(post)[0]
+        (post.linkedin, ) = linkedin(post)
         post.save()
     except Post.DoesNotExist:
         logger.error("Post %s does not exist")
