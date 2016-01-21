@@ -1,4 +1,4 @@
-from django.conf.urls import url, include, patterns
+from django.conf.urls import url, include
 
 #
 # API
@@ -14,8 +14,7 @@ router.register(r'categories', CategoryViewSet)
 router.register(r'feeds', FeedViewSet)
 router.register(r'posts', PostViewSet)
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^', include(router.urls)),
     url(
         r'^api-auth/',
@@ -23,4 +22,4 @@ urlpatterns = patterns(
             'rest_framework.urls',
             namespace='rest_framework')
     ),
-)
+]

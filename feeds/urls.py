@@ -69,10 +69,8 @@ urlpatterns = [
             'sitemaps': sitemaps
         },
         name='sitemaps'
-    )
-]
+    ),
 
-urlpatterns += [
     url(
         r'^site/$',
         SiteListView.as_view(),

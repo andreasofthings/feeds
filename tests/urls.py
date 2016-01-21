@@ -5,7 +5,7 @@
 urly.py to allow tests in travis-ci
 """
 
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from django.contrib import admin
 from feeds.sitemap import PostSitemap, FeedSitemap
@@ -18,8 +18,7 @@ sitemaps = {
     'post': PostSitemap,
 }
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^feeds/',
         include(
             'feeds.urls',
@@ -40,10 +39,6 @@ urlpatterns = patterns(
             template_name="feeds/index.html"
         )
     ),
-)
-
-urlpatterns += patterns(
-    '',
     url(r'^sitemap\.xml$',
         cache_page(86400)(sitemaps_views.index),
         {
@@ -59,8 +54,5 @@ urlpatterns += patterns(
         },
         name='sitemaps'
         ),
-    )
-
-urlpatterns += patterns(
     url(r'^admin/', include(admin.site.urls)),
-)
+]

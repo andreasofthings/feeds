@@ -413,24 +413,6 @@ class ViewsAnonymousTest(TestCase):
         self.feed_delete()
         # self.feed_refresh()
 
-        """
-        category-home
-        -------------
-
-            :url: url(
-                r'^category/$',
-                CategoryListView.as_view(),
-                name="category-home"
-            ),
-
-            Viewing details for a :py:mod:`feeds.models.Category` should be
-            available to the public.
-
-            Should return 200 for an anonymous user.
-        """
-        result = self.client.get(reverse('planet:category-home'))
-        self.assertEqual(result.status_code, 200)
-
     def test_sitemap(self):
         client = Client()
         result = client.get("/sitemap.xml")
@@ -582,22 +564,6 @@ class TestAllViewsLoggedIn(TestCase):
         feed_id = Feed.objects.all()[0].pk
         result = self.client.get(reverse('planet:feed-view', args=(feed_id,)))
         """.. todo:: figure out why this gives 404"""
-        self.assertEqual(result.status_code, 200)
-
-    def test_category_home(self):
-        """
-        go to category home
-        """
-        c = Client()
-        result = c.get(reverse('planet:category-home'))
-        self.assertEqual(result.status_code, 200)
-
-    def test_tags_home(self):
-        """
-        go to tags home
-        """
-        c = Client()
-        result = c.get(reverse('planet:tag-home'))
         self.assertEqual(result.status_code, 200)
 
     def test_feed_refresh_view(self):
