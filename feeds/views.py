@@ -29,10 +29,9 @@ from .models import Options
 from .forms import OptionsForm
 from .forms import OPMLForm
 
-from .models import WebSite, Feed, Post, Subscription
-from .models import Category, Tag, PostReadCount
-from .forms import FeedCreateForm, CategoryCreateForm, TagCreateForm
-from .forms import FeedUpdateForm, CategoryUpdateForm
+from .models import WebSite, Feed, Post, Subscription, PostReadCount
+from .forms import FeedCreateForm
+from .forms import FeedUpdateForm
 from .forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
 from .mixins import FeedsLevelTwoMixin, PaginationMixin
 
@@ -347,103 +346,6 @@ class PostTrackableView(RedirectView):
         post = get_object_or_404(Post, pk=pk)
         PostReadCount(post=post).save()
         return post.link
-
-
-class CategoryListView(ListView):
-    """
-    List all registered feeds
-
-    """
-    model = Category
-    context_object_name = "categories"
-    paginate_by = 10
-    # queryset = Category.objects.all()
-
-
-class CategoryDetailView(DetailView):
-    """
-    Show details for a particular Category
-
-    ToDo:
-    this shall include stats
-    """
-    model = Category
-
-    def get_context_data(self, **kwargs):
-        context = super(CategoryDetailView, self).get_context_data(**kwargs)
-        context['top5'] = \
-            Post.objects.filter(feed__category=context['object'])
-        return context
-
-
-class CategoryUpdateView(LoginRequiredMixin, UpdateView):
-    """
-    Update a particular Category
-    """
-    form_class = CategoryUpdateForm
-    model = Category
-
-    def get_success_url(self):
-        if 'slug' in self.kwargs:
-            return reverse('planet:category-view', self.kwargs['slug'])
-        else:
-            return reverse('planet:category-home')
-
-
-class CategoryCreateView(LoginRequiredMixin, CreateView):
-    """
-    ToDo:
-    make this more nice & userfriendly
-    """
-    form_class = CategoryCreateForm
-    model = Category
-    initial = {'is_Active': False}
-
-
-class CategoryDeleteView(PermissionRequiredMixin, DeleteView):
-    permission_required = "feeds.delete_category"
-    model = Category
-    success_url = "planet:category-home"
-
-
-class TagListView(ListView):
-    """
-    List all registered tags
-
-    """
-    model = Tag
-    context_object_name = "tags"
-    paginate_by = 10
-    queryset = Tag.objects.all()
-
-
-class TagDetailView(DetailView):
-    """
-    Show details for a particular tag.
-
-    ToDo:
-    this shall include stats
-    """
-    model = Tag
-    paginate_by = 10
-
-
-class TagCreateView(LoginRequiredMixin, CreateView):
-    """
-    ToDo:
-    make this more nice & userfriendly
-    """
-    form_class = TagCreateForm
-    model = Tag
-    initial = {'is_Active': False}
-
-
-class TagUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
-    """
-    Update particular tag
-    """
-    permission_required = "feeds.update_tag"
-    model = Tag
 
 
 class BackupView(FeedsLevelTwoMixin, View):

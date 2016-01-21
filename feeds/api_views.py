@@ -3,11 +3,13 @@ from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
 from rest_framework import mixins, viewsets
 
-from .models import Options, Feed, Post, Category
+from .models import Options, Feed, Post
 from .serializers import SubscriptionSerializer
 from .serializers import CategorySerializer
 from .serializers import FeedSerializer
 from .serializers import PostSerializer
+
+from category.models import Category
 
 
 class FeedThrottle(UserRateThrottle):

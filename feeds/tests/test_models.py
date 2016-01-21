@@ -9,7 +9,8 @@ Tests for the "feeds" app.
 
 from django.test import TestCase, Client
 
-from feeds.models import Category, Feed
+from feeds.models import Feed
+from category.models import Category
 from feeds import FEED_OK
 
 

@@ -18,7 +18,8 @@ from django.utils import timezone
 from django.contrib.sitemaps import Sitemap
 from django.db.models import Max
 
-from feeds.models import Feed, Post, Category, Tag
+from feeds.models import Feed, Post
+from category.models import Category, Tag
 
 
 class FeedSitemap(Sitemap):

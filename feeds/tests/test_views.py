@@ -12,7 +12,7 @@ from django.core.urlresolvers import reverse
 
 from django.contrib.auth.models import User, Permission
 
-from feeds.models import Feed, Post, Category
+from feeds.models import Feed, Post
 
 
 class ViewsAnonymousTest(TestCase):
@@ -413,7 +413,6 @@ class ViewsAnonymousTest(TestCase):
         self.feed_delete()
         # self.feed_refresh()
 
-    def category_home(self):
         """
         category-home
         -------------
@@ -431,71 +430,6 @@ class ViewsAnonymousTest(TestCase):
         """
         result = self.client.get(reverse('planet:category-home'))
         self.assertEqual(result.status_code, 200)
-
-    def category_home_paginated(self):
-        """
-        category-home
-        -------------
-
-            :url: url(
-                r'^category/$',
-                CategoryListView.as_view(),
-                name="category-paginated"
-            ),
-
-            Viewing details for a :py:mod:`feeds.models.Category` should be
-            available to the public.
-
-            Should return 200 for an anonymous user.
-        """
-        result = self.client.get(
-            reverse(
-                'planet:category-home-paginated',
-                args=(1,)
-            )
-        )
-        self.assertEqual(result.status_code, 200)
-
-    def category_view(self):
-        """
-        category-view
-        -------------
-            :url: url(
-                r'^(?P<pk>\d+)/$',
-                CategoryDetailView.as_view(),
-                name="feed-view"
-            ),
-
-            Viewing details for a :py:mod:`feeds.models.Category` should be
-            available to the public.
-
-            Should return 200.
-
-            The `fixture` has a feed with the ID 1.
-        """
-        category = Category.objects.all()
-        result = self.client.get(
-            reverse(
-                'planet:category-view',
-                args=(category[0].pk,)
-            )
-        )
-        self.assertEqual(result.status_code, 200)
-
-    def test_category_views(self):
-        """
-        Category.
-        =========
-
-        Test Category Views:
-
-        """
-        self.category_home()
-        self.category_home_paginated()
-        # self.category_add()
-        self.category_view()
-        # self.category_update()
-        # self.category_delete()
 
     def test_sitemap(self):
         client = Client()

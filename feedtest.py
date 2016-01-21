@@ -4,7 +4,7 @@ import os
 import sys
 
 if 'TRAVIS' in os.environ:
-    import MySQLdb
+    import psycopg2
     os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.travis-settings'
 else:
     os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.settings'
@@ -20,13 +20,6 @@ if __name__ == '__main__':
     if hasattr(django, 'setup'):
         django.setup()
     from django.test.runner import DiscoverRunner
-    failures = None
-    try:
-        failures = DiscoverRunner().run_tests(("feeds",), verbosity=2)
-    except MySQLdb.OperationalError, e:
-        if e[0] == 2006:
-            print("MySQL has gone away.")
-        else:
-            raise MySQLdb.OperationalError(e)
+    failures = DiscoverRunner().run_tests(("feeds",), verbosity=2)
     if failures:
         sys.exit(failures)

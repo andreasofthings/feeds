@@ -25,12 +25,6 @@ from .views import FeedUnSubscribeView
 from .views import FeedSubscriptionsView
 
 from .views import PostListView, PostDetailView, PostTrackableView
-from .views import CategoryListView, CategoryCreateView
-from .views import CategoryDetailView
-from .views import CategoryUpdateView
-from .views import CategoryDeleteView
-from .views import TagListView, TagDetailView
-from .views import TagCreateView, TagUpdateView
 
 from .views import SiteSubmitWizardView, SiteSubmitForms
 
@@ -197,69 +191,6 @@ urlpatterns += patterns(
         r'^t/(?P<pk>\d+)/$',
         PostTrackableView.as_view(),
         name="post-trackable-view"
-    ),
-)
-
-urlpatterns += patterns(
-    '',
-    url(
-        r'^category/$',
-        CategoryListView.as_view(),
-        name="category-home"
-    ),
-    url(
-        r'^category/page/(?P<page>\w+)/$',
-        CategoryListView.as_view(),
-        name="category-home-paginated"
-    ),
-    url(
-        r'^category/add/$',
-        CategoryCreateView.as_view(),
-        name="category-add"
-    ),
-    url(
-        r'^category/(?P<pk>\w+)/$',
-        CategoryDetailView.as_view(),
-        name="category-view"
-    ),
-    url(
-        r'^category/(?P<pk>\w+)/update$',
-        CategoryUpdateView.as_view(),
-        name="category-update"
-    ),
-    url(
-        r'^category/(?P<pk>\w+)/delete$',
-        CategoryDeleteView.as_view(),
-        name="category-delete"
-    ),
-)
-
-urlpatterns += patterns(
-    '',
-    url(
-        r'^tag /$',
-        TagListView.as_view(),
-        name="tag-home"
-    ),
-    url(
-        r'^tag/page/(?P<page>\w+)/$',
-        TagListView.as_view(),
-        name="tag-home-paginated"
-    ),
-    url(
-        r'^tag/add/$',
-        TagCreateView.as_view(),
-        name="tag-add"
-    ),
-    url(
-        r'^tag/(?P<slug>[\w-]+)/$',
-        TagDetailView.as_view(),
-        name="tag-view"
-    ),
-    url(
-        r'^tag/(?P<id>\d+)/update/$',
-        TagUpdateView.as_view(),
-        name="tag-update"
     ),
 )
 

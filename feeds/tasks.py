@@ -35,9 +35,11 @@ from django.conf import settings
 from feeds import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 from feeds import CRON_OK, CRON_ERR
 
-from .models import Feed, Post, Tag, TaggedPost
+from .models import Feed, Post, TaggedPost
 from .models import FeedStats
 
+
+from category.models import Tag
 from social.get import tweets, facebook, linkedin, plusone
 
 from exceptions import Exception

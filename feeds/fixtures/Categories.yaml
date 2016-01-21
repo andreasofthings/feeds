@@ -1,18 +1,18 @@
-- model: feeds.Category
+- model: category.Category
   fields:
     "name": "Business"
-- model: feeds.Category
+- model: category.Category
   fields:
     "name": "News"
-- model: feeds.Category
+- model: category.Category
   fields:
     "name": "Sports"
-- model: feeds.Category
+- model: category.Category
   fields:
     "name": "Culture"
-- model: feeds.Category
+- model: category.Category
   fields:
     "name": "Podcast"
-- model: feeds.Category
+- model: category.Category
   fields:
     "name": "High-Tech"

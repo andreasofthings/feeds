@@ -4,8 +4,6 @@ from .models.website import WebSite
 from .models.feed import Feed
 from .models.post import Post
 from .models.stats import FeedPostCount
-from .models.category import Category
-from .models.tag import Tag
 from .models.files import FileModel
 from .forms import FeedAdminForm
 
@@ -37,19 +35,6 @@ class WebSiteAdmin(admin.ModelAdmin):
     inlines = [
         FeedInline,
     ]
-
-
-class TagAdmin(admin.ModelAdmin):
-    """
-    Tag Admin Class
-    """
-    list_display = ('name', 'slug', 'relevant', 'touched')
-
-
-class CategoryAdmin(admin.ModelAdmin):
-    """
-    """
-    pass
 
 
 def refresh_feed(modeladmin, request, queryset):
@@ -139,7 +124,5 @@ class FeedPostCountAdmin(admin.ModelAdmin):
 admin.site.register(FileModel, FileAdmin)
 admin.site.register(WebSite, WebSiteAdmin)
 admin.site.register(Post, PostAdmin)
-admin.site.register(Tag, TagAdmin)
 admin.site.register(Feed, FeedAdmin)
-admin.site.register(Category, CategoryAdmin)
 admin.site.register(FeedPostCount, FeedPostCountAdmin)

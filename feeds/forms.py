@@ -9,14 +9,11 @@ from crispy_forms.layout import Fieldset
 from crispy_forms.layout import ButtonHolder
 from crispy_forms.layout import Submit
 from crispy_forms.layout import Button
-from crispy_forms.layout import Div
 from crispy_forms.bootstrap import FormActions
 
 from .models import Options
 from .models import WebSite
 from .models import Feed
-from .models import Category
-from .models import Tag
 
 from .validators import SiteField, FeedField
 
@@ -189,64 +186,6 @@ class FeedUpdateForm(forms.ModelForm):
         self.helper.form_method = 'post'
         # self.helper.form_action = 'planet:feed-update'
         super(FeedUpdateForm, self).__init__(*args, **kwargs)
-
-
-class CategoryCreateForm(forms.ModelForm):
-    class Meta:
-        model = Category
-        fields = ('name', )
-
-    def __init__(self, *args, **kwargs):
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            Div(
-                'name',
-            ),
-            ButtonHolder(
-                Submit('submit', 'Submit', css_class='btn-small'),
-                Button('cancel', 'Cancel', css_class='btn-small')
-            )
-        )
-        self.helper.form_method = 'post'
-        self.helper.form_class = 'form-inline'
-        self.helper.form_action = 'planet:category-add'
-        super(CategoryCreateForm, self).__init__(*args, **kwargs)
-
-
-class CategoryUpdateForm(forms.ModelForm):
-    """
-    CategoryUpdateForm
-
-    Django Form to modify an angryplanet-category
-
-    .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
-    """
-    class Meta:
-        model = Category
-        fields = ('name', )
-
-    def __init__(self, *args, **kwargs):
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            Fieldset(
-                'Change Category',
-                'name',
-            ),
-            ButtonHolder(
-                Submit('submit', 'Submit', css_class='btn-small'),
-                Button('cancel', 'Cancel', css_class='btn-small')
-            )
-        )
-        self.helper.form_method = 'post'
-        super(CategoryUpdateForm, self).__init__(*args, **kwargs)
-
-
-class TagCreateForm(forms.ModelForm):
-    """
-    """
-    class Meta:
-        model = Tag
-        fields = ('name', )
 
 
 class FeedAdminForm(forms.ModelForm):
