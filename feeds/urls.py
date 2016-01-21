@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim: ts=4 et sw=4 sts=4
 
-from django.conf.urls import url, patterns, include
+from django.conf.urls import url, include
 
 from .views import HomeView
 from .views import OptionsView
@@ -48,8 +48,7 @@ sitemaps = {
 }
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^$', HomeView.as_view(), name="home"),
     url(r'^options$', OptionsView.as_view(), name="options"),
     url(r'^opml$', OPMLView.as_view(), name="opml"),
@@ -71,10 +70,9 @@ urlpatterns = patterns(
         },
         name='sitemaps'
     )
-)
+]
 
-urlpatterns += patterns(
-    '',
+urlpatterns += [
     url(
         r'^site/$',
         SiteListView.as_view(),
@@ -105,10 +103,9 @@ urlpatterns += patterns(
         SiteDeleteView.as_view(),
         name="site-delete"
     ),
-    )
+]
 
-urlpatterns += patterns(
-    '',
+urlpatterns += [
     url(r'^list/$', FeedListView.as_view(), name="feed-home"),
     url(
         r'^page/(?P<page>\w+)/$',
@@ -140,10 +137,9 @@ urlpatterns += patterns(
         FeedRefreshView.as_view(),
         name="feed-refresh"
     ),
-)
+]
 
-urlpatterns += patterns(
-    '',
+urlpatterns += [
     url(
         r'^feed/(?P<pk>\d+)/subscribe/$',
         FeedSubscribeView.as_view(),
@@ -159,10 +155,6 @@ urlpatterns += patterns(
         FeedSubscriptionsView.as_view(),
         name="feed-subscriptions"
     ),
-)
-
-urlpatterns += patterns(
-    '',
     url(
         r'^(?P<pk>\d+)/$',
         PostDetailView.as_view(),
@@ -178,10 +170,6 @@ urlpatterns += patterns(
         PostListView.as_view(),
         name="post-home-paginated"
     ),
-)
-
-urlpatterns += patterns(
-    '',
     url(
         r'^f/(?P<feed_id>\d+)/$',
         RssFeed(),
@@ -192,24 +180,14 @@ urlpatterns += patterns(
         PostTrackableView.as_view(),
         name="post-trackable-view"
     ),
-)
+]
 
 #
-# Backup
+# Backup / RSS / Legacy API
 #
 
-urlpatterns += patterns(
-    '',
+urlpatterns += [
     url(r'^backup/$', BackupView.as_view(), name="backup"),
-)
-
-#
-# RSS
-#
-
-
-urlpatterns += patterns(
-    '',
     url(
         r'test/rss1/$',
         TemplateView.as_view(template_name="feeds/tests/rss1.html"),
@@ -220,17 +198,9 @@ urlpatterns += patterns(
         TemplateView.as_view(template_name="feeds/tests/rss2.html"),
         name="rss2"
     ),
-)
-
-#
-# Legacy API
-#
-
-urlpatterns += patterns(
-    '',
     url(
-        r'/api/v1/subscriptions$',
+        r'api/v1/subscriptions$',
         UserSubscriptions.as_view(),
         name="subscription-api"
     ),
-)
+]
