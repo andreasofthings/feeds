@@ -12,6 +12,7 @@ requests>=2.2.1
 twitter>=1.9.2
 pyaml
 whoosh
+pycopg2
 timestring==1.6.2
 django-formtools
 git+https://github.com/aneumeier/python-django-social.git#latest
