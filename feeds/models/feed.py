@@ -25,7 +25,7 @@ from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
 
 from .website import WebSite
-from .category import Category
+from category.models import Category
 
 from .. import USER_AGENT
 from .. import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
