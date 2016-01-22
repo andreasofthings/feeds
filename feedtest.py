@@ -4,7 +4,6 @@ import os
 import sys
 
 if 'TRAVIS' in os.environ:
-    import psycopg2
     os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.travis-settings'
 else:
     os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.settings'
@@ -17,6 +16,7 @@ if __name__ == '__main__':
     from django.core.management import execute_from_command_line
     execute_from_command_line([sys.argv[0], "makemigrations", "feeds"])
     execute_from_command_line([sys.argv[0], "migrate"])
+    execute_from_command_line([sys.argv[0], "sqlflush"])
     if hasattr(django, 'setup'):
         django.setup()
     from django.test.runner import DiscoverRunner
