@@ -223,7 +223,7 @@ def post_update_social(post_id):
         p = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
         logger.error("Post %s does not exist." % (post_id))
-        return
+        return None
 
     header = []
 

@@ -19,5 +19,4 @@ git+https://github.com/aneumeier/python-django-social.git#latest
 
 # Testing
 celery>=3.1.10
-#MySQL-python>=1.2.5
 selenium==2.42.0

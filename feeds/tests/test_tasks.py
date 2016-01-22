@@ -94,12 +94,18 @@ class TaskTest(TestCase):
         """
         """
         from feeds.tasks import post_update_social
+
         post = Post.objects.all()[0]
+        """Get a post from test-data."""
         result = post_update_social.delay(post.pk)
+        """See how often that was shared socially."""
         self.assertEqual(result.get(), 0)
+        """Since it's test-data, it should show up zero times."""
 
         result = post_update_social.delay(999999)
+        """Try to find a non-existing post on social media."""
         self.assertEqual(result.get(), None)
+        """Expect 'None' as a result."""
 
     def test_feed_refresh(self):
         from feeds.tasks import feed_refresh
