@@ -42,8 +42,6 @@ from .models import FeedStats
 from category.models import Tag
 from social.get import tweets, facebook, linkedin, plusone
 
-from exceptions import Exception
-
 logger = logging.getLogger(__name__)
 
 
@@ -362,7 +360,7 @@ def cronjob():
         )()
     except SoftTimeLimitExceeded as timeout:
         logger.info("SoftTimeLimitExceeded: %s", timeout)
-    except Exception, e:
+    except Exception as e:
         logger.error("Exception: %s", str(e))
         return CRON_ERR
     logger.debug("-- end (%s) -- " % result)

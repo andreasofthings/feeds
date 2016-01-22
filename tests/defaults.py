@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
+SITE_ID = 1
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -35,6 +35,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.admin',
     'django.contrib.sitemaps',
+    'django.contrib.sites',
     'crispy_forms',
     'category',
     'haystack',
@@ -57,7 +58,6 @@ TEMPLATES = [
        {
          'BACKEND': 'django.template.backends.django.DjangoTemplates',
          'DIRS': [],
-         'TEMPLATE_DEBUG': True,
          'APP_DIRS': True,
          'OPTIONS': {
              'context_processors': [
@@ -125,6 +125,6 @@ CELERY_RESULT_BACKEND = "amqp"
 FEEDS_UPDATE_SOCIAL = True
 FEEDS_POST_SOCIAL = False
 FEED_POST_UPDATE_TWITTER = False
-FEED_POST_UPDATE_LINKEDIN = True
-FEED_POST_UPDATE_FACEBOOK = True
+FEED_POST_UPDATE_LINKEDIN = False
+FEED_POST_UPDATE_FACEBOOK = False
 FEED_POST_UPDATE_GOOGLEPLUS = False

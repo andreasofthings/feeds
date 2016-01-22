@@ -370,9 +370,10 @@ class Feed(models.Model):
         """ToDo: get other content instead."""
 
         p.save()
-        logger.info(
-            "Saved '%s', new entry for feed %s (%s)",
+        logger.debug(
+            """Saved '%s', new entry for feed '%s' (FeedID: %s, PostID %s)""",
             p.title,
+            self.title,
             self.id,
             p.id
         )
@@ -385,6 +386,7 @@ class Feed(models.Model):
 
         logger.debug("stop: entry")
         p.save()
+        return result
 
     def update(self, parsed):
         """
