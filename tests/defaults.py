@@ -22,8 +22,6 @@ SECRET_KEY = '!#)0&*=_!k%d8rg!57=8kat3ln^*345i@ri-p@qvy&tf$lq*9!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
@@ -59,6 +57,7 @@ TEMPLATES = [
        {
          'BACKEND': 'django.template.backends.django.DjangoTemplates',
          'DIRS': [],
+         'TEMPLATE_DEBUG': True,
          'APP_DIRS': True,
          'OPTIONS': {
              'context_processors': [
@@ -91,7 +90,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_PATH = '/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Logging
 

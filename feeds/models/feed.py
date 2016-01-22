@@ -385,9 +385,6 @@ class Feed(models.Model):
 
         logger.debug("stop: entry")
         p.save()
-        from ..tasks import post_update_social
-        post_update_social(p.id)
-        return result
 
     def update(self, parsed):
         """
@@ -524,7 +521,7 @@ class Feed(models.Model):
             )
         except Exception as e:
             logger.debug("-- end (ERR) --")
-            raise e
+            raise Exception(e)
             return FEED_ERREXC
 
         logger.info("Feed '%s' returned %s", self.title, result)
