@@ -1,5 +1,6 @@
 from haystack import indexes
-from .models import Feed, Post, Tag
+from .models import Feed, Post
+from category.models import Category, Tag
 
 
 class FeedIndex(indexes.SearchIndex):
@@ -30,3 +31,11 @@ class TagIndex(indexes.SearchIndex):
 
     def get_model(self):
         return Tag
+
+
+class CategoryIndex(indexes.SearchIndex):
+    name = indexes.CharField(document=True, use_template=True)
+    slug = indexes.CharField()
+
+    def get_model(self):
+        return Category
