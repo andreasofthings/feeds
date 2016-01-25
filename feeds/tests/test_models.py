@@ -10,7 +10,6 @@ Tests for the "feeds" app.
 from django.test import TestCase, Client
 
 from feeds.models import Feed
-from category.models import Category
 from feeds import FEED_OK
 
 
@@ -24,8 +23,6 @@ class ModelTest(TestCase):
     - :py:mod:`feeds.models.WebSite`
     - :py:mod:`feeds.models.TagManager`
     - :py:mod:`feeds.models.Tag`
-    - :py:mod:`feeds.models.CategoryManager`
-    - :py:mod:`feeds.models.Category`
     - :py:mod:`feeds.models.Feed`
     - :py:mod:`feeds.models.Post`
     - :py:mod:`feeds.models.Enclosure`
@@ -79,22 +76,6 @@ class ModelTest(TestCase):
         # self.assertContains( t.get_absolute_url(), t.pk)
         """
         Assert the tag URL contains the tag.pk.
-
-        .. todo:: self.assertContains won't work for what is being tested here.
-        """
-
-    def test_category(self):
-        """
-        Test a :py:mod:`feeds:models.Category`
-
-        .. todo:: use `fixtures` instead.
-        """
-        c = Category(name="default")
-        c.save()
-        self.assertEquals(str(c), c.name)
-        # self.assertContains(c.get_absolute_url(), c.id)
-        """
-        Assert the category URL contains the category.pk.
 
         .. todo:: self.assertContains won't work for what is being tested here.
         """

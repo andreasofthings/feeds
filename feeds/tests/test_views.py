@@ -31,7 +31,6 @@ class ViewsAnonymousTest(TestCase):
 
     fixtures = [
         'Feed_all.yaml',
-        'Categories.yaml',
     ]
 
     def setUp(self):

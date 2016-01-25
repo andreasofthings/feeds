@@ -19,8 +19,6 @@ class ApiTest(TestCase):
     - :py:mod:`feeds.models.Site`
     - :py:mod:`feeds.models.TagManager`
     - :py:mod:`feeds.models.Tag`
-    - :py:mod:`feeds.models.CategoryManager`
-    - :py:mod:`feeds.models.Category`
     - :py:mod:`feeds.models.Feed`
     - :py:mod:`feeds.models.Post`
     - :py:mod:`feeds.models.Enclosure`
@@ -36,13 +34,6 @@ class ApiTest(TestCase):
         Set up environment to test the API
         """
         self.client = Client()
-
-    def test_categories_anonymous(self):
-        """
-        request subscription, expect a list of all feeds in json
-        """
-        response = self.client.get(reverse('category-list'))
-        self.assertEqual(response.status_code,  200)
 
     def test_subscription_anonymous(self):
         """

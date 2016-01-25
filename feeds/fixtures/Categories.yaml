@@ -1,18 +1,24 @@
 - model: category.Category
   fields:
+    "pk": 1
     "name": "Business"
 - model: category.Category
   fields:
+    "pk": 2
     "name": "News"
 - model: category.Category
   fields:
+    "pk": 3
     "name": "Sports"
 - model: category.Category
   fields:
+    "pk": 4
     "name": "Culture"
 - model: category.Category
   fields:
+    "pk": 5
     "name": "Podcast"
 - model: category.Category
   fields:
+    "pk": 6
     "name": "High-Tech"
