@@ -96,7 +96,13 @@ class TaskTest(TestCase):
 
     def test_count_linkedin(self):
         """
+        test linkedin shares
+
+        .. :todo::
+            test this in the `python-social` module
         """
+        if not settings.FEED_POST_UPDATE_LINKEDIN:
+            return
         from feeds.tasks import post_update_linkedin
         post = Post.objects.all()[0]
         result = post_update_linkedin.delay(post.pk)
