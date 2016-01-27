@@ -21,8 +21,6 @@ class ModelTest(TestCase):
 
     - :py:mod:`feeds.models.SiteManager`
     - :py:mod:`feeds.models.WebSite`
-    - :py:mod:`feeds.models.TagManager`
-    - :py:mod:`feeds.models.Tag`
     - :py:mod:`feeds.models.Feed`
     - :py:mod:`feeds.models.Post`
     - :py:mod:`feeds.models.Enclosure`
@@ -33,7 +31,6 @@ class ModelTest(TestCase):
         "Feed_all.yaml",
         "Site.yaml",
         "Tags.yaml",
-        "Categories.yaml",
     ]
 
     def setUp(self):
@@ -58,27 +55,6 @@ class ModelTest(TestCase):
         """
         self.assertEqual(str(s), "https://angry-planet.com/")
         """Assert the __str__ representation equals the site-name."""
-
-    def test_tag(self):
-        """
-        Test a Tag
-        """
-        from feeds.models import Tag
-        """Import the :py:mod:`feeds.models.Tag`-model."""
-        t = Tag(name="tag")
-        """Instanciate the model."""
-        tagid = t.save()
-        """Save the model and retrieve the pk/id."""
-        self.assertNotEqual(tagid, 0)
-        """Assert the pk/id is not 0."""
-        self.assertEqual(str(t), "tag")
-        """Assert the __str__ representation equals the tag-name."""
-        # self.assertContains( t.get_absolute_url(), t.pk)
-        """
-        Assert the tag URL contains the tag.pk.
-
-        .. todo:: self.assertContains won't work for what is being tested here.
-        """
 
     def test_feed(self):
         """

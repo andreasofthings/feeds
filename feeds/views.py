@@ -13,14 +13,12 @@ import logging
 
 from django import forms
 from django.core.urlresolvers import reverse
-from django.views.generic import View
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic import DetailView, ListView
 from django.views.generic import CreateView, UpdateView
 from django.views.generic import DeleteView, RedirectView
 from django.http import HttpResponseRedirect
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -34,7 +32,7 @@ from .models import WebSite, Feed, Post, Subscription, PostReadCount
 from .forms import FeedCreateForm
 from .forms import FeedUpdateForm
 from .forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
-from .mixins import FeedsLevelTwoMixin, PaginationMixin
+from .mixins import PaginationMixin
 
 from formtools.wizard.views import SessionWizardView
 
@@ -347,23 +345,3 @@ class PostTrackableView(RedirectView):
         post = get_object_or_404(Post, pk=pk)
         PostReadCount(post=post).save()
         return post.link
-
-
-class BackupView(FeedsLevelTwoMixin, View):
-    """
-    Dump all Feed Data.
-    Just in case.
-    """
-    def get(self, request):
-        from django.core import serializers
-        data = serializers.serialize("xml", Feed.objects.all())
-        from models.files import FileModel
-        from django.core.files import File
-        from tempfile import NamedTemporaryFile
-        with NamedTemporaryFile(delete=True) as f:
-                    myfile = File(f)
-                    myfile.write(data)
-                    f = FileModel()
-                    f.data = myfile
-                    f.save()
-        return HttpResponse()
