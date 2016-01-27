@@ -311,7 +311,9 @@ class FeedSubscriptionsView(LoginRequiredMixin, ListView):
     template_name = "feeds/feed_list.html"
 
     def get_queryset(self):
-        user = Options.objects.get(user=self.request.user)
+        user, created = Options.objects.get_or_create(user=self.request.user)
+        if created:
+            user.save()
         queryset = Feed.objects.filter(feed_subscription__user=user)
         return queryset
 
