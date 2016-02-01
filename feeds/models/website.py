@@ -11,6 +11,9 @@ Stores as much as possible coming out of the feed.
 .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
 """
 
+from __future__ import unicode_literals
+from django.utils.encoding import python_2_unicode_compatible
+
 import logging
 
 from django.db import models
@@ -22,6 +25,7 @@ from ..managers import WebSiteManager
 logger = logging.getLogger(__name__)
 
 
+@python_2_unicode_compatible
 class WebSite(models.Model):
     url = models.URLField(
         unique=True,

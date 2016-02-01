@@ -11,6 +11,9 @@ Stores as much as possible coming out of the feed.
 .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
 """
 
+from __future__ import unicode_literals
+from django.utils.encoding import python_2_unicode_compatible
+
 import logging
 import feedparser
 from feedparser import CharacterEncodingOverride
@@ -36,6 +39,7 @@ from ..feedexceptions import FeedErrorHTTP, FeedErrorParse, FeedSame
 logger = logging.getLogger(__name__)
 
 
+@python_2_unicode_compatible
 class Feed(models.Model):
     """
     Model that contains information about any feed, including
@@ -274,7 +278,7 @@ class Feed(models.Model):
             ("can_backup_feed", _("Can backup feeds")),
         )
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.name)
 
     def natural_key(self):

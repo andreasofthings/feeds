@@ -11,7 +11,11 @@ Stores as much as possible coming out of the feed.
 .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
 """
 
+from __future__ import unicode_literals
+
 import logging
+
+from django.utils.encoding import python_2_unicode_compatible
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -22,6 +26,7 @@ from .tag import Tag
 logger = logging.getLogger(__name__)
 
 
+@python_2_unicode_compatible
 class Post(models.Model):
     """
     Model to hold an actual feed entry
@@ -99,7 +104,10 @@ class Post(models.Model):
         super(Post, self).save(*args, **kwargs)
         """Call the "real" save() method."""
 
-    def __unicode__(self):
+    def __str__(self):
+        """
+        Python 2/3 compatibility through @python_2_unicode_compatible
+        """
         return u'%s' % (self.title)
 
 
