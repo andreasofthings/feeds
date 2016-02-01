@@ -46,7 +46,6 @@ setup(
     ],
     install_requires=[
         'beautifulsoup4>=4.2.1',
-        'django-braces>=1.0.0',
         'django-formtools',
         'django-crispy-forms>=1.2.3',
         'feedparser>=5.1.2',
