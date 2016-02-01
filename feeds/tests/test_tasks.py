@@ -11,6 +11,7 @@ from datetime import datetime
 import feedparser
 
 from django.test import TestCase
+from django.conf import settings
 
 from feeds import ENTRY_NEW, ENTRY_UPDATED
 from feeds import FEED_OK
@@ -59,7 +60,13 @@ class TaskTest(TestCase):
 
     def test_count_tweets(self):
         """
+        test tweets
+
+        .. :todo::
+            test this in the `python-social` module
         """
+        if not settings.FEED_POST_UPDATE_TWITTER:
+            return
         from feeds.tasks import post_update_twitter
         post = Post.objects.all()[0]
         result = post_update_twitter.delay(post.pk)
@@ -69,6 +76,14 @@ class TaskTest(TestCase):
         self.assertEqual(result.get(), (-1,))
 
     def test_count_share_like(self):
+        """
+        test facebook shares and likes
+
+        .. :todo::
+            test this in the `python-social` module
+        """
+        if not settings.FEED_POST_UPDATE_FACEBOOK:
+            return
         from feeds.tasks import post_update_facebook
         posts = Post.objects.all()
         result = post_update_facebook.delay(posts[0].pk)
@@ -81,7 +96,13 @@ class TaskTest(TestCase):
 
     def test_count_linkedin(self):
         """
+        test linkedin shares
+
+        .. :todo::
+            test this in the `python-social` module
         """
+        if not settings.FEED_POST_UPDATE_LINKEDIN:
+            return
         from feeds.tasks import post_update_linkedin
         post = Post.objects.all()[0]
         result = post_update_linkedin.delay(post.pk)

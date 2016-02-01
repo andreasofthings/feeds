@@ -31,7 +31,6 @@ class ViewsAnonymousTest(TestCase):
 
     fixtures = [
         'Feed_all.yaml',
-        'Categories.yaml',
     ]
 
     def setUp(self):
@@ -291,7 +290,7 @@ class ViewsAnonymousTest(TestCase):
         )
         self.assertEqual(result.status_code, 200)
 
-    def feed_subscription(self):
+    def feed_subscriptions(self):
         """
         feed-subscription
         ---------
@@ -303,7 +302,7 @@ class ViewsAnonymousTest(TestCase):
 
             Should return 302 for an anonymous user.
         """
-        result = self.client.get(reverse('planet:feed-subscription'))
+        result = self.client.get(reverse('planet:feed-subscriptions'))
         self.assertEqual(result.status_code, 302)
 
     def feed_add(self):
@@ -411,7 +410,7 @@ class ViewsAnonymousTest(TestCase):
         self.feed_view()
         self.feed_update()
         self.feed_delete()
-        # self.feed_refresh()
+        self.feed_subscriptions()
 
     def test_sitemap(self):
         client = Client()
@@ -497,9 +496,9 @@ class TestAllViewsLoggedIn(TestCase):
         )
         self.assertEqual(result.status_code, 200)
 
-    def feed_subscription(self):
+    def test_feed_subscription(self):
         """
-        feed-subscription
+        test feed-subscription
         ---------
             :url: url(
                 r'^list/$',
@@ -509,7 +508,11 @@ class TestAllViewsLoggedIn(TestCase):
 
             Should return 200 for an authenticated user.
         """
-        result = self.client.get(reverse('planet:feed-subscription'))
+        self.client.login(
+            username=self.username,
+            password=self.password
+        )
+        result = self.client.get(reverse('planet:feed-subscriptions'))
         self.assertEqual(result.status_code, 200)
 
     def test_feed_add(self):

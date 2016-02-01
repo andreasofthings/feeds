@@ -28,8 +28,6 @@ from .views import PostListView, PostDetailView, PostTrackableView
 
 from .views import SiteSubmitWizardView, SiteSubmitForms
 
-from .views import BackupView
-
 from .rss import RssFeed
 
 from .api_views import UserSubscriptions
@@ -185,7 +183,6 @@ urlpatterns += [
 #
 
 urlpatterns += [
-    url(r'^backup/$', BackupView.as_view(), name="backup"),
     url(
         r'test/rss1/$',
         TemplateView.as_view(template_name="feeds/tests/rss1.html"),

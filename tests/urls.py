@@ -55,4 +55,5 @@ urlpatterns = [
         name='sitemaps'
         ),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^category/', include("category.urls", namespace="category")),
 ]
