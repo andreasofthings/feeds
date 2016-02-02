@@ -101,7 +101,7 @@ class OPMLView(FormView):
     """
     form_class = OPMLForm
     template_name = "feeds/opml.html"
-    success_url = "planet:home"
+    success_url = reverse("planet:home")
 
     def form_valid(self, form):
         from xml.etree import ElementTree
@@ -323,7 +323,7 @@ class PostListView(PaginationMixin, ListView):
     List Posts
     """
     model = Post
-    context_object_name = "nodes"
+    paginate_by = 100
     queryset = Post.objects.order_by('published')
 
 
