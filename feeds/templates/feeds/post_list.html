@@ -31,7 +31,7 @@
 </div>
 {% endif %}
 
-{% for node in nodes %}
+{% for node in objects %}
 <div class="row">
     <div class="col-md-2">
       <small>
@@ -42,7 +42,7 @@
       <small><a href="{{node.get_absolute_url }}">{{ node.title }}</a></small>
     </div>
     <div class="col-md-2">
-      <small>{{ node.updated }}</small>
+      <small>{{ node.published }}</small>
     </div>
     <div class="col-md-2">
       <small>{{ node.score }}</small>

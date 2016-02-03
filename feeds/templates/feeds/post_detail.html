@@ -25,7 +25,7 @@
 
 <div itemscope itemtype="http://schema.org/Article" class="row">
   <div class="col-md-8">
-    <h5>{{ node.updated }}</h5>
+    <h5>{{ node.published }}</h5>
     <h2><a href="{{node.link}}" itemprop="headline">{{ node.title }}</a></h2>
     <p>via: <a href="{{node.feed.link}}" itemprop="url">{{node.feed.name}}</a></p>
     {% if node.tags %}

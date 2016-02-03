@@ -323,7 +323,7 @@ class PostListView(PaginationMixin, ListView):
     List Posts
     """
     model = Post
-    context_object_name = "nodes"
+    paginate_by = 50
     queryset = Post.objects.order_by('published')
 
 
