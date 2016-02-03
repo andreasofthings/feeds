@@ -14,10 +14,12 @@
         <li class="disabled"><a href="#">Older</a></li>
       {% endif %}
       {% for page in  page_obj.paginator.page_range %}
-        {% if page == page_obj.number %}
-          <li class="disabled"><a href="#">{{ page }}</a></li>
-        {% else %}
-          <li class="active"><a href="{% url "planet:post-home-paginated" page %}">{{ page }}</a></li>
+        {% if page < 4 or page > (page_obj.last-4) %}
+          {% if page == page_obj.number %}
+            <li class="disabled"><a href="#">{{ page }}</a></li>
+          {% else %}
+            <li class="active"><a href="{% url "planet:post-home-paginated" page %}">{{ page }}</a></li>
+          {% endif %}
         {% endif %}
       {% endfor %}
       {% if page_obj.has_next %}
