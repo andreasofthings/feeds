@@ -14,7 +14,7 @@
         <li class="disabled"><a href="#">Older</a></li>
       {% endif %}
       {% for page in  page_obj.paginator.page_range %}
-        {% if page < 4 or page > (page_obj.last-4) %}
+      {% if page < 4 or page > 10 %}
           {% if page == page_obj.number %}
             <li class="disabled"><a href="#">{{ page }}</a></li>
           {% else %}
