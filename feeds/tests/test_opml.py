@@ -7,7 +7,11 @@ Test the recursive opml import.
 """
 
 from feeds.views import opml_import
-from django.test import TestCase
+from django.test import TestCase, Client
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+
+upload_file = 'feeds/tests/data/feedlyshort.opml'
 
 
 class TaskOPML(TestCase):
@@ -17,17 +21,36 @@ class TaskOPML(TestCase):
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
 
+    username = "john"
+    password = "password"
+
     def setUp(self):
         """
-        Set up enivironment to test models.
+        Set up enivironment to test models
         """
-        pass
+        self.user = User.objects.create_user(
+            self.username,
+            'lennon@thebeatles.com',
+            self.password
+        )
+        """Test user."""
+
+        self.client = Client()
+        """Test Client."""
 
     def test_opml_import(self):
         from xml.etree import ElementTree
-        tree = ElementTree.parse(open('feeds/tests/data/feedlyshort.opml'))
+        tree = ElementTree.parse(open(upload_file))
         result = opml_import(tree)
         self.assertEqual(result, True)
+
+    def test_opml_view(self):
+        with open(upload_file) as fp:
+            result = self.client.post(
+                reverse('planet:opml'),
+                {'attachment': fp}
+            )
+            self.assertEqual(result, result)
 
     def tearDown(self):
         pass
