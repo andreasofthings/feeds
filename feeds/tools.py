@@ -8,6 +8,19 @@ helper functions for angryplanet.feeds
 import sys
 import time
 import datetime
+import requests
+from bs4 import BeautifulSoup
+
+
+def getFeedsFromSite(site):
+    result = ()
+    html = requests.get(site)
+    soup = BeautifulSoup(html.text)
+    for link in soup.head.find_all('link'):
+        if 'type' in link:
+            if "application/rss" in link.get('type'):
+                result.append(link.get('title'), link.get('href'))
+    return result
 
 
 def getText(nodelist):
@@ -59,12 +72,12 @@ def mtime(ttime):
 
     try:
         mktime = time.mktime(argtime)
-    except TypeError, e:
+    except TypeError as e:
         raise e
 
     try:
         return datetime.datetime.fromtimestamp(mktime)
-    except Exception, e:
+    except Exception as e:
         raise e
 
 

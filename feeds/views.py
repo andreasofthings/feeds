@@ -32,6 +32,7 @@ from .models import WebSite, Feed, Post, Subscription, PostReadCount
 from .forms import FeedCreateForm
 from .forms import FeedUpdateForm
 from .forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
+from .tools import getFeedsFromSite
 from .mixins import PaginationMixin
 
 from formtools.wizard.views import SessionWizardView
@@ -136,6 +137,7 @@ class SiteSubmitWizardView(SessionWizardView):
             form = SiteFeedAddForm()
             html = requests.get(step_0_data['Site-url'])
             soup = BeautifulSoup(html.text)
+            links = getFeedsFromSite(step_0_data['Site-url'])
             for link in soup.head.find_all('link'):
                 if 'type' in link:
                     if "application/rss" in link.get('type'):
