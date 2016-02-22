@@ -41,21 +41,17 @@ def refresh_feed(modeladmin, request, queryset):
     queryset.refresh()
 refresh_feed.short_description = "Refresh selected feeds"
 
-
 def activate_feed(modeladmin, request, queryset):
     queryset.update(is_active=True)
 activate_feed.short_description = "Activate selected feeds"
-
 
 def deactivate_feed(modeladmin, request, queryset):
     queryset.update(is_active=False)
 deactivate_feed.short_description = "Deactivate selected feeds"
 
-
 def reset_feed_errors(modeladmin, request, queryset):
     queryset.update(errors=0)
 reset_feed_errors.short_description = "Reset Feed-errors."
-
 
 class FeedAdmin(admin.ModelAdmin):
     """

@@ -102,7 +102,9 @@ class OPMLView(FormView):
     """
     form_class = OPMLForm
     template_name = "feeds/opml.html"
-    success_url = reverse("planet:home")
+
+    def get_success_url(self):
+        return reverse("planet:home")
 
     def form_valid(self, form):
         from xml.etree import ElementTree
@@ -138,15 +140,17 @@ class SiteSubmitWizardView(SessionWizardView):
             html = requests.get(step_0_data['Site-url'])
             soup = BeautifulSoup(html.text)
             links = getFeedsFromSite(step_0_data['Site-url'])
+            for title, href in links:
+                form.fields[href] = forms.BooleanField(
+                    initial=False,
+                    required=False,
+                    label=title
+                )
+
             for link in soup.head.find_all('link'):
                 if 'type' in link:
                     if "application/rss" in link.get('type'):
-                        form.fields[link.get('href')] = forms.BooleanField(
-                            initial=False,
-                            required=False,
-                            label=link.get('title')
-                        )
-
+                        pass
         return form
 
 

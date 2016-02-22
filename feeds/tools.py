@@ -19,7 +19,7 @@ def getFeedsFromSite(site):
     for link in soup.head.find_all('link'):
         if 'type' in link:
             if "application/rss" in link.get('type'):
-                result.append(link.get('title'), link.get('href'))
+                result.append((link.get('title'), link.get('href')))
     return result
 
 

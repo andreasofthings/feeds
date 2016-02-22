@@ -13,4 +13,6 @@ feeds.egg-info/*
 feeds/.ropeproject
 *.pot
 .pypirc
+django.db
 myapp_test
+_MAIN_0.toc
