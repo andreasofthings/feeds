@@ -48,9 +48,9 @@ class TaskOPML(TestCase):
         with open(upload_file) as fp:
             result = self.client.post(
                 reverse('planet:opml'),
-                {'attachment': fp}
+                {'opml': fp}
             )
-            self.assertEqual(result, result)
+            self.assertEqual(result.status_code, 302)
 
     def tearDown(self):
         pass
