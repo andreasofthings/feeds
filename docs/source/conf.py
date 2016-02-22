@@ -12,7 +12,7 @@
 # serve to show the default.
 
 import sys, os
-os.environ['DJANGO_SETTINGS_MODULE'] = "tests.settings"
+os.environ['DJANGO_SETTINGS_MODULE'] = "conf"
 import django
 django.setup()
 
