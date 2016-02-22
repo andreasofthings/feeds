@@ -12,8 +12,8 @@
 # serve to show the default.
 
 import sys, os
-from django.conf import settings
-settings.configure()
+import django
+django.setup()
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -28,9 +28,9 @@ sys.path.insert(0, os.path.abspath('../..'))
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
-    'sphinx.ext.autodoc', 
-    'sphinx.ext.doctest', 
-    'sphinx.ext.todo', 
+    'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
+    'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'celery.contrib.sphinx'
 ]

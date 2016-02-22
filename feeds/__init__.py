@@ -7,10 +7,10 @@ feeds - feed aggregator, social relevance and stats
 
 :Author:    Andreas Neumeier
 :Contact:   andreas@neumeier.org
-:Revision:  $Revision: 1 $
-:Date:      $Date: 2003-10-24 19:46:32 +0000 (Fri, 24 Oct 2003) $
+:Revision:  |version|
+:Date:      |today|
 :ID:        $Id:
-:Copyright: To be decided soon. BSD alike, probably.
+:Copyright: BSD alike.
 
 feeds is the core module for feeds.
 
