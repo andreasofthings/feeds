@@ -6,7 +6,7 @@
 Test the recursive opml import.
 """
 
-from feeds.views import opml_import
+from feeds.views import opmlImport
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -41,7 +41,7 @@ class TaskOPML(TestCase):
     def test_opml_import(self):
         from xml.etree import ElementTree
         tree = ElementTree.parse(open(upload_file))
-        result = opml_import(tree)
+        result = opmlImport(tree)
         self.assertEqual(result, True)
 
     def test_opml_view(self):

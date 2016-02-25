@@ -9,8 +9,8 @@ Views for :py:mod:`feeds`
 =========
 
 The views module contains all Django Class Based Views, marking up the
-Frontend to managing and reading :py:mod:`feeds.models.feed`,
-:py:mod:`feeds.models.post` and :py:mod:`feeds.models.subscriptions`.
+Frontend to managing and reading :py:mod:`feeds.models.Feed`,
+:py:mod:`feeds.models.Post` and :py:mod:`feeds.models.Subscriptions`.
 
 """
 
@@ -70,8 +70,10 @@ class OptionsView(LoginRequiredMixin, UpdateView):
     The `OptionsView` will allow individual users to manage settings/options
     related to their account and viewing experience.
 
-    Options managed here are kept in :py:mod:`feeds.models.options`
+    Options managed here are kept in :py:mod:`feeds.models.Options`
     The form to display them is kept in :py:mod:`feeds.forms.OptionsForm`
+
+    .. todo:: This should be architected better and have better tests.
     """
     model = Options
     template_name = "feeds/options.html"
@@ -93,7 +95,7 @@ class OptionsView(LoginRequiredMixin, UpdateView):
         return super(OptionsView, self).form_valid(form)
 
 
-def opml_import(opml, count=0):
+def opmlImport(opml, count=0):
     for node in opml.iter('outline'):
         name = node.attrib.get('text')
         url = node.attrib.get('xmlUrl')
@@ -104,12 +106,7 @@ def opml_import(opml, count=0):
                 name=name,
             )
             if c:
-                try:
-                    f.save()
-                except Exception as e:
-                    logger.debug(e)
-        else:
-            logger.debug("Category: %s", name)
+                f.save()
     return True
 
 
@@ -128,7 +125,7 @@ class OPMLView(FormView):
     def form_valid(self, form):
         from xml.etree import ElementTree
         tree = ElementTree.parse(self.request.FILES['opml'])
-        opml_import(tree)
+        opmlImport(tree)
         return super(OPMLView, self).form_valid(form)
 
 
