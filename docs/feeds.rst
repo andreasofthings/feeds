@@ -4,4 +4,3 @@
 .. automodule:: feeds
    :members:
    :show-inheritance:
-

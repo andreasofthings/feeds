@@ -5,7 +5,12 @@
 """
 :mod:`feeds.views`
 
-views for feeds
+Views for :py:mod:`feeds`
+=========
+
+The views module contains all Django Class Based Views, marking up the
+Frontend to managing and reading :py:mod:`feeds.models.feed`,
+:py:mod:`feeds.models.post` and :py:mod:`feeds.models.subscriptions`.
 
 """
 
@@ -47,13 +52,27 @@ logger = logging.getLogger(__name__)
 class HomeView(TemplateView):
     """
     Marketing Page
+    ==============
 
-    This is where new users are supposed to come to first.
+    The HomeView will print out a marketing page, where new users are supposed
+    to come to first. It is often referred to as the `landingpage`.
+
+    It does not have any functionality.
     """
     template_name = "feeds/home.html"
 
 
 class OptionsView(LoginRequiredMixin, UpdateView):
+    """
+    Options Page
+    ============
+
+    The `OptionsView` will allow individual users to manage settings/options
+    related to their account and viewing experience.
+
+    Options managed here are kept in :py:mod:`feeds.models.options`
+    The form to display them is kept in :py:mod:`feeds.forms.OptionsForm`
+    """
     model = Options
     template_name = "feeds/options.html"
     form_class = OptionsForm
