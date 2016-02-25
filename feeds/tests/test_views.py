@@ -127,6 +127,7 @@ class TestAllViewsLoggedIn(TestCase):
         - self.feed_home
         """
         self.feed_home()
+        self.feed_subscribe()
         self.feed_subscription()
 
     def test_feed_home_paginated(self):
