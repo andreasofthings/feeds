@@ -98,9 +98,14 @@ class TestAllViewsLoggedIn(TestCase):
             username=self.username,
             password=self.password
         )
-        result = self.client.get(reverse('planet:feed-subscribe', {'pk': 1}))
+        result = self.client.get(
+            reverse('planet:feed-subscribe', kwargs={'pk': 1})
+        )
         self.assertEqual(result.status_code, 302)
-        self.assertRedirects(result, reverse('planet:feed-view', {'pk': 1}))
+        self.assertRedirects(
+            result,
+            reverse('planet:feed-view', kwargs={'pk': 1})
+        )
 
     def feed_subscription(self):
         """
