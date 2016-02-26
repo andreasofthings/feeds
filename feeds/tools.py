@@ -9,17 +9,43 @@ import sys
 import time
 import datetime
 import requests
-from bs4 import BeautifulSoup
+
+try:
+    from HTMLParser import HTMLParser as HTMLParser
+except:
+    from html.parser import HTMLParser as HTMLParser
+
+
+class feedFinder(HTMLParser):
+    """
+    feedFinder
+    ==========
+
+    custom HTMLParser to find all relevant feeds from a website.
+    """
+    links = []
+
+    def handle_starttag(self, tag, attrs):
+        if "link" in tag:
+            attr = {}
+            for k, v in attrs:
+                attr[k] = v
+            self.links.append(attr)
+
+    @property
+    def get_links(self):
+        return self.links
 
 
 def getFeedsFromSite(site):
-    result = ()
+    parser = feedFinder()
+    result = []
     html = requests.get(site)
-    soup = BeautifulSoup(html.text)
-    for link in soup.head.find_all('link'):
-        if 'type' in link:
-            if "application/rss" in link.get('type'):
-                result.append((link.get('title'), link.get('href')))
+    parser.feed(html.text)
+    for link in parser.links:
+        if "type" in link.keys():
+            if "application/rss" in link['type']:
+                result.append((link['title'], link['href']))
     return result
 
 
