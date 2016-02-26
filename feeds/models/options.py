@@ -23,19 +23,6 @@ from .feed import Feed
 
 logger = logging.getLogger(__name__)
 
-class OptionsManager(models.Manager):
-    def get(self, *args, **kwargs):
-        """
-        Override get to ensure Options are created if not existing yet.
-        """
-        obj, created = self.get_or_create(*args, **kwargs)
-        if created:
-            obj.save()
-        return super(OptionsManager, self).get(*args, **kwargs)
-
-    def __init__(self, *args, **kwargs):
-        return super(OptionsManager, self).__init__(*args, **kwargs)
-
 
 @python_2_unicode_compatible
 class Options(models.Model):
@@ -60,5 +47,5 @@ class Options(models.Model):
     class Meta:
         verbose_name_plural = "options"
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s Options' % self.user
