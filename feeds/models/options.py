@@ -16,13 +16,28 @@ import logging
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.utils.encoding import python_2_unicode_compatible
 
 from ..managers import OptionsManager
 from .feed import Feed
 
 logger = logging.getLogger(__name__)
 
+class OptionsManager(models.Manager):
+    def get(self, *args, **kwargs):
+        """
+        Override get to ensure Options are created if not existing yet.
+        """
+        obj, created = self.get_or_create(*args, **kwargs)
+        if created:
+            obj.save()
+        return super(OptionsManager, self).get(*args, **kwargs)
 
+    def __init__(self, *args, **kwargs):
+        return super(OptionsManager, self).__init__(*args, **kwargs)
+
+
+@python_2_unicode_compatible
 class Options(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

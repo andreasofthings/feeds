@@ -83,11 +83,14 @@ class PostReadCountManager(models.Manager):
 
 
 class OptionsManager(models.Manager):
-    def get_options(self):
-        options = self.objects.all()
-        if options:
-            options = options[0]
-        else:
-            options = self.objects.create()
-            """Create with default value."""
-        return options
+    def get(self, *args, **kwargs):
+        """
+        Override get to ensure Options are created if not existing yet.
+        """
+        obj, created = self.get_or_create(*args, **kwargs)
+        if created:
+            obj.save()
+        return super(OptionsManager, self).get(*args, **kwargs)
+
+    def __init__(self, *args, **kwargs):
+        return super(OptionsManager, self).__init__(*args, **kwargs)
