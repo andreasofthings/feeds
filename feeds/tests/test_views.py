@@ -20,6 +20,10 @@ class TestAllViewsLoggedIn(TestCase):
     Test Feeds views for users that are authenticated.
     """
 
+    fixtures = [
+        'Feed_all.yaml',
+    ]
+
     username = "john"
     password = "password"
 
