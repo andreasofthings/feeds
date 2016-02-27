@@ -58,29 +58,9 @@ class FeedManager(models.Manager):
 
 class PostReadCountManager(models.Manager):
     """
-    Manager for Tag objects
+    Manager for PostReadCount objects
     """
-
-    def get_feed_count_in_timeframe(self, feed_id, start, delta, steps):
-        """
-        feed_id:which feed
-        start:  start at which time
-        delta:  how long shall one step be
-        steps:  how many steps
-        """
-        clickdata = ()
-        clicklist = self.objects.filter(post__feed__id=feed_id)
-        lower_offset = start
-        for i in range(steps):
-            upper_offset = lower_offset
-            lower_offset = upper_offset - delta
-            if clicklist:
-                clickdata.append(
-                    clicklist.filter(
-                        created__gte=lower_offset
-                    ).filter(created__lte=upper_offset).count())
-        return clickdata
-
+    pass
 
 class OptionsManager(models.Manager):
     def get(self, *args, **kwargs):
