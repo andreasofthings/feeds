@@ -6,13 +6,22 @@
 """
 
 from django.test import TestCase, Client
+from feeds.models import Feed
 
 
-class ViewsAnonymousTest(TestCase):
+class SitemapTest(TestCase):
     """
+    Test sitemaps.
     """
+
+    fixtures = [
+        'Feed_basic.yaml',
+    ]
+
     def setUp(self):
         self.client = Client()
+        for feed in Feed.objects.all():
+            feed.refresh()
 
     def test_sitemap(self):
         result = self.client.get('/feeds/sitemap.xml')
