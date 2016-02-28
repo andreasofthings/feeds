@@ -21,7 +21,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from .feed import Feed
-from category.tag import Tag
+from category.models import Tag
 
 logger = logging.getLogger(__name__)
 
