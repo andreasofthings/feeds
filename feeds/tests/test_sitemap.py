@@ -26,3 +26,7 @@ class SitemapTest(TestCase):
     def test_sitemap(self):
         result = self.client.get('/feeds/sitemap.xml')
         self.assertEqual(result.status_code, 200)
+        result = self.client.get('/feeds/sitemap-feeds.xml')
+        self.assertEqual(result.status_code, 200)
+        result = self.client.get('/feeds/sitemap-posts.xml')
+        self.assertEqual(result.status_code, 200)
