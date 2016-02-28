@@ -21,29 +21,6 @@ class WebSiteManager(models.Manager):
         return self.get(slug=slug)
 
 
-class TagManager(models.Manager):
-    """
-    Manager for `Tag` objects.
-    """
-
-    def get_by_natural_key(self, name):
-        """
-        get Tag by natural key, to allow serialization by key rather than `ìd`
-        """
-        return self.get(name=name)
-
-
-class CategoryManager(models.Manager):
-    """
-    Manager for Category
-    """
-    def get_by_natural_key(self, name):
-        """
-        Get Category by natural kea to allow serialization
-        """
-        return self.get(name=name)
-
-
 class FeedManager(models.Manager):
     """
     Manager object for :py:mod:`feeds.models.Feed`
@@ -61,6 +38,7 @@ class PostReadCountManager(models.Manager):
     Manager for PostReadCount objects
     """
     pass
+
 
 class OptionsManager(models.Manager):
     def get(self, *args, **kwargs):
