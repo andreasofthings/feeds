@@ -28,6 +28,7 @@ from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
 
 from .website import WebSite
+from .models import Enclosure
 from category.models import Category
 
 from .. import USER_AGENT
@@ -374,6 +375,15 @@ Coming from `feedparser`:
             )
         p.content = entry.get('content', '')
         """ToDo: get other content instead."""
+
+        if len(entry.enclosures) > 0:
+            for enclosure in entry.enclosures:
+                e = Enclosure(
+                    href=entry.enclosure['href'],
+                    length=entry.enclosure['length'],
+                    enclosure_type=entry.enclosure['type'],
+                )
+                e.save()
 
         p.save()
         logger.debug(

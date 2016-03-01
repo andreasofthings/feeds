@@ -44,7 +44,7 @@ class Post(models.Model):
     author = models.CharField(_('author'), max_length=50, blank=True)
     author_email = models.EmailField(_('author email'), blank=True)
     comments = models.URLField(_('comments'), blank=True)
-    # enclosure, see there
+    # enclosure , see there
     guid = models.CharField(
         _('guid'),
         max_length=255,
