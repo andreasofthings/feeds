@@ -28,7 +28,7 @@ from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
 
 from .website import WebSite
-from .models import Enclosure
+from .enclosure import Enclosure
 from category.models import Category
 
 from .. import USER_AGENT
@@ -379,6 +379,7 @@ Coming from `feedparser`:
         if len(entry.enclosures) > 0:
             for enclosure in entry.enclosures:
                 e = Enclosure(
+                    post=p,
                     href=entry.enclosure['href'],
                     length=entry.enclosure['length'],
                     enclosure_type=entry.enclosure['type'],
