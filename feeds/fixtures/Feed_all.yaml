@@ -853,3 +853,10 @@
     "feed_url": 'http://jacobian.org/feed/'
     "name": 'Jacob Kaplan-Moss'
     "is_active": False
+- model: feeds.Feed
+  pk: 145
+  fields:
+    "feed_url": 'http://www.wrint.de/feed/'
+    "name": "Wer redet ist nicht tot"
+    "is_active": True
+    "category": ['Podcast',]
