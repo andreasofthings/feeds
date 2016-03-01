@@ -859,4 +859,4 @@
     "feed_url": 'http://www.wrint.de/feed/'
     "name": "Wer redet ist nicht tot"
     "is_active": True
-    "category": ['Podcast',]
+    "category": [5,]
