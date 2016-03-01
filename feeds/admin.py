@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models.website import WebSite
+from .models.enclosure import Enclosure
 from .models.feed import Feed
 from .models.post import Post
 from .models.stats import FeedPostCount
@@ -37,21 +38,31 @@ class WebSiteAdmin(admin.ModelAdmin):
     ]
 
 
+class EnclosureAdmin(admin.ModelAdmin):
+    """
+    """
+    list_display = ('post', 'enclosure_type', 'length', 'href')
+
+
 def refresh_feed(modeladmin, request, queryset):
     queryset.refresh()
 refresh_feed.short_description = "Refresh selected feeds"
+
 
 def activate_feed(modeladmin, request, queryset):
     queryset.update(is_active=True)
 activate_feed.short_description = "Activate selected feeds"
 
+
 def deactivate_feed(modeladmin, request, queryset):
     queryset.update(is_active=False)
 deactivate_feed.short_description = "Deactivate selected feeds"
 
+
 def reset_feed_errors(modeladmin, request, queryset):
     queryset.update(errors=0)
 reset_feed_errors.short_description = "Reset Feed-errors."
+
 
 class FeedAdmin(admin.ModelAdmin):
     """
@@ -117,6 +128,7 @@ class FeedPostCountAdmin(admin.ModelAdmin):
     """
     pass
 
+admin.site.register(Enclosure, EnclosureAdmin)
 admin.site.register(FileModel, FileAdmin)
 admin.site.register(WebSite, WebSiteAdmin)
 admin.site.register(Post, PostAdmin)

@@ -28,7 +28,6 @@ from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
 
 from .website import WebSite
-from .enclosure import Enclosure
 from category.models import Category
 
 from .. import USER_AGENT
@@ -327,11 +326,11 @@ Coming from `feedparser`:
 
     def from_feedparser(self, entry, postdict):
         """
-        Receive Entry, process
+        Receive Entry, postdict
         ..arguments:
             entry: actual Entry
             postdict: ?
-        entry has these keys: (Spiegel.de)
+        entry has these keys:
         - 'summary_detail'
         - 'published'
         - 'published_parsed'
@@ -350,7 +349,7 @@ Coming from `feedparser`:
         """
         result = ENTRY_SAME
 
-        p, created = self.posts.get_or_create(
+        p, created = self.posts.from_feedparser(
             feed=self,
             title=entry.title,
             guid=self._entry_guid(entry),
@@ -376,15 +375,15 @@ Coming from `feedparser`:
         p.content = entry.get('content', '')
         """ToDo: get other content instead."""
 
-        if len(entry.enclosures) > 0:
-            for enclosure in entry.enclosures:
-                e = Enclosure(
-                    post=p,
-                    href=entry.enclosure['href'],
-                    length=entry.enclosure['length'],
-                    enclosure_type=entry.enclosure['type'],
-                )
-                e.save()
+#        if len(entry.enclosures) > 0:
+#            for enclosure in entry.enclosures:
+#                e = Enclosure(
+#                    post=p,
+#                    href=entry.enclosure['href'],
+#                    length=entry.enclosure['length'],
+#                    enclosure_type=entry.enclosure['type'],
+#                )
+#                e.save()
 
         p.save()
         logger.debug(

@@ -33,6 +33,16 @@ class FeedManager(models.Manager):
         return self.get(name=name)
 
 
+class PostManager(models.Manager):
+    """
+    """
+    def from_feedparser(self, *args, **kwargs):
+        """
+        Actual logic to create a new post from feedparser goes here.
+        """
+        return self.get_or_create(*args, **kwargs)
+
+
 class PostReadCountManager(models.Manager):
     """
     Manager for PostReadCount objects
