@@ -43,8 +43,13 @@ class PostManager(models.Manager):
         return self.get_or_create(*args, **kwargs)
 
     def older_than(self, ttl):
-        from datetime.datetime import now
-        edge = now() - ttl
+        """
+        Get all Posts older than `ttl`.
+
+        .. ToDo: work with timezones.
+        """
+        from datetime import datetime
+        edge = datetime.now() - ttl
         return self.filter(published__lte=edge)
 
 
