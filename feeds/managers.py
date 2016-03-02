@@ -42,6 +42,11 @@ class PostManager(models.Manager):
         """
         return self.get_or_create(*args, **kwargs)
 
+    def older_than(self, ttl):
+        from datetime.datetime import now
+        edge = now() - ttl
+        return self.filter(published__lte=edge)
+
 
 class PostReadCountManager(models.Manager):
     """

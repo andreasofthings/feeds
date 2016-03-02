@@ -22,7 +22,7 @@ except ImportError:
     import urlparse
 
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from celery import shared_task
 from celery import chord
@@ -322,6 +322,22 @@ def feed_refresh(pk):
     Wrap Feed.refresh() to allow async execution in Celery.
     """
     return Feed.objects.get(pk=pk).refresh()
+
+
+@shared_task
+def purge(ttl=timedelta(days=31)):
+    """
+    Removes posts older than `ttl`.
+
+    returns True if OK
+    returns False if not.
+    """
+    try:
+        posts = Post.objects.older_than(ttl)
+        posts.delete()
+    except:
+        return False
+    return True
 
 
 @shared_task
