@@ -19,6 +19,7 @@ class ManagerTest(TestCase):
     :py:mod:`feeds.tests.ModelTest` aims to test following models:
     """
     fixtures = [
+        "Feed_basic.yaml",
         "Posts.yaml",
     ]
 
