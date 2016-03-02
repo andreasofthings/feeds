@@ -4,14 +4,17 @@
     "feed": 1
     "title": "Test"
     "link": "http://www.spiegel.de/1234"
+    "guid": "http://www.spiegel.de/1234"
     "published": "2000-01-01 00:00"
     "updated": "2001-01-01 00:00"
+
 - model: feeds.Post
   pk: 2
   fields:
     "feed": 1
     "title": "Test-2"
     "link": "http://www.wurst.de/1234"
+    "guid": "http://www.wurst.de/1234"
     "published": "2000-01-01 00:00"
     "updated": "2001-01-01 00:00"
     "score": 1
