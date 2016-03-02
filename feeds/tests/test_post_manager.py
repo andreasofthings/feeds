@@ -11,6 +11,11 @@ from django.test import TestCase
 
 from feeds.models import Post
 
+try:
+    from datetime.datetime import timedelta
+except ImportError:
+    from datetime import timedelta
+
 
 class ManagerTest(TestCase):
     """
@@ -36,7 +41,6 @@ class ManagerTest(TestCase):
         This should be older than 1 year, but not older than 100 years.
         Hence, count should be 1, respectively 0.
         """
-        from datetime.datetime import timedelta
         p = Post.objects.older_than(timedelta(years=100))
         self.assertEqual(len(p), 0)
         p = Post.objects.older_than(timedelta(years=1))
