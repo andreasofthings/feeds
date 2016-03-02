@@ -8,13 +8,9 @@ Tests the posts manager.
 """
 
 from django.test import TestCase
+from datetime import timedelta
 
 from feeds.models import Post
-
-try:
-    from datetime.datetime import timedelta
-except ImportError:
-    from datetime import timedelta
 
 
 class ManagerTest(TestCase):
@@ -38,12 +34,12 @@ class ManagerTest(TestCase):
         """
         Posts.yaml has one entry from 2000-01-01.
 
-        This should be older than 1 year, but not older than 100 years.
+        This should be older than 1 day, but not older than 100 years.
         Hence, count should be 1, respectively 0.
         """
-        p = Post.objects.older_than(timedelta(years=100))
+        p = Post.objects.older_than(timedelta(days=100*365))
         self.assertEqual(len(p), 0)
-        p = Post.objects.older_than(timedelta(years=1))
+        p = Post.objects.older_than(timedelta(days=1))
         self.assertEqual(len(p), 1)
 
 
