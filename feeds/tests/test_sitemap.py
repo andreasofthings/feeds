@@ -16,6 +16,7 @@ class SitemapTest(TestCase):
 
     fixtures = [
         'Feed_basic.yaml',
+        'Posts.yaml'
     ]
 
     def setUp(self):

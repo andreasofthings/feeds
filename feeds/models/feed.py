@@ -375,15 +375,15 @@ Coming from `feedparser`:
         p.content = entry.get('content', '')
         """ToDo: get other content instead."""
 
-#        if len(entry.enclosures) > 0:
-#            for enclosure in entry.enclosures:
-#                e = Enclosure(
-#                    post=p,
-#                    href=entry.enclosure['href'],
-#                    length=entry.enclosure['length'],
-#                    enclosure_type=entry.enclosure['type'],
-#                )
-#                e.save()
+        if len(entry.enclosures) > 0:
+            for enclosure in entry.enclosures:
+                e, created = p.enclosure.get_or_create(
+                    href=entry.enclosure['href'],
+                    length=entry.enclosure['length'],
+                    enclosure_type=entry.enclosure['type'],
+                )
+                if created:
+                    e.save()
 
         p.save()
         logger.debug(
