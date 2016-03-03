@@ -10,6 +10,7 @@ Tests for the "feeds" app.
 from django.test import TestCase, Client
 
 from feeds.models import Feed
+from feeds.models import Enclosure
 from feeds import FEED_OK
 
 
@@ -31,6 +32,7 @@ class ModelTest(TestCase):
         "Feed_all.yaml",
         "Site.yaml",
         "Tags.yaml",
+        "Enclosures.yaml",
     ]
 
     def setUp(self):
@@ -62,6 +64,14 @@ class ModelTest(TestCase):
         """
         feed = Feed.objects.filter(is_active=True)
         self.assertEquals(feed[0].refresh(), FEED_OK)
+
+    def test_enclosure(self):
+        """
+        Enclosure doesn't have a whole lot of functions.
+        At least test representation.
+        """
+        enclosure = Enclosure.objects.all()[0]
+        self.assertEqual(type(u''), type(enclosure))
 
     def tearDown(self):
         """

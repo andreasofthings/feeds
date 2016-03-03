@@ -1,0 +1,7 @@
+- model: feeds.Enclosure
+  pk: 1
+  fields:
+    "post": 1
+    "type": "Test"
+    "href": "http://www.spiegel.de/1234"
+    "length": 1234
