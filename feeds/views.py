@@ -37,9 +37,6 @@ from .mixins import PaginationMixin
 
 from formtools.wizard.views import SessionWizardView
 
-from bs4 import BeautifulSoup
-import requests
-
 
 logger = logging.getLogger(__name__)
 
@@ -137,8 +134,6 @@ class SiteSubmitWizardView(SessionWizardView):
         if step == u'Feeds':
             step_0_data = self.storage.get_step_data('Site')
             form = SiteFeedAddForm()
-            html = requests.get(step_0_data['Site-url'])
-            soup = BeautifulSoup(html.text)
             links = getFeedsFromSite(step_0_data['Site-url'])
             for title, href in links:
                 form.fields[href] = forms.BooleanField(
@@ -146,11 +141,6 @@ class SiteSubmitWizardView(SessionWizardView):
                     required=False,
                     label=title
                 )
-
-            for link in soup.head.find_all('link'):
-                if 'type' in link:
-                    if "application/rss" in link.get('type'):
-                        pass
         return form
 
 

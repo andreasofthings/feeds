@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 def getFeedsFromSite(site):
     result = ()
     html = requests.get(site)
-    soup = BeautifulSoup(html.text)
+    soup = BeautifulSoup(html.text, "lxml")
     for link in soup.head.find_all('link'):
         if 'type' in link:
             if "application/rss" in link.get('type'):
