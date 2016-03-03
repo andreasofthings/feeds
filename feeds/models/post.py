@@ -21,7 +21,10 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from .feed import Feed
-from .tag import Tag
+from ..managers import PostManager
+
+from category.models import Tag
+
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +47,7 @@ class Post(models.Model):
     author = models.CharField(_('author'), max_length=50, blank=True)
     author_email = models.EmailField(_('author email'), blank=True)
     comments = models.URLField(_('comments'), blank=True)
-    # enclosure, see there
+    # enclosure , see there
     guid = models.CharField(
         _('guid'),
         max_length=255,
@@ -77,6 +80,8 @@ class Post(models.Model):
 
     # management
     has_errors = models.BooleanField(default=True)
+
+    objects = PostManager()
 
     @models.permalink
     def get_absolute_url(self):

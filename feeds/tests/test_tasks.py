@@ -58,6 +58,17 @@ class TaskTest(TestCase):
         test_result = cronjob.delay()
         self.assertEqual(test_result.get(), CRON_OK)
 
+    def test_purge(self):
+        """
+        Test for the `purge` function in :py:mod:`feeds.tasks`
+
+        This will go through all of the posts in the fixture and
+        purge for the default value.
+        """
+        from feeds.tasks import purge
+        test_result = purge.delay()
+        self.assertEqual(test_result.get(), True)
+
     def test_count_tweets(self):
         """
         test tweets

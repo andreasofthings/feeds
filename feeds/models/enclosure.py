@@ -29,7 +29,7 @@ class Enclosure(models.Model):
     post = models.ForeignKey(Post, related_name="enclosure")
     """reference to the post the enclosure belongs to."""
 
-    url = models.URLField()
+    href = models.URLField()
     """the url of the enclosed media file."""
 
     length = models.BigIntegerField()
@@ -42,4 +42,4 @@ class Enclosure(models.Model):
         """
         return type of object and containing post
         """
-        return u'%s [for %s]' % (self.enclosure_type, self.post)
+        return _(u'%s [for %s]' % (self.enclosure_type, self.post))

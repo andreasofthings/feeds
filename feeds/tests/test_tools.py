@@ -24,7 +24,7 @@ class TaskTools(TestCase):
     def test_getFeedFromSite(self):
         from feeds.tools import getFeedsFromSite
         result = getFeedsFromSite("http://nomorecubes.net")
-        self.assertEqual(type(result), type(()))
+        self.assertEqual(type(result), type([]))
 
     def tearDown(self):
         pass

@@ -1,8 +1,0 @@
-- model: feeds.Tag
-  fields:
-    "name": "Deutsch"
-    "touched": "2000-01-01 00:00"
-- model: feeds.Tag
-  fields:
-    "name": "English"
-    "touched": "2000-01-01 00:00"

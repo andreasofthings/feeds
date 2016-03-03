@@ -16,6 +16,7 @@ import logging
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.utils.encoding import python_2_unicode_compatible
 
 from ..managers import OptionsManager
 from .feed import Feed
@@ -23,6 +24,7 @@ from .feed import Feed
 logger = logging.getLogger(__name__)
 
 
+@python_2_unicode_compatible
 class Options(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -45,5 +47,5 @@ class Options(models.Model):
     class Meta:
         verbose_name_plural = "options"
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s Options' % self.user

@@ -7,12 +7,12 @@ Welcome to feeds documentation!
 ======================================
 
 .. image:: https://travis-ci.org/aneumeier/feeds.png?branch=master
-   :target: https://travis-ci.org/aneumeier/feeds 
-   
-.. image:: https://coveralls.io/repos/aneumeier/feeds/badge.png 
-   :target: https://coveralls.io/r/aneumeier/feeds 
+   :target: https://travis-ci.org/aneumeier/feeds
 
-Feeds aims to be a feed aggregator, readed and potentially a replacement for feedburner_. 
+.. image:: https://coveralls.io/repos/aneumeier/feeds/badge.png
+   :target: https://coveralls.io/r/aneumeier/feeds
+
+Feeds aims to be a feed aggregator, readed and potentially a replacement for feedburner_.
 
 It is realized as a Django app. It takes feeds in any format `feedparser` can understand and aims to reproduce identical but trackable feeds, augmented with feedbrater information.
 
@@ -32,7 +32,9 @@ Quick start
 
         url(r'^feeds/', include( 'feeds.urls', namespace="planet", app_name="planet")),
 
-    Mind the namespace.
+
+    Mind the namespace `planet` that is used throughout the application for
+    reversing URLs.
 
 3. Run `python manage.py syncdb` to create the feeds models.
 
@@ -61,4 +63,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

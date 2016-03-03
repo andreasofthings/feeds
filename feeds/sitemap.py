@@ -12,14 +12,13 @@
         'never'
 """
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from django.utils import timezone
 from django.contrib.sitemaps import Sitemap
 from django.db.models import Max
 
 from feeds.models import Feed, Post
-from category.models import Category, Tag
 
 
 class FeedSitemap(Sitemap):
@@ -87,54 +86,9 @@ class PostSitemap(Sitemap):
         return priority
 
     def items(self):
-        return Post.objects.filter(score__gt=0)
+        return Post.objects.all()
 
     def lastmod(self, obj):
         return obj.published
 
     limit = 1000
-
-
-class CategorySitemap(Sitemap):
-    """
-    SiteMap for Categories
-    """
-
-    def changefreq(self, obj):
-        return "weekly"
-
-    def priority(self, obj):
-        return 1.0
-
-    def items(self):
-        return Category.objects.all()
-
-    def lastmod(self, obj):
-        return datetime.now()
-
-
-class TagSitemap(Sitemap):
-    """
-    SiteMap for Tags
-    """
-
-    def changefreq(self, obj):
-        if obj.touched > timezone.now()-timedelta(hours=1):
-            return "hourly"
-        if obj.touched > timezone.now()-timedelta(days=1):
-            return "daily"
-        if obj.touched > timezone.now()-timedelta(days=7):
-            return "weekly"
-        return "monthly"
-
-    def priority(self, obj):
-        posts_per_tag = obj.posts().count()
-        total_posts = Post.objects.all().count()
-        priority = float(posts_per_tag) / float(total_posts)
-        return priority
-
-    def items(self):
-        return Tag.objects.all()
-
-    def lastmod(self, obj):
-        return obj.touched

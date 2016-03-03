@@ -21,29 +21,6 @@ class WebSiteManager(models.Manager):
         return self.get(slug=slug)
 
 
-class TagManager(models.Manager):
-    """
-    Manager for `Tag` objects.
-    """
-
-    def get_by_natural_key(self, name):
-        """
-        get Tag by natural key, to allow serialization by key rather than `ìd`
-        """
-        return self.get(name=name)
-
-
-class CategoryManager(models.Manager):
-    """
-    Manager for Category
-    """
-    def get_by_natural_key(self, name):
-        """
-        Get Category by natural kea to allow serialization
-        """
-        return self.get(name=name)
-
-
 class FeedManager(models.Manager):
     """
     Manager object for :py:mod:`feeds.models.Feed`
@@ -56,38 +33,42 @@ class FeedManager(models.Manager):
         return self.get(name=name)
 
 
+class PostManager(models.Manager):
+    """
+    """
+    def from_feedparser(self, *args, **kwargs):
+        """
+        Actual logic to create a new post from feedparser goes here.
+        """
+        return self.get_or_create(*args, **kwargs)
+
+    def older_than(self, ttl):
+        """
+        Get all Posts older than `ttl`.
+
+        .. ToDo: work with timezones.
+        """
+        from datetime import datetime
+        edge = datetime.now() - ttl
+        return self.filter(published__lte=edge)
+
+
 class PostReadCountManager(models.Manager):
     """
-    Manager for Tag objects
+    Manager for PostReadCount objects
     """
-
-    def get_feed_count_in_timeframe(self, feed_id, start, delta, steps):
-        """
-        feed_id:which feed
-        start:  start at which time
-        delta:  how long shall one step be
-        steps:  how many steps
-        """
-        clickdata = ()
-        clicklist = self.objects.filter(post__feed__id=feed_id)
-        lower_offset = start
-        for i in range(steps):
-            upper_offset = lower_offset
-            lower_offset = upper_offset - delta
-            if clicklist:
-                clickdata.append(
-                    clicklist.filter(
-                        created__gte=lower_offset
-                    ).filter(created__lte=upper_offset).count())
-        return clickdata
+    pass
 
 
 class OptionsManager(models.Manager):
-    def get_options(self):
-        options = self.objects.all()
-        if options:
-            options = options[0]
-        else:
-            options = self.objects.create()
-            """Create with default value."""
-        return options
+    def get(self, *args, **kwargs):
+        """
+        Override get to ensure Options are created if not existing yet.
+        """
+        obj, created = self.get_or_create(*args, **kwargs)
+        if created:
+            obj.save()
+        return super(OptionsManager, self).get(*args, **kwargs)
+
+    def __init__(self, *args, **kwargs):
+        return super(OptionsManager, self).__init__(*args, **kwargs)

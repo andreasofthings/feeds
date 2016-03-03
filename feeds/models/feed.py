@@ -42,55 +42,57 @@ logger = logging.getLogger(__name__)
 @python_2_unicode_compatible
 class Feed(models.Model):
     """
-    Model that contains information about any feed, including
+Model that contains information about any feed, including:
+
     - metadata for processing
     - results from social updates
     - calculated values
 
-    Coming from `feedparser`:
-        bozo
-        bozo_exception
-        encoding
-        etag
-        feed.author
-        feed.author_detail
-        feed.cloud
-        feed.contributors
-        feed.docs
-        feed.errorreportsto
-        feed.generator
-        feed.generator_detail
-        feed.icon
-        feed.id
-        feed.image
-        feed.info
-        feed.info_detail
-        feed.language
-        feed.license
-        feed.link
-        feed.links
-        feed.logo
-        feed.published
-        feed.published_parsed
-        feed.publisher
-        feed.publisher_detail
-        feed.rights
-        feed.rights_detail
-        feed.subtitle
-        feed.subtitle_detail
-        feed.tags
-        feed.textinput
-        feed.title
-        feed.title_detail
-        feed.ttl
-        feed.updated
-        feed.updated_parsed
-        headers
-        href
-        modified
-        namespaces
-        status
-        version
+Coming from `feedparser`:
+
+    - bozo
+    - bozo_exception
+    - encoding
+    - etag
+    - feed.author
+    - feed.author_detail
+    - feed.cloud
+    - feed.contributors
+    - feed.docs
+    - feed.errorreportsto
+    - feed.generator
+    - feed.generator_detail
+    - feed.icon
+    - feed.id
+    - feed.image
+    - feed.info
+    - feed.info_detail
+    - feed.language
+    - feed.license
+    - feed.link
+    - feed.links
+    - feed.logo
+    - feed.published
+    - feed.published_parsed
+    - feed.publisher
+    - feed.publisher_detail
+    - feed.rights
+    - feed.rights_detail
+    - feed.subtitle
+    - feed.subtitle_detail
+    - feed.tags
+    - feed.textinput
+    - feed.title
+    - feed.title_detail
+    - feed.ttl
+    - feed.updated
+    - feed.updated_parsed
+    - headers
+    - href
+    - modified
+    - namespaces
+    - status
+    - version
     """
     website = models.ForeignKey(
         WebSite,
@@ -324,11 +326,11 @@ class Feed(models.Model):
 
     def from_feedparser(self, entry, postdict):
         """
-        Receive Entry, process
+        Receive Entry, postdict
         ..arguments:
             entry: actual Entry
             postdict: ?
-        entry has these keys: (Spiegel.de)
+        entry has these keys:
         - 'summary_detail'
         - 'published'
         - 'published_parsed'
@@ -347,7 +349,7 @@ class Feed(models.Model):
         """
         result = ENTRY_SAME
 
-        p, created = self.posts.get_or_create(
+        p, created = self.posts.from_feedparser(
             feed=self,
             title=entry.title,
             guid=self._entry_guid(entry),
@@ -372,6 +374,16 @@ class Feed(models.Model):
             )
         p.content = entry.get('content', '')
         """ToDo: get other content instead."""
+
+        if len(entry.enclosures) > 0:
+            for enclosure in entry.enclosures:
+                e, created = p.enclosure.get_or_create(
+                    href=entry.enclosure['href'],
+                    length=entry.enclosure['length'],
+                    enclosure_type=entry.enclosure['type'],
+                )
+                if created:
+                    e.save()
 
         p.save()
         logger.debug(
