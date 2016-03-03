@@ -8,14 +8,15 @@ from .subscription import Subscription
 from .stats import PostReadCount, FeedStats, FeedEntryStats
 
 __all__ = [
-    'WebSite',
+    'Enclosure',
     'Feed',
     'FeedStats',
     'FeedEntryStats',
-    'Post',
     'FeedPostCount',
-    'TaggedPost',
     'Options',
-    'Subscription',
+    'Post',
     'PostReadCount',
+    'Subscription',
+    'TaggedPost',
+    'WebSite',
 ]
