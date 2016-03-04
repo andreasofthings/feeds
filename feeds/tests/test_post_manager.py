@@ -42,14 +42,7 @@ class ManagerTest(TestCase):
         p = Post.objects.older_than(timedelta(days=1))
         self.assertEqual(len(p), 2)
 
-    test_post_manager_from_feedparser(self):
-        """
-        Test PostManager functions.
-        """
-
-        self.assertEqual()
-
-def tearDown(self):
+    def tearDown(self):
         """
         Clean up environment after model tests
         """

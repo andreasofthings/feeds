@@ -15,12 +15,14 @@ import logging
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import python_2_unicode_compatible
 
 from .post import Post
 
 logger = logging.getLogger(__name__)
 
 
+@python_2_unicode_compatible
 class Enclosure(models.Model):
     """
     potential enclosure of a :mod:`feeds.models.Post`
@@ -38,7 +40,7 @@ class Enclosure(models.Model):
     enclosure_type = models.CharField(max_length=32)
     """type of the enclosed file, for example 'image/jpeg'."""
 
-    def __unicode__(self):
+    def __str__(self):
         """
         return type of object and containing post
         """

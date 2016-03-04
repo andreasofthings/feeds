@@ -31,6 +31,7 @@ class ModelTest(TestCase):
     fixtures = [
         "Feed_all.yaml",
         "Site.yaml",
+        "Posts.yaml",
         "Tags.yaml",
         "Enclosures.yaml",
     ]
@@ -71,7 +72,7 @@ class ModelTest(TestCase):
         At least test representation.
         """
         enclosure = Enclosure.objects.all()[0]
-        self.assertEqual(type(u''), type(enclosure))
+        self.assertEqual(type(""), type(str(enclosure.__str__())))
 
     def tearDown(self):
         """
