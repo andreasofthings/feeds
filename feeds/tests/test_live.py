@@ -30,9 +30,6 @@ class TestAllViewsAnonymousLive(LiveServerTestCase):
             self.password
         )
 
-    def tearDown(self):
-        self.browser.quit()
-
     def test_home(self):
         """
         Test the home page from browser.
@@ -62,3 +59,6 @@ class TestAllViewsAnonymousLive(LiveServerTestCase):
         # password_field = self.browser.find_element_by_name('password')
         # password_field.send_keys(self.password)
         # password_field.send_keys(Keys.RETURN)
+
+    def tearDown(self):
+        self.browser.quit()

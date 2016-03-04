@@ -130,6 +130,27 @@ class TestAllViewsLoggedIn(TestCase):
         result = self.client.get(reverse('planet:feed-subscriptions'))
         self.assertEqual(result.status_code, 200)
 
+    def feed_update(self):
+        """
+        test FeedUpdateView
+        """
+        self.client.login(
+            username=self.username,
+            password=self.password
+        )
+        result = self.client.get(
+            reverse('planet:feed-update', kwargs={'pk': 1})
+        )
+        self.assertEqual(result.status_code, 200)
+
+    def feed_delete(self):
+        """
+        Test FeedDeleteView
+
+        Probably better through Selenium
+        """
+        pass
+
     def test_feed(self):
         """
         Run tests for all views related to feeds.
@@ -138,6 +159,8 @@ class TestAllViewsLoggedIn(TestCase):
         self.feed_home()
         self.feed_subscribe()
         self.feed_subscription()
+        self.feed_update()
+        self.feed_delete()
 
     def test_feed_home_paginated(self):
         """

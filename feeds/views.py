@@ -339,6 +339,16 @@ class PostListView(PaginationMixin, ListView):
     queryset = Post.objects.order_by('-published')
 
 
+class PostSubscriptionView(LoginRequiredMixin, PaginationMixin, ListView):
+    """
+    List Posts from subscribed Views.
+
+    .. todo: Test, queryset
+    """
+    model = Post
+    paginate_by = 50
+    queryset = Post.objects.order_by('-published')
+
 class PostDetailView(DetailView):
     user_agent = "google"
     permissions = {

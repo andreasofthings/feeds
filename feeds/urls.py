@@ -24,7 +24,8 @@ from .views import FeedUnSubscribeView
 
 from .views import FeedSubscriptionsView
 
-from .views import PostListView, PostDetailView, PostTrackableView
+from .views import PostListView, PostSubscriptionView
+from .views import PostDetailView, PostTrackableView
 
 from .views import SiteSubmitWizardView, SiteSubmitForms
 
@@ -163,6 +164,16 @@ urlpatterns += [
         r'^p/page(?P<page>[0-9]+)/$',
         PostListView.as_view(),
         name="post-home-paginated"
+    ),
+    url(
+        r'^s/$',
+        PostSubscriptionView.as_view(),
+        name="post-subscription-home"
+    ),
+    url(
+        r'^s/page(?P<page>[0-9]+)/$',
+        PostSubscriptionView.as_view(),
+        name="post-subscription-home-paginated"
     ),
     url(
         r'^f/(?P<feed_id>\d+)/$',
