@@ -484,9 +484,12 @@ Coming from `feedparser`:
         Refresh feed.
         """
         logger.debug("-- start --")
+
+        now = datetime.datetime.now(settings.TIME_ZONE)
+        fiveminutesago = now - datetime.timedelta(seconds=300)
+
         if self.last_checked is not None:
-            if self.last_checked + \
-                    datetime.timedelta(seconds=300) > datetime.datetime.now():
+            if self.last_checked > fiveminutesago:
                 logger.error(
                     "tried feed %s too quick. aborting. (%s, %s, %s)",
                     self.feed_url,

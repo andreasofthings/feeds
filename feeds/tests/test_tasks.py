@@ -136,8 +136,8 @@ class TaskTest(TestCase):
 
         result = post_update_social.delay(999999)
         """Try to find a non-existing post on social media."""
-        self.assertEqual(result.get(), None)
-        """Expect 'None' as a result."""
+        self.assertEqual(result.get(), 0)
+        """Expect '0' as a result."""
 
     def test_feed_refresh(self):
         from feeds.tasks import feed_refresh
