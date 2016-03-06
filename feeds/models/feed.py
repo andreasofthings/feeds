@@ -283,13 +283,6 @@ Coming from `feedparser`:
     def __str__(self):
         return u'%s' % (self.name)
 
-    def natural_key(self):
-        """
-        Return a natural_key for this Feed.
-        """
-        return (self.name, ) + self.category.natural_key()
-    natural_key.dependency = ['feeds.Category', ]
-
     @models.permalink
     def get_absolute_url(self):
         return ('planet:feed-view', [str(self.id)])

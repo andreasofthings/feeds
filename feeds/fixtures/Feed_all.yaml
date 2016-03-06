@@ -1,8 +1,8 @@
 - model: feeds.Feed
   pk: 1
   fields:
-    "feed_url": 'http://www.spvggunterhaching.de/aktuell/news/rss'
-    "name": 'spvgg-unterhaching.de'
+    "feed_url": 'http://nomorecubes.net/feed/rss'
+    "name": 'No more cubes.'
     "is_active": True
 - model: feeds.Feed
   pk: 2
@@ -798,13 +798,15 @@
 - model: feeds.Feed
   pk: 135
   fields:
-    "feed_url": 'http://feeds.feedburner.com/nomore-cubes'
-    "name": 'No more cubes.'
+    "feed_url": 'http://www.spvggunterhaching.de/aktuell/news/rss'
+    "name": 'spvgg-unterhaching.de'
+    "is_active": False
 - model: feeds.Feed
   pk: 136
   fields:
     "feed_url": 'http://feeds.feedburner.com/BeerFoodCat'
     "name": 'Beer, Food & Cat'
+    "is_active": False
 - model: feeds.Feed
   pk: 137
   fields:
@@ -860,3 +862,9 @@
     "name": "Wer redet ist nicht tot"
     "is_active": True
     "category": [5,]
+- model: feeds.Feed
+  pk: 146
+  fields:
+    "feed_url": 'http://nomorecubes.net/fehler/'
+    "name": "Ist egal, dieser Feed liefert 404"
+    "is_active": True

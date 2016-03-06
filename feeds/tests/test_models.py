@@ -11,7 +11,7 @@ from django.test import TestCase, Client
 
 from feeds.models import Feed
 from feeds.models import Enclosure
-from feeds import FEED_OK
+from feeds import FEED_OK, FEED_SAME, FEED_ERRHTTP
 
 
 class ModelTest(TestCase):
@@ -65,6 +65,8 @@ class ModelTest(TestCase):
         """
         feed = Feed.objects.filter(is_active=True)
         self.assertEquals(feed[0].refresh(), FEED_OK)
+        self.assertEquals(feed[0].refresh(), FEED_SAME)
+        self.assertEquals(feed[2].refresh(), FEED_ERRHTTP)
 
     def test_enclosure(self):
         """
