@@ -33,15 +33,15 @@ class TestAllViewsAnonymousLive(LiveServerTestCase):
 
         self.browser.get(self.live_server_url + reverse('planet:site-home'))
         body = self.browser.find_element_by_tag_name('body')
-        self.assertIn('Feeds', body.text)
+        self.assertIn('Andreas', body.text)
 
         self.browser.get(self.live_server_url + reverse('planet:feed-home'))
         body = self.browser.find_element_by_tag_name('body')
-        self.assertIn('Feeds', body.text)
+        self.assertIn('Andreas', body.text)
 
         self.browser.get(self.live_server_url + reverse('planet:post-home'))
         body = self.browser.find_element_by_tag_name('body')
-        self.assertIn('Feeds', body.text)
+        self.assertIn('Andreas', body.text)
 
     def tearDown(self):
         self.browser.quit()
