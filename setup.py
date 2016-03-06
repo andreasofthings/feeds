@@ -56,6 +56,7 @@ setup(
         'timestring==1.6.2',
         'python-django-social>=0.1.0',
         'category>=0.9.0',
+        'pytz',
     ],
     dependency_links=[
         'https://github.com/aneumeier/python-django-social/tarball/master#egg=latest',

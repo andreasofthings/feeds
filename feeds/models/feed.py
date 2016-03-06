@@ -26,6 +26,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 
 from .website import WebSite
 from category.models import Category
@@ -350,7 +351,7 @@ Coming from `feedparser`:
                 calendar.timegm(
                     entry.get('published_parsed',
                               entry.get(
-                                  'created_parsed', datetime.datetime.now()
+                                  'created_parsed', timezone.now()
                               )
                               )
                 )
@@ -422,7 +423,7 @@ Coming from `feedparser`:
 
                         parsed.feed.get(
                             'updated',
-                            datetime.datetime.now().timetuple()
+                            timezone.now().timetuple()
                         )
                         )
                 )
@@ -484,8 +485,7 @@ Coming from `feedparser`:
         Refresh feed.
         """
         logger.debug("-- start --")
-
-        now = datetime.datetime.now(settings.TIME_ZONE)
+        now = timezone.now()
         fiveminutesago = now - datetime.timedelta(seconds=300)
 
         if self.last_checked is not None:
@@ -495,7 +495,7 @@ Coming from `feedparser`:
                     self.feed_url,
                     self.last_checked,
                     self.last_checked + datetime.timedelta(seconds=300),
-                    datetime.datetime.now()
+                    timezone.now()
                 )
                 return FEED_SAME
 
