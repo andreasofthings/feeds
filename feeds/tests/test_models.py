@@ -66,9 +66,9 @@ class ModelTest(TestCase):
         feeds = Feed.objects.filter(is_active=True)
         for feed in feeds:
             print(feed)
-        self.assertEquals(feeds[0].refresh(), FEED_OK)
-        self.assertEquals(feeds[0].refresh(), FEED_SAME)
-        self.assertEquals(feeds[2].refresh(), FEED_ERRHTTP)
+        self.assertEquals(feeds[1].refresh(), FEED_OK)
+        self.assertEquals(feeds[1].refresh(), FEED_SAME)
+        self.assertEquals(feeds[0].refresh(), FEED_ERRHTTP)
 
     def test_enclosure(self):
         """

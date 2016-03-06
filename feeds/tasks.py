@@ -111,9 +111,9 @@ def post_update_twitter(entry_id):
         post = Post.objects.get(pk=entry_id)
         (post.tweets, ) = tweets(post)
         post.save()
-
-    logger.debug("stop: counting tweets. got %s", post.tweets)
-    return (post.tweets, )
+        logger.debug("stop: counting tweets. got %s", post.tweets)
+        return (post.tweets, )
+    return (0, )
 
 
 @shared_task(time_limit=10)
@@ -127,13 +127,13 @@ def post_update_facebook(entry_id):
         post = Post.objects.get(pk=entry_id)
         (post.shares, post.likes, bla) = facebook(post)
         post.save()
-
-    logger.debug(
-        "stop: counting tweets. got %s shares and %s likes",
-        post.shares,
-        post.likes
-    )
-    return (post.shares, post.likes)
+        logger.debug(
+            "stop: counting tweets. got %s shares and %s likes",
+            post.shares,
+            post.likes
+        )
+        return (post.shares, post.likes)
+    return (0, )
 
 
 @shared_task(time_limit=10)
@@ -147,12 +147,12 @@ def post_update_linkedin(entry_id):
         post = Post.objects.get(pk=entry_id)
         (post.linkedin, ) = linkedin(post)
         post.save()
-
-    logger.debug(
-        "stop: counting linkedin. got %s",
-        post.linkedin
-    )
-    return (post.linkedin, )
+        logger.debug(
+            "stop: counting linkedin. got %s",
+            post.linkedin
+        )
+        return (post.linkedin, )
+    return (0, )
 
 
 @shared_task(time_limit=10)
@@ -166,8 +166,8 @@ def post_update_googleplus(post_id):
         post = Post.objects.get(pk=post_id)
         post.plus1 = plusone(post)
         post.save()
-
-    return (post.plus1, )
+        return (post.plus1, )
+    return (0, )
 
 
 @shared_task
