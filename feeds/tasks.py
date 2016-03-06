@@ -107,15 +107,10 @@ def post_update_twitter(entry_id):
     """
     logger.debug("start: counting tweets")
 
-    try:
+    if getattr(settings, 'FEED_POST_UPDATE_TWITTER', False):
         post = Post.objects.get(pk=entry_id)
         (post.tweets, ) = tweets(post)
         post.save()
-    except Post.DoesNotExist:
-        logger.error("Post %s does not exist")
-        return (-1, )
-    except Exception as e:
-        raise e
 
     logger.debug("stop: counting tweets. got %s", post.tweets)
     return (post.tweets, )
@@ -128,15 +123,10 @@ def post_update_facebook(entry_id):
     """
     logger.debug("start: counting facebook")
 
-    try:
+    if getattr(settings, 'FEED_POST_UPDATE_FACEBOOK', False):
         post = Post.objects.get(pk=entry_id)
         (post.shares, post.likes, bla) = facebook(post)
         post.save()
-    except Post.DoesNotExist:
-        logger.error("Post %s does not exist")
-        return (-1, -1)
-    except Exception as e:
-        raise e
 
     logger.debug(
         "stop: counting tweets. got %s shares and %s likes",
@@ -153,15 +143,10 @@ def post_update_linkedin(entry_id):
     """
     logger.debug("start: counting linkedin")
 
-    try:
+    if getattr(settings, 'FEED_POST_UPDATE_LINKEDIN', False):
         post = Post.objects.get(pk=entry_id)
         (post.linkedin, ) = linkedin(post)
         post.save()
-    except Post.DoesNotExist:
-        logger.error("Post %s does not exist")
-        return (-1, )
-    except Exception as e:
-        raise e
 
     logger.debug(
         "stop: counting linkedin. got %s",
@@ -171,24 +156,18 @@ def post_update_linkedin(entry_id):
 
 
 @shared_task(time_limit=10)
-def entry_update_googleplus(post_id):
+def post_update_googleplus(post_id):
     """
     plus 1
     """
     logger.debug("start: counting +1s")
 
-    try:
+    if getattr(settings, 'FEED_POST_UPDATE_GOOGLEPLUS', False):
         post = Post.objects.get(pk=post_id)
-    except Post.DoesNotExist:
-        logger.error("Does not exist (%s)", post_id)
-
-    try:
         post.plus1 = plusone(post)
-    except:
-        pass
-    post.save()
+        post.save()
 
-    return post.plus1
+    return (post.plus1, )
 
 
 @shared_task
@@ -220,23 +199,19 @@ def post_update_social(post_id):
     try:
         p = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
-        logger.error("Post %s does not exist." % (post_id))
-        return None
+        logger.debug("Post %s does not exist." % (post_id))
+        return 0
 
     header = []
 
-    if getattr(settings, 'FEED_POST_UPDATE_TWITTER', False):
-        f = (post_update_twitter.subtask((p.id, )))
-        header.append(f)
-    if getattr(settings, 'FEED_POST_UPDATE_FACEBOOK', False):
-        f = (post_update_facebook.subtask((p.id, )))
-        header.append(f)
-    if getattr(settings, 'FEED_POST_UPDATE_LINKEDIN', False):
-        f = (post_update_linkedin.subtask((p.id, )))
-        header.append(f)
-    if getattr(settings, 'FEED_POST_UPDATE_GOOGLEPLUS', False):
-        f = (entry_update_googleplus.subtask((p.id, )))
-        header.append(f)
+    f = (post_update_twitter.subtask((p.id, )))
+    header.append(f)
+    f = (post_update_facebook.subtask((p.id, )))
+    header.append(f)
+    f = (post_update_linkedin.subtask((p.id, )))
+    header.append(f)
+    f = (post_update_googleplus.subtask((p.id, )))
+    header.append(f)
 
     callback = tsum.s(post_id)
     result = chord(header)(callback)

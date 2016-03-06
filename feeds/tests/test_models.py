@@ -63,10 +63,12 @@ class ModelTest(TestCase):
         """
         Test a :py:mod:`feeds:models.Feed`
         """
-        feed = Feed.objects.filter(is_active=True)
-        self.assertEquals(feed[0].refresh(), FEED_OK)
-        self.assertEquals(feed[0].refresh(), FEED_SAME)
-        self.assertEquals(feed[2].refresh(), FEED_ERRHTTP)
+        feeds = Feed.objects.filter(is_active=True)
+        for feed in feeds:
+            print(feed)
+        self.assertEquals(feeds[0].refresh(), FEED_OK)
+        self.assertEquals(feeds[0].refresh(), FEED_SAME)
+        self.assertEquals(feeds[2].refresh(), FEED_ERRHTTP)
 
     def test_enclosure(self):
         """

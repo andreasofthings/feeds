@@ -535,7 +535,7 @@ Coming from `feedparser`:
             raise Exception(e)
             return FEED_ERREXC
 
-        logger.info("Feed '%s' returned %s", self.title, result)
+        logger.debug("Feed '%s' returned %s", self.title, result)
         logger.debug("-- end --")
         self.errors = 0
         self.save()
