@@ -13,36 +13,40 @@ Feed: {{ feed }}
           <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider"></span></li>
             <li><a href="{% url "planet:feed-home" %}">Feeds</a> <span class="divider"></span></li>
-            <li><a href="{% url "planet:feed-view" feed.id %}">{{ feed }}</a> <span class="divider"></span></li>
+            <li><a href="{% url "planet:feed-view" object.id %}">{{ feed }}</a> <span class="divider"></span></li>
             <li class="active">You are here</li>
           </ul>
 {%endblock%}
 
 {%block content%}
 <div class="row">
-  <div class="col-md-8">
-    <h3> {{feed}} </h3>
-  </div>
-  <div class="col-md-4">
-        <p> {% feed_controls feed %} </p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-7">
-    <canvas id="chart"  width="600" height="240"></canvas>
-  </div>
-  <div class="col-md-5">
-    <ul>
-    {% for post in feed.posts.all %}
-    <li><h5><a href="{{ post.get_absolute_url }}">{{post}}</a><small>{{ post.published }}</small></h5></li>
-    {%endfor%}
-    </ul>
-    <ul>
-      {% recent_posts feed as posts %}
-      {% for post in posts.all %}
-      <li><h5><a href="{{ post.get_absolute_url }}">{{post}}</a><small>{{ post.published }}</small></h5></li>
-      {%endfor%}
-    </ul>
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-8">
+        <h3> {{object}} </h3>
+      </div>
+      <div class="col-md-4">
+            <p> {% feed_controls object %} </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-5">
+        <canvas id="chart"  width="600" height="240"></canvas>
+      </div>
+      <div class="col-md-7">
+        <ul>
+        {% for post in feed.posts.all %}
+        <li><h5><a href="{{ post.get_absolute_url }}">{{post}}</a><small>{{ post.published }}</small></h5></li>
+        {%endfor%}
+        </ul>
+        <ul>
+          {% recent_posts feed as posts %}
+          {% for post in posts.all %}
+          <li><h5><a href="{{ post.get_absolute_url }}">{{post}}</a><small>{{ post.published }}</small></h5></li>
+          {%endfor%}
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
 {%endblock%}

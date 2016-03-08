@@ -242,11 +242,7 @@ class FeedDetailView(DetailView):
     this shall include stats
     """
     model = Feed
-    context_object_name = "feed"
-
-    def get_context_data(self, **kwargs):
-        context = super(FeedDetailView, self).get_context_data(**kwargs)
-        return context
+    queryset = Feed.objects.all()
 
 
 class FeedUpdateView(LoginRequiredMixin, UpdateView):
