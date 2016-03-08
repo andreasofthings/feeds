@@ -31,6 +31,7 @@ class ManagementTest(TestCase):
         .. todo: A real testcase.
         """
         call_command("refresh", "1")
+        call_command("refresh", "999")
         self.assertEqual(0, 0)
 
     def tearDown(self):
