@@ -6,7 +6,8 @@
           <ul class="breadcrumb">
             <li><a href="/">Home</a> <span class="divider"></span></li>
             <li><a href="{% url "planet:feed-home" %}">Feeds</a> <span class="divider"></span></li>
-            <li><a href="{% url "planet:feed-view" node.feed.id %}">{{ node.feed.shortname }}</a> <span class="divider"></span></li>
+            <li><a href="{% url "planet:feed-view" object.feed.id %}">{{ object.feed.shortname }}</a> <span class="divider"></span></li>
+            <li><a href="{% url "planet:post-view" object.id %}">{{ object.published }}</a> <span class="divider"></span></li>
             <li class="active">You are here</li>
           </ul>
 {%endblock%}
@@ -16,7 +17,7 @@
 {% endblock %}
 
 {% block additional_scripts_start %}
-<link rel="canonical" href="/{{node.id}}" />
+<link rel="canonical" href="/{{object.id}}" />
 {% endblock %}
 
 {% block content %}
@@ -25,13 +26,13 @@
 
 <div itemscope itemtype="http://schema.org/Article" class="row">
   <div class="col-md-8">
-    <h5>{{ node.published }}</h5>
-    <h2><a href="{{node.link}}" itemprop="headline">{{ node.title }}</a></h2>
-    <p>via: <a href="{{node.feed.link}}" itemprop="url">{{node.feed.name}}</a></p>
-    {% if node.tags %}
+    <h5>{{ object.published }}</h5>
+    <h2><a href="{{object.link}}" itemprop="headline">{{ object.title }}</a></h2>
+    <p>via: <a href="{{object.feed.link}}" itemprop="url">{{object.feed.name}}</a></p>
+    {% if object.tags %}
     <p>
     <meta itemprop="keywords">
-    {% for t in node.tags.all %}<a href="{{ t.get_absolute_url }}">{{t}}</a>
+    {% for t in object.tags.all %}<a href="{{ t.get_absolute_url }}">{{t}}</a>
     {% endfor %}
     </meta></p>
     {% endif %}
@@ -40,12 +41,12 @@
   <div class="col-md-4">
     <div class="row">
       <div class="col-md-12">
-      {% social node %}
+      {% social object %}
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        {% more_like_this node as related_content limit 5 %}
+        {% more_like_this object as related_content limit 5 %}
         {% if related_content %}
         <h2>Related</h2>
         <ul>

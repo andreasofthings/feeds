@@ -349,16 +349,18 @@ class PostSubscriptionView(LoginRequiredMixin, PaginationMixin, ListView):
     paginate_by = 50
     queryset = Post.objects.order_by('-published')
 
+
 class PostDetailView(DetailView):
+    """
+    View a post and related metadata.
+
+    Requires login and permissions.
+    """
     user_agent = "google"
+    model = Post
     permissions = {
         "any": ("feeds.delete_post", "feeds.change_post", "feeds.add_post",)
     }
-    model = Post
-    context_object_name = "node"
-
-    def dispatch(self, *args, **kwargs):
-        return super(PostDetailView, self).dispatch(*args, **kwargs)
 
 
 class PostTrackableView(RedirectView):
