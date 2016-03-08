@@ -8,6 +8,7 @@ Test Management Command
 
 from django.test import TestCase
 from django.core.management import call_command
+from django.core.management.base import CommandError
 
 
 class ManagementTest(TestCase):
@@ -31,7 +32,8 @@ class ManagementTest(TestCase):
         .. todo: A real testcase.
         """
         call_command("refresh", "1")
-        call_command("refresh", "999")
+        with self.assertRaises(CommandError):
+            call_command("refresh", "999")
         self.assertEqual(0, 0)
 
     def tearDown(self):

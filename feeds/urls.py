@@ -151,7 +151,7 @@ urlpatterns += [
         name="feed-subscriptions"
     ),
     url(
-        r'^(?P<pk>\d+)/$',
+        r'^post/(?P<pk>\d+)/$',
         PostDetailView.as_view(),
         name="post-view"
     ),
