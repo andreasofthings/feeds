@@ -57,6 +57,12 @@ Contents:
    feed_mixins
    tests
 
+Todos
+=====
+
+.. todolist::
+
+
 Indices and tables
 ==================
 
