@@ -62,7 +62,7 @@ class WebSite(models.Model):
         """
         Absolute URL for this object.
 
-        ToDo: should use 'slug' instead of 'id'
+        .. todo:: should use 'slug' instead of 'id'
         """
         return ('planet:site-view', [str(self.id)])
 

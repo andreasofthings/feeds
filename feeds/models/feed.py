@@ -367,7 +367,7 @@ Coming from `feedparser`:
                 p.id
             )
         p.content = entry.get('content', '')
-        """ToDo: get other content instead."""
+        """.. todo:: get other content instead."""
 
         if len(entry.enclosures) > 0:
             for enclosure in entry.enclosures:

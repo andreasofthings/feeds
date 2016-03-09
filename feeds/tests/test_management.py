@@ -29,7 +29,9 @@ class ManagementTest(TestCase):
         """
         This calls the 'refresh' Command.
 
-        .. todo: A real testcase.
+        .. todo:: A real testcase. Right now this test only ensures the code
+                  runs with no exception, respectivly the correct exception.
+                  However, the command does not return anything.
         """
         call_command("refresh", "1")
         with self.assertRaises(CommandError):

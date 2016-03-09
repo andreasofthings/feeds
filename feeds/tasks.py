@@ -278,8 +278,10 @@ def aggregate_stats(result_list):
     stat = FeedStats()
     """
     New instance of `py:mod:feeds.models.FeedStats` to keep the result.
-    ToDo: `py:mod:feeds.models.FeedStats` should rather
-    accept the dict as input.
+
+    .. todo:: `py:mod:feeds.models.FeedStats` should rather accept the
+              dict as input to map results correctly. Right now it picks all
+              results from the dict explicitly.
     """
     stat.feed_ok = result[FEED_OK]
     stat.feed_same = result[FEED_SAME]

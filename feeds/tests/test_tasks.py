@@ -73,8 +73,7 @@ class TaskTest(TestCase):
         """
         test tweets
 
-        .. :todo::
-            test this in the `python-social` module
+        .. todo:: test this in the `python-social` module
         """
         if not settings.FEED_POST_UPDATE_TWITTER:
             return
@@ -90,8 +89,7 @@ class TaskTest(TestCase):
         """
         test facebook shares and likes
 
-        .. :todo::
-            test this in the `python-social` module
+        .. todo:: test this in the `python-social` module
         """
         if not settings.FEED_POST_UPDATE_FACEBOOK:
             return
@@ -109,8 +107,7 @@ class TaskTest(TestCase):
         """
         test linkedin shares
 
-        .. :todo::
-            test this in the `python-social` module
+        .. todo:: test this in the `python-social` module
         """
         if not settings.FEED_POST_UPDATE_LINKEDIN:
             return

@@ -70,7 +70,11 @@ class OptionsView(LoginRequiredMixin, UpdateView):
     Options managed here are kept in :py:mod:`feeds.models.Options`
     The form to display them is kept in :py:mod:`feeds.forms.OptionsForm`
 
-    .. todo:: This should be architected better and have better tests.
+    .. todo:: The entire `options` approach should be architected better
+              and have better tests. Contained options are neither complete
+              nor are these consequently used across the codebase.
+
+    .. codeauthor:: Andreas Neumeier
     """
     model = Options
     template_name = "feeds/options.html"
@@ -111,7 +115,9 @@ class OPMLView(FormView):
     """
     View to allow import of OPML Files.
 
-    .. todo:: This should be per user. OPML allows user/ownership.
+    .. todo:: The `OPML Import` should work on a per user basis.
+              OPML is plain text format, but since uploaded by individuals,
+              that should reflect in user/ownership.
     """
     form_class = OPMLForm
     template_name = "feeds/opml.html"
@@ -238,8 +244,8 @@ class FeedDetailView(DetailView):
     """
     Show details for a particular feed.
 
-    ToDo:
-    this shall include stats
+    .. todo:: The view for `Feed Details` shall include stats for the
+              particular `Feed`. It is a plain Class Based View right now.
     """
     model = Feed
     queryset = Feed.objects.all()
@@ -339,7 +345,10 @@ class PostSubscriptionView(LoginRequiredMixin, PaginationMixin, ListView):
     """
     List Posts from subscribed Views.
 
-    .. todo: Test, queryset
+    .. todo:: At the time being `PostSubscriptionView` is a bare stub.
+              It does not yet have the correct `queryset`, that limits
+              results to posts from actually subscribed feeds, neither
+              does it have a proper tests for the functionality.
     """
     model = Post
     paginate_by = 50
