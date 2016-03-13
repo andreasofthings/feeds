@@ -318,7 +318,14 @@ class FeedUnSubscribeView(LoginRequiredMixin, RedirectView):
 
 class FeedSubscriptionsView(LoginRequiredMixin, ListView):
     """
-    One users subscriptions
+    List all Feeds one users subscribed to.
+
+    .. reverse-url: 'planet:feed-subscriptions'
+
+    See also:
+
+      - :py:mod:`feeds.views.FeedSubscribeView`
+      - :py:mod:`feeds.views.FeedUnsubscribeView`
     """
     model = Feed
     context_object_name = "feeds"
@@ -334,7 +341,10 @@ class FeedSubscriptionsView(LoginRequiredMixin, ListView):
 
 class PostListView(PaginationMixin, ListView):
     """
-    List Posts
+    List Posts from all Feeds.
+
+    .. todo: Pagination does not work properly. Some sort of limit would be
+    nice, too. The pagination bar looks really ugly.
     """
     model = Post
     paginate_by = 50
@@ -343,16 +353,29 @@ class PostListView(PaginationMixin, ListView):
 
 class PostSubscriptionView(LoginRequiredMixin, PaginationMixin, ListView):
     """
-    List Posts from subscribed Views.
+    List Posts from subscribed Feeds.
 
     .. todo:: At the time being `PostSubscriptionView` is a bare stub.
               It does not yet have the correct `queryset`, that limits
               results to posts from actually subscribed feeds, neither
               does it have a proper tests for the functionality.
+
+              Also, this view is not accessiable through an URL for now.
+
+    .. reverse-url: 'planet:post-subscription-home'
     """
     model = Post
     paginate_by = 50
-    queryset = Post.objects.order_by('-published')
+
+    def get_queryset(self):
+        """
+        .. todo: This returns a default queryset of all Posts, ordered by their
+        published date. It should be limited by the requesting users feed-
+        subscriptions.
+        """
+        user = self.request.user
+        subscriptions = Subscription.objects.filter(user=user)
+        return Post.objects.order_by('-published')
 
 
 class PostDetailView(DetailView):
@@ -375,4 +398,6 @@ class PostTrackableView(RedirectView):
     def get_redirect_url(self, pk):
         post = get_object_or_404(Post, pk=pk)
         PostReadCount(post=post).save()
+        """Increase Read Counter for this post."""
         return post.link
+        """And return to the actual link."""

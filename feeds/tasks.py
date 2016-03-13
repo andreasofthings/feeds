@@ -107,7 +107,7 @@ def post_update_twitter(entry_id):
     """
     logger.debug("start: counting tweets")
 
-    if getattr(settings, 'FEED_POST_UPDATE_TWITTER', False):
+    if getattr(settings, 'FEEDS_POST_UPDATE_TWITTER', False):
         post = Post.objects.get(pk=entry_id)
         (post.tweets, ) = tweets(post)
         post.save()
@@ -123,7 +123,7 @@ def post_update_facebook(entry_id):
     """
     logger.debug("start: counting facebook")
 
-    if getattr(settings, 'FEED_POST_UPDATE_FACEBOOK', False):
+    if getattr(settings, 'FEEDS_POST_UPDATE_FACEBOOK', False):
         post = Post.objects.get(pk=entry_id)
         (post.shares, post.likes, bla) = facebook(post)
         post.save()
@@ -143,7 +143,7 @@ def post_update_linkedin(entry_id):
     """
     logger.debug("start: counting linkedin")
 
-    if getattr(settings, 'FEED_POST_UPDATE_LINKEDIN', False):
+    if getattr(settings, 'FEEDS_POST_UPDATE_LINKEDIN', False):
         post = Post.objects.get(pk=entry_id)
         (post.linkedin, ) = linkedin(post)
         post.save()
@@ -162,7 +162,7 @@ def post_update_googleplus(post_id):
     """
     logger.debug("start: counting +1s")
 
-    if getattr(settings, 'FEED_POST_UPDATE_GOOGLEPLUS', False):
+    if getattr(settings, 'FEEDS_POST_UPDATE_GOOGLEPLUS', False):
         post = Post.objects.get(pk=post_id)
         post.plus1 = plusone(post)
         post.save()
@@ -196,25 +196,26 @@ def post_update_social(post_id):
 
     logger.debug("start: social scoring")
 
-    try:
-        p = Post.objects.get(pk=post_id)
-    except Post.DoesNotExist:
-        logger.debug("Post %s does not exist." % (post_id))
-        return 0
+    if getattr(settings, 'FEEDS_POST_UPDATE_SOCIAL', False):
+        try:
+            p = Post.objects.get(pk=post_id)
+        except Post.DoesNotExist:
+            logger.debug("Post %s does not exist." % (post_id))
+            return 0
 
-    header = []
+        header = []
 
-    f = (post_update_twitter.subtask((p.id, )))
-    header.append(f)
-    f = (post_update_facebook.subtask((p.id, )))
-    header.append(f)
-    f = (post_update_linkedin.subtask((p.id, )))
-    header.append(f)
-    f = (post_update_googleplus.subtask((p.id, )))
-    header.append(f)
+        f = (post_update_twitter.subtask((p.id, )))
+        header.append(f)
+        f = (post_update_facebook.subtask((p.id, )))
+        header.append(f)
+        f = (post_update_linkedin.subtask((p.id, )))
+        header.append(f)
+        f = (post_update_googleplus.subtask((p.id, )))
+        header.append(f)
 
-    callback = tsum.s(post_id)
-    result = chord(header)(callback)
+        callback = tsum.s(post_id)
+        result = chord(header)(callback)
 
     logger.debug("stop: social scoring. got %s" % result)
     return p.score
