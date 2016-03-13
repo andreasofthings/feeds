@@ -75,8 +75,6 @@ class TaskTest(TestCase):
 
         .. todo:: test this in the `python-social` module
         """
-        if not settings.FEED_POST_UPDATE_TWITTER:
-            return
         from feeds.tasks import post_update_twitter
         post = Post.objects.all()[0]
         result = post_update_twitter.delay(post.pk)
@@ -91,8 +89,6 @@ class TaskTest(TestCase):
 
         .. todo:: test this in the `python-social` module
         """
-        if not settings.FEED_POST_UPDATE_FACEBOOK:
-            return
         from feeds.tasks import post_update_facebook
         posts = Post.objects.all()
         result = post_update_facebook.delay(posts[0].pk)
@@ -109,8 +105,6 @@ class TaskTest(TestCase):
 
         .. todo:: test this in the `python-social` module
         """
-        if not settings.FEED_POST_UPDATE_LINKEDIN:
-            return
         from feeds.tasks import post_update_linkedin
         post = Post.objects.all()[0]
         result = post_update_linkedin.delay(post.pk)
