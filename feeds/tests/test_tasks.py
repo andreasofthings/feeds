@@ -12,7 +12,6 @@ import feedparser
 
 from django.test import TestCase
 from django.conf import settings
-from django.core.exceptions import DoesNotExist
 
 from feeds import ENTRY_NEW, ENTRY_UPDATED
 from feeds import FEED_OK
@@ -113,7 +112,7 @@ class TaskTest(TestCase):
         self.assertEqual(len(result.get()), len((0,)))
 
         result = post_update_linkedin.delay(999999)
-        with self.assertRaises(DoesNotExist):
+        with self.assertRaises(Post.DoesNotExist):
             self.assertEqual(result.get(), (-1,))
 
     def test_update_social(self):
