@@ -79,9 +79,6 @@ class TaskTest(TestCase):
         post = Post.objects.all()[0]
         result = post_update_twitter.delay(post.pk)
         self.assertEqual(result.get(), (0,))
-        settings.configure(FEEDS_POST_UPDATE_TWITTER=False)
-        result = post_update_twitter.delay(post.pk)
-        self.assertEqual(result.get(), (0,))
 
         result = post_update_twitter.delay(999999)
         with self.assertRaises(Post.DoesNotExist):
