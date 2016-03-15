@@ -1,21 +1,4 @@
-beautifulsoup4>=4.2.1
-django-braces>=1.0.0
-django_celery>=3.1.10
-django-crispy-forms
-djangorestframework
-feedparser>=5.1.2
-django-haystack
-elasticsearch==1.4.0
-opml==0.5
-category>=0.9.0
-requests>=2.6.0
-twitter>=1.9.2
-pyaml
-whoosh
-psycopg2
-timestring==1.6.2
-django-formtools
-
-# Testing
+# Please see setup.py.
+# These requirements are for testing.
 celery>=3.1.10
 selenium==2.42.0

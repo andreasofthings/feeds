@@ -11,7 +11,6 @@ from datetime import datetime
 import feedparser
 
 from django.test import TestCase
-from django.conf import settings
 
 from feeds import ENTRY_NEW, ENTRY_UPDATED
 from feeds import FEED_OK

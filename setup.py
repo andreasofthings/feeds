@@ -58,7 +58,6 @@ setup(
         'category>=0.9.0',
     ],
     dependency_links=[
-        'https://github.com/aneumeier/python-django-social/tarball/master#egg=latest',
     ],
     # cmdclass={
     #    'install': InstallCommand,
