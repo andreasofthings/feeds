@@ -171,13 +171,12 @@ def post_update_googleplus(post_id):
 
 
 @shared_task
-def tsum(numbers, post_id):
-    try:
-        p = Post.objects.get(pk=post_id)
-    except Post.DoesNotExist:
-        logger.error("Post %s does not exist." % (post_id))
-        return
-
+def tsum(numbers):
+    """
+    tsum
+    ====
+    This is a callback function and should never be invoked directly.
+    """
     import itertools
     try:
         merged = list(itertools.chain.from_iterable(numbers))
@@ -185,8 +184,6 @@ def tsum(numbers, post_id):
         logger.error(e)
         logger.error(numbers)
         return 0
-    p.score = sum(merged)
-    p.save()
 
     return sum(merged)
 
@@ -215,9 +212,9 @@ def post_update_social(post_id):
         header.append(f)
 
         callback = tsum.s(post_id)
-        result = chord(header)(callback)
+        p.score = chord(header)(callback)
 
-    logger.debug("stop: social scoring. got %s" % result)
+    logger.debug("stop: social scoring. got %s" % p.score)
     return p.score
 
 
