@@ -94,7 +94,7 @@ class TaskTest(TestCase):
         posts = Post.objects.all()
         result = post_update_facebook.delay(posts[0].pk)
         self.assertEqual(type(result.get()), type((0, 0)))
-        self.assertEqual(len(result.get()), len((0, )))
+        self.assertEqual(len(result.get()), len((0, 0,)))
 
         result = post_update_facebook.delay(9999999)
         with self.assertRaises(Post.DoesNotExist):
