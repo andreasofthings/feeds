@@ -2,9 +2,6 @@ from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
 
-import requests
-from bs4 import BeautifulSoup
-
 
 class FeedValidator(validators.URLValidator):
     def __init__(self, *args, **kwargs):
@@ -35,6 +32,15 @@ class FeedField(forms.URLField):
 
 
 class SiteValidator(validators.URLValidator):
+    """
+    SiteValidator
+    =============
+
+    Supposed to validate a site to contain a feed.
+
+    .. todo: actually validate the site.
+    To do so, use the `:py:function:tools.getFeedsFromSite` function.
+    """
     def __init__(self, *args, **kwargs):
         super(SiteValidator, self).__init__(*args, **kwargs)
 
@@ -44,19 +50,7 @@ class SiteValidator(validators.URLValidator):
         except ValidationError as e:
             raise e
 
-        try:
-            html = requests.get(value)
-            soup = BeautifulSoup(html.text)
-            result = []
-            for link in soup.head.find_all('link'):
-                if "application/rss" in link.get('type'):
-                    result.append(link.get('href'))
-            if not result:
-                raise Exception
-        except Exception:
-            raise
-        else:
-            self.site = value
+        self.site = value
 
 
 class SiteField(forms.URLField):
