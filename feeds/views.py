@@ -368,14 +368,8 @@ class PostSubscriptionView(LoginRequiredMixin, PaginationMixin, ListView):
     paginate_by = 50
 
     def get_queryset(self):
-        """
-        .. todo: This returns a default queryset of all Posts, ordered by their
-        published date. It should be limited by the requesting users feed-
-        subscriptions.
-        """
         user = self.request.user
-        subscriptions = Subscription.objects.filter(user=user)
-        return Post.objects.order_by('-published')
+        return Post.objects.subscribed(user).order_by('-published')
 
 
 class PostDetailView(DetailView):

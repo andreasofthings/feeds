@@ -79,10 +79,14 @@ class TaskTest(TestCase):
         post = Post.objects.all()[0]
         result = post_update_twitter.delay(post.pk)
         self.assertEqual(result.get(), (0,))
+        settings.configure(FEEDS_POST_UPDATE_TWITTER=False)
+        result = post_update_twitter.delay(post.pk)
+        self.assertEqual(result.get(), (0,))
 
         result = post_update_twitter.delay(999999)
-        self.assertEqual(type(result.get()), type((0, )))
-        self.assertEqual(len(result.get()), len((0, )))
+        with self.assertRaises(Post.DoesNotExist):
+            self.assertEqual(type(result.get()), type((0, )))
+            self.assertEqual(len(result.get()), len((0, )))
 
     def test_count_share_like(self):
         """
@@ -97,8 +101,9 @@ class TaskTest(TestCase):
         self.assertEqual(len(result.get()), len((0, )))
 
         result = post_update_facebook.delay(9999999)
-        self.assertEqual(type(result.get()), type((0, 0)))
-        self.assertEqual(len(result.get()), len((0, )))
+        with self.assertRaises(Post.DoesNotExist):
+            self.assertEqual(type(result.get()), type((0, 0)))
+            self.assertEqual(len(result.get()), len((0, )))
 
     def test_count_linkedin(self):
         """

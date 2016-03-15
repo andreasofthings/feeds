@@ -13,6 +13,15 @@ from django.db import models
 class PostManager(models.Manager):
     """
     """
+    def subscribed(self, user):
+        """
+        Get only Posts for subscribed feeds.
+        .. todo: This returns a queryset of all Posts, ordered by their
+        published date. It should be limited by the requesting users feed-
+        subscriptions. At the time, the queryset below likely breaks.
+        """
+        return self.filter(feeds_subscriptions__user=user)
+
     def from_feedparser(self, *args, **kwargs):
         """
         Actual logic to create a new post from feedparser goes here.
