@@ -45,7 +45,8 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
     install_requires=[
-        'beautifulsoup4>=4.2.1',
+        'celery>=3.1.23',
+        'django-celery',
         'django-formtools',
         'django-crispy-forms>=1.2.3',
         'feedparser>=5.1.2',
