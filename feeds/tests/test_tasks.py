@@ -99,7 +99,7 @@ class TaskTest(TestCase):
         result = post_update_facebook.delay(9999999)
         with self.assertRaises(Post.DoesNotExist):
             self.assertEqual(type(result.get()), type((0, 0)))
-            self.assertEqual(len(result.get()), len((0, )))
+            self.assertEqual(len(result.get()), len((0, 0)))
 
     def test_count_linkedin(self):
         """

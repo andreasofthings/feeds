@@ -1,5 +1,4 @@
 # Please see setup.py.
 # These requirements are for testing.
-celery>=3.1.10
 psycopg2
 selenium>=2.52.0
