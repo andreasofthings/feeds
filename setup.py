@@ -54,7 +54,7 @@ setup(
         'djangorestframework>=3.0.3',
         'elasticsearch==1.4.0',
         'timestring==1.6.2',
-        'python-django-social>=0.1.0',
+        'python-django-social>=0.8.0',
         'category>=0.9.0',
     ],
     dependency_links=[
