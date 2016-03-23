@@ -102,11 +102,11 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^list/$', FeedListView.as_view(), name="feed-home"),
-    url(
-        r'^page/(?P<page>\w+)/$',
-        FeedListView.as_view(),
-        name="feed-home-paginated"
-    ),
+    # url(
+    #    r'^page/(?P<page>\w+)/$',
+    #    FeedListView.as_view(),
+    #    name="feed-home-paginated"
+    # ),
     url(
         r'^add/$',
         FeedCreateView.as_view(),
@@ -160,11 +160,11 @@ urlpatterns += [
         PostListView.as_view(),
         name="post-home"
     ),
-    url(
-        r'^p/page(?P<page>[0-9]+)/$',
-        PostListView.as_view(),
-        name="post-home-paginated"
-    ),
+    # url(
+    #    r'^p/page(?P<page>[0-9]+)/$',
+    #    PostListView.as_view(),
+    #    name="post-home-paginated"
+    # ),
     url(
         r'^s/$',
         PostSubscriptionView.as_view(),

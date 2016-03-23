@@ -2,35 +2,7 @@
 {% load i18n %}
 
 {% block content %}
-{% if is_paginated %}
-<div class="row">
-  <div class="col-md-12">
-  <nav>
-  <ul class="pagination">
-      {% if page_obj.has_previous %}
-        <li class="previous"><a href="{% url "planet:post-home-paginated" page_obj.previous_page_number %}"><span aria-hidden="true">&larr;</span> Older</a></li>
-      {% else %}
-        <li class="disabled"><a href="#">Older</a></li>
-      {% endif %}
-      {% for page in  page_obj.paginator.page_range %}
-      {% if page < 4 or page > 10 %}
-          {% if page == page_obj.number %}
-            <li class="disabled"><a href="#">{{ page }}</a></li>
-          {% else %}
-            <li class="active"><a href="{% url "planet:post-home-paginated" page %}">{{ page }}</a></li>
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-      {% if page_obj.has_next %}
-        <li class="next"><a href="{% url "planet:post-home-paginated" page_obj.next_page_number %}">{% trans "Newer" %}<span aria-hidden="true">&rarr;</span></a></li>
-      {% else %}
-          <li class="disabled"><a href="#">{% trans "Newer" %}</a></li>
-      {% endif %}
-  </ul>
-  </nav>
-  </div>
-</div>
-{% endif %}
+{% include "feeds/paginator.html"%}
 
 {% for node in object_list %}
 <div class="row">

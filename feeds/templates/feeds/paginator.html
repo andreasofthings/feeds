@@ -1,0 +1,28 @@
+{% load i18n %}
+{% if is_paginated %}
+<div class="row">
+  <div class="col-md-12">
+  <nav>
+  <ul class="pagination">
+      {% if page_obj.has_previous %}
+        <li class="previous"><a href="?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> {% trans "Newer" %}</a></li>
+      {% else %}
+        <li class="disabled"><a href="#">{% trans "Newer" %}</a></li>
+      {% endif %}
+      {% for page in page_obj.paginator.page_range %}
+          {% if page == page_obj.number %}
+            <li class="disabled"><a href="#">{{ page }}</a></li>
+          {% else %}
+            <li class="active"><a href="?page={{page}}">{{ page }}</a></li>
+          {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <li class="next"><a href="?page={{page_obj.next_page_number}}">{% trans "Older" %}<span aria-hidden="true">&rarr;</span></a></li>
+      {% else %}
+          <li class="disabled"><a href="#">{% trans "Older" %}</a></li>
+      {% endif %}
+  </ul>
+  </nav>
+  </div>
+</div>
+{% endif %}
