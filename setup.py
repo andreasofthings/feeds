@@ -53,7 +53,6 @@ setup(
         'requests>=2.6',
         'django-haystack>=2.3.1',
         'djangorestframework>=3.0.3',
-        'elasticsearch==1.4.0',
         'timestring==1.6.2',
         'python-django-social>=0.8.0',
         'category>=0.9.0',
