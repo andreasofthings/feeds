@@ -171,7 +171,7 @@ def post_update_googleplus(post_id):
 
 
 @shared_task
-def tsum(numbers):
+def tsum(numbers, post):
     """
     tsum
     ====
@@ -185,7 +185,8 @@ def tsum(numbers):
         logger.error(numbers)
         return 0
 
-    return sum(merged)
+    post.score = sum(merged)
+    post.save()
 
 
 @shared_task
@@ -211,8 +212,8 @@ def post_update_social(post_id):
         f = (post_update_googleplus.subtask((p.id, )))
         header.append(f)
 
-        callback = tsum.s(post_id)
-        p.score = chord(header)(callback)
+        callback = tsum.s(p)
+        chord(header)(callback)
 
     logger.debug("stop: social scoring. got %s" % p.score)
     return p.score

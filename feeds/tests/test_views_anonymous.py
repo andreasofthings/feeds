@@ -263,27 +263,6 @@ class ViewsAnonymousTest(TestCase):
         result = self.client.get(reverse('planet:feed-home'))
         self.assertEqual(result.status_code, 200)
 
-    def feed_home_paginated(self):
-        """
-        feed-home-paginated
-        -------------------
-            :url: url(
-                     r'^page/(?P<page>\w+)/$',
-                     FeedListView.as_view(),
-                     name="feed-home-paginated"
-                  ),
-
-            - Should return 200 for an anonymous user.
-            - Should allow to navigate between paginated results.
-        """
-        result = self.client.get(
-            reverse(
-                'planet:feed-home-paginated',
-                args=(1,)
-            )
-        )
-        self.assertEqual(result.status_code, 200)
-
     def feed_subscriptions(self):
         """
         feed-subscription
@@ -399,7 +378,6 @@ class ViewsAnonymousTest(TestCase):
             FeedRefreshView.as_view(), name="feed-refresh"),
         """
         self.feed_home()
-        self.feed_home_paginated()
         self.feed_add()
         self.feed_view()
         self.feed_update()

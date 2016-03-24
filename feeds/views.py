@@ -16,11 +16,13 @@ Frontend to managing and reading :py:mod:`feeds.models.Feed`,
 
 import logging
 
+from datetime import timedelta
+
 from django import forms
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.views.generic import DeleteView, RedirectView
 from django.http import HttpResponseRedirect
@@ -38,7 +40,7 @@ from .forms import FeedCreateForm
 from .forms import FeedUpdateForm
 from .forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
 from .tools import getFeedsFromSite
-from .mixins import PaginationMixin
+from .baseviews import PaginatedListView
 
 from formtools.wizard.views import SessionWizardView
 
@@ -166,7 +168,7 @@ class SiteSubmitWizardView(SessionWizardView):
         return form
 
 
-class SiteListView(ListView):
+class SiteListView(PaginatedListView):
     """
     Lists all sites in the database.
 
@@ -230,7 +232,7 @@ class FeedCreateView(PermissionRequiredMixin, CreateView):
     initial = {'is_Active': False}
 
 
-class FeedListView(PaginationMixin, ListView):
+class FeedListView(PaginatedListView):
     """
     List all registered feeds
 
@@ -316,7 +318,7 @@ class FeedUnSubscribeView(LoginRequiredMixin, RedirectView):
         return reverse('planet:feed-view', args=(pk,))
 
 
-class FeedSubscriptionsView(LoginRequiredMixin, ListView):
+class FeedSubscriptionsView(LoginRequiredMixin, PaginatedListView):
     """
     List all Feeds one users subscribed to.
 
@@ -339,7 +341,7 @@ class FeedSubscriptionsView(LoginRequiredMixin, ListView):
         return queryset
 
 
-class PostListView(PaginationMixin, ListView):
+class PostListView(PaginatedListView):
     """
     List Posts from all Feeds.
 
@@ -348,10 +350,12 @@ class PostListView(PaginationMixin, ListView):
     """
     model = Post
     paginate_by = 50
-    queryset = Post.objects.order_by('-published')
+
+    def get_queryset(self):
+        return Post.objects.older_than(timedelta(0)).order_by('-published')
 
 
-class PostSubscriptionView(LoginRequiredMixin, PaginationMixin, ListView):
+class PostSubscriptionView(LoginRequiredMixin, PaginatedListView):
     """
     List Posts from subscribed Feeds.
 
@@ -369,7 +373,8 @@ class PostSubscriptionView(LoginRequiredMixin, PaginationMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return Post.objects.subscribed(user).order_by('-published')
+        feeds = Subscription.objects.userfeeds(user)
+        return Post.objects.filter(feed__in=feeds).order_by('-published')
 
 
 class PostDetailView(DetailView):

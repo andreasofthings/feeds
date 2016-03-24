@@ -19,4 +19,4 @@ class SubscriptionManager(models.Manager):
 
         .. todo: Implement this.
         """
-        return
+        return self.objects.filter(user=user).feed

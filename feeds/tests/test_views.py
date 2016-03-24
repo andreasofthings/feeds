@@ -162,18 +162,6 @@ class TestAllViewsLoggedIn(TestCase):
         self.feed_update()
         self.feed_delete()
 
-    def test_feed_home_paginated(self):
-        """
-        go to feed-home-paginated
-        """
-        result = self.client.get(
-            reverse(
-                'planet:feed-home-paginated',
-                args=("1",)
-            )
-        )
-        self.assertEqual(result.status_code, 200)
-
     def test_feed_add(self):
         """
         Go to feed-add.
@@ -330,4 +318,6 @@ class TestFeedViewsWithCredentials(TestCase):
         result = c.get(reverse('planet:post-home'))
         self.assertEqual(result.status_code, 200)
         result = c.get(reverse('planet:post-home')+'?paginate_by=15')
+        self.assertEqual(result.status_code, 200)
+        result = c.get(reverse('planet:post-home')+'?page=2')
         self.assertEqual(result.status_code, 200)

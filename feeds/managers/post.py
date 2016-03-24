@@ -32,6 +32,8 @@ class PostManager(models.Manager):
         """
         Get all Posts older than `ttl`.
 
+        `ttl`is in the form of `datetime.timedelta(days=31)``
+
         .. ToDo: work with timezones.
         """
         from datetime import datetime
