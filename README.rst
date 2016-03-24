@@ -2,6 +2,9 @@
 Feeds
 =====
 
+.. image:: https://badge.fury.io/py/feeds.svg
+    :target: https://badge.fury.io/py/feeds
+    
 .. image:: https://travis-ci.org/aneumeier/feeds.png?branch=master
    :target: https://travis-ci.org/aneumeier/feeds
 
@@ -12,10 +15,9 @@ Feeds
   :target: https://readthedocs.org/projects/feeds/?badge=latest
   :alt: Documentation Status
 
-
-.. image::http://app.review.ninja/assets/images/wereviewninja-32.png
-   :target: http://app.review.ninja/aneumeier/feeds
-
+.. image:: https://requires.io/github/aneumeier/feeds/requirements.svg?branch=master
+     :target: https://requires.io/github/aneumeier/feeds/requirements/?branch=master
+     :alt: Requirements Status
 
 
 Feeds aims to be a feed aggregator, readerubscription service, and potentially
