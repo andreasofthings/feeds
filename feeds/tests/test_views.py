@@ -320,4 +320,5 @@ class TestFeedViewsWithCredentials(TestCase):
         result = c.get(reverse('planet:post-home')+'?paginate_by=15')
         self.assertEqual(result.status_code, 200)
         result = c.get(reverse('planet:post-home')+'?page=2')
-        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 404)
+        """we won't have a 2nd page for now."""
