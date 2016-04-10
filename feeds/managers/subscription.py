@@ -13,10 +13,10 @@ from django.db import models
 class SubscriptionManager(models.Manager):
     """
     """
-    def userfeeds(self, user):
+    def feeds(self, user):
         """
         Return feeds subscribed by user.
 
         .. todo: Implement this.
         """
-        return self.objects.filter(user=user).feed
+        return self.objects.filter(user=user).feed.all()

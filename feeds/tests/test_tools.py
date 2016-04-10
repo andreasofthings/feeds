@@ -9,7 +9,7 @@ Test all tools
 from django.test import TestCase
 
 
-class TaskTools(TestCase):
+class TestTools(TestCase):
     """
 
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
