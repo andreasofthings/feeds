@@ -18,6 +18,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .options import Options
 from .feed import Feed
+from ..managers import SubscriptionManager
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +37,8 @@ class Subscription(models.Model):
         verbose_name=_('Feed Subscription'),
         related_name='feed_subscription'
     )
+
+    objects = SubscriptionManager()
 
     class Meta:
         unique_together = (("user", "feed"),)
