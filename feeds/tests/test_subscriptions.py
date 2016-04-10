@@ -39,7 +39,7 @@ class TestSubscriptions(TestCase):
         from feeds.models.options import Options
         from django.contrib.auth.models import User
         o = Options(user=User.objects.get(pk=1))
-        self.assertEqual(1, Subscription.objects.feed(o))
+        self.assertEqual(1, Subscription.objects.feeds(o))
 
     def tearDown(self):
         pass
