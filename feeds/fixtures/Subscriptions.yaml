@@ -1,5 +1,5 @@
 - fields:
     user: 1
     feed: 1
-  model: feed.Subscription
+  model: feeds.Subscription
   pk: 1

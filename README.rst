@@ -2,9 +2,6 @@
 Feeds
 =====
 
-.. image:: https://badge.fury.io/py/feeds.svg
-    :target: https://badge.fury.io/py/feeds
-    
 .. image:: https://travis-ci.org/aneumeier/feeds.png?branch=master
    :target: https://travis-ci.org/aneumeier/feeds
 
@@ -15,17 +12,28 @@ Feeds
   :target: https://readthedocs.org/projects/feeds/?badge=latest
   :alt: Documentation Status
 
+
+
+.. image:: https://badge.fury.io/py/feeds.svg
+    :target: https://badge.fury.io/py/feeds
+
 .. image:: https://requires.io/github/aneumeier/feeds/requirements.svg?branch=master
      :target: https://requires.io/github/aneumeier/feeds/requirements/?branch=master
      :alt: Requirements Status
 
 
-Feeds aims to be a feed aggregator, readerubscription service, and potentially
-a replacement for feedburner_.
+Feeds aims to be a feed aggregator, reader, subscription service, and
+potentially a replacement for feedburner_. It is under heavy development and
+not in active use. At the time being it serves as a project in code development
+and maintenance.
 
 It is realized as a Django app. It takes feeds in any format `feedparser` can
 understand and aims to reproduce identical but trackable feeds, augmented with
-feedbrater information.
+meta information.
+
+As a side effort, `feeds` queries social media to evaluate the relevance of
+individual posts and collects metrics available from the open web, trying
+to identify most relevant news.
 
 Source for Documentation_ is in the "docs" directory.
 
