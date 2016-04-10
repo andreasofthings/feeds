@@ -1,4 +1,4 @@
 - fields:
-    user: [1,]
+    user: 1
   model: feeds.Options
   pk: 1
