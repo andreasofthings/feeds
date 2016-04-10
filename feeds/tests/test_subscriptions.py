@@ -35,6 +35,11 @@ class TestSubscriptions(TestCase):
 
         .. todo:: This ain't implemented yet.
         """
+        from feeds.models.subscription import Subscription
+        from feeds.models.options import Options
+        from django.contrib.auth.models import User
+        o = Options(user=User.objects.get(pk=1))
+        self.assertEqual(1, Subscription.objects.feed(o))
 
     def tearDown(self):
         pass
