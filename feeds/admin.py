@@ -33,7 +33,7 @@ class PostInline(admin.TabularInline):
 
 class SubscriptionInline(admin.TabularInline):
     model = Subscription
-    fields = ('feeds', )
+    fields = ('feed', )
 
 
 @admin.register(Enclosure)
