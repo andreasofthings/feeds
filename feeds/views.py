@@ -341,7 +341,7 @@ class FeedSubscriptionsView(LoginRequiredMixin, PaginatedListView):
         return queryset
 
 
-class PostListView(PaginatedListView):
+class PostListView(ListView):
     """
     List Posts from all Feeds.
 
@@ -349,9 +349,17 @@ class PostListView(PaginatedListView):
     nice, too. The pagination bar looks really ugly.
     """
     model = Post
-    paginate_by = 50
+    # paginate_by = 50
 
     def get_queryset(self):
+        """
+        Apparently some feeds give posts that only have a timestamp 'published'
+        from the future. We prevent displaying these by filtering for older
+        than today/now.
+
+        :py:module:`PostManager.older_than` provides this functionality and
+        exposes it as the :py:module:`Post.objects` Manager.
+        """
         return Post.objects.older_than(timedelta(0)).order_by('-published')
 
 
