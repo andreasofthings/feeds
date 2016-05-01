@@ -31,6 +31,11 @@ class PostInline(admin.TabularInline):
     can_delete = False
 
 
+class SubscriptionInline(admin.TabularInline):
+    model = Subscription
+    fields = ('feeds', )
+
+
 @admin.register(Enclosure)
 class EnclosureAdmin(admin.ModelAdmin):
     """
@@ -110,7 +115,9 @@ class OptionsAdmin(admin.ModelAdmin):
     """
     Admin-Class for User-Configuration-Options.
     """
-    pass
+    inlines = [
+        SubscriptionInline,
+    ]
 
 
 @admin.register(Post)
