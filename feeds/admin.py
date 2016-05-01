@@ -31,6 +31,7 @@ class PostInline(admin.TabularInline):
     can_delete = False
 
 
+@admin.register(Enclosure)
 class EnclosureAdmin(admin.ModelAdmin):
     """
     """
@@ -57,6 +58,7 @@ def reset_feed_errors(modeladmin, request, queryset):
 reset_feed_errors.short_description = "Reset Feed-errors."
 
 
+@admin.register(FileModel)
 class FileAdmin(admin.ModelAdmin):
     """
     File admin options
@@ -66,6 +68,7 @@ class FileAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(FeedPostCount)
 class FeedPostCountAdmin(admin.ModelAdmin):
     """
     FeedPostCount admin options
@@ -73,6 +76,7 @@ class FeedPostCountAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(Feed)
 class FeedAdmin(admin.ModelAdmin):
     """
     Feed admin options
@@ -101,6 +105,7 @@ class FeedAdmin(admin.ModelAdmin):
     actions = [activate_feed, deactivate_feed, refresh_feed, reset_feed_errors]
 
 
+@admin.register(Options)
 class OptionsAdmin(admin.ModelAdmin):
     """
     Admin-Class for User-Configuration-Options.
@@ -108,6 +113,7 @@ class OptionsAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     """
     Post admin options
@@ -129,6 +135,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('was_announced', 'feed', )
 
 
+@admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     """
     Class to admin User/Feed Subscriptions.
@@ -136,6 +143,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(WebSite)
 class WebSiteAdmin(admin.ModelAdmin):
     """
     WebSite Admin Class
@@ -144,13 +152,3 @@ class WebSiteAdmin(admin.ModelAdmin):
     inlines = [
         FeedInline,
     ]
-
-
-admin.site.register(Enclosure, EnclosureAdmin)
-admin.site.register(Feed, FeedAdmin)
-admin.site.register(FeedPostCount, FeedPostCountAdmin)
-admin.site.register(FileModel, FileAdmin)
-admin.site.register(Options, OptionsAdmin)
-admin.site.register(Post, PostAdmin)
-admin.site.register(Subscription, SubscriptionAdmin)
-admin.site.register(WebSite, WebSiteAdmin)
