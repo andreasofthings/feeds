@@ -6,6 +6,9 @@ from .models.feed import Feed
 from .models.post import Post
 from .models.stats import FeedPostCount
 from .models.files import FileModel
+from .models.options import Options
+from .models.subscriptions import Subscription
+
 from .forms import FeedAdminForm
 
 
@@ -26,16 +29,6 @@ class PostInline(admin.TabularInline):
     ordering = ('-published',)
     readonly_fields = ('title', 'tweets', 'shares', 'likes')
     can_delete = False
-
-
-class WebSiteAdmin(admin.ModelAdmin):
-    """
-    WebSite Admin Class
-    """
-    list_display = ('url', 'slug', )
-    inlines = [
-        FeedInline,
-    ]
 
 
 class EnclosureAdmin(admin.ModelAdmin):
@@ -62,6 +55,22 @@ deactivate_feed.short_description = "Deactivate selected feeds"
 def reset_feed_errors(modeladmin, request, queryset):
     queryset.update(errors=0)
 reset_feed_errors.short_description = "Reset Feed-errors."
+
+
+class FileAdmin(admin.ModelAdmin):
+    """
+    File admin options
+    """
+    list_display = (
+        'data',
+    )
+
+
+class FeedPostCountAdmin(admin.ModelAdmin):
+    """
+    FeedPostCount admin options
+    """
+    pass
 
 
 class FeedAdmin(admin.ModelAdmin):
@@ -92,6 +101,13 @@ class FeedAdmin(admin.ModelAdmin):
     actions = [activate_feed, deactivate_feed, refresh_feed, reset_feed_errors]
 
 
+class OptionsAdmin(admin.ModelAdmin):
+    """
+    Admin-Class for User-Configuration-Options.
+    """
+    pass
+
+
 class PostAdmin(admin.ModelAdmin):
     """
     Post admin options
@@ -113,24 +129,28 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('was_announced', 'feed', )
 
 
-class FileAdmin(admin.ModelAdmin):
+class SubscriptionAdmin(admin.ModelAdmin):
     """
-    File admin options
-    """
-    list_display = (
-        'data',
-    )
-
-
-class FeedPostCountAdmin(admin.ModelAdmin):
-    """
-    FeedPostCount admin options
+    Class to admin User/Feed Subscriptions.
     """
     pass
 
+
+class WebSiteAdmin(admin.ModelAdmin):
+    """
+    WebSite Admin Class
+    """
+    list_display = ('url', 'slug', )
+    inlines = [
+        FeedInline,
+    ]
+
+
 admin.site.register(Enclosure, EnclosureAdmin)
-admin.site.register(FileModel, FileAdmin)
-admin.site.register(WebSite, WebSiteAdmin)
-admin.site.register(Post, PostAdmin)
 admin.site.register(Feed, FeedAdmin)
 admin.site.register(FeedPostCount, FeedPostCountAdmin)
+admin.site.register(FileModel, FileAdmin)
+admin.site.register(Options, OptionsAdmin)
+admin.site.register(Post, PostAdmin)
+admin.site.register(Subscription, SubscriptionAdmin)
+admin.site.register(WebSite, WebSiteAdmin)
