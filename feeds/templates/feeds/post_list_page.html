@@ -1,0 +1,23 @@
+{% load i18n %}
+{% load el_pagination_tags %}
+
+
+{% for node in object_list %}
+<div class="row">
+    <div class="col-md-8">
+      <p>
+        <h4>
+        <a href="{{node.feed.link}}" alt="{{node.feed.title}}">{{node.feed.title}}</a>
+        </h4>
+      </p>
+      <p>
+      <h3><a href="{{node.get_absolute_url }}">{{ node.title }}</a></h3>
+      </p>
+    </div>
+    <div class="col-md-4">
+      <small>{{ node.published }}</small>
+      <small>score {{ node.score }}</small>
+    </div>
+</div>
+{% endfor %}
+{% show_more %}

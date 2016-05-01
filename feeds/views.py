@@ -22,7 +22,7 @@ from django import forms
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.views.generic import DeleteView, RedirectView
 from django.http import HttpResponseRedirect
@@ -44,6 +44,7 @@ from .baseviews import PaginatedListView
 
 from formtools.wizard.views import SessionWizardView
 
+from el_pagination.views import AjaxListView
 
 logger = logging.getLogger(__name__)
 
@@ -341,7 +342,7 @@ class FeedSubscriptionsView(LoginRequiredMixin, PaginatedListView):
         return queryset
 
 
-class PostListView(ListView):
+class PostListView(AjaxListView):
     """
     List Posts from all Feeds.
 

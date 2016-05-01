@@ -3,29 +3,25 @@
 {% load el_pagination_tags %}
 
 {% block content %}
-{% include "feeds/paginator.html"%}
 
 {% paginate object_list %}
-
-{% for node in object_list %}
 <div class="row">
-    <div class="col-md-2">
-      <small>
-        <a href="{{node.feed.link}}" alt="{{node.feed.title}}">{{node.feed.title}}</a>
-      </small>
-    </div>
-    <div class="col-md-6">
-      <small><a href="{{node.get_absolute_url }}">{{ node.title }}</a></small>
-    </div>
-    <div class="col-md-2">
-      <small>{{ node.published }}</small>
-    </div>
-    <div class="col-md-2">
-      <small>{{ node.score }}</small>
+    <div class="col-md-12">
+      {% show_pages %}
     </div>
 </div>
-{% endfor %}
 
-{% show_pages %}
+{% include page_template %}
 
+
+{% endblock %}
+
+{% block js %}
+<script src={% static "el-pagination/js/el-pagination.js" %}></script>
+<script>
+    $.endlessPaginate({
+        paginateOnScroll: true,
+        paginateOnScrollChunkSize: 5
+    });
+</script>
 {% endblock %}
