@@ -74,18 +74,38 @@ Quick start
       In this case, mind the absence of an namespace.
 
 
-3. Run `python manage.py syncdb` to create the feeds models.
+3. Django apps
 
-4. Dependencies:
+  Add the following to INSTALLED_APPS, too...
 
-`feeds` assumes it will find the following:
+  INSTALLED_APPS = (
+    ...
+    'crispy_forms',
+    'category',
+    'haystack',
+    'el_pagination',
+    )
+
+  `feeds` uses crispy_forms_, category_, haystack_ and el_pagination_ in it's
+  default templates.
+
+4. Run `python manage.py syncdb` to create the feeds models.
+
+5. Other dependencies:
+
+`feeds` may assume it will find the following:
 
   - /static/bs335 for Bootstrap_.
   - /static/jquery for jquery_.
   - /static/d3 for D3_.
+
 
 .. _Documentation: http://feeds.readthedocs.org/en/latest/
 .. _feedburner: http://www.feedburner.com
 .. _Bootstrap: http://www.getbootstrap.com
 .. _jquery: http://www.jquery.com
 .. _D3: http://www.d3js.org
+.. _haystack: https://django-haystack.readthedocs.io/en/v2.4.1/
+.. _category: https://github.com/aneumeier/category
+.. _crispy_forms: http://django-crispy-forms.readthedocs.io/en/latest/
+.. _el_pagination: http://django-el-pagination.readthedocs.io/en/latest/

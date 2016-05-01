@@ -47,5 +47,5 @@ class Subscription(models.Model):
     class Meta:
         unique_together = (("user", "feed"),)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s subscribed [%s]' % (self.user, self.feed)

@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'crispy_forms',
     'category',
     'haystack',
+    'el_pagination',
     'tests',
     'feeds',
 )
