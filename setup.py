@@ -49,6 +49,7 @@ setup(
         'django-celery',
         'django-formtools',
         'django-crispy-forms>=1.2.3',
+        'django-endless-pagination>=2.0.0',
         'feedparser>=5.1.2',
         'requests>=2.6',
         'django-haystack>=2.3.1',

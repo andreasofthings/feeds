@@ -1,8 +1,11 @@
 {% extends "feeds/index.html" %}
 {% load i18n %}
+{% load endless %}
 
 {% block content %}
 {% include "feeds/paginator.html"%}
+
+{% paginate object_list %}
 
 {% for node in object_list %}
 <div class="row">
@@ -21,6 +24,8 @@
       <small>{{ node.score }}</small>
     </div>
 </div>
- {% endfor %}
+{% endfor %}
+
+{% show_pages %}
 
 {% endblock %}
