@@ -7,7 +7,7 @@ from .models.post import Post
 from .models.stats import FeedPostCount
 from .models.files import FileModel
 from .models.options import Options
-from .models.subscriptions import Subscription
+from .models.subscription import Subscription
 
 from .forms import FeedAdminForm
 
