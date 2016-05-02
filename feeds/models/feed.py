@@ -369,7 +369,7 @@ Coming from `feedparser`:
         p.content = entry.get('content', '')
         """.. todo:: get other content instead."""
 
-        if len(entry.enclosures) > 0:
+        if 'enclosures' in entry and len(entry.enclosures) > 0:
             for enclosure in entry.enclosures:
                 e, created = p.enclosure.get_or_create(
                     href=entry.enclosure['href'],
