@@ -382,8 +382,9 @@ class PostSubscriptionView(LoginRequiredMixin, PaginatedListView):
 
     def get_queryset(self):
         user = self.request.user
-        feeds = Subscription.objects.userfeeds(user)
-        return Post.objects.filter(feed__in=feeds).order_by('-published')
+        user_subscriptions = Subscription.objects.feeds(user)
+        subscriptions = Post.objects.filter(feed_id__in=user_subscriptions)
+        return subscriptions.order_by('-published')
 
 
 class PostDetailView(DetailView):

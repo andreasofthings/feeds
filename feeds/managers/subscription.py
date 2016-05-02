@@ -15,8 +15,8 @@ class SubscriptionManager(models.Manager):
     """
     def feeds(self, user):
         """
-        Return feeds subscribed by user.
+        Returns a list of feed-ids the user subscribed to.
 
-        .. todo: Implement this.
+        .. todo: Careful, it's IDs!, not instances returned.
         """
-        return self.filter(user=user).feed_set.all()
+        return self.filter(user=user).values_list('feed', flat=True)
