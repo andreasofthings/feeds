@@ -364,7 +364,7 @@ class PostListView(AjaxListView):
         return Post.objects.older_than(timedelta(0)).order_by('-published')
 
 
-class PostSubscriptionView(LoginRequiredMixin, PaginatedListView):
+class PostSubscriptionView(LoginRequiredMixin, AjaxListView):
     """
     List Posts from subscribed Feeds.
 
