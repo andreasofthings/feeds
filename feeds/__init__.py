@@ -3,7 +3,11 @@
 # vim: ts=4 et sw=4 sts=4
 
 """
-feeds - feed aggregator, social relevance and stats
+.. testsetup:: *
+
+   import feeds
+
+The feeds module provides feed aggregation, subscription, social ranking and stats.
 
 :Author:    Andreas Neumeier
 :Contact:   andreas@neumeier.org
@@ -23,6 +27,12 @@ feeds (feedburner like), displaying all with Chartjs_.
  - :mod:`feeds.admin`
  - :mod:`feeds.forms`
  - :mod:`feeds.rss`
+
+.. testcode::
+  feeds.__version__ == "0.9.7"
+  
+.. testoutput::
+  True
 
 .. _Django: http://www.djangoproject.com
 .. _Chartjs: http://www.chartjs.org
