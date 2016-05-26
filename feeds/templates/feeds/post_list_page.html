@@ -6,21 +6,23 @@
 {% for node in object_list %}
 <div class="row">
     <div class="col-md-8">
-      <p>
         <h5>
           <a href="{{ node.feed.get_absolute_url }}" alt="{{node.feed.title}}">{{node.feed.title}}</a>
         </h5>
-      </p>
-      <p>
-        <h3>
-          <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
-        </h3>
-      </p>
     </div>
     <div class="col-md-4">
       <p>{{ node.published }}</p>
       <p>score {{ node.score }}</p>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-12">
+        <h3>
+            <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+        </h3>
+    </div>
+</div>
+
 {% endfor %}
+
 {% show_more %}
