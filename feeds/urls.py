@@ -12,6 +12,8 @@ from .views import WebSiteCreateView
 from .views import WebSiteDetailView
 from .views import WebSiteUpdateView
 from .views import WebSiteDeleteView
+from .views import WebSiteSubmitWizardView
+from .views import WebSiteSubmitForms
 
 from .views import FeedCreateView
 from .views import FeedListView
@@ -27,7 +29,6 @@ from .views import FeedSubscriptionsView
 from .views import PostListView, PostSubscriptionView
 from .views import PostDetailView, PostTrackableView
 
-from .views import SiteSubmitWizardView, SiteSubmitForms
 
 from .rss import RssFeed
 
