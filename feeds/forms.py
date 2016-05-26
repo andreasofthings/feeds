@@ -121,7 +121,7 @@ class WebSiteUpdateForm(forms.ModelForm):
         super(WebSiteUpdateForm, self).__init__(*args, **kwargs)
 
 
-class WebFeedCreateForm(forms.ModelForm):
+class FeedCreateForm(forms.ModelForm):
     """
     FeedCreateForm
 
