@@ -55,15 +55,14 @@ class FeedViewSet(mixins.ListModelMixin,
     API endpoint that allows feeds to be listed.
     """
     throttle_class = (FeedThrottle,)
-    
+    queryset = Feed.objects.all()
+
     def list(self, request):
-        queryset = Feed.objects.all()
-        data = FeedListSerializer(queryset, many=True)
+        data = FeedListSerializer(self.queryset, many=True)
         return Response(data.data)
         
     def retrieve(self, request, pk=None):
-        queryset = Feed.objects.all()
-        feed = get_object_or_404(queryset, pk=pk)
+        feed = get_object_or_404(self.queryset, pk=pk)
         data = FeedDetailSerializer(feed)
         return Response(data.data)
 
