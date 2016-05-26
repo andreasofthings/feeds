@@ -135,7 +135,7 @@ class OPMLView(FormView):
         return super(OPMLView, self).form_valid(form)
 
 
-SiteSubmitForms = [
+WebSiteSubmitForms = [
     ('Site', WebSiteCreateForm),
     ('Feeds', WebSiteFeedAddForm),
     ]
@@ -152,7 +152,7 @@ class WebSiteSubmitWizardView(SessionWizardView):
         return HttpResponseRedirect(reverse('planet:website-home'))
 
     def get_form(self, step=None, data=None, files=None):
-        form = super(SiteSubmitWizardView, self).get_form(step, data, files)
+        form = super(WebSiteSubmitWizardView, self).get_form(step, data, files)
 
         step = step or self.steps.current
 
