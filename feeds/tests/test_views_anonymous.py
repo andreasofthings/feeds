@@ -102,11 +102,11 @@ class ViewsAnonymousTest(TestCase):
         """
         site-home
         ---------
-            :url: url(r'^site/$', SiteListView.as_view(), name="site-home"),
+            :url: url(r'^website/$', SiteListView.as_view(), name="website-home"),
 
             Should return 200
         """
-        result = self.client.get(reverse('planet:site-home'))
+        result = self.client.get(reverse('planet:website-home'))
         self.assertEqual(result.status_code, 200)
 
     def site_submit(self):
@@ -116,16 +116,16 @@ class ViewsAnonymousTest(TestCase):
             :url: url(
                     r'^site/submit/$',
                     SiteSubmitWizardView.as_view(SiteSubmitForms),
-                    name="site-submit"
+                    name="website-submit"
 
             Should return a form.
             Should accept a post.
         """
-        result = self.client.get(reverse('planet:site-submit'))
+        result = self.client.get(reverse('planet:website-submit'))
         self.assertEqual(result.status_code, 200)
         """Assert the `submit` site is visible to anonymous users."""
         result = self.client.post(
-            reverse('planet:site-submit'),
+            reverse('planet:website-submit'),
             {
                 'url': 'http://spiegel.de/',
                 'form-TOTAL_FORMS': 1,
@@ -141,19 +141,19 @@ class ViewsAnonymousTest(TestCase):
         site-add
         --------
             :url: url(
-                    r'^site/add/$',
+                    r'^website/add/$',
                     SiteCreateView.as_view(),
-                    name="site-add"
+                    name="website-add"
                     )
 
             To add a site should require credentials.
 
             Should result in a redirect to the login-page.
         """
-        result = self.client.get(reverse('planet:site-add'))
+        result = self.client.get(reverse('planet:website-add'))
         self.assertRedirects(
             result,
-            '/accounts/login/?next=%s' % (reverse('planet:site-add'))
+            '/accounts/login/?next=%s' % (reverse('planet:website-add'))
         )
         self.assertEqual(result.status_code, 302)
 
@@ -162,17 +162,17 @@ class ViewsAnonymousTest(TestCase):
         site-view
         ---------
             :url: url(
-                r'^site/(?P<pk>\d+)/$',
+                r'^website/(?P<pk>\d+)/$',
                 SiteDetailView.as_view(),
-                name="site-view"
+                name="website-view"
                 )
 
-            Viewing a site should be available to the public.
+            Viewing a website should be available to the public.
 
             Should return 200.
         """
         result = self.client.get(
-            reverse('planet:site-view', args=(self.site_id,))
+            reverse('planet:website-view', args=(self.site_id,))
         )
         self.assertEqual(result.status_code, 200)
 
@@ -181,23 +181,23 @@ class ViewsAnonymousTest(TestCase):
         site-update
         -----------
             :url: url(
-                    r'^site/(?P<pk>\d+)/update/$',
+                    r'^website/(?P<pk>\d+)/update/$',
                     SiteUpdateView.as_view(),
-                    name="site-update"
+                    name="website-update"
                 )
 
             .. todo:: needs to be defined.
         """
         result = self.client.get(
             reverse(
-                'planet:site-update',
+                'planet:website-update',
                 args=(self.site_id,)
                 )
             )
         self.assertRedirects(
             result,
             '/accounts/login/?next=%s' % (
-                reverse('planet:site-update',
+                reverse('planet:website-update',
                         args=(self.site_id,)
                         )
             )
@@ -209,16 +209,16 @@ class ViewsAnonymousTest(TestCase):
         site-delete
         -----------
             :url: url(
-                r'^site/(?P<pk>\d+)/delete/$',
+                r'^website/(?P<pk>\d+)/delete/$',
                 SiteDeleteView.as_view(),
-                name="site-delete"
+                name="website-delete"
                 )
 
             .. todo:: needs to be defined.
         """
         result = self.client.get(
             reverse(
-                'planet:site-delete',
+                'planet:website-delete',
                 args=(self.site_id,)
             )
         )
