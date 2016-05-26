@@ -141,15 +141,15 @@ SiteSubmitForms = [
     ]
 
 
-class SiteSubmitWizardView(SessionWizardView):
+class WebSiteSubmitWizardView(SessionWizardView):
     """
     Wizard that walks people through when adding a site with feeds
     """
-    template_name = "feeds/site_submit_wizard.html"
-    form_list = [SiteCreateForm, SiteFeedAddForm]
+    template_name = "feeds/website_submit_wizard.html"
+    form_list = [WebSiteCreateForm, WebSiteFeedAddForm]
 
     def done(self, form_list, **kwargs):
-        return HttpResponseRedirect('/page-to-redirect-to-when-done/')
+        return HttpResponseRedirect(reverse('planet:website-home')r)
 
     def get_form(self, step=None, data=None, files=None):
         form = super(SiteSubmitWizardView, self).get_form(step, data, files)
@@ -169,7 +169,7 @@ class SiteSubmitWizardView(SessionWizardView):
         return form
 
 
-class SiteListView(PaginatedListView):
+class WebSiteListView(PaginatedListView):
     """
     Lists all sites in the database.
 
@@ -183,16 +183,16 @@ class SiteListView(PaginatedListView):
     template_name = "feeds/site_list.html"
 
 
-class SiteCreateView(PermissionRequiredMixin, CreateView):
+class WebSiteCreateView(PermissionRequiredMixin, CreateView):
     """
     View to create a new site.
     """
     permission_required = "feeds.add_site"
-    form_class = SiteCreateForm
+    form_class = WebSiteCreateForm
     model = WebSite
 
 
-class SiteDetailView(DetailView):
+class WebSiteDetailView(DetailView):
     """
     Shows Details for one particular :py:mod:`feeds.models.WebSite`.
 
@@ -203,19 +203,19 @@ class SiteDetailView(DetailView):
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
     model = WebSite
-    template_name = "feeds/site_detail.html"
+    template_name = "feeds/website_detail.html"
 
 
-class SiteUpdateView(PermissionRequiredMixin, UpdateView):
+class WebSiteUpdateView(PermissionRequiredMixin, UpdateView):
     """
     View to update an existing site.
     """
     permission_required = "feeds.change_site"
-    form_class = SiteUpdateForm
+    form_class = WebSiteUpdateForm
     model = WebSite
 
 
-class SiteDeleteView(PermissionRequiredMixin, DeleteView):
+class WebSiteDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = "feeds.delete_site"
     model = WebSite
     success_url = "planet:site-home"
