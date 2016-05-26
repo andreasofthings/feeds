@@ -31,9 +31,9 @@ class FeedField(forms.URLField):
         super(FeedField, self).__init__(*args, **kwargs)
 
 
-class SiteValidator(validators.URLValidator):
+class WebSiteValidator(validators.URLValidator):
     """
-    SiteValidator
+    WebSiteValidator
     =============
 
     Supposed to validate a site to contain a feed.
@@ -42,19 +42,19 @@ class SiteValidator(validators.URLValidator):
     To do so, use the `:py:function:tools.getFeedsFromSite` function.
     """
     def __init__(self, *args, **kwargs):
-        super(SiteValidator, self).__init__(*args, **kwargs)
+        super(WebSiteValidator, self).__init__(*args, **kwargs)
 
     def __call__(self, value):
         try:
-            super(SiteValidator, self).__call__(value)
+            super(WebSiteValidator, self).__call__(value)
         except ValidationError as e:
             raise e
 
         self.site = value
 
 
-class SiteField(forms.URLField):
-    default_validators = [SiteValidator]
+class WebSiteField(forms.URLField):
+    default_validators = [WebSiteValidator]
 
     def __init__(self, *args, **kwargs):
-        super(SiteField, self).__init__(*args, **kwargs)
+        super(WebSiteField, self).__init__(*args, **kwargs)
