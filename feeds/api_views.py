@@ -48,8 +48,7 @@ class PostViewSet(mixins.ListModelMixin,
     serializer_class = PostSerializer
 
 
-class FeedViewSet(mixins.CreateModelMixin,
-                  mixins.ListModelMixin,
+class FeedViewSet(mixins.ListModelMixin,
                   mixins.RetrieveModelMixin,
                   viewsets.GenericViewSet):
     """
