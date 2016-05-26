@@ -76,7 +76,7 @@ urlpatterns = [
     ),
     url(
         r'^website/submit/$',
-        WebSiteSubmitWizardView.as_view(SiteSubmitForms),
+        WebSiteSubmitWizardView.as_view(WebSiteSubmitForms),
         name="website-submit"
     ),
     url(
