@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load el_pagination_tags %}
-
+{% load humanize %}
 {% paginate object_list %}
 
 {% for node in object_list %}
@@ -11,7 +11,7 @@
         </h5>
     </div>
     <div class="col-md-4">
-      <p>{{ node.published }}</p>
+      <p>{{ node.published|naturaltime }}</p>
       <p>score {{ node.score }}</p>
     </div>
 </div>
