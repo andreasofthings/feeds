@@ -149,7 +149,7 @@ class WebSiteSubmitWizardView(SessionWizardView):
     form_list = [WebSiteCreateForm, WebSiteFeedAddForm]
 
     def done(self, form_list, **kwargs):
-        return HttpResponseRedirect(reverse('planet:website-home')r)
+        return HttpResponseRedirect(reverse('planet:website-home'))
 
     def get_form(self, step=None, data=None, files=None):
         form = super(SiteSubmitWizardView, self).get_form(step, data, files)
