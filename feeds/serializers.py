@@ -24,7 +24,20 @@ class PostSerializer(serializers.ModelSerializer):
 class FeedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feed
-        fields = ('name', 'url', )
+        fields = (
+            'name', 
+            'feed_url',
+            'is_active',
+            'category',
+            'title',
+            'link',
+            'tagline',
+            'language',
+            'copyright',
+            'author',
+            'webmaster',
+            'pubDate',
+        )
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
