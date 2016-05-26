@@ -15,7 +15,7 @@ from .models import Options
 from .models import WebSite
 from .models import Feed
 
-from .validators import SiteField, FeedField
+from .validators import WebSiteField, FeedField
 
 
 class OptionsForm(forms.ModelForm):
@@ -68,12 +68,12 @@ class OPMLForm(forms.Form):
         super(OPMLForm, self).__init__(*args, **kwargs)
 
 
-class SiteCreateForm(forms.ModelForm):
+class WebSiteCreateForm(forms.ModelForm):
     """
     Form to create a new Site
     """
 
-    url = SiteField()
+    url = WebSiteField()
 
     class Meta:
         model = WebSite
@@ -83,7 +83,7 @@ class SiteCreateForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.form_class = "field_inline"
-        self.helper.form_action = 'planet:site-add'
+        self.helper.form_action = 'planet:website-add'
         self.helper.layout = Layout(
             Field('url'),
             FormActions(
@@ -91,15 +91,15 @@ class SiteCreateForm(forms.ModelForm):
                 Button('cancel', 'Cancel', css_class='btn-small')
             )
         )
-        super(SiteCreateForm, self).__init__(*args, **kwargs)
+        super(WebSiteCreateForm, self).__init__(*args, **kwargs)
 
 
-class SiteFeedAddForm(forms.Form):
+class WebSiteFeedAddForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        super(SiteFeedAddForm, self).__init__(*args, **kwargs)
+        super(WebSiteFeedAddForm, self).__init__(*args, **kwargs)
 
 
-class SiteUpdateForm(forms.ModelForm):
+class WebSiteUpdateForm(forms.ModelForm):
     """
     Form to update an existing Site
     """
@@ -110,7 +110,7 @@ class SiteUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        self.helper.form_action = 'planet:site-update'
+        self.helper.form_action = 'planet:website-update'
         self.helper.layout = Layout(
             Field('url'),
             FormActions(
@@ -118,10 +118,10 @@ class SiteUpdateForm(forms.ModelForm):
                 Button('cancel', 'Cancel', css_class='btn-small')
             )
         )
-        super(SiteUpdateForm, self).__init__(*args, **kwargs)
+        super(WebSiteUpdateForm, self).__init__(*args, **kwargs)
 
 
-class FeedCreateForm(forms.ModelForm):
+class WebFeedCreateForm(forms.ModelForm):
     """
     FeedCreateForm
 
