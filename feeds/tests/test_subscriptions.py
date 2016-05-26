@@ -32,14 +32,14 @@ class TestSubscriptions(TestCase):
 
     def test_getSubscription(self):
         """
+        Verify the subscriptions function for individual users.
 
-        .. todo:: This ain't implemented yet.
         """
         from feeds.models.subscription import Subscription
         from feeds.models.options import Options
         from django.contrib.auth.models import User
         options = Options(user=User.objects.get(pk=1))
-        self.assertEqual(1, Subscription.objects.feeds(options))
+        self.assertEqual([], Subscription.objects.feeds(options))
 
     def tearDown(self):
         pass
