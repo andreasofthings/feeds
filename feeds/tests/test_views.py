@@ -320,5 +320,5 @@ class TestFeedViewsWithCredentials(TestCase):
         result = c.get(reverse('planet:post-home')+'?paginate_by=15')
         self.assertEqual(result.status_code, 200)
         result = c.get(reverse('planet:post-home')+'?page=9992')
-        self.assertEqual(result.status_code, 404)
-        """we won't have a 9992nd page for now."""
+        self.assertEqual(result.status_code, 200)
+        """we won't have a 9992nd page for now. Still, the infinite scroller will return 200."""
