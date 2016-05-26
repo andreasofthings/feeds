@@ -38,7 +38,7 @@ from .forms import OPMLForm
 from .models import WebSite, Feed, Post, Subscription, PostReadCount
 from .forms import FeedCreateForm
 from .forms import FeedUpdateForm
-from .forms import SiteCreateForm, SiteFeedAddForm, SiteUpdateForm
+from .forms import WebSiteCreateForm, WebSiteFeedAddForm, WebSiteUpdateForm
 from .tools import getFeedsFromSite
 from .baseviews import PaginatedListView
 
