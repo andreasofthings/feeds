@@ -21,7 +21,18 @@ class PostSerializer(serializers.ModelSerializer):
         )
 
 
-class FeedSerializer(serializers.ModelSerializer):
+class FeedListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feed
+        fields = (
+            'url',
+            'get_absolute_url',
+            'feed_url',
+            'name',
+            'is_active',
+        )
+        
+class FeedDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feed
         fields = (
