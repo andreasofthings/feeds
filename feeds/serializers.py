@@ -25,9 +25,14 @@ class FeedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feed
         fields = (
-            'name', 
+            'get_absolute_url',
+            'website',
             'feed_url',
+            'name',
+            'short_name',
+            'slug',
             'is_active',
+            'errors',
             'category',
             'title',
             'link',
@@ -37,6 +42,14 @@ class FeedSerializer(serializers.ModelSerializer):
             'author',
             'webmaster',
             'pubDate',
+            'last_modified',
+            'ttl',
+            'image_title',
+            'image_link',
+            'image_url',
+            'etag',
+            'last_checked',
+            'check_interval',
         )
 
 
