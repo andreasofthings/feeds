@@ -158,7 +158,7 @@ class WebSiteSubmitWizardView(SessionWizardView):
 
         if step == u'Feeds':
             step_0_data = self.storage.get_step_data('Site')
-            form = SiteFeedAddForm()
+            form = WebSiteFeedAddForm()
             links = getFeedsFromSite(step_0_data['Site-url'])
             for title, href in links:
                 form.fields[href] = forms.BooleanField(
