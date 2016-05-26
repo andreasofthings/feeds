@@ -136,8 +136,8 @@ class OPMLView(FormView):
 
 
 SiteSubmitForms = [
-    ('Site', SiteCreateForm),
-    ('Feeds', SiteFeedAddForm),
+    ('Site', WebSiteCreateForm),
+    ('Feeds', WebSiteFeedAddForm),
     ]
 
 
