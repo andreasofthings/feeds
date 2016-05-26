@@ -1,3 +1,5 @@
+from django.shortcuts import get_object_or_404
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
@@ -6,7 +8,7 @@ from rest_framework import mixins, viewsets
 from .models import Options, Feed, Post
 from .serializers import SubscriptionSerializer
 from .serializers import CategorySerializer
-from .serializers import FeedSerializer
+from .serializers import FeedDetailSerializer, FeedListSerializer
 from .serializers import PostSerializer
 
 from category.models import Category
@@ -54,8 +56,18 @@ class FeedViewSet(mixins.CreateModelMixin,
     API endpoint that allows feeds to be listed.
     """
     throttle_class = (FeedThrottle,)
-    queryset = Feed.objects.all()
-    serializer_class = FeedSerializer
+    
+    def list(self, request):
+        queryset = Feed.objects.all()
+        data = FeedListSerializer(queryset, many=True)
+        return Response(data.data)
+        
+    def retrieve(self, request, pk=None):
+        queryset = Feed.objects.all()
+        feed = get_object_or_404(queryset, pk=pk)
+        data = FeedDetailSerializer(feed)
+        return Response(data.data)
+
 
 
 class SubscriptionThrottle(UserRateThrottle):
