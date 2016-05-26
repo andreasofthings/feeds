@@ -7,11 +7,11 @@ from django.conf.urls import url, include
 from .views import HomeView
 from .views import OptionsView
 from .views import OPMLView
-from .views import SiteListView
-from .views import SiteCreateView
-from .views import SiteDetailView
-from .views import SiteUpdateView
-from .views import SiteDeleteView
+from .views import WebSiteListView
+from .views import WebSiteCreateView
+from .views import WebSiteDetailView
+from .views import WebSiteUpdateView
+from .views import WebSiteDeleteView
 
 from .views import FeedCreateView
 from .views import FeedListView
@@ -69,34 +69,34 @@ urlpatterns = [
     ),
 
     url(
-        r'^site/$',
-        SiteListView.as_view(),
-        name="site-home"
+        r'^website/$',
+        WebSiteListView.as_view(),
+        name="website-home"
     ),
     url(
-        r'^site/submit/$',
-        SiteSubmitWizardView.as_view(SiteSubmitForms),
-        name="site-submit"
+        r'^website/submit/$',
+        WebSiteSubmitWizardView.as_view(SiteSubmitForms),
+        name="website-submit"
     ),
     url(
-        r'^site/add/$',
-        SiteCreateView.as_view(),
-        name="site-add"
+        r'^website/add/$',
+        WebSiteCreateView.as_view(),
+        name="website-add"
     ),
     url(
-        r'^site/(?P<pk>\d+)/$',
-        SiteDetailView.as_view(),
-        name="site-view"
+        r'^website/(?P<pk>\d+)/$',
+        WebSiteDetailView.as_view(),
+        name="website-view"
     ),
     url(
-        r'^site/(?P<pk>\d+)/update/$',
-        SiteUpdateView.as_view(),
-        name="site-update"
+        r'^website/(?P<pk>\d+)/update/$',
+        WebSiteUpdateView.as_view(),
+        name="website-update"
     ),
     url(
-        r'^site/(?P<pk>\d+)/delete/$',
-        SiteDeleteView.as_view(),
-        name="site-delete"
+        r'^website/(?P<pk>\d+)/delete/$',
+        WebSiteDeleteView.as_view(),
+        name="website-delete"
     ),
 ]
 
