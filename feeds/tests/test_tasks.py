@@ -108,11 +108,13 @@ class TaskTest(TestCase):
         .. todo:: test this in the `python-social` module
         """
         from feeds.tasks import post_update_linkedin
+
         post = Post.objects.all()[0]
         result = post_update_linkedin.delay(post.pk)
         self.assertEqual(len(result.get()), len((0,)))
 
         result = post_update_linkedin.delay(999999)
+
         with self.assertRaises(Post.DoesNotExist):
             self.assertEqual(result.get(), (-1,))
 

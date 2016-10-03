@@ -31,7 +31,7 @@ class TestAllViewsAnonymousLive(LiveServerTestCase):
         body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Feeds', body.text)
 
-        self.browser.get(self.live_server_url + reverse('planet:site-home'))
+        self.browser.get(self.live_server_url + reverse('planet:website-home'))
         body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Andreas', body.text)
 

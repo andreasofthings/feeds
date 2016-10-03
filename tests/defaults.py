@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.sitemaps',
     'django.contrib.sites',
+    'django.contrib.humanize',
     'crispy_forms',
     'category',
     'haystack',

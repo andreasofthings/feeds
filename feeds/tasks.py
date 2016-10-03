@@ -143,15 +143,18 @@ def post_update_linkedin(entry_id):
     """
     logger.debug("start: counting linkedin")
 
-    if getattr(settings, 'FEEDS_POST_UPDATE_LINKEDIN', False):
-        post = Post.objects.get(pk=entry_id)
-        (post.linkedin, ) = linkedin(post)
-        post.save()
-        logger.debug(
-            "stop: counting linkedin. got %s",
-            post.linkedin
-        )
-        return (post.linkedin, )
+    try:
+        if getattr(settings, 'FEEDS_POST_UPDATE_LINKEDIN', False):
+            post = Post.objects.get(pk=entry_id)
+            (post.linkedin, ) = linkedin(post)
+            post.save()
+            logger.debug(
+                "stop: counting linkedin. got %s",
+                post.linkedin
+            )
+            return (post.linkedin, )
+    exception Exception:
+        return (-1,)
     return (0, )
 
 
