@@ -153,7 +153,7 @@ def post_update_linkedin(entry_id):
                 post.linkedin
             )
             return (post.linkedin, )
-    exception Exception:
+    except Exception:
         return (-1,)
     return (0, )
 

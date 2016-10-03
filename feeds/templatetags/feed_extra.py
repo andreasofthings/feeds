@@ -108,7 +108,18 @@ class FeedControlsNode(template.Node):
                 self.feed, type(self.feed)
             )
 
+        """
+        Before Django 1.10 / Feeds 2016.09.30:
         user = template.resolve_variable('user', context)
+
+        The function has been informally marked as “Deprecated” for some time.
+        Replace resolve_variable(path, context) with
+        django.template.Variable(path).resolve(context).
+
+        Hence:
+        """
+        user = template.Variable('user').resolve(context)
+
         absolute_url = feed.get_absolute_url()
 
         view_button = self.button % (absolute_url, _('View Feed'), 'zoom-in')
