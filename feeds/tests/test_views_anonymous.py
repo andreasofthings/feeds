@@ -102,7 +102,10 @@ class ViewsAnonymousTest(TestCase):
         """
         site-home
         ---------
-            :url: url(r'^website/$', SiteListView.as_view(), name="website-home"),
+            :url: url(
+                    r'^website/$', SiteListView.as_view(),
+                    name="website-home"
+                    ),
 
             Should return 200
         """
@@ -130,7 +133,7 @@ class ViewsAnonymousTest(TestCase):
                 'url': 'http://spiegel.de/',
                 'form-TOTAL_FORMS': 1,
                 'form-INITIAL_FORMS': 0,
-                'site_submit_wizard_view-current_step': 'Site',
+                'site_submit_wizard_view-current_step': 'WebSite',
             }
         )
         self.assertEqual(result.status_code, 200)
