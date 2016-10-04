@@ -22,8 +22,8 @@
   fields:
     "feed": 1
     "title": "Test"
-    "link": "http://www.spiegel.de/1234"
-    "guid": "http://www.spiegel.de/1234"
+    "link": "http://www.spiegel.de/2341"
+    "guid": "http://www.spiegel.de/2341"
     "published": "2000-01-01 00:00:00.000000"
     "updated": "2001-01-01 00:00"
 - model: feeds.Post
@@ -31,7 +31,7 @@
   fields:
     "feed": 1
     "title": "Test"
-    "link": "http://www.spiegel.de/1234"
-    "guid": "http://www.spiegel.de/1234"
+    "link": "http://www.spiegel.de/3412"
+    "guid": "http://www.spiegel.de/3412"
     "published": "2000-01-01 00:00:00.000000UTC"
     "updated": "2001-01-01 00:00"
