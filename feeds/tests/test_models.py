@@ -32,7 +32,6 @@ class ModelTest(TestCase):
         "Feed_all.yaml",
         "Site.yaml",
         "Posts.yaml",
-        "Tags.yaml",
         "Enclosures.yaml",
     ]
 

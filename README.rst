@@ -78,13 +78,14 @@ Quick start
 
   Add the following to INSTALLED_APPS, too...
 
-  INSTALLED_APPS = (
-    ...
-    'crispy_forms',
-    'category',
-    'haystack',
-    'el_pagination',
-    )
+    INSTALLED_APPS = (
+      ...
+      'crispy_forms',
+      'category',
+      'haystack',
+      'el_pagination',
+      )
+
 
   `feeds` uses crispy_forms_, category_, haystack_ and el_pagination_ in it's
   default templates.
@@ -99,6 +100,11 @@ Quick start
   - /static/jquery for jquery_.
   - /static/d3 for D3_.
 
+ 6. Guidelines
+
+ `feeds` makes an effort to follow best practices and follows PEP8_ and PEP263_
+ as a baseline.
+
 
 .. _Documentation: http://feeds.readthedocs.org/en/latest/
 .. _feedburner: http://www.feedburner.com
@@ -109,3 +115,5 @@ Quick start
 .. _category: https://github.com/aneumeier/category
 .. _crispy_forms: http://django-crispy-forms.readthedocs.io/en/latest/
 .. _el_pagination: http://django-el-pagination.readthedocs.io/en/latest/
+.. _PEP8: https://www.python.org/dev/peps/pep-0008/
+.. _PEP263: https://www.python.org/dev/peps/pep-0263/

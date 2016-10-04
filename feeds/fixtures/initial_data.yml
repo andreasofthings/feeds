@@ -1,3 +1,3 @@
 - model: feeds.category
   fields:
-    title: John
+    title: Default
