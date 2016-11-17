@@ -152,14 +152,15 @@ class WebSiteSubmitWizardView(SessionWizardView):
         return HttpResponseRedirect(reverse('planet:website-home'))
 
     def get_form(self, step=None, data=None, files=None):
+
         form = super(WebSiteSubmitWizardView, self).get_form(step, data, files)
 
         step = step or self.steps.current
 
         if step == u'Feeds':
-            step_0_data = self.storage.get_step_data('Site')
+            step_0_data = self.storage.get_step_data('WebSite')
             form = WebSiteFeedAddForm()
-            links = getFeedsFromSite(step_0_data['Site-url'])
+            links = getFeedsFromSite(step_0_data['WebSite-url'])
             for title, href in links:
                 form.fields[href] = forms.BooleanField(
                     initial=False,
