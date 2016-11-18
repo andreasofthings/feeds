@@ -27,6 +27,7 @@ from django.views.generic import CreateView, UpdateView
 from django.views.generic import DeleteView, RedirectView
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext as _
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -148,11 +149,7 @@ class WebSiteSubmitWizardView(SessionWizardView):
     template_name = "feeds/website_submit_wizard.html"
     form_list = [WebSiteCreateForm, WebSiteFeedAddForm]
 
-    def done(self, form_list, **kwargs):
-        return HttpResponseRedirect(reverse('planet:website-home'))
-
     def get_form(self, step=None, data=None, files=None):
-
         form = super(WebSiteSubmitWizardView, self).get_form(step, data, files)
 
         step = step or self.steps.current
@@ -168,6 +165,16 @@ class WebSiteSubmitWizardView(SessionWizardView):
                     label=title
                 )
         return form
+
+    def done(self, form_list, **kwargs):
+        from django.contrib import messages
+        form_list['Feeds'].save()
+        messages.add_message(
+            self.request,
+            messages.INFO,
+            _("Successfully submitted site.")
+            )
+        return HttpResponseRedirect(reverse('planet:website-home'))
 
 
 class WebSiteListView(PaginatedListView):
