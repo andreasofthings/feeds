@@ -284,6 +284,18 @@ Coming from `feedparser`:
     def __str__(self):
         return u'%s' % (self.name)
 
+    def post_count(self):
+        """
+        Return the number of posts in this feed.
+        """
+        return self.posts.count()
+
+    def subscriber_count(self):
+        """
+        Return the number of subscribers for this feed.
+        """
+        return self.feed_subscription.count()
+
     @models.permalink
     def get_absolute_url(self):
         return ('planet:feed-view', [str(self.id)])
@@ -347,15 +359,11 @@ Coming from `feedparser`:
             feed=self,
             title=entry.title,
             guid=self._entry_guid(entry),
-            published=datetime.datetime.utcfromtimestamp(
-                calendar.timegm(
-                    entry.get('published_parsed',
-                              entry.get(
-                                  'created_parsed', timezone.now()
-                              )
-                              )
-                )
-            )
+            published=entry.get('published_parsed',
+                                entry.get(
+                                    'created_parsed', timezone.now()
+                                        )
+                                )
         )
         if created:
             result = ENTRY_NEW
@@ -495,7 +503,7 @@ Coming from `feedparser`:
                     self.feed_url,
                     self.last_checked,
                     self.last_checked + datetime.timedelta(seconds=300),
-                    timezone.now()
+                    now
                 )
                 return FEED_SAME
 
@@ -545,15 +553,3 @@ Coming from `feedparser`:
         from django.contrib.sitemaps import ping_google
         ping_google(reverse("planet:sitemap"))
         return FEED_OK
-
-    def post_count(self):
-        """
-        Return the number of posts in this feed.
-        """
-        return self.posts.count()
-
-    def subscriber_count(self):
-        """
-        Return the number of subscribers for this feed.
-        """
-        return self.feed_subscription.count()
