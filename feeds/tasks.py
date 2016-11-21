@@ -12,15 +12,15 @@ This module takes care of everything that is not client/customer facing.
 .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
 """
 
-import logging
+from __future__ import absolute_import, unicode_literals
 
+import logging
 import types
 
 try:
     from urllib.parse import urlparse
 except ImportError:
     import urlparse
-
 
 from datetime import datetime, timedelta
 
