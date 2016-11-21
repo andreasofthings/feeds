@@ -40,9 +40,32 @@ from .models import FeedStats
 
 
 from category.models import Tag
-from social.get import tweets, facebook, linkedin, plusone
 
 logger = logging.getLogger(__name__)
+
+
+def feedsocial(object):
+
+    def __init__(self, f):
+        self.f = f
+
+    def __call__(self, *args):
+        logger.debug("start: %s", self.f.__name__)
+
+        try:
+            from social.get import tweets, facebook, linkedin, plusone
+        except:
+            logger.error("social not installed")
+            return
+        if not args.post_id:
+            """
+            failed
+            """
+            logger.error("Provided an invalid post_id")
+            return
+        result = self.f(*args)
+        logger.debug("end: %s", self.f.__name__)
+        return result
 
 
 @shared_task
@@ -71,11 +94,7 @@ def twitter_post(post_id):
     announce track and artist on twitter
     """
     logger.debug("twittering new post")
-    if not post_id:
-        """
-        failed
-        """
-        return
+
     from twitter import Api
     post = Post.objects.get(pk=post_id)
     user = User.objects.get(id=15)
@@ -101,12 +120,11 @@ def twitter_post(post_id):
 
 
 @shared_task(time_limit=10)
+@feedsocial
 def post_update_twitter(entry_id):
     """
     count tweets
     """
-    logger.debug("start: counting tweets")
-
     if getattr(settings, 'FEEDS_POST_UPDATE_TWITTER', False):
         post = Post.objects.get(pk=entry_id)
         (post.tweets, ) = tweets(post)
@@ -117,6 +135,7 @@ def post_update_twitter(entry_id):
 
 
 @shared_task(time_limit=10)
+@feedsocial
 def post_update_facebook(entry_id):
     """
     count facebook
@@ -137,6 +156,7 @@ def post_update_facebook(entry_id):
 
 
 @shared_task(time_limit=10)
+@feedsocial
 def post_update_linkedin(entry_id):
     """
     count linkedin
@@ -156,6 +176,7 @@ def post_update_linkedin(entry_id):
 
 
 @shared_task(time_limit=10)
+@feedsocial
 def post_update_googleplus(post_id):
     """
     plus 1

@@ -53,7 +53,6 @@ setup(
         'feedparser>=5.1.2',
         'requests>=2.6',
         'django-haystack>=2.3.1',
-        'djangorestframework>=3.5.0',
         'timestring==1.6.2',
         'category>=0.9.0',
     ],
