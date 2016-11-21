@@ -123,8 +123,8 @@ def twitter_post(post_id):
     logger.debug("done twittering post")
 
 
-@shared_task(time_limit=10)
 @feedsocial
+@shared_task(time_limit=10)
 def post_update_twitter(entry_id):
     """
     count tweets
@@ -138,8 +138,8 @@ def post_update_twitter(entry_id):
     return (0, )
 
 
-@shared_task(time_limit=10)
 @feedsocial
+@shared_task(time_limit=10)
 def post_update_facebook(entry_id):
     """
     count facebook
@@ -159,8 +159,8 @@ def post_update_facebook(entry_id):
     return (0, )
 
 
-@shared_task(time_limit=10)
 @feedsocial
+@shared_task(time_limit=10)
 def post_update_linkedin(entry_id):
     """
     count linkedin
@@ -179,8 +179,8 @@ def post_update_linkedin(entry_id):
     return (0, )
 
 
-@shared_task(time_limit=10)
 @feedsocial
+@shared_task(time_limit=10)
 def post_update_googleplus(post_id):
     """
     plus 1
