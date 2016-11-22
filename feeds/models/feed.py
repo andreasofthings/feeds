@@ -361,7 +361,7 @@ Coming from `feedparser`:
             guid=self._entry_guid(entry),
             published=entry.get('published_parsed',
                                 entry.get(
-                                    'created_parsed', timezone.now()
+                                    'created_parsed', str(timezone.now())
                                         )
                                 )
         )
