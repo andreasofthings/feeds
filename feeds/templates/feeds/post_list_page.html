@@ -8,28 +8,26 @@
 <div class="row">
     <div class="col-md-12">
         <div class="row">
-            <div class="col-md-8">
-                <h5>
-                  <a href="{{ node.feed.get_absolute_url }}" alt="{{node.feed.title}}">{{node.feed.title}}</a>
-                </h5>
-            </div>
-            <div class="col-md-4">
-              <p>{{ node.published|naturaltime }}</p>
+            <div class="col-md-12">
+                <h6>
+                  <a href="{{ node.feed.get_absolute_url }}" alt="{{node.feed.title}}">
+                    {{node.feed.title}}
+                  </a>
+                  <small>{{ node.published|naturaltime }}</small>
+                </h6>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-8">
-                <h3>
+            <div class="col-md-12">
+                <h4>
                     <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
-                </h3>
-            </div>
-            <div class="col-md-4">
-                  <p>score {{ node.score }}</p>
+                    <small>score {{ node.score }}</small>
+                </h4>
             </div>
         </div>
     </div>
 </div>
-
+<hr>
 {% endfor %}
 
 {% show_more %}
