@@ -91,6 +91,7 @@ class FeedAdmin(admin.ModelAdmin):
         'name',
         'is_active',
         'announce_posts',
+        'post_count',
         'errors',
         'slug',
         'title',
@@ -155,7 +156,7 @@ class WebSiteAdmin(admin.ModelAdmin):
     """
     WebSite Admin Class
     """
-    list_display = ('url', 'slug', )
+    list_display = ('url', 'slug', 'feedcount')
     inlines = [
         FeedInline,
     ]
