@@ -355,16 +355,14 @@ Coming from `feedparser`:
         """
         result = ENTRY_SAME
 
+        now = timezone.now()
+        created_parsed = entry.get('created_parsed', now)
+
         p, created = self.posts.from_feedparser(
             feed=self,
             title=entry.title,
             guid=self._entry_guid(entry),
-            published=entry.get('published_parsed',
-                                entry.get(
-                                    'created_parsed',
-                                    str(timezone.now())
-                                    )
-                                )
+            published=entry.get('published_parsed', created_parsed)
         )
         if created:
             result = ENTRY_NEW
