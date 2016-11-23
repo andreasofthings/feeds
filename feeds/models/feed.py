@@ -19,6 +19,8 @@ import feedparser
 from feedparser import CharacterEncodingOverride
 import datetime
 import calendar
+import time
+from time import mktime
 from collections import Counter
 
 from django.db import models
@@ -355,12 +357,31 @@ Coming from `feedparser`:
         """
         result = ENTRY_SAME
 
+        """
+        .. todo:: This is still a trainwreck. Datetime handling needs serious
+        work, all over the codebase. It's crucial to handling feeds and posts,
+        why is this still so badly implemented?
+        """
+
         now = timezone.now()
         created_parsed = entry.get('created_parsed', now)
         published_parsed = entry.get('published_parsed', created_parsed)
-        logger.error("Now: type: %s value: %s", type(now), now)
-        logger.error("Created: type: %s value: %s", type(created_parsed), created_parsed)
-        logger.error("Published: type: %s value: %s", type(published_parsed), published_parsed)
+
+        if isinstance(published_parsed, time.struct_time):
+            published_parsed = datetime.fromtimestamp(mktime(published_parsed))
+
+        logger.error("Now: type: %s value: %s",
+                     type(now),
+                     now
+                     )
+        logger.error("Created: type: %s value: %s",
+                     type(created_parsed),
+                     created_parsed
+                     )
+        logger.error("Published: type: %s value: %s",
+                     type(published_parsed),
+                     published_parsed
+                     )
 
         p, created = self.posts.from_feedparser(
             feed=self,
