@@ -18,7 +18,6 @@ import logging
 import feedparser
 from feedparser import CharacterEncodingOverride
 import datetime
-import calendar
 import time
 from time import mktime
 from collections import Counter
@@ -368,7 +367,8 @@ Coming from `feedparser`:
         published_parsed = entry.get('published_parsed', created_parsed)
 
         if isinstance(published_parsed, time.struct_time):
-            published_parsed = datetime.fromtimestamp(mktime(published_parsed))
+            published_parsed = \
+                datetime.datetime.fromtimestamp(mktime(published_parsed))
 
         logger.error("Now: type: %s value: %s",
                      type(now),
@@ -447,19 +447,21 @@ Coming from `feedparser`:
 
         self.etag = parsed.get('etag', '')
         self.pubdate = parsed.feed.get('pubDate', '')
-        try:
-            self.last_modified = datetime.datetime.utcfromtimestamp(
-                calendar.timegm(
-                    parsed.feed.get(
-                        'updated_parsed',
 
-                        parsed.feed.get(
-                            'updated',
-                            timezone.now().timetuple()
-                        )
-                        )
-                )
-            )
+        """
+        .. todo:: Same as above. A trainwreck.
+        """
+        try:
+            updated = parsed.feed.get('updated', timezone.now())
+            updated_parsed = parsed.feed.get('updated_parsed', updated)
+
+            if isinstance(updated_parsed, time.struct_time):
+                updated_parsed = \
+                    datetime.datetime.fromtimestamp(mktime(updated_parsed))
+
+            self.last_modified = \
+                datetime.datetime.fromtimestamp(updated_parsed)
+
         except ValueError as e:
             logger.error(e)
             logger.error(parsed.feed.updated)
