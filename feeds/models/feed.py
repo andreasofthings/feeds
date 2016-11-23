@@ -459,8 +459,7 @@ Coming from `feedparser`:
                 updated_parsed = \
                     datetime.datetime.fromtimestamp(mktime(updated_parsed))
 
-            self.last_modified = \
-                datetime.datetime.fromtimestamp(updated_parsed)
+            self.last_modified = updated_parsed
 
         except ValueError as e:
             logger.error(e)
