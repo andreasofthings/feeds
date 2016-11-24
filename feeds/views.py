@@ -155,7 +155,7 @@ class WebSiteSubmitWizardView(SessionWizardView):
         step = step or self.steps.current
 
         if step == u'Feeds':
-            form = WebSiteFeedAddForm()
+            # form = WebSiteFeedAddForm()
             step_0_data = self.storage.get_step_data('WebSite')
             links = getFeedsFromSite(step_0_data['WebSite-url'])
             for title, href in links:
@@ -166,12 +166,11 @@ class WebSiteSubmitWizardView(SessionWizardView):
                 )
         return form
 
-    def done(self, form_list, **kwargs):
+    def done(self, form_list, form_dict, **kwargs):
         from django.contrib import messages
         form_list['Feeds'].save()
-        logger.error("**kwargs: %s", kwargs)
         logger.error("form_list: %s", form_list)
-        logger.error("Content of form_list: %s", form_list['Feeds'])
+        logger.error("form_dict: %s", form_dict)
         messages.add_message(
             self.request,
             messages.INFO,
