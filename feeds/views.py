@@ -169,11 +169,11 @@ class WebSiteSubmitWizardView(SessionWizardView):
     def done(self, form_list, **kwargs):
         from django.contrib import messages
         form_list['Feeds'].save()
+        logger.error("Content of form_list: %s", form_list['Feeds'])
         messages.add_message(
             self.request,
             messages.INFO,
-            # _("Successfully submitted site.")
-            form_list['Feeds']
+            _("Successfully submitted site.")
             )
         return HttpResponseRedirect(reverse('planet:website-home'))
 
