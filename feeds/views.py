@@ -168,9 +168,7 @@ class WebSiteSubmitWizardView(SessionWizardView):
 
     def done(self, form_list, form_dict, **kwargs):
         from django.contrib import messages
-        form_list['Feeds'].save()
-        logger.error("form_list: %s", form_list)
-        logger.error("form_dict: %s", form_dict)
+        form_dict['Feeds'].save()
         messages.add_message(
             self.request,
             messages.INFO,
