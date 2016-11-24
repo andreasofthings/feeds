@@ -168,9 +168,18 @@ class WebSiteSubmitWizardView(SessionWizardView):
 
     def done(self, form_list, form_dict, **kwargs):
         from django.contrib import messages
-        form = form_dict['Feeds']
-        if form.is_valid():
-            feeds = form.save()
+        site_form = form_dict['WebSite']
+        feed_form = form_dict['Feeds']
+        if site_form.is_valid() and feed_form.is_valid():
+            site = WebSite(url=site_form.url).save()
+            for feed in feed_form.fields:
+                f = Feed.get_or_create(
+                    website=site,
+                    feed_url=feed.url,
+                    name=feed.name
+                )
+                f.save()
+
             messages.add_message(
                 self.request,
                 messages.INFO,
