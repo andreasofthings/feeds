@@ -155,8 +155,8 @@ class WebSiteSubmitWizardView(SessionWizardView):
         step = step or self.steps.current
 
         if step == u'Feeds':
-            step_0_data = self.storage.get_step_data('WebSite')
             form = WebSiteFeedAddForm()
+            step_0_data = self.storage.get_step_data('WebSite')
             links = getFeedsFromSite(step_0_data['WebSite-url'])
             for title, href in links:
                 form.fields[href] = forms.BooleanField(
@@ -172,7 +172,8 @@ class WebSiteSubmitWizardView(SessionWizardView):
         messages.add_message(
             self.request,
             messages.INFO,
-            _("Successfully submitted site.")
+            # _("Successfully submitted site.")
+            form_list['Feeds']
             )
         return HttpResponseRedirect(reverse('planet:website-home'))
 

@@ -37,39 +37,11 @@ from feeds import CRON_OK, CRON_ERR
 
 from .models import Feed, Post, TaggedPost
 from .models import FeedStats
+from .decorators import feedsocial
 
 from category.models import Tag
 
 logger = logging.getLogger(__name__)
-
-
-def feedsocial(object):
-    """
-    Decorator to perform default sanity checks for all social scoring.
-    Also, logging.
-    """
-
-    def __init__(self, f):
-        self.f = f
-
-    def __call__(self, *args):
-        logger.debug("start: %s", self.f.__name__)
-
-        try:
-            from social.get import tweets, facebook, linkedin, plusone
-        except:
-            logger.error("social not installed")
-            return
-
-        if not args.post_id:
-            """
-            failed
-            """
-            logger.error("Provided an invalid post_id")
-            return
-        result = self.f(*args)
-        logger.debug("end: %s", self.f.__name__)
-        return result
 
 
 @shared_task
@@ -144,8 +116,6 @@ def post_update_facebook(entry_id):
     """
     count facebook
     """
-    logger.debug("start: counting facebook")
-
     if getattr(settings, 'FEEDS_POST_UPDATE_FACEBOOK', False):
         post = Post.objects.get(pk=entry_id)
         (post.shares, post.likes, bla) = facebook(post)
@@ -165,8 +135,6 @@ def post_update_linkedin(entry_id):
     """
     count linkedin
     """
-    logger.debug("start: counting linkedin")
-
     if getattr(settings, 'FEEDS_POST_UPDATE_LINKEDIN', False):
         post = Post.objects.get(pk=entry_id)
         (post.linkedin, ) = linkedin(post)
@@ -185,8 +153,6 @@ def post_update_googleplus(post_id):
     """
     plus 1
     """
-    logger.debug("start: counting +1s")
-
     if getattr(settings, 'FEEDS_POST_UPDATE_GOOGLEPLUS', False):
         post = Post.objects.get(pk=post_id)
         post.plus1 = plusone(post)

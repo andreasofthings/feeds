@@ -96,6 +96,7 @@ class WebSiteCreateForm(forms.ModelForm):
 
 class WebSiteFeedAddForm(forms.Form):
     def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
         super(WebSiteFeedAddForm, self).__init__(*args, **kwargs)
 
 

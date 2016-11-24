@@ -35,6 +35,10 @@ class feedFinder(HTMLParser):
 
 
 def getFeedsFromSite(site):
+    """
+    Takes 'site' in form of an URL as an Argument.
+    Fetches the site, parses it, finds embedded links.
+    """
     parser = feedFinder()
     result = []
     html = requests.get(site)
