@@ -25,7 +25,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
-from django.utils import timezone, make_aware
+from django.utils import timezone
 
 import feedparser
 from feedparser import CharacterEncodingOverride
@@ -368,7 +368,7 @@ Coming from `feedparser`:
         published_parsed = entry.get('published_parsed', created_parsed)
 
         if isinstance(published_parsed, time.struct_time):
-            published_parsed = make_aware(
+            published_parsed = timezone.make_aware(
                 datetime.datetime.fromtimestamp(mktime(published_parsed))
             )
 
@@ -447,7 +447,7 @@ Coming from `feedparser`:
             updated_parsed = parsed.feed.get('updated_parsed', updated)
 
             if isinstance(updated_parsed, time.struct_time):
-                updated_parsed = make_aware(
+                updated_parsed = timezone.make_aware(
                     datetime.datetime.fromtimestamp(mktime(updated_parsed))
                 )
             self.last_modified = updated_parsed
