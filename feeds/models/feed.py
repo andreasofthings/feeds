@@ -368,15 +368,14 @@ Coming from `feedparser`:
         published_parsed = entry.get('published_parsed', created_parsed)
 
         if isinstance(published_parsed, time.struct_time):
-            published_parsed = timezone.make_aware(
+            published_parsed = \
                 datetime.datetime.fromtimestamp(mktime(published_parsed))
-            )
 
         p, created = self.posts.from_feedparser(
             feed=self,
             title=entry.title,
             guid=self._entry_guid(entry),
-            published=published_parsed,
+            published=timezone.make_aware(published_parsed),
         )
         if created:
             result = ENTRY_NEW
@@ -447,10 +446,10 @@ Coming from `feedparser`:
             updated_parsed = parsed.feed.get('updated_parsed', updated)
 
             if isinstance(updated_parsed, time.struct_time):
-                updated_parsed = timezone.make_aware(
+                updated_parsed = \
                     datetime.datetime.fromtimestamp(mktime(updated_parsed))
-                )
-            self.last_modified = updated_parsed
+
+            self.last_modified = timezone.make_aware(updated_parsed)
 
         except ValueError as e:
             logger.error(e)

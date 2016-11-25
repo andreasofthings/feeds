@@ -1,12 +1,12 @@
 - fields:
-    date_joined: 2014-11-26 08:56:43.985534+00:00
+    date_joined: 2014-11-26 08:56:43.985534Z
     email: andreas@neumeier.org
     first_name: ''
     groups: []
     is_active: true
     is_staff: true
     is_superuser: true
-    last_login: 2014-11-26 08:57:03.823807+00:00
+    last_login: 2014-11-26 08:57:03.823807Z
     last_name: ''
     user_permissions: []
     username: andreas

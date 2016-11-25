@@ -24,7 +24,7 @@ def feedsocial(object):
 
         try:
             from social.get import tweets, facebook, linkedin, plusone
-        except:
+        except ImportError:
             logger.error("social not installed")
             return
 
@@ -34,6 +34,7 @@ def feedsocial(object):
             """
             logger.error("Provided an invalid post_id")
             return
+
         result = self.f(*args)
         logger.debug("end: %s", self.f.__name__)
         return result
