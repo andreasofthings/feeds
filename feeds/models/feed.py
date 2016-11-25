@@ -368,10 +368,7 @@ Coming from `feedparser`:
 
         if isinstance(published_parsed, time.struct_time):
             published_parsed = \
-                datetime.datetime.utcfromtimestamp(
-                    mktime(published_parsed),
-                    timezone.utc
-                    )
+                datetime.datetime.utcfromtimestamp(mktime(published_parsed))
 
         p, created = self.posts.from_feedparser(
             feed=self,
@@ -449,10 +446,7 @@ Coming from `feedparser`:
 
             if isinstance(updated_parsed, time.struct_time):
                 updated_parsed = \
-                    datetime.datetime.utcfromtimestamp(
-                        mktime(updated_parsed),
-                        timezone.utc
-                        )
+                    datetime.datetime.utcfromtimestamp(mktime(updated_parsed))
 
             self.last_modified = updated_parsed
 

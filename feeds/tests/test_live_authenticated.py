@@ -9,8 +9,8 @@ from django.test import LiveServerTestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
-from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.firefox.webdriver import WebDriver
 
 
 class TestAllViewsAnonymousLive(LiveServerTestCase):
@@ -21,21 +21,28 @@ class TestAllViewsAnonymousLive(LiveServerTestCase):
     realname = "John Lennon"
     password = "password"
 
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-        self.browser.implicitly_wait(3)
-        self.user = User.objects.create_superuser(
-            self.username,
-            self.realname,
-            self.password
+    @classmethod
+    def setUpClass(cls):
+        super(TestAllViewsAnonymousLive, cls).setUpClass()
+        cls.selenium = WebDriver()
+        cls.selenium.implicitly_wait(10)
+        cls.user = User.objects.create_superuser(
+            cls.username,
+            cls.realname,
+            cls.password
         )
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super(TestAllViewsAnonymousLive, cls).tearDownClass()
 
     def test_home(self):
         """
         Test the home page from browser.
         """
-        self.browser.get(self.live_server_url + reverse('planet:home'))
-        body = self.browser.find_element_by_tag_name('body')
+        self.selenium.get(self.live_server_url + reverse('planet:home'))
+        body = self.selenium.find_element_by_tag_name('body')
         self.assertIn('Feeds', body.text)
 
     def test_options(self):
@@ -45,10 +52,10 @@ class TestAllViewsAnonymousLive(LiveServerTestCase):
         .. todo:: This currently only tests for a superuser.
         Also create a regular user.
         """
-        self.browser.get(self.live_server_url + '/admin')
+        self.selenium.get(self.live_server_url + '/admin')
 
         # She sees the familiar 'Django administration' heading
-        body = self.browser.find_element_by_tag_name('body')
+        body = self.selenium.find_element_by_tag_name('body')
         self.assertIn('admin', body.text)
 
         # She types in her username and passwords and
@@ -59,6 +66,3 @@ class TestAllViewsAnonymousLive(LiveServerTestCase):
         # password_field = self.browser.find_element_by_name('password')
         # password_field.send_keys(self.password)
         # password_field.send_keys(Keys.RETURN)
-
-    def tearDown(self):
-        self.browser.quit()
