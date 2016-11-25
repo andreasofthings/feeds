@@ -370,19 +370,6 @@ Coming from `feedparser`:
             published_parsed = \
                 datetime.datetime.utcfromtimestamp(mktime(published_parsed))
 
-        logger.error("Now: type: %s value: %s",
-                     type(now),
-                     now
-                     )
-        logger.error("Created: type: %s value: %s",
-                     type(created_parsed),
-                     created_parsed
-                     )
-        logger.error("Published: type: %s value: %s",
-                     type(published_parsed),
-                     published_parsed
-                     )
-
         p, created = self.posts.from_feedparser(
             feed=self,
             title=entry.title,
