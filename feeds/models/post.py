@@ -82,7 +82,7 @@ class Post(models.Model):
     has_errors = models.BooleanField(default=True)
 
     objects = PostManager()
-
+    
     @models.permalink
     def get_absolute_url(self):
         return ('planet:post-view', [str(self.id)])
@@ -100,6 +100,12 @@ class Post(models.Model):
         """
         return ('planet:post-trackable-view', [str(self.id)])
 
+    def getClassification(self):
+        """
+        Classify this individual post and return the result.
+        """
+        return
+    
     def save(self, *args, **kwargs):
         """
         sanity check the post before saving.
