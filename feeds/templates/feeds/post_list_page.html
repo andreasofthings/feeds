@@ -13,7 +13,9 @@
                   <a href="{{ node.feed.get_absolute_url }}" alt="{{node.feed.title}}">
                     {{node.feed.title}}
                   </a>
-                  <small>{{ node.published|naturaltime }}</small>
+                  <small data-toggle="tooltip" data-placement="top" title="{{ node.published }}">
+                      {{ node.published|naturaltime }}
+                   </small>
                 </h6>
             </div>
         </div>
@@ -21,7 +23,7 @@
             <div class="col-md-12">
                 <h4>
                     <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
-                    <small>score {{ node.score }}</small>
+                    <small >score {{ node.score }}</small>
                 </h4>
             </div>
         </div>
