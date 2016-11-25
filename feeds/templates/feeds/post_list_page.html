@@ -10,6 +10,9 @@
         <div class="row">
             <div class="col-md-12">
                 <h6>
+                  {% if node.author %}
+                    <small> {{ node.author }} @ </small>
+                  {% endif %}
                   <a href="{{ node.feed.get_absolute_url }}" alt="{{node.feed.title}}">
                     {{node.feed.title}}
                   </a>
@@ -22,7 +25,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h4>
-                    <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+                    <a href="{{ node.get_absolute_url }}">{{ node.title }}</a> - 
                     <small >score {{ node.score }}</small>
                 </h4>
             </div>
