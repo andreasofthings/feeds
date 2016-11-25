@@ -368,7 +368,10 @@ Coming from `feedparser`:
 
         if isinstance(published_parsed, time.struct_time):
             published_parsed = \
-                datetime.datetime.utcfromtimestamp(mktime(published_parsed))
+                datetime.datetime.utcfromtimestamp(
+                    mktime(published_parsed),
+                    timezone.utc
+                    )
 
         p, created = self.posts.from_feedparser(
             feed=self,
@@ -387,6 +390,8 @@ Coming from `feedparser`:
             )
         p.content = entry.get('content', '')
         """.. todo:: get other content instead."""
+        p.author = entry.get('author', '')
+        p.author_email = entry.get('author_email', '')
 
         if 'enclosures' in entry and len(entry.enclosures) > 0:
             for enclosure in entry.enclosures:
@@ -444,13 +449,17 @@ Coming from `feedparser`:
 
             if isinstance(updated_parsed, time.struct_time):
                 updated_parsed = \
-                    datetime.datetime.utcfromtimestamp(mktime(updated_parsed))
+                    datetime.datetime.utcfromtimestamp(
+                        mktime(updated_parsed),
+                        timezone.utc
+                        )
 
             self.last_modified = updated_parsed
 
         except ValueError as e:
             logger.error(e)
             logger.error(parsed.feed.updated)
+
         self.title = parsed.feed.get('title', '')[0:200]
         self.tagline = parsed.feed.get('subtitle', '')[:64]
         self.copyright = parsed.feed.get('copyright', '')[:64]
