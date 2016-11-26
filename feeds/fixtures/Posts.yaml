@@ -5,8 +5,8 @@
     "title": "Test"
     "link": "http://www.spiegel.de/1234"
     "guid": "http://www.spiegel.de/1234"
-    "published": "2000-01-01 00:00"
-    "updated": "2001-01-01 00:00"
+    "published": "2000-01-01 00:00Z"
+    "updated": "2001-01-01 00:00Z"
 - model: feeds.Post
   pk: 2
   fields:
@@ -14,8 +14,8 @@
     "title": "Test-2"
     "link": "http://www.wurst.de/1234"
     "guid": "http://www.wurst.de/1234"
-    "published": "2000-01-01 00:00:00"
-    "updated": "2001-01-01 00:00"
+    "published": "2000-01-01 00:00:00Z"
+    "updated": "2001-01-01 00:00Z"
     "score": 1
 - model: feeds.Post
   pk: 3
@@ -24,8 +24,8 @@
     "title": "Test"
     "link": "http://www.spiegel.de/2341"
     "guid": "http://www.spiegel.de/2341"
-    "published": "2000-01-01 00:00:00.000000"
-    "updated": "2001-01-01 00:00"
+    "published": "2000-01-01 00:00:00.000000Z"
+    "updated": "2001-01-01 00:00Z"
 - model: feeds.Post
   pk: 4
   fields:
@@ -34,4 +34,4 @@
     "link": "http://www.spiegel.de/3412"
     "guid": "http://www.spiegel.de/3412"
     "published": "2000-01-01 00:00:00.000000Z"
-    "updated": "2001-01-01 00:00"
+    "updated": "2001-01-01 00:00Z"
