@@ -51,6 +51,7 @@ setup(
         'django-crispy-forms>=1.6.0',
         'django-el-pagination>=3.0.0',
         'djangorestframework>=3.5.0',
+        'python-django-social',
         'feedparser>=5.1.2',
         'requests>=2.6',
         'django-haystack>=2.3.1',
