@@ -5,7 +5,7 @@ language: python
 # List the versions of Python you'd like to test against
 python:
   - "2.7"
-  - "3.4"
+  - "3.5"
 
 services:
   - rabbitmq
@@ -14,7 +14,10 @@ services:
 
 # List the versions of Django you'd like to test against
 env:
-  - DJANGO="Django>=1.9" TRAVIS="True"
+  - DJANGO="Django>=1.10" TRAVIS="True"
+
+addons:
+  firefox: "47.0"
 
 install:
    # Install the dependencies the app itself has
