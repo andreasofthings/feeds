@@ -8,7 +8,7 @@
 from django.test import LiveServerTestCase
 from django.core.urlresolvers import reverse
 
-from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.chrome.webdriver import WebDriver
 
 
 class TestAllViewsAnonymousLive(LiveServerTestCase):
@@ -38,7 +38,8 @@ class TestAllViewsAnonymousLive(LiveServerTestCase):
         body = self.selenium.find_element_by_tag_name('body')
         self.assertIn('Feeds', body.text)
 
-        self.selenium.get(self.live_server_url + reverse('planet:website-home'))
+        self.selenium.get(self.live_server_url +
+                          reverse('planet:website-home'))
         body = self.selenium.find_element_by_tag_name('body')
         self.assertIn('Andreas', body.text)
 
