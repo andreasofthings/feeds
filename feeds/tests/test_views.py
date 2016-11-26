@@ -5,11 +5,9 @@
 """
 """
 
-from datetime import datetime
-
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
-
+from django.utils import timezone
 from django.contrib.auth.models import User, Permission
 
 from feeds.models import Feed, Post
@@ -237,7 +235,7 @@ class TestAllViewsLoggedIn(TestCase):
         with self.assertNumQueries(1):
             Post.objects.create(
                 feed=feed,
-                published=datetime.now()
+                published=timezone.now()
             )
 
 
@@ -321,4 +319,7 @@ class TestFeedViewsWithCredentials(TestCase):
         self.assertEqual(result.status_code, 200)
         result = c.get(reverse('planet:post-home')+'?page=9992')
         self.assertEqual(result.status_code, 200)
-        """we won't have a 9992nd page for now. Still, the infinite scroller will return 200."""
+        """
+        We won't have a 9992nd page for now.
+        Still, the infinite scroller will return 200.
+        """
