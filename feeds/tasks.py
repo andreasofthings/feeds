@@ -41,6 +41,9 @@ from .decorators import feedsocial
 
 from category.models import Tag
 
+from social.get import tweets, facebook, linkedin, plusone
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -116,6 +119,10 @@ def post_update_facebook(entry_id):
     """
     count facebook
     """
+    if not entry_id:
+        logger.error("Provided an invalid post_id")
+        return
+
     if getattr(settings, 'FEEDS_POST_UPDATE_FACEBOOK', False):
         post = Post.objects.get(pk=entry_id)
         (post.shares, post.likes, bla) = facebook(post)
@@ -135,6 +142,10 @@ def post_update_linkedin(entry_id):
     """
     count linkedin
     """
+    if not entry_id:
+        logger.error("Provided an invalid post_id")
+        return
+
     if getattr(settings, 'FEEDS_POST_UPDATE_LINKEDIN', False):
         post = Post.objects.get(pk=entry_id)
         (post.linkedin, ) = linkedin(post)
@@ -206,8 +217,13 @@ def post_update_social(post_id):
         callback = tsum.s(p)
         chord(header)(callback)
 
-    logger.debug("stop: social scoring. got %s" % p.score)
-    return p.score
+        logger.debug("stop: social scoring. got %s" % p.score)
+        return p.score
+    else:
+        """
+        Disabled, return 0.
+        """
+        return 0
 
 
 @shared_task

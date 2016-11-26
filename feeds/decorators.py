@@ -17,24 +17,10 @@ def feedsocial(object):
     """
 
     def __init__(self, f):
-        self.f = f
+        self.__f = f
 
     def __call__(self, *args):
-        logger.debug("start: %s", self.f.__name__)
+        logger.debug("start: %s", self.__f.__name__)
 
-        try:
-            from social.get import tweets, facebook, linkedin, plusone
-        except ImportError:
-            logger.error("social not installed")
-            return
-
-        if not args.post_id:
-            """
-            failed
-            """
-            logger.error("Provided an invalid post_id")
-            return
-
-        result = self.f(*args)
         logger.debug("end: %s", self.f.__name__)
-        return result
+        return self.__f(*args)
