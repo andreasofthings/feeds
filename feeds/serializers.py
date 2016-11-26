@@ -31,7 +31,8 @@ class FeedListSerializer(serializers.ModelSerializer):
             'name',
             'is_active',
         )
-        
+
+
 class FeedDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feed

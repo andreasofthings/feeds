@@ -40,7 +40,7 @@ class ManagerTest(TestCase):
         p = Post.objects.older_than(timedelta(days=100*365))
         self.assertEqual(len(p), 0)
         p = Post.objects.older_than(timedelta(days=1))
-        self.assertEqual(len(p), 2)
+        self.assertEqual(len(p), 4)
 
     def tearDown(self):
         """

@@ -390,6 +390,7 @@ Coming from `feedparser`:
         """.. todo:: get other content instead."""
         p.author = entry.get('author', '')
         p.author_email = entry.get('author_email', '')
+        p.summary = entry.get('summary', '')
 
         if 'enclosures' in entry and len(entry.enclosures) > 0:
             for enclosure in entry.enclosures:
@@ -449,7 +450,11 @@ Coming from `feedparser`:
                 updated_parsed = \
                     datetime.datetime.fromtimestamp(mktime(updated_parsed))
 
-            self.last_modified = timezone.make_aware(updated_parsed)
+            if timezone.is_naive(updated_parsed):
+                updated_parsed = \
+                    timezone.make_aware(updated_parsed)
+
+            self.last_modified = updated_parsed
 
         except ValueError as e:
             logger.error(e)
