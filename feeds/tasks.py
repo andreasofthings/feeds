@@ -331,6 +331,8 @@ def cronjob():
     Returns a CRON_OK for no problems.
     Returns CRON_ERR when a problem occured.
 
+    .. todo:: Only check feeds that have subscribers.
+
     .. codeauthor:: Andreas Neumeier
     """
     logger.debug("-- started --")

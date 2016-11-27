@@ -399,9 +399,9 @@ Coming from `feedparser`:
         if 'enclosures' in entry and len(entry.enclosures) > 0:
             for enclosure in entry.enclosures:
                 e, created = p.enclosure.get_or_create(
-                    href=entry.enclosure['href'],
-                    length=entry.enclosure['length'],
-                    enclosure_type=entry.enclosure['type'],
+                    href=enclosure['href'],
+                    length=enclosure['length'],
+                    enclosure_type=enclosure['type'],
                 )
                 if created:
                     e.save()
