@@ -371,11 +371,15 @@ Coming from `feedparser`:
             published_parsed = \
                 datetime.datetime.fromtimestamp(mktime(published_parsed))
 
+        if timezone.is_naive(published_parsed):
+            published_parsed = \
+                timezone.make_aware(published_parsed)
+
         p, created = self.posts.from_feedparser(
             feed=self,
             title=entry.title,
             guid=self._entry_guid(entry),
-            published=timezone.make_aware(published_parsed),
+            published=published_parsed,
         )
         if created:
             result = ENTRY_NEW
@@ -457,6 +461,9 @@ Coming from `feedparser`:
             self.last_modified = updated_parsed
 
         except ValueError as e:
+            """
+            .. todo:: Proper Exceptionhandling
+            """
             logger.error(e)
             logger.error(parsed.feed.updated)
 
