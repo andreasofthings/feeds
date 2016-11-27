@@ -41,7 +41,7 @@ from .decorators import feedsocial
 
 from category.models import Tag
 
-from social.get import tweets, facebook, linkedin, plusone
+from social.get import tweets, facebook, linkedin
 
 
 logger = logging.getLogger(__name__)
@@ -160,19 +160,6 @@ def post_update_linkedin(entry_id):
     return result
 
 
-@shared_task(time_limit=10)
-def post_update_googleplus(post_id):
-    """
-    plus 1
-    """
-    if getattr(settings, 'FEEDS_POST_UPDATE_GOOGLEPLUS', False):
-        post = Post.objects.get(pk=post_id)
-        post.plus1 = plusone(post)
-        post.save()
-        return (post.plus1, )
-    return (0, )
-
-
 @shared_task
 def tsum(numbers, post):
     """
@@ -211,8 +198,6 @@ def post_update_social(post_id):
         f = (post_update_facebook.subtask((p.id, )))
         header.append(f)
         f = (post_update_linkedin.subtask((p.id, )))
-        header.append(f)
-        f = (post_update_googleplus.subtask((p.id, )))
         header.append(f)
 
         callback = tsum.s(p)

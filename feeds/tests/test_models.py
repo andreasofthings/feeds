@@ -69,7 +69,7 @@ class ModelTest(TestCase):
         self.assertEquals(feeds[1].refresh(), FEED_OK)
         self.assertEquals(feeds[1].refresh(), FEED_SAME)
         # 0 == "feed_url": 'https://nomorecubes.net/feed/rss'
-        self.assertEquals(feeds[0].refresh(), FEED_ERRHTTP)
+        self.assertEquals(feeds[0].refresh(), FEED_ERRPARSE)
 
     def test_enclosure(self):
         """

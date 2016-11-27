@@ -13,7 +13,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
 
 
-class TestAllViewsAnonymousLive(LiveServerTestCase):
+class ClassTestAllViewsAnonymousLive(LiveServerTestCase):
     """
     Test options with browser.
     """
@@ -23,7 +23,7 @@ class TestAllViewsAnonymousLive(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(TestAllViewsAnonymousLive, cls).setUpClass()
+        super(ClassTestAllViewsAnonymousLive, cls).setUpClass()
         cls.selenium = WebDriver()
         cls.selenium.implicitly_wait(10)
         cls.user = User.objects.create_superuser(
@@ -35,7 +35,7 @@ class TestAllViewsAnonymousLive(LiveServerTestCase):
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
-        super(TestAllViewsAnonymousLive, cls).tearDownClass()
+        super(ClassTestAllViewsAnonymousLive, cls).tearDownClass()
 
     def test_home(self):
         """

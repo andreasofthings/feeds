@@ -11,7 +11,7 @@ from django.core.urlresolvers import reverse
 from selenium.webdriver.chrome.webdriver import WebDriver
 
 
-class TestAllViewsAnonymousLive(LiveServerTestCase):
+class ClassTestAllViewsAnonymousLive(LiveServerTestCase):
     """
     Test options with browser.
     """

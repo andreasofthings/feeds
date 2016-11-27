@@ -544,6 +544,7 @@ Coming from `feedparser`:
             self.save()  # touch timestamp
             return FEED_ERRHTTP
         except FeedErrorParse as e:
+            logger.error("Feed %s raised FeedErrorParse: %s", self.name, e)
             self.errors = self.errors+1
             self.save()  # touch timestamp
             return FEED_ERRPARSE
