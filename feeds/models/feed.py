@@ -375,6 +375,9 @@ Coming from `feedparser`:
             published_parsed = \
                 timezone.make_aware(published_parsed)
 
+        if timezone.is_naive(published_parsed):
+            logger.error("WHAT THE FUCK, DJANGO.TOOLS")
+
         p, created = self.posts.from_feedparser(
             feed=self,
             title=entry.title,
@@ -502,7 +505,6 @@ Coming from `feedparser`:
                 logger.error("CharacterEncodingOverride, trying to continue")
                 pass
             else:
-
                 raise FeedErrorParse(fpf.bozo_exception)
 
         if fpf.status == 304:
