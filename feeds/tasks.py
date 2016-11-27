@@ -103,9 +103,12 @@ def post_update_twitter(entry_id):
     """
     count tweets
     """
+    import tweepy
+    api = tweepy.API()
+
     if getattr(settings, 'FEEDS_POST_UPDATE_TWITTER', False):
         post = Post.objects.get(pk=entry_id)
-        (post.tweets, ) = tweets(post)
+        (post.tweets, ) = api.search(post.url)
         post.save()
         logger.debug("stop: counting tweets. got %s", post.tweets)
         return (post.tweets, )
@@ -117,9 +120,10 @@ def post_update_facebook(entry_id):
     """
     count facebook
     """
+    result = (-1, -1)
     if not entry_id:
         logger.error("Provided an invalid post_id")
-        return
+        return result
 
     if getattr(settings, 'FEEDS_POST_UPDATE_FACEBOOK', False):
         post = Post.objects.get(pk=entry_id)
@@ -131,7 +135,7 @@ def post_update_facebook(entry_id):
             post.likes
         )
         return (post.shares, post.likes)
-    return (0, )
+    return result
 
 
 @shared_task(time_limit=10)
@@ -139,9 +143,10 @@ def post_update_linkedin(entry_id):
     """
     count linkedin
     """
+    result = (-1, )
     if not entry_id:
         logger.error("Provided an invalid post_id")
-        return
+        return result
 
     if getattr(settings, 'FEEDS_POST_UPDATE_LINKEDIN', False):
         post = Post.objects.get(pk=entry_id)
@@ -152,7 +157,7 @@ def post_update_linkedin(entry_id):
             post.linkedin
         )
         return (post.linkedin, )
-    return (0, )
+    return result
 
 
 @shared_task(time_limit=10)

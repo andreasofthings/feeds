@@ -65,8 +65,10 @@ class ModelTest(TestCase):
         feeds = Feed.objects.filter(is_active=True)
         for feed in feeds:
             print(feed)
+        # 1 ==
         self.assertEquals(feeds[1].refresh(), FEED_OK)
         self.assertEquals(feeds[1].refresh(), FEED_SAME)
+        # 0 == "feed_url": 'https://nomorecubes.net/feed/rss'
         self.assertEquals(feeds[0].refresh(), FEED_ERRHTTP)
 
     def test_enclosure(self):
