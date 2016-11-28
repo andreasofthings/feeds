@@ -37,7 +37,6 @@ from feeds import CRON_OK, CRON_ERR
 
 from .models import Feed, Post, TaggedPost
 from .models import FeedStats
-from .decorators import feedsocial
 
 from category.models import Tag
 
@@ -103,12 +102,10 @@ def post_update_twitter(entry_id):
     """
     count tweets
     """
-    import tweepy
-    api = tweepy.API()
 
     if getattr(settings, 'FEEDS_POST_UPDATE_TWITTER', False):
         post = Post.objects.get(pk=entry_id)
-        (post.tweets, ) = api.search(post.url)
+        # (post.tweets, ) = api.search(post.link)
         post.save()
         logger.debug("stop: counting tweets. got %s", post.tweets)
         return (post.tweets, )
