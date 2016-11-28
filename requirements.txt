@@ -1,4 +1,4 @@
 # Please see setup.py.
 # These requirements are for testing.
 psycopg2
-selenium>=2.52.0
+selenium>=2.52.0,<3.0.0

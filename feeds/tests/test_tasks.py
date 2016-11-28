@@ -116,6 +116,7 @@ class TaskTest(TestCase):
         """
         self.assertEqual(True, True)
         return
+
         from feeds.tasks import post_update_linkedin
 
         post = Post.objects.all()[0]
