@@ -11,7 +11,7 @@ from django.test import TestCase, Client
 
 from feeds.models import Feed
 from feeds.models import Enclosure
-from feeds import FEED_OK, FEED_SAME, FEED_ERRHTTP
+from feeds import FEED_OK, FEED_SAME, FEED_ERRHTTP, FEED_ERRPARSE
 
 
 class ModelTest(TestCase):
