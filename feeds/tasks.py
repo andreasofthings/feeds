@@ -123,9 +123,20 @@ def post_update_facebook(entry_id):
         return result
 
     if getattr(settings, 'FEEDS_POST_UPDATE_FACEBOOK', False):
+        import facebook
+        from allauth.socialaccount.models import SocialToken
+        from django.contrib.auth.models import User
+        
+        user = User.objects.get(pk=1)
         post = Post.objects.get(pk=entry_id)
+        tokens = SocialToken.objects.filter(account__user=user, account__provider='facebook')
+        
+        for token in tokens:
+            graph = facebook.GraphAPI(access_token=token, version='2.4')
+        
         (post.shares, post.likes, bla) = facebook(post)
         post.save()
+        
         logger.debug(
             "stop: counting tweets. got %s shares and %s likes",
             post.shares,
