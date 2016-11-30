@@ -30,9 +30,9 @@ Feed: {{ feed }}
 </div>
 <div class="row">
   <div class="col-md-12">
-    {% paginate feed.posts.all as entries %}
+    {% paginate feed.posts.all as posts %}
     <ul>
-    {% for post in entries %}
+    {% for post in posts %}
     <li><h5>{{ post.author }} wrote: <a href="{{ post.get_absolute_url }}">{{ post }}</a>
       <small>{{ post.published }}</small></h5></li>
     {% endfor %}
