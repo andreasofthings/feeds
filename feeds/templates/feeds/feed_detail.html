@@ -33,7 +33,9 @@ Feed: {{ feed }}
     {% paginate feed.posts.all as posts %}
     <ul>
     {% for post in posts %}
-    <li><h5>{{ post.author }} wrote: <a href="{{ post.get_absolute_url }}">{{ post }}</a>
+    <li><h5>
+        {% if post.author %}{{ post.author }} wrote: {% endif %}
+        <a href="{{ post.get_absolute_url }}">{{ post }}</a>
       <small>{{ post.published }}</small></h5></li>
     {% endfor %}
     {% show_pages %}
