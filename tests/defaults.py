@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'crispy_forms',
     'category',
+    'star_ratings',
     'haystack',
     'el_pagination',
     'tests',
