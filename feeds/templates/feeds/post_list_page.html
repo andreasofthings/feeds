@@ -8,14 +8,25 @@
 {% for node in object_list %}
 
 <div class="row">
-    <div class="col-md-9">
-        {% if node.feed.logo %}
-        <img src="{{ node.feed.logo }}" width="48" height="48">
-        {% else %}
-        <img src="{% static "feeds/icons/rss-480px.png" %}" width="48" height="48">
-        {% endif %}
+    <div class="col-md-1">
+      <div class="row">
+          <div class="col-md-12">
+            <a href="{{ node.feed.get_absolute_url }}" alt="{{node.feed.title}}">
+              {% if node.feed.logo %}
+              <img src="{{ node.feed.logo }}" width="48" height="48">
+              {% else %}
+              <img src="{% static "feeds/icons/rss-480px.png" %}" width="48" height="48">
+              {% endif %}
+            </a>
+          </div>
+        </div>
+      <div class="row">
+        <div class="col-md-12">
+          <small >score {{ node.score }}</small>
+        </div>
+      </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-11">
         <div class="row">
             <div class="col-md-12">
                 <h6>
@@ -34,8 +45,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h4>
-                    <a href="{{ node.get_absolute_url }}">{{ node.title }}</a> -
-                    <small >score {{ node.score }}</small>
+                    <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
                 </h4>
             </div>
         </div>
