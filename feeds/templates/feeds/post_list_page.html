@@ -1,6 +1,8 @@
 {% load i18n %}
 {% load el_pagination_tags %}
 {% load humanize %}
+{% load static from staticfiles %}
+
 {% paginate object_list %}
 
 {% for node in object_list %}
@@ -8,6 +10,7 @@
 <div class="row">
     <div class="col-md-9">
         {% if node.feed.logo %}
+        <img src="{{ node.feed.logo }}" width="48" height="48">
         {% else %}
         <img src="{% static "feeds/icons/rss-480px.png" %}" width="48" height="48">
         {% endif %}
