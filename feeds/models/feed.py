@@ -156,6 +156,11 @@ Coming from `feedparser`:
         _('link'),
         blank=True
     )
+    logo = models.URLField(
+        _('link'),
+        blank=True
+    )
+
     tagline = models.TextField(
         _('description'),
         blank=True,
@@ -356,12 +361,6 @@ Coming from `feedparser`:
             Either ENTRY_NEW, ENTRY_UPDATE
         """
         result = ENTRY_SAME
-
-        """
-        .. todo:: This is still a trainwreck. Datetime handling needs serious
-        work, all over the codebase. It's crucial to handling feeds and posts,
-        why is this still so badly implemented?
-        """
 
         now = timezone.now()
         created_parsed = entry.get('created_parsed', now)
