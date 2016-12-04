@@ -157,10 +157,10 @@ Coming from `feedparser`:
         blank=True
     )
     logo = models.URLField(
-        _('link'),
-        blank=True
+        _('logo'),
+        blank=True,
+        null=True,
     )
-
     tagline = models.TextField(
         _('description'),
         blank=True,
