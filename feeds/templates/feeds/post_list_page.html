@@ -15,14 +15,14 @@
               {% if node.feed.logo %}
               <img src="{{ node.feed.logo }}" width="48" height="48">
               {% else %}
-              <img src="{% static "feeds/icons/rss-480px.png" %}" width="48" height="48">
+              <img src="{% static "feeds/icons/rss-480px.png" %}" width="32" height="32">
               {% endif %}
             </a>
           </div>
         </div>
       <div class="row">
         <div class="col-md-12">
-          <small >score {{ node.score }}</small>
+          <small ># {{ node.score }}</small>
         </div>
       </div>
     </div>

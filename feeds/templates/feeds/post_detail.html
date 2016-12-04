@@ -26,7 +26,7 @@
 <div id="angry-planet-star"></div>
 
 <div itemscope itemtype="http://schema.org/Article" class="row">
-  <div class="col-md-8">
+  <div class="col-md-7">
     <h5>{{ object.published }}</h5>
     <h2><a href="{{object.link}}" itemprop="headline">{{ object.title }}</a></h2>
     <p>via: <a href="{{object.feed.link}}" itemprop="url">{{object.feed.name}}</a></p>
@@ -39,7 +39,7 @@
     {% endif %}
     <!-- {# node.content|safe #} -->
   </div>
-  <div class="col-md-4">
+  <div class="col-md-5">
     <div class="row">
       <div class="col-md-12">
       {% social object %}
@@ -47,7 +47,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        {% ratings object 32 32 %}
+        {% ratings object 16 16 %}
       </div>
     </div>
     <div class="row">
