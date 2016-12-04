@@ -473,6 +473,7 @@ Coming from `feedparser`:
         self.tagline = parsed.feed.get('subtitle', '')[:64]
         self.copyright = parsed.feed.get('copyright', '')[:64]
         self.author = parsed.feed.get('author', '')[:64]
+        self.logo = parsed.feed.get('logo', None)
         self.webmaster = parsed.feed.get('webmaster', '')[:64]
 
     def parse(self):

@@ -8,12 +8,12 @@
 {% for node in object_list %}
 
 <div class="row">
-    <div class="col-md-1">
+    <div class="col-md-2">
       <div class="row">
           <div class="col-md-12">
             <a href="{{ node.feed.get_absolute_url }}" alt="{{node.feed.title}}">
               {% if node.feed.logo %}
-              <img src="{{ node.feed.logo }}" width="48" height="48">
+              <img src="{{ node.feed.logo }}" width="32" height="32">
               {% else %}
               <img src="{% static "feeds/icons/rss-480px.png" %}" width="32" height="32">
               {% endif %}
@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-11">
+    <div class="col-md-10">
         <div class="row">
             <div class="col-md-12">
                 <h6>
