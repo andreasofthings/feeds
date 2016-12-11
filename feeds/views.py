@@ -258,7 +258,7 @@ class FeedCreateView(PermissionRequiredMixin, CreateView):
     initial = {'is_Active': False}
 
 
-class FeedListView(PaginatedListView):
+class FeedListView(LoginRequiredMixin, PaginatedListView):
     """
     List all registered feeds
 
@@ -268,7 +268,7 @@ class FeedListView(PaginatedListView):
     queryset = Feed.objects.all()
 
 
-class FeedDetailView(DetailView):
+class FeedDetailView(LoginRequiredMixin, DetailView):
     """
     Show details for a particular feed.
 
