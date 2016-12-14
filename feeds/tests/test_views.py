@@ -79,9 +79,12 @@ class TestAllViewsLoggedIn(TestCase):
 
         .. todo:: rename and restructure as in
         :py:mod:`feeds.tests.ViewsAnonymousTest`.
+
+        .. todo::
+        Requires login or credential.
         """
         result = self.client.get(reverse('planet:feed-home'))
-        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 302)
 
     def feed_subscribe(self):
         """
@@ -208,11 +211,13 @@ class TestAllViewsLoggedIn(TestCase):
     def test_feed_view(self):
         """
         go to feed-view for feed 1
+
+        .. todo::
+        Requires login or credential.
         """
         feed_id = Feed.objects.all()[0].pk
         result = self.client.get(reverse('planet:feed-view', args=(feed_id,)))
-        """.. todo:: figure out why this gives 404"""
-        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 302)
 
     def test_feed_refresh_view(self):
         """

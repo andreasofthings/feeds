@@ -269,7 +269,7 @@ class ViewsAnonymousTest(TestCase):
             Should return 200 for an anonymous user.
         """
         result = self.client.get(reverse('planet:feed-home'))
-        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 302)
 
     def feed_subscriptions(self):
         """

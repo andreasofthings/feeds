@@ -23,7 +23,7 @@ from django.utils.translation import ugettext_lazy as _
 from .feed import Feed
 from ..managers import PostManager
 
-from category.models import Tag
+from category.models import Tag, Category
 
 
 logger = logging.getLogger(__name__)
@@ -61,6 +61,12 @@ class Post(models.Model):
         Tag,
         related_name="tag_posts",
         through='TaggedPost'
+    )
+
+    categories = models.ManyToManyFields(
+        Category,
+        blank=True,
+        related_name="categories"
     )
 
     # Social
