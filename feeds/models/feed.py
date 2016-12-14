@@ -446,7 +446,8 @@ Coming from `feedparser`:
 #        if hasattr(parsed.feed, 'language'):
 #            self.language = parsed.feed.language[:7]
         if hasattr(parsed.feed, 'image'):
-            self.image_url = parsed.feed.url
+            if hasattr(parsed.feed.image, 'url'):
+                self.image_url = parsed.feed.image.url
         if not self.slug:
             self.slug = slugify(self.name)
 
