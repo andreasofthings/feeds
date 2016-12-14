@@ -63,7 +63,7 @@ class Post(models.Model):
         through='TaggedPost'
     )
 
-    categories = models.ManyToManyFields(
+    categories = models.ManyToManyField(
         Category,
         blank=True,
         related_name="categories"
