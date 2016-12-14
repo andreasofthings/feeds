@@ -14,10 +14,12 @@ Stores as much as possible coming out of the feed.
 from __future__ import unicode_literals
 from django.utils.encoding import python_2_unicode_compatible
 
+import sys
+import time
 import logging
 import datetime
-import time
-from time import mktime
+import traceback
+
 from collections import Counter
 
 from django.db import models
@@ -368,7 +370,9 @@ Coming from `feedparser`:
 
         if isinstance(published_parsed, time.struct_time):
             published_parsed = \
-                datetime.datetime.fromtimestamp(mktime(published_parsed))
+                datetime.datetime.fromtimestamp(
+                    time.mktime(published_parsed)
+                )
 
         if timezone.is_naive(published_parsed):
             published_parsed = \
@@ -463,7 +467,9 @@ Coming from `feedparser`:
 
             if isinstance(updated_parsed, time.struct_time):
                 updated_parsed = \
-                    datetime.datetime.fromtimestamp(mktime(updated_parsed))
+                    datetime.datetime.fromtimestamp(
+                        time.mktime(updated_parsed)
+                    )
 
             if timezone.is_naive(updated_parsed):
                 updated_parsed = \
@@ -583,7 +589,7 @@ Coming from `feedparser`:
             )
         except Exception as e:
             logger.debug("-- end (ERR) --")
-            raise Exception(e)
+            traceback.print_exc(file=sys.stdout)
             return FEED_ERREXC
 
         logger.debug("Feed '%s' returned %s", self.title, result)
