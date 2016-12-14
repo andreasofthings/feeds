@@ -400,7 +400,7 @@ Coming from `feedparser`:
 
         if 'category' in entry and len(entry.category) > 0:
             for category in entry.category:
-                cat, created = p.category.get_or_create(
+                cat, created = p.categories.get_or_create(
                     name=category
                 )
 
