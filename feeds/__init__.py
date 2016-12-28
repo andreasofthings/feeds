@@ -7,7 +7,8 @@
 
    import feeds
 
-The feeds module provides feed aggregation, subscription, social ranking and stats.
+The feeds module provides feed aggregation,
+subscription, social ranking and stats.
 
 :Author:    Andreas Neumeier
 :Contact:   andreas@neumeier.org
@@ -30,7 +31,7 @@ feeds (feedburner like), displaying all with Chartjs_.
 
 .. testcode::
   feeds.__version__ == "0.9.7"
-  
+
 .. testoutput::
   True
 
@@ -38,6 +39,14 @@ feeds (feedburner like), displaying all with Chartjs_.
 .. _Chartjs: http://www.chartjs.org
 
 """
+
+
+default_app_config = 'feeds.apps.FeedsConfig'
+
+version_info = (0, 9, 7)
+__version__ = ".".join(map(str, version_info))
+SERVER_SOFTWARE = "feeds/%s" % __version__
+
 
 USER_AGENT = ""
 
@@ -56,7 +65,3 @@ CRON_OK = 'cron_ok'
 CRON_FAIL = 'cron_fail'
 CRON_ERR = 'cron_err'
 CRON_RES = 'cron_res'
-
-version_info = (0, 9, 7)
-__version__ = ".".join(map(str, version_info))
-SERVER_SOFTWARE = "feeds/%s" % __version__

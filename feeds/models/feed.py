@@ -447,8 +447,8 @@ Coming from `feedparser`:
             self.short_name = parsed.feed.title[:50]
         if not self.link and hasattr(parsed.feed, 'link'):
             self.link = parsed.feed.link
-#        if hasattr(parsed.feed, 'language'):
-#            self.language = parsed.feed.language[:7]
+        if hasattr(parsed.feed, 'language'):
+            self.language = parsed.feed.language[:7]
         if hasattr(parsed.feed, 'image'):
             if hasattr(parsed.feed.image, 'url'):
                 self.image_url = parsed.feed.image.url

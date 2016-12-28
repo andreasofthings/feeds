@@ -280,7 +280,7 @@ class FeedDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(FeedDetailView, self).get_context_data(**kwargs)
-        context['posts'] = Feed.objects.posts().order_by('-published')
+        context['posts'] = Feed.posts.order_by('-published')
         return context
 
 
