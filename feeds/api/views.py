@@ -1,15 +1,16 @@
 from django.shortcuts import get_object_or_404
 
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, viewsets, permissions
 
-from .models import Options, Feed, Post
+from ..models import Options, Feed, Post
+
 from .serializers import SubscriptionSerializer
 from .serializers import CategorySerializer
 from .serializers import FeedDetailSerializer, FeedListSerializer
 from .serializers import PostSerializer
+from .permission import IsSubscriptionOwner
 
 from category.models import Category
 
@@ -60,19 +61,29 @@ class FeedViewSet(mixins.ListModelMixin,
     def list(self, request):
         data = FeedListSerializer(self.queryset, many=True)
         return Response(data.data)
-        
+
     def retrieve(self, request, pk=None):
         feed = get_object_or_404(self.queryset, pk=pk)
         data = FeedDetailSerializer(feed)
         return Response(data.data)
 
 
-
 class SubscriptionThrottle(UserRateThrottle):
     rate = '1/second'
 
 
-class UserSubscriptions(APIView):
+class UserSubscriptions(viewsets.ModelViewSet):
+    serializer_class = SubscriptionSerializer
+
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return (permissions.AllowAny(),)
+
+        if self.request.method == 'POST':
+            return (permissions.AllowAny(),)
+
+        return (permissions.IsAuthenticated(), IsSubscriptionOwner(),)
+
     def get(self, request, format=None):
         """
         Return a list of all user subscriptions, all Feeds if anonymous.

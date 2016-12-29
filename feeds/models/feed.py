@@ -402,11 +402,11 @@ Coming from `feedparser`:
         p.author_email = entry.get('author_email', '')
         p.summary = entry.get('summary', '')
 
-        if 'category' in entry and len(entry.category) > 0:
-            for category in entry.category:
-                cat, created = p.categories.get_or_create(
-                    name=category
-                )
+        # if 'category' in entry and len(entry.category) > 0:
+        #    for category in entry.category:
+        #        cat, created = p.categories.get_or_create(
+        #            name=category
+        #        )
 
         if 'enclosures' in entry and len(entry.enclosures) > 0:
             for enclosure in entry.enclosures:

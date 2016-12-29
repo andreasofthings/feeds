@@ -26,7 +26,7 @@ urlpatterns = [
             app_name="planet"
         )
         ),
-    url(r'^feedapi/', include('feeds.api_urls')),
+    url(r'^feedapi/', include('feeds.api.urls')),
     url(
         r'^testfeed1',
         TemplateView.as_view(

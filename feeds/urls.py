@@ -32,7 +32,7 @@ from .views import PostDetailView, PostTrackableView
 
 from .rss import RssFeed
 
-from .api_views import UserSubscriptions
+from feeds.api.views import UserSubscriptions
 from .sitemap import PostSitemap, FeedSitemap
 
 from django.views.generic import TemplateView
@@ -50,6 +50,7 @@ urlpatterns = [
     url(r'^$', HomeView.as_view(), name="home"),
     url(r'^options$', OptionsView.as_view(), name="options"),
     url(r'^opml$', OPMLView.as_view(), name="opml"),
+    url(r'^api/', include('feeds.api.urls')),
     url(r'^search/', include('haystack.urls')),
     url(
         r'^sitemap\.xml$',
@@ -203,9 +204,9 @@ urlpatterns += [
         TemplateView.as_view(template_name="feeds/tests/rss2.html"),
         name="rss2"
     ),
-    url(
-        r'api/v1/subscriptions$',
-        UserSubscriptions.as_view(),
-        name="subscription-api"
-    ),
+    #    url(
+    #        r'api/v1/subscriptions$',
+    #        UserSubscriptions.as_view(),
+    #        name="subscription-api"
+    #    ),
 ]

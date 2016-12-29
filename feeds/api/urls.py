@@ -3,10 +3,11 @@ from django.conf.urls import url, include
 #
 # API
 #
-from .api_views import FeedViewSet
-from .api_views import PostViewSet
-from .api_views import CategoryViewSet
 from rest_framework import routers
+
+from .views import FeedViewSet
+from .views import PostViewSet
+from .views import CategoryViewSet
 
 router = routers.DefaultRouter()
 # register job endpoint in the router

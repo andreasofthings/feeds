@@ -319,7 +319,7 @@ class ViewsAnonymousTest(TestCase):
         """
 
         result = self.client.get(reverse('planet:feed-view', args=(1,)))
-        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 302)
 
     def feed_update(self):
         """
