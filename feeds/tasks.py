@@ -311,13 +311,11 @@ def purge(ttl=timedelta(days=31)):
     Removes posts older than `ttl`.
 
     returns True if OK
-    returns False if not.
+    .. todo:: returns False if not. This was
+        handled with a generic exception before.
     """
-    try:
-        posts = Post.objects.older_than(ttl)
-        posts.delete()
-    except:
-        return False
+    posts = Post.objects.older_than(ttl)
+    posts.delete()
     return True
 
 
