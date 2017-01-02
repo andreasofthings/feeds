@@ -28,13 +28,14 @@ class TestPostModel(TestCase):
     def test_post_instance(self):
         """
         Test whether a Post can be instanciated.
+        .. todo:: pass without 'published'
         """
         from django.utils import timezone
         f = Feed.objects.get(pk=1)
         p = Post.objects.get_or_create(
             feed=f,
             title="Test",
-            link="https://neumeier.org"
+            link="https://neumeier.org",
             published=timezone.now()
             )
         self.assertIsInstance(p, Post)
