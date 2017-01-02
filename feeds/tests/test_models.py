@@ -13,6 +13,12 @@ from feeds.models import Feed
 from feeds.models import Enclosure
 from feeds import FEED_OK, FEED_SAME, FEED_ERRHTTP, FEED_ERRPARSE
 
+import warnings
+warnings.filterwarnings(
+    'error', r"DateTimeField .* received a naive datetime",
+    RuntimeWarning, r'django\.db\.models\.fields',
+)
+
 
 class ModelTest(TestCase):
     """

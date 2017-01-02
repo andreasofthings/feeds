@@ -16,6 +16,8 @@ from __future__ import absolute_import, unicode_literals
 
 import logging
 import types
+import requests
+import json
 
 try:
     from urllib.parse import urlparse
@@ -123,20 +125,22 @@ def post_update_facebook(entry_id):
         return result
 
     if getattr(settings, 'FEEDS_POST_UPDATE_FACEBOOK', False):
-        import facebook
-        from allauth.socialaccount.models import SocialToken
-        from django.contrib.auth.models import User
-        
-        user = User.objects.get(pk=1)
         post = Post.objects.get(pk=entry_id)
-        tokens = SocialToken.objects.filter(account__user=user, account__provider='facebook')
-        
-        for token in tokens:
-            graph = facebook.GraphAPI(access_token=token, version='2.4')
-        
-        (post.shares, post.likes, bla) = facebook(post)
+
+        facebook_count = \
+            'http://graph.facebook.com/?ids=%s'
+        query = facebook_count % (post.link)
+        resp = requests.get(query)
+
+        if resp.status_code in (200, 304):
+            js = json.loads(resp.text)
+            (post.shares, post.likes, ) = (
+                js.get('shares', 0),
+                js.get('likes', 0),
+                # js.get('comments', 0),
+            )
         post.save()
-        
+
         logger.debug(
             "stop: counting tweets. got %s shares and %s likes",
             post.shares,

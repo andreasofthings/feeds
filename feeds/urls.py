@@ -32,7 +32,7 @@ from .views import PostDetailView, PostTrackableView
 
 from .rss import RssFeed
 
-from feeds.api.views import UserSubscriptions
+# from feeds.api.views import UserSubscriptions
 from .sitemap import PostSitemap, FeedSitemap
 
 from django.views.generic import TemplateView

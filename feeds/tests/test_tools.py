@@ -23,7 +23,7 @@ class TestTools(TestCase):
 
     def test_getFeedFromSite(self):
         from feeds.tools import getFeedsFromSite
-        result = getFeedsFromSite("http://nomorecubes.net")
+        result = getFeedsFromSite("https://nomorecubes.net")
         self.assertEqual(type(result), type([]))
 
     def tearDown(self):
