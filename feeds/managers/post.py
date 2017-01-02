@@ -36,6 +36,7 @@ class PostManager(models.Manager):
 
         .. ToDo: work with timezones.
         """
-        from datetime import datetime
-        edge = datetime.now() - ttl
+        from django.utils import timezone
+        now = timezone.now()
+        edge = now - ttl
         return self.filter(published__lte=edge)
