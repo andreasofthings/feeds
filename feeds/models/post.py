@@ -33,6 +33,12 @@ logger = logging.getLogger(__name__)
 class Post(models.Model):
     """
     Model to hold an actual feed entry
+
+    .. required::
+      - feed
+      - title
+      - link
+      - published
     """
     feed = models.ForeignKey(
         Feed,

@@ -29,11 +29,13 @@ class TestPostModel(TestCase):
         """
         Test whether a Post can be instanciated.
         """
+        from django.utils import timezone
         f = Feed.objects.get(pk=1)
         p = Post.objects.get_or_create(
             feed=f,
             title="Test",
             link="https://neumeier.org"
+            published=timezone.now()
             )
         self.assertIsInstance(p, Post)
 
