@@ -32,7 +32,7 @@ class TestPostModel(TestCase):
         """
         from django.utils import timezone
         f = Feed.objects.get(pk=1)
-        p = Post.objects.get_or_create(
+        p, created = Post.objects.get_or_create(
             feed=f,
             title="Test",
             link="https://neumeier.org",
