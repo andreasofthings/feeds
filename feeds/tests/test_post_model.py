@@ -30,7 +30,11 @@ class TestPostModel(TestCase):
         Test whether a Post can be instanciated.
         """
         f = Feed.objects.get(pk=1)
-        p = Post.objects.get_or_create(feed=f, title="Test")
+        p = Post.objects.get_or_create(
+            feed=f,
+            title="Test",
+            link="https://neumeier.org"
+            )
         self.assertIsInstance(p, Post)
 
     def tearDown(self):
