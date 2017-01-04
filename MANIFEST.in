@@ -7,4 +7,6 @@ recursive-include feeds/models *
 recursive-include feeds/static *
 recursive-include feeds *
 recursive-include docs/source *
+recursive-include docs *
+recursive-include tests *
 include docs/Makefile
