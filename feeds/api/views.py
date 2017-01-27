@@ -23,6 +23,10 @@ class PostThrottle(UserRateThrottle):
     rate = "4/second"
 
 
+class SubscriptionThrottle(UserRateThrottle):
+    rate = '1/second'
+
+    
 class CategoryViewSet(mixins.CreateModelMixin,
                       mixins.ListModelMixin,
                       mixins.RetrieveModelMixin,
@@ -49,27 +53,25 @@ class PostViewSet(mixins.ListModelMixin,
     serializer_class = PostSerializer
 
 
-class FeedViewSet(mixins.ListModelMixin,
-                  mixins.RetrieveModelMixin,
-                  viewsets.GenericViewSet):
+class FeedViewSet(viewsets.ViewSet):
     """
     API endpoint that allows feeds to be listed.
     """
+    
     throttle_class = (FeedThrottle,)
-    queryset = Feed.objects.all()
-
+    
     def list(self, request):
-        data = FeedListSerializer(self.queryset, many=True)
-        return Response(data.data)
+        queryset = Feed.objects.all()
+        serializer = FeedListSerializer(queryset, many=True)
+        return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        feed = get_object_or_404(self.queryset, pk=pk)
-        data = FeedDetailSerializer(feed)
-        return Response(data.data)
+        queryset = Feed.objects.all()
+        feed = get_object_or_404(queryset, pk=pk)
+        serializer = FeedDetailSerializer(feed)
+        return Response(serializer.data)
 
 
-class SubscriptionThrottle(UserRateThrottle):
-    rate = '1/second'
 
 
 class UserSubscriptions(viewsets.ModelViewSet):
