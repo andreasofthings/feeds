@@ -8,7 +8,7 @@ from ..models import Options, Feed, Post
 
 from .serializers import SubscriptionSerializer
 from .serializers import CategorySerializer
-from .serializers import FeedDetailSerializer, FeedListSerializer
+from .serializers import FeedSerializer
 from .serializers import PostSerializer
 from .permission import IsSubscriptionOwner
 
@@ -59,19 +59,8 @@ class FeedViewSet(viewsets.ViewSet):
     """
     
     throttle_class = (FeedThrottle,)
-    
-    def list(self, request):
-        queryset = Feed.objects.all()
-        serializer = FeedListSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = Feed.objects.all()
-        feed = get_object_or_404(queryset, pk=pk)
-        serializer = FeedDetailSerializer(feed)
-        return Response(serializer.data)
-
-
+    serializer = FeedSerializer
+    queryset = Feed.objects.all()
 
 
 class UserSubscriptions(viewsets.ModelViewSet):
