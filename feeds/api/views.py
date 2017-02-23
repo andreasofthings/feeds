@@ -1,7 +1,5 @@
-from django.shortcuts import get_object_or_404
 
 from rest_framework.response import Response
-from rest_framework.throttling import UserRateThrottle
 from rest_framework import mixins, viewsets, permissions
 
 from ..models import Options, Feed, Post
@@ -15,18 +13,9 @@ from .permission import IsSubscriptionOwner
 from category.models import Category
 
 
-class FeedThrottle(UserRateThrottle):
-    rate = "1/second"
+from .throttle import FeedThrottle, PostThrottle, SubscriptionThrottle
 
 
-class PostThrottle(UserRateThrottle):
-    rate = "4/second"
-
-
-class SubscriptionThrottle(UserRateThrottle):
-    rate = '1/second'
-
-    
 class CategoryViewSet(mixins.CreateModelMixin,
                       mixins.ListModelMixin,
                       mixins.RetrieveModelMixin,
@@ -57,7 +46,7 @@ class FeedViewSet(viewsets.ViewSet):
     """
     API endpoint that allows feeds to be listed.
     """
-    
+
     throttle_class = (FeedThrottle,)
     serializer = FeedSerializer
     queryset = Feed.objects.all()
@@ -65,6 +54,7 @@ class FeedViewSet(viewsets.ViewSet):
 
 class UserSubscriptions(viewsets.ModelViewSet):
     serializer_class = SubscriptionSerializer
+    throttle_class = (SubscriptionThrottle,)
 
     def get_permissions(self):
         if self.request.method in permissions.SAFE_METHODS:
