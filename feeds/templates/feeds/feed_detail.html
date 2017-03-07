@@ -30,9 +30,9 @@ Feed: {{ feed }}
 </div>
 <div class="row">
   <div class="col-md-12">
-    {% paginate feed.posts.all as posts %}
+    {% paginate posts as post_list %}
     <ul>
-    {% for post in posts %}
+    {% for post in post_list %}
     <li><h5>
         {% if post.author %}{{ post.author }} wrote: {% endif %}
         <a href="{{ post.get_absolute_url }}">{{ post }}</a>

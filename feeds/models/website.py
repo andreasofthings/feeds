@@ -64,7 +64,7 @@ class WebSite(models.Model):
 
         .. todo:: should use 'slug' instead of 'id'
         """
-        return ('planet:website-view', [str(self.id)])
+        return ('planet:website-detail', [str(self.id)])
 
     def feeds(self):
         """

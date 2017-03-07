@@ -167,7 +167,7 @@ class ViewsAnonymousTest(TestCase):
             :url: url(
                 r'^website/(?P<pk>\d+)/$',
                 SiteDetailView.as_view(),
-                name="website-view"
+                name="website-detail"
                 )
 
             Viewing a website should be available to the public.
@@ -175,7 +175,7 @@ class ViewsAnonymousTest(TestCase):
             Should return 200.
         """
         result = self.client.get(
-            reverse('planet:website-view', args=(self.site_id,))
+            reverse('planet:website-detail', args=(self.site_id,))
         )
         self.assertEqual(result.status_code, 200)
 

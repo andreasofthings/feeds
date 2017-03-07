@@ -88,7 +88,7 @@ urlpatterns = [
     url(
         r'^website/(?P<pk>\d+)/$',
         WebSiteDetailView.as_view(),
-        name="website-view"
+        name="website-detail"
     ),
     url(
         r'^website/(?P<pk>\d+)/update/$',
