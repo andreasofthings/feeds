@@ -1,5 +1,5 @@
 - fields:
-    date_joined: 2014-12-26 08:56:43.985534Z
+    date_joined: "2014-12-26T08:56:43+00:00"
     email: andreas@neumeier.org
     first_name: ''
     groups: []
