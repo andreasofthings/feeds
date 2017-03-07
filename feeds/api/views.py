@@ -17,17 +17,10 @@ from category.models import Category
 from .throttle import WebSiteThrottle, FeedThrottle, PostThrottle, SubscriptionThrottle
 
 
-class WebSiteViewSet(viewsets.ViewSet):
-    """
-    API endpoint that allows feeds to be listed.
-    """
-
-    throttle_class = (WebSiteThrottle,)
-    serializer = WebSiteSerializer
-    queryset = WebSite.objects.all()
-
-
-class FeedViewSet(viewsets.ViewSet):
+class FeedViewSet(mixins.CreateModelMixin,
+                  mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
+                  viewsets.GenericViewSet):
     """
     API endpoint that allows feeds to be listed.
     """
@@ -51,6 +44,31 @@ class PostViewSet(mixins.ListModelMixin,
     serializer_class = PostSerializer
 
 
+class WebSiteViewSet(mixins.CreateModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin,
+                     viewsets.GenericViewSet):
+    """
+    API endpoint that allows WebSites to be listed.
+    """
+
+    throttle_class = (WebSiteThrottle,)
+    serializer = WebSiteSerializer
+    queryset = WebSite.objects.all()
+
+
+class CategoryViewSet(mixins.CreateModelMixin,
+                      mixins.ListModelMixin,
+                      mixins.RetrieveModelMixin,
+                      viewsets.GenericViewSet):
+    """
+    API endpoint that allows categories to be listed.
+    """
+    throttle_class = (FeedThrottle,)
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    
 class UserSubscriptions(viewsets.ModelViewSet):
     serializer_class = SubscriptionSerializer
     throttle_class = (SubscriptionThrottle,)
@@ -74,14 +92,3 @@ class UserSubscriptions(viewsets.ModelViewSet):
         else:
             result = Feed.objects.all()
         return Response(SubscriptionSerializer(result, many=True).data)
-
-class CategoryViewSet(mixins.CreateModelMixin,
-                      mixins.ListModelMixin,
-                      mixins.RetrieveModelMixin,
-                      viewsets.GenericViewSet):
-    """
-    API endpoint that allows categories to be listed.
-    """
-    throttle_class = (FeedThrottle,)
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
