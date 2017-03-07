@@ -1,5 +1,6 @@
 #! /usr/bin/env python2.7
 # -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
 
 """
 helper functions for angryplanet.feeds
@@ -49,4 +50,3 @@ def getFeedsFromSite(site):
                 result.append((link['title'], link['href']))
     return result
 
-# vim: ts=4 et sw=4 sts=4

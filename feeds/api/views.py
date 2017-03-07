@@ -14,12 +14,32 @@ from .permission import IsSubscriptionOwner
 from category.models import Category
 
 
-from .throttle import WebSiteThrottle, FeedThrottle, PostThrottle, SubscriptionThrottle
+from .throttle import WebSiteThrottle
+from .throttle import FeedThrottle
+from .throttle import PostThrottle
+from .throttle import SubscriptionThrottle
 
 
-class FeedViewSet(mixins.CreateModelMixin,
-                  mixins.ListModelMixin,
+class WebSiteViewSet(mixins.ListModelMixin,
+                     mixins.CreateModelMixin,
+                     mixins.RetrieveModelMixin,
+                     mixins.UpdateModelMixin,
+                     mixins.DestroyModelMixin,
+                     viewsets.GenericViewSet):
+    """
+    API endpoint that allows WebSites to be listed.
+    """
+
+    throttle_class = (WebSiteThrottle,)
+    serializer_class = WebSiteSerializer
+    queryset = WebSite.objects.all()
+
+
+class FeedViewSet(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
                   mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
                   viewsets.GenericViewSet):
     """
     API endpoint that allows feeds to be listed.
@@ -44,19 +64,6 @@ class PostViewSet(mixins.ListModelMixin,
     serializer_class = PostSerializer
 
 
-class WebSiteViewSet(mixins.CreateModelMixin,
-                     mixins.ListModelMixin,
-                     mixins.RetrieveModelMixin,
-                     viewsets.GenericViewSet):
-    """
-    API endpoint that allows WebSites to be listed.
-    """
-
-    throttle_class = (WebSiteThrottle,)
-    serializer_class = WebSiteSerializer
-    queryset = WebSite.objects.all()
-
-
 class CategoryViewSet(mixins.CreateModelMixin,
                       mixins.ListModelMixin,
                       mixins.RetrieveModelMixin,
@@ -68,7 +75,7 @@ class CategoryViewSet(mixins.CreateModelMixin,
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-    
+
 class UserSubscriptions(viewsets.ModelViewSet):
     serializer_class = SubscriptionSerializer
     throttle_class = (SubscriptionThrottle,)
