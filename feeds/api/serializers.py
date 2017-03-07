@@ -4,7 +4,11 @@ from category.models import Category
 from ..models import WebSite, Feed, Post
 
 
-class WebSiteSerializer(serializers.ModelSerializer):
+class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
+    feeds = serializers.ChoiceField(
+        choices=Feed.objects.values_list('pk', 'slug', 'name')
+    )
+
     class Meta:
         model = WebSite
         fields = (
