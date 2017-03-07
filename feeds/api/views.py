@@ -26,7 +26,7 @@ class FeedViewSet(mixins.CreateModelMixin,
     """
 
     throttle_class = (FeedThrottle,)
-    serializer = FeedSerializer
+    serializer_class = FeedSerializer
     queryset = Feed.objects.all()
 
 
@@ -53,7 +53,7 @@ class WebSiteViewSet(mixins.CreateModelMixin,
     """
 
     throttle_class = (WebSiteThrottle,)
-    serializer = WebSiteSerializer
+    serializer_class = WebSiteSerializer
     queryset = WebSite.objects.all()
 
 
