@@ -1,27 +1,18 @@
 from rest_framework import serializers
 from category.models import Category
 
-from ..models import Feed, Post
+from ..models import WebSite, Feed, Post
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Category
-        fields = ('name', 'url', )
-
-
-class PostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Post
+        model = WebSite
         fields = (
-            'id',
-            'feed',
-            'title',
-            'link',
-            'published',
+            'url',
+            'slug',
         )
 
-
+        
 class FeedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feed
@@ -53,6 +44,24 @@ class FeedSerializer(serializers.ModelSerializer):
             'last_checked',
             'check_interval',
         )
+
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = (
+            'id',
+            'feed',
+            'title',
+            'link',
+            'published',
+        )
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('name', 'url', )
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):

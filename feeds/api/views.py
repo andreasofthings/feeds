@@ -2,30 +2,39 @@
 from rest_framework.response import Response
 from rest_framework import mixins, viewsets, permissions
 
-from ..models import Options, Feed, Post
+from ..models import WebSite, Feed, Post, Options
 
-from .serializers import SubscriptionSerializer
-from .serializers import CategorySerializer
+from .serializers import WebSiteSerializer
 from .serializers import FeedSerializer
 from .serializers import PostSerializer
+from .serializers import CategorySerializer
+from .serializers import SubscriptionSerializer
 from .permission import IsSubscriptionOwner
 
 from category.models import Category
 
 
-from .throttle import FeedThrottle, PostThrottle, SubscriptionThrottle
+from .throttle import WebSiteThrottle, FeedThrottle, PostThrottle, SubscriptionThrottle
 
 
-class CategoryViewSet(mixins.CreateModelMixin,
-                      mixins.ListModelMixin,
-                      mixins.RetrieveModelMixin,
-                      viewsets.GenericViewSet):
+class WebSiteViewSet(viewsets.ViewSet):
     """
-    API endpoint that allows categories to be listed.
+    API endpoint that allows feeds to be listed.
     """
+
+    throttle_class = (WebSiteThrottle,)
+    serializer = WebSiteSerializer
+    queryset = WebSite.objects.all()
+
+
+class FeedViewSet(viewsets.ViewSet):
+    """
+    API endpoint that allows feeds to be listed.
+    """
+
     throttle_class = (FeedThrottle,)
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    serializer = FeedSerializer
+    queryset = Feed.objects.all()
 
 
 class PostViewSet(mixins.ListModelMixin,
@@ -40,16 +49,6 @@ class PostViewSet(mixins.ListModelMixin,
     throttle_class = (PostThrottle,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-
-
-class FeedViewSet(viewsets.ViewSet):
-    """
-    API endpoint that allows feeds to be listed.
-    """
-
-    throttle_class = (FeedThrottle,)
-    serializer = FeedSerializer
-    queryset = Feed.objects.all()
 
 
 class UserSubscriptions(viewsets.ModelViewSet):
@@ -75,3 +74,14 @@ class UserSubscriptions(viewsets.ModelViewSet):
         else:
             result = Feed.objects.all()
         return Response(SubscriptionSerializer(result, many=True).data)
+
+class CategoryViewSet(mixins.CreateModelMixin,
+                      mixins.ListModelMixin,
+                      mixins.RetrieveModelMixin,
+                      viewsets.GenericViewSet):
+    """
+    API endpoint that allows categories to be listed.
+    """
+    throttle_class = (FeedThrottle,)
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
