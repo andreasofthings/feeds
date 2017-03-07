@@ -6,10 +6,11 @@
 """
 
 from django.test import TestCase, Client
-from django.core.urlresolvers import reverse
+from rest_framework.test import APITestCase
+from rest_framework import status
 
 
-class ApiTest(TestCase):
+class ApiTest(APITestCase):
     """
     Test Models and their Managers
 
@@ -33,7 +34,17 @@ class ApiTest(TestCase):
         """
         Set up environment to test the API
         """
-        self.client = Client()
+        # self.client = Client()
+        pass
+
+    def test_website_anonymous(self):
+        """
+        request subscription, expect a list of all feeds in json
+
+        .. todo:: This ain't done yet.
+        """
+        response = self.client.get('/feedapi/websites/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_subscription_anonymous(self):
         """
