@@ -237,6 +237,7 @@
   fields:
     "feed_url": 'http://rss.slashdot.org/Slashdot/slashdot'
     "name": 'Slashdot'
+    "is_active": False
 - model: feeds.Feed
   pk: 41
   fields:
@@ -860,11 +861,14 @@
   fields:
     "feed_url": 'http://www.wrint.de/feed/'
     "name": "Wer redet ist nicht tot"
-    "is_active": True
+    "is_active": False
     "category": [5,]
 - model: feeds.Feed
   pk: 146
   fields:
     "feed_url": 'http://nomorecubes.net/fehler/'
     "name": "Ist egal, dieser Feed liefert 404"
+    "short_name": "egal"
+    "slug": "egal"
+    "website": 1
     "is_active": True

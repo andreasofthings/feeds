@@ -24,6 +24,7 @@ class ViewsAnonymousTest(TestCase):
     """
 
     fixtures = [
+        'Site.yaml',
         'Feed_all.yaml',
     ]
 
@@ -32,7 +33,7 @@ class ViewsAnonymousTest(TestCase):
         Set up environment.
         """
         from feeds.models import WebSite
-        site = WebSite(url="https://angry-planet.com/")
+        site = WebSite(website_url="https://angry-planet.com/")
         site.save()
         self.site_id = site.pk
         """Test WebSite."""

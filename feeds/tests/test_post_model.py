@@ -18,6 +18,7 @@ class TestPostModel(TestCase):
     """
 
     fixtures = [
+        'Site.yaml',
         'Feed_all.yaml',
         'Posts.yaml',
     ]

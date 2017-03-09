@@ -54,7 +54,7 @@ class ModelTest(TestCase):
         """
 
         from feeds.models import WebSite
-        s = WebSite(url="https://angry-planet.com/")
+        s = WebSite(website_url="https://angry-planet.com/")
         s.save()
         # self.assertContains( s.get_absolute_url(), s.pk)
         """
@@ -71,10 +71,14 @@ class ModelTest(TestCase):
         feeds = Feed.objects.filter(is_active=True)
         for feed in feeds:
             print(feed)
+        print(feeds[0])
         # 1 ==
+        print("Testing: %s" % feeds[1])
         self.assertEquals(feeds[1].refresh(), FEED_OK)
+        print("Testing: %s" % feeds[1])
         self.assertEquals(feeds[1].refresh(), FEED_SAME)
         # 0 == "feed_url": 'https://nomorecubes.net/feed/rss'
+        print("Testing: %s" % feeds[0])
         self.assertEquals(feeds[0].refresh(), FEED_ERRPARSE)
 
     def test_enclosure(self):

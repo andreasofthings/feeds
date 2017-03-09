@@ -19,6 +19,7 @@ class TestAllViewsLoggedIn(TestCase):
     """
 
     fixtures = [
+        'Site.yaml',
         'Feed_all.yaml',
     ]
 
@@ -250,7 +251,10 @@ class TestFeedViewsWithCredentials(TestCase):
     py:mod:`feeds.models.Feed`, that require proper cedentials.
     """
 
-    fixtures = ['Feed_all.yaml', ]
+    fixtures = [
+        'Site.yaml',
+        'Feed_all.yaml',
+    ]
 
     username = "john"
     password = "password"

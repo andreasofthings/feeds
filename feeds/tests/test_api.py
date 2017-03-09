@@ -27,6 +27,7 @@ class ApiTest(APITestCase):
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
     fixtures = [
+        "Site.yaml",
         "Feed_all.yaml",
     ]
 
@@ -44,6 +45,15 @@ class ApiTest(APITestCase):
         .. todo:: This ain't done yet.
         """
         response = self.client.get('/feedapi/websites/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_feeds_anonymous(self):
+        """
+        request subscription, expect a list of all feeds in json
+
+        .. todo:: This ain't done yet.
+        """
+        response = self.client.get('/feedapi/feeds/1/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_subscription_anonymous(self):

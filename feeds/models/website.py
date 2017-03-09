@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 @python_2_unicode_compatible
 class WebSite(models.Model):
-    url = models.URLField(
+    website_url = models.URLField(
         unique=True,
         help_text=_("URL of the Website.")
     )
@@ -48,14 +48,14 @@ class WebSite(models.Model):
         set it before saving.
         """
         if not self.slug:
-            self.slug = slugify(self.url)
+            self.slug = slugify(self.website_url)
         return super(WebSite, self).save(*args, **kwargs)
 
     def __str__(self):
         """
         String representation of :Site:
         """
-        return u"%s" % (self.url)
+        return u"%s" % (self.website_url)
 
     @models.permalink
     def get_absolute_url(self):

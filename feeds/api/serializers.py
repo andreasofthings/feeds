@@ -4,24 +4,11 @@ from category.models import Category
 from ..models import WebSite, Feed, Post
 
 
-class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
-    feeds = serializers.ChoiceField(
-        choices=Feed.objects.values_list('pk', 'slug', 'name')
-    )
-
-    class Meta:
-        model = WebSite
-        fields = (
-            'url',
-            'slug',
-            'feeds',
-        )
-
-
 class FeedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feed
         fields = (
+            'pk',
             'url',
             'get_absolute_url',
             'website',
@@ -48,6 +35,18 @@ class FeedSerializer(serializers.ModelSerializer):
             'etag',
             'last_checked',
             'check_interval',
+        )
+
+
+class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
+    # feeds = FeedSerializer(required=True)
+    class Meta:
+        model = WebSite
+        fields = (
+            'pk',
+            'url',
+            'slug',
+            'feeds',
         )
 
 

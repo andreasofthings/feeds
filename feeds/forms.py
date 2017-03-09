@@ -73,11 +73,11 @@ class WebSiteCreateForm(forms.ModelForm):
     Form to create a new Site
     """
 
-    url = WebSiteField()
+    website_url = WebSiteField()
 
     class Meta:
         model = WebSite
-        fields = ('url', )
+        fields = ('website_url', )
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -85,7 +85,7 @@ class WebSiteCreateForm(forms.ModelForm):
         self.helper.form_class = "field_inline"
         self.helper.form_action = 'planet:website-add'
         self.helper.layout = Layout(
-            Field('url'),
+            Field('website_url'),
             FormActions(
                 Submit('submit', 'Submit', css_class='btn-small'),
                 Button('cancel', 'Cancel', css_class='btn-small')
@@ -106,14 +106,14 @@ class WebSiteUpdateForm(forms.ModelForm):
     """
     class Meta:
         model = WebSite
-        fields = ('url', )
+        fields = ('website_url', )
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.form_action = 'planet:website-update'
         self.helper.layout = Layout(
-            Field('url'),
+            Field('website_url'),
             FormActions(
                 Submit('submit', 'Submit', css_class='btn-small'),
                 Button('cancel', 'Cancel', css_class='btn-small')

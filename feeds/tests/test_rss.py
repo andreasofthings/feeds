@@ -13,7 +13,10 @@ from feeds.models import Feed
 
 class TestRSS(TestCase):
 
-    fixtures = ["Feed_all.yaml", ]
+    fixtures = [
+        "Site.yaml",
+        "Feed_all.yaml",
+    ]
 
     def test_rss(self):
         c = Client()
