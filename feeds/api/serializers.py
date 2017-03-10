@@ -39,7 +39,7 @@ class FeedSerializer(serializers.ModelSerializer):
 
 
 class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
-    # feeds = FeedSerializer(required=True)
+    feeds = FeedSerializer(required=True, many=True)
     class Meta:
         model = WebSite
         fields = (
