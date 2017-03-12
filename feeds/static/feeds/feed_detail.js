@@ -10,4 +10,3 @@ var myChart = new Chart(ctx).Line(data);
 //        $(this).parent('form').submit();
 //    });
 //});
-

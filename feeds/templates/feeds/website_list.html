@@ -28,7 +28,7 @@
   <div class="pagination pagination-mini pagination-centered">
     <ul>
       {% if page_obj.has_previous %}
-        <li class="active"><a href="{% url "planet:website-home-paginated" page_obj.previous_page_number %}"> previous</a></li>
+        <li class="active"><a href="{% url "planet:website-home" page_obj.previous_page_number %}"> previous</a></li>
       {% else %}
         <li class="disabled"><a href="#">previous</a></li>
       {% endif %}
@@ -37,12 +37,12 @@
         {% if page == page_obj.number %}
           <li class="disabled"><a href="#">{{ page }}</a></li>
         {% else %}
-          <li class="active"><a href="{% url "planet:website-home-paginated" page %}">{{ page }}</a></li>
+          <li class="active"><a href="{% url "planet:website-home" page %}">{{ page }}</a></li>
         {% endif %}
       {% endfor %}
 
       {% if page_obj.has_next %}
-        <li class="active"> <a href="{% url "planet:website-home-paginated" page_obj.next_page_number %}">next</a></li>
+        <li class="active"> <a href="{% url "planet:website-home" page_obj.next_page_number %}">next</a></li>
       {% else %}
         <li class="disabled"><a href="#">next</a></li>
       {% endif %}

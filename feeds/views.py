@@ -205,7 +205,7 @@ class WebSiteListView(PaginatedListView):
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
     model = WebSite
-    template_name = "feeds/site_list.html"
+    template_name = "feeds/website_list.html"
 
 
 class WebSiteCreateView(PermissionRequiredMixin, CreateView):
