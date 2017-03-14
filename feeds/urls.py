@@ -73,7 +73,7 @@ urlpatterns = [
     url(
         r'^website/$',
         WebSiteListView.as_view(),
-        name="website-home"
+        name="website-home",
     ),
     url(
         r'^website/submit/$',
