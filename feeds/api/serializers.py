@@ -38,8 +38,18 @@ class FeedSerializer(serializers.ModelSerializer):
         )
 
 
+class FeedBriefSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feed
+        fields = (
+            'pk',
+            'name',
+        )
+
+
 class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
-    feeds = FeedSerializer(required=True, many=True)
+    feeds = FeedBriefSerializer(required=True, many=True)
+
     class Meta:
         model = WebSite
         fields = (
