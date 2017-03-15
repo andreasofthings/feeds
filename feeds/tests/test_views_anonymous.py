@@ -99,7 +99,7 @@ class ViewsAnonymousTest(TestCase):
         """
         self.home()
 
-    def site_home(self):
+    def website_home(self):
         """
         site-home
         ---------
@@ -113,7 +113,7 @@ class ViewsAnonymousTest(TestCase):
         result = self.client.get(reverse('planet:website-home'))
         self.assertEqual(result.status_code, 200)
 
-    def site_submit(self):
+    def website_submit(self):
         """
         site-submit
         -----------
@@ -140,7 +140,7 @@ class ViewsAnonymousTest(TestCase):
         self.assertEqual(result.status_code, 200)
         """Assert the `submit` site accepts `POST` from anonymous users."""
 
-    def site_add(self):
+    def website_add(self):
         """
         site-add
         --------
@@ -161,7 +161,7 @@ class ViewsAnonymousTest(TestCase):
         )
         self.assertEqual(result.status_code, 302)
 
-    def site_view(self):
+    def website_view(self):
         """
         site-view
         ---------
@@ -180,7 +180,7 @@ class ViewsAnonymousTest(TestCase):
         )
         self.assertEqual(result.status_code, 200)
 
-    def site_update(self):
+    def website_update(self):
         """
         site-update
         -----------
@@ -208,7 +208,7 @@ class ViewsAnonymousTest(TestCase):
         )
         self.assertEqual(result.status_code, 302)
 
-    def site_delete(self):
+    def website_delete(self):
         """
         site-delete
         -----------
@@ -228,7 +228,7 @@ class ViewsAnonymousTest(TestCase):
         )
         self.assertEqual(result.status_code, 302)
 
-    def test_site_views(self):
+    def test_website_views(self):
         """
         Site.
         =====
@@ -237,18 +237,17 @@ class ViewsAnonymousTest(TestCase):
 
         Access the following pages, in order,
         as defined in :py:mod:`feeds.urls`.
-        """
-        self.site_home()
-        """
-        # site_submit() is breaking for some reason
-        # self.site_submit()
+
+        # website_submit() is breaking for some reason
+        # self.website_submit()
         .. todo:: Make the WebSiteSubmitWizard work and write a
         proper test for the procedure.
         """
-        self.site_add()
-        self.site_view()
-        self.site_update()
-        self.site_delete()
+        self.website_home()
+        self.website_add()
+        self.website_view()
+        self.website_update()
+        self.website_delete()
 
     def feed_home(self):
         """
