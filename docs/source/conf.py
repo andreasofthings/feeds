@@ -15,13 +15,13 @@ import sys
 import os
 import django
 os.environ['DJANGO_SETTINGS_MODULE'] = "tests.settings"
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-django.setup()
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../..'))
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+django.setup()
 
 # -- General configuration ----------------------------------------------------
 
@@ -69,7 +69,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'feeds'
-copyright = u'2013-2014, Andreas Neumeier'
+copyright = u'2013-today, Andreas Neumeier'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
