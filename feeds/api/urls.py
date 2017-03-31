@@ -7,16 +7,22 @@ from django.conf.urls import url, include
 
 from rest_framework import routers
 
+from .views import WebSiteViewSet
 from .views import FeedViewSet
 from .views import PostViewSet
-from .views import WebSiteViewSet
+
+from .views import UserOptionViewSet
+
 from .views import CategoryViewSet
 
 router = routers.DefaultRouter()
 # register job endpoint in the router
+router.register(r'websites', WebSiteViewSet)
 router.register(r'feeds', FeedViewSet)
 router.register(r'posts', PostViewSet)
-router.register(r'websites', WebSiteViewSet)
+
+router.register(r'options', UserOptionViewSet)
+
 router.register(r'categories', CategoryViewSet)
 
 urlpatterns = [
