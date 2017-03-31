@@ -7,6 +7,7 @@ from ..models import WebSite, Feed, Post, Options
 from .serializers import WebSiteSerializer
 from .serializers import FeedSerializer
 from .serializers import PostSerializer
+from .serializers import UserOptionSerializer
 from .serializers import CategorySerializer
 from .serializers import SubscriptionSerializer
 from .permission import IsSubscriptionOwner
@@ -62,6 +63,14 @@ class PostViewSet(mixins.ListModelMixin,
     throttle_class = (PostThrottle,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+
+class UserOptionViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """
+    API endpoint that allows categories to be listed.
+    """
+    queryset = Options.objects.all()
+    serializer_class = UserOptionSerializer
 
 
 class CategoryViewSet(mixins.CreateModelMixin,
