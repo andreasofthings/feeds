@@ -1,7 +1,20 @@
 from rest_framework import serializers
 from category.models import Category
 
-from ..models import WebSite, Feed, Post
+from ..models import WebSite, Feed, Post, Options
+
+
+class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
+    feeds = FeedBriefSerializer(required=True, many=True)
+
+    class Meta:
+        model = WebSite
+        fields = (
+            'pk',
+            'url',
+            'slug',
+            'feeds',
+        )
 
 
 class FeedSerializer(serializers.ModelSerializer):
@@ -47,19 +60,6 @@ class FeedBriefSerializer(serializers.ModelSerializer):
         )
 
 
-class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
-    feeds = FeedBriefSerializer(required=True, many=True)
-
-    class Meta:
-        model = WebSite
-        fields = (
-            'pk',
-            'url',
-            'slug',
-            'feeds',
-        )
-
-
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
@@ -69,6 +69,15 @@ class PostSerializer(serializers.ModelSerializer):
             'title',
             'link',
             'published',
+        )
+
+
+class UserOptionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Options
+        fields = (
+            'pk',
+            'user',
         )
 
 
