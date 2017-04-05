@@ -3,6 +3,14 @@ from category.models import Category
 
 from ..models import WebSite, Feed, Post, Options
 
+class FeedBriefSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feed
+        fields = (
+            'pk',
+            'name',
+        )
+
 
 class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
     feeds = FeedBriefSerializer(required=True, many=True)
@@ -50,14 +58,6 @@ class FeedSerializer(serializers.ModelSerializer):
             'check_interval',
         )
 
-
-class FeedBriefSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Feed
-        fields = (
-            'pk',
-            'name',
-        )
 
 
 class PostSerializer(serializers.ModelSerializer):
