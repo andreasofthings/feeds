@@ -1,9 +1,19 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
 
+"""
+Feeds API views.
+"""
+
+
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import mixins, viewsets, permissions
 
 from ..models import WebSite, Feed, Post, Options
 
+from .serializers import OptionsSerializer
 from .serializers import WebSiteSerializer
 from .serializers import FeedSerializer
 from .serializers import PostSerializer
@@ -13,11 +23,30 @@ from .permission import IsSubscriptionOwner
 
 from category.models import Category
 
-
+from .throttle import OptionsThrottle
 from .throttle import WebSiteThrottle
 from .throttle import FeedThrottle
 from .throttle import PostThrottle
 from .throttle import SubscriptionThrottle
+
+import logging
+
+log = logging.getLogger(__name__)
+
+
+class OptionsViewSet(viewsets.GenericViewSet):
+    throttle_class = (OptionsThrottle, )
+    serializer_class = OptionsSerializer
+    queryset = Options.objects.all()
+    permissions = (permissions.IsAuthenticated, )
+
+    def list(self, request, format=None):
+        """
+        Return Users Options.
+        """
+        queryset = Options.objects.all()
+        result = OptionsSerializer(queryset, many=True)
+        return Response(result.data)
 
 
 class WebSiteViewSet(mixins.ListModelMixin,

@@ -1,7 +1,29 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
+
+"""
+Serializers for the Feeds API
+"""
+
 from rest_framework import serializers
 from category.models import Category
 
-from ..models import WebSite, Feed, Post
+from ..models import Options, WebSite, Feed, Post
+
+
+class OptionsSerializer(serializers.ModelSerializer):
+    """
+    Serializer for User Options
+
+    .. classauthor:: Andreas Neumeier
+    """
+    class Meta:
+        model = Options
+        fields = (
+            "pk",
+            "number_initially_displayed",
+        )
 
 
 class FeedSerializer(serializers.ModelSerializer):

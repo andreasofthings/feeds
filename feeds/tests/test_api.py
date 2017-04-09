@@ -5,9 +5,12 @@
 """
 """
 
-from django.test import TestCase, Client
-from rest_framework.test import APITestCase
 from rest_framework import status
+from rest_framework.test import APITestCase
+
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class ApiTest(APITestCase):
@@ -27,6 +30,8 @@ class ApiTest(APITestCase):
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
     fixtures = [
+        "Users.yaml",
+        "Options.yaml",
         "Site.yaml",
         "Feed_all.yaml",
     ]
@@ -38,13 +43,35 @@ class ApiTest(APITestCase):
         # self.client = Client()
         pass
 
+    def test_options_anonymous(self):
+        """
+        Return options list.
+
+        .. todo:: Should actually not work and require authentication.
+        .. input: None.
+        .. expect:: 404 Not Found
+        """
+        log.debug("test_options_anonymous")
+        response = self.client.get('/feeds/api/options/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_options_authenticated(self):
+        """
+        Request options for an authenticated user.
+        """
+        # Make an authenticated request to the view...
+        self.client.login(username="andreas", password="password")
+        response = self.client.get('/feeds/api/options/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.client.logout()
+
     def test_website_anonymous(self):
         """
         request subscription, expect a list of all feeds in json
 
         .. todo:: This ain't done yet.
         """
-        response = self.client.get('/feedapi/websites/', format='json')
+        response = self.client.get('/feeds/api/websites/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_feeds_anonymous(self):
@@ -53,7 +80,7 @@ class ApiTest(APITestCase):
 
         .. todo:: This ain't done yet.
         """
-        response = self.client.get('/feedapi/feeds/1/', format='json')
+        response = self.client.get('/feeds/api/feeds/1/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_subscription_anonymous(self):
