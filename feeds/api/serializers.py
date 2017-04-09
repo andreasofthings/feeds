@@ -26,6 +26,28 @@ class OptionsSerializer(serializers.ModelSerializer):
         )
 
 
+class FeedBriefSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feed
+        fields = (
+            'pk',
+            'name',
+        )
+
+
+class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
+    feeds = FeedBriefSerializer(required=True, many=True)
+
+    class Meta:
+        model = WebSite
+        fields = (
+            'pk',
+            'url',
+            'slug',
+            'feeds',
+        )
+
+
 class FeedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feed
@@ -60,18 +82,6 @@ class FeedSerializer(serializers.ModelSerializer):
         )
 
 
-class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
-    feeds = FeedSerializer(required=True, many=True)
-    class Meta:
-        model = WebSite
-        fields = (
-            'pk',
-            'url',
-            'slug',
-            'feeds',
-        )
-
-
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
@@ -81,6 +91,15 @@ class PostSerializer(serializers.ModelSerializer):
             'title',
             'link',
             'published',
+        )
+
+
+class UserOptionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Options
+        fields = (
+            'pk',
+            'user',
         )
 
 

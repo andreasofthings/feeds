@@ -56,23 +56,35 @@ class TestAllViewsLoggedIn(TestCase):
         self.client = Client()
         """Test Client."""
 
-    def site_add(self):
+    def website_home(self):
+        """
+        go to website-home
+
+        .. todo::
+        Requires login or credential.
+        """
+        result = self.client.get(reverse('planet:website-home'))
+        self.assertEqual(result.status_code, 200)
+
+    def website_add(self):
         """.. todo:: todo"""
         pass
 
-    def test_site(self):
+    def test_website(self):
         """
         test_site
         ---------
 
         Test all aspects of "Site" as a logged in user.
 
+        - home
         - add
         - submit
         - view
         - update
         """
-        self.site_add()
+        self.website_home()
+        self.website_add()
 
     def feed_home(self):
         """
