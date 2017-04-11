@@ -97,7 +97,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscription
         fields = (
-            'name',
+            'pk',
             'user',
             'feed'
         )
