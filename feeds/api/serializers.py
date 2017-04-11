@@ -36,9 +36,15 @@ class FeedBriefSerializer(serializers.ModelSerializer):
 
 
 class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
-    feeds = FeedBriefSerializer(
-        required=True,
-        many=True
+    # feeds = FeedBriefSerializer(
+    #    required=True,
+    #    many=True
+    # )
+    feeds = serializers.HyperlinkedRelatedField(
+        view_name='planet:feed-detail',
+        lookup_field='pk',
+        many=True,
+        read_only=True
     )
 
     class Meta:
