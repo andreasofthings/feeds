@@ -34,6 +34,7 @@ class ApiTest(APITestCase):
         "Options.yaml",
         "Site.yaml",
         "Feed_all.yaml",
+        "Posts.yaml",
     ]
 
     def setUp(self):
@@ -76,11 +77,26 @@ class ApiTest(APITestCase):
 
     def test_feeds_anonymous(self):
         """
-        request subscription, expect a list of all feeds in json
+        1. request /feeds/api/feeds, expect a list of all feeds in json.
+        2. request /feeds/api/feeds/1, expect details for feed 1 in json.
 
         .. todo:: This ain't done yet.
         """
+        response = self.client.get('/feeds/api/feeds/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         response = self.client.get('/feeds/api/feeds/1/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_posts_anonymous(self):
+        """
+        1. request /feeds/api/posts, expect a list of all posts in json.
+        2. request /feeds/api/posts/1, expect details for post 1 in json.
+
+        .. todo:: This ain't done yet.
+        """
+        response = self.client.get('/feeds/api/posts/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.get('/feeds/api/posts/2/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_subscription_anonymous(self):

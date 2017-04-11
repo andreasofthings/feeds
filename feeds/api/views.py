@@ -79,7 +79,10 @@ class FeedViewSet(mixins.ListModelMixin,
 
 
 class PostViewSet(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
                   mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
                   viewsets.GenericViewSet):
     """
     API endpoint that allows feeds to be listed.
@@ -92,9 +95,11 @@ class PostViewSet(mixins.ListModelMixin,
     queryset = Post.objects.all()
 
 
-class CategoryViewSet(mixins.CreateModelMixin,
-                      mixins.ListModelMixin,
+class CategoryViewSet(mixins.ListModelMixin,
+                      mixins.CreateModelMixin,
                       mixins.RetrieveModelMixin,
+                      mixins.UpdateModelMixin,
+                      mixins.DestroyModelMixin,
                       viewsets.GenericViewSet):
     """
     API endpoint that allows categories to be listed.

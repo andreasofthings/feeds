@@ -12,20 +12,20 @@ from rest_framework.throttling import UserRateThrottle
 
 
 class OptionsThrottle(UserRateThrottle):
-    rate = "1/second"
+    rate = "2/second"
 
 
 class WebSiteThrottle(UserRateThrottle):
-    rate = "1/second"
+    rate = "2/second"
 
 
 class FeedThrottle(UserRateThrottle):
-    rate = "1/second"
+    rate = "2/second"
 
 
 class PostThrottle(UserRateThrottle):
-    rate = "4/second"
+    rate = "2/second"
 
 
 class SubscriptionThrottle(UserRateThrottle):
-    rate = '1/second'
+    rate = '2/second'
