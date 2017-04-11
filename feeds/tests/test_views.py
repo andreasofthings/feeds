@@ -312,11 +312,15 @@ class TestFeedViewsWithCredentials(TestCase):
         c = Client()
         c.login(username=self.username, password=self.password)
         feeds = Feed.objects.all()
-        result = c.post(reverse('planet:feed-update', args=(feeds[0].pk,)),
-                        {'feed_url': "http://spiegel.de/index.rss"}
-                        )
+        result = c.post(
+            reverse(
+                'planet:feed-update',
+                args=(feeds[0].pk,)
+                ),
+            {'feed_url': "http://spiegel.de/index.rss"}
+            )
         self.assertEquals(result.status_code, 302)
-        self.assertRedirects(result, reverse('planet:feed-home'))
+        self.assertRedirects(result, reverse('planet:feed-detail', args=(60,)))
 
     def test_feed_refresh_view(self):
         """

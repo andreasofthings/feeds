@@ -292,10 +292,7 @@ class FeedUpdateView(LoginRequiredMixin, UpdateView):
     model = Feed
 
     def get_success_url(self):
-        if 'slug' in self.kwargs:
-            return reverse('planet:feed-detail', self.kwargs['slug'])
-        else:
-            return reverse('planet:feed-home')
+        return reverse('planet:feed-detail', args=(self.kwargs['pk'],))
 
 
 class FeedDeleteView(LoginRequiredMixin, DeleteView):

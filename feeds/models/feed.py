@@ -294,12 +294,6 @@ Coming from `feedparser`:
     def __str__(self):
         return u'%s' % (self.name)
 
-    def posts(self):
-        """
-        return all posts for this :WebSite:.
-        """
-        return self.post_set.all()
-
     def post_count(self):
         """
         Return the number of posts in this feed.
