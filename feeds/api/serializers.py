@@ -43,7 +43,7 @@ class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class FeedSerializer(serializers.ModelSerializer):
+class FeedSerializer(serializers.HyperlinkedModelSerializer):
     posts = serializers.PrimaryKeyRelatedField(
         many=True,
         read_only=True,
@@ -60,7 +60,6 @@ class FeedSerializer(serializers.ModelSerializer):
             'short_name',
             'slug',
             'is_active',
-            'category',
             'title',
             'link',
             'tagline',
@@ -68,9 +67,6 @@ class FeedSerializer(serializers.ModelSerializer):
             'copyright',
             'author',
             'webmaster',
-            'pubDate',
-            'last_modified',
-            'ttl',
             'posts',
         )
 
