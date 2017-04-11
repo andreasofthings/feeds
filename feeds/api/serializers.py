@@ -45,13 +45,12 @@ class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
         model = WebSite
         fields = (
             'pk',
-            'name',
-            'url',
+            'website_url',
             'slug',
             'feeds',
         )
         extra_kwargs = {
-            'name': {
+            'website_url': {
                 'view_name': 'planet:website-detail',
                 'lookup_field': 'pk'
             },
