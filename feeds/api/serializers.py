@@ -9,7 +9,7 @@ Serializers for the Feeds API
 from rest_framework import serializers
 from category.models import Category
 
-from ..models import Options, WebSite, Feed, Post
+from ..models import Options, WebSite, Feed, Post, Subscription
 
 
 class OptionsSerializer(serializers.ModelSerializer):
@@ -22,6 +22,7 @@ class OptionsSerializer(serializers.ModelSerializer):
         model = Options
         fields = (
             "pk",
+            "user",
             "number_initially_displayed",
         )
 
@@ -54,13 +55,11 @@ class FeedSerializer(serializers.ModelSerializer):
             'pk',
             'url',
             'get_absolute_url',
-            'website',
             'feed_url',
             'name',
             'short_name',
             'slug',
             'is_active',
-            'errors',
             'category',
             'title',
             'link',
@@ -72,12 +71,6 @@ class FeedSerializer(serializers.ModelSerializer):
             'pubDate',
             'last_modified',
             'ttl',
-            'image_title',
-            'image_link',
-            'image_url',
-            'etag',
-            'last_checked',
-            'check_interval',
             'posts',
         )
 
@@ -94,15 +87,6 @@ class PostSerializer(serializers.ModelSerializer):
         )
 
 
-class UserOptionSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Options
-        fields = (
-            'pk',
-            'user',
-        )
-
-
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -111,5 +95,9 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Feed
-        fields = ('name', )
+        model = Subscription
+        fields = (
+            'name',
+            'user',
+            'feed'
+        )

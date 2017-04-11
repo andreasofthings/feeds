@@ -103,9 +103,10 @@ class ApiTest(APITestCase):
         """
         request subscription, expect a list of all feeds in json
 
-        .. todo:: This ain't done yet.
+        .. todo:: Should require authentication.
         """
-        self.assertEqual(True, True)
+        response = self.client.get('/feeds/api/subscriptions/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def tearDown(self):
         """

@@ -10,7 +10,7 @@ Feeds API views.
 from rest_framework.response import Response
 from rest_framework import mixins, viewsets, permissions
 
-from ..models import WebSite, Feed, Post, Options
+from ..models import WebSite, Feed, Post, Options, Subscription
 
 from .serializers import OptionsSerializer
 from .serializers import WebSiteSerializer
@@ -109,9 +109,10 @@ class CategoryViewSet(mixins.ListModelMixin,
     serializer_class = CategorySerializer
 
 
-class UserSubscriptions(viewsets.ModelViewSet):
+class UserSubscriptionsViewSet(viewsets.ModelViewSet):
     serializer_class = SubscriptionSerializer
     throttle_class = (SubscriptionThrottle,)
+    queryset = Subscription.objects.all()
 
     def get_permissions(self):
         if self.request.method in permissions.SAFE_METHODS:
