@@ -37,7 +37,6 @@ class FeedBriefSerializer(serializers.ModelSerializer):
 
 class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
     feeds = FeedBriefSerializer(
-        view_name="planet:website-detail",
         required=True,
         many=True
     )
@@ -46,10 +45,17 @@ class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
         model = WebSite
         fields = (
             'pk',
+            'name',
             'url',
             'slug',
             'feeds',
         )
+        extra_kwargs = {
+            'name': {
+                'view_name': 'planet:website-detail',
+                'lookup_field': 'pk'
+            },
+        }
 
 
 class FeedSerializer(serializers.ModelSerializer):
