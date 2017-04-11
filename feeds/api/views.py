@@ -88,8 +88,8 @@ class PostViewSet(mixins.ListModelMixin,
     page_size_query_param = 'page_size'
     max_page_size = 1000
     throttle_class = (PostThrottle,)
-    queryset = Post.objects.all()
     serializer_class = PostSerializer
+    queryset = Post.objects.all()
 
 
 class CategoryViewSet(mixins.CreateModelMixin,

@@ -42,7 +42,7 @@ class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
     # )
     feeds = serializers.HyperlinkedRelatedField(
         view_name='planet:feed-detail',
-        lookup_field='pk',
+        # lookup_field='pk',
         many=True,
         read_only=True
     )
