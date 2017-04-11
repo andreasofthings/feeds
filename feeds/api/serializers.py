@@ -37,7 +37,7 @@ class FeedBriefSerializer(serializers.ModelSerializer):
 
 class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
     feeds = FeedBriefSerializer(
-        view_name="planet:website-detail"
+        view_name="planet:website-detail",
         required=True,
         many=True
     )
