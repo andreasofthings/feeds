@@ -49,12 +49,6 @@ class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
             'slug',
             'feeds',
         )
-        extra_kwargs = {
-            'website_url': {
-                'view_name': 'planet:website-detail',
-                'lookup_field': 'pk'
-            },
-        }
 
 
 class FeedSerializer(serializers.ModelSerializer):
