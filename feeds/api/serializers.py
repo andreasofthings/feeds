@@ -26,23 +26,8 @@ class OptionsSerializer(serializers.ModelSerializer):
         )
 
 
-class FeedBriefSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Feed
-        fields = (
-            'pk',
-            'name',
-        )
-
-
 class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
-    # feeds = FeedBriefSerializer(
-    #    required=True,
-    #    many=True
-    # )
-    feeds = serializers.HyperlinkedRelatedField(
-        view_name='planet:feed-detail',
-        # lookup_field='pk',
+    feeds = serializers.PrimaryKeyRelatedField(
         many=True,
         read_only=True
     )
@@ -58,6 +43,11 @@ class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class FeedSerializer(serializers.ModelSerializer):
+    posts = serializers.PrimaryKeyRelatedField(
+        many=True,
+        read_only=True,
+    )
+
     class Meta:
         model = Feed
         fields = (
@@ -88,6 +78,7 @@ class FeedSerializer(serializers.ModelSerializer):
             'etag',
             'last_checked',
             'check_interval',
+            'posts',
         )
 
 

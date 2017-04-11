@@ -223,7 +223,7 @@ class WebSiteDetailView(DetailView):
 
     The view is accessible publically.
 
-    :url: planet:site-view
+    :url: planet:site-detail
 
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
@@ -293,7 +293,7 @@ class FeedUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         if 'slug' in self.kwargs:
-            return reverse('planet:feed-view', self.kwargs['slug'])
+            return reverse('planet:feed-detail', self.kwargs['slug'])
         else:
             return reverse('planet:feed-home')
 
@@ -317,7 +317,7 @@ class FeedRefreshView(LoginRequiredMixin, RedirectView):
     def get_redirect_url(self, pk):
         from feeds.tasks import feed_refresh
         feed_refresh.delay(pk)
-        return reverse('planet:feed-view', args=(pk,))
+        return reverse('planet:feed-detail', args=(pk,))
 
 
 class FeedSubscribeView(LoginRequiredMixin, RedirectView):
@@ -332,7 +332,7 @@ class FeedSubscribeView(LoginRequiredMixin, RedirectView):
         s, created = Subscription.objects.get_or_create(user=user, feed=feed)
         if created:
             s.save()
-        return reverse('planet:feed-view', args=(pk,))
+        return reverse('planet:feed-detail', args=(pk,))
 
 
 class FeedUnSubscribeView(LoginRequiredMixin, RedirectView):
@@ -346,7 +346,7 @@ class FeedUnSubscribeView(LoginRequiredMixin, RedirectView):
         feed = Feed.objects.get(pk=pk)
         s = Subscription.objects.get(user=user, feed=feed)
         s.delete()
-        return reverse('planet:feed-view', args=(pk,))
+        return reverse('planet:feed-detail', args=(pk,))
 
 
 class FeedSubscriptionsView(LoginRequiredMixin, PaginatedListView):

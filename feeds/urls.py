@@ -1,4 +1,4 @@
-#! /usr/bin/env python2.7
+#! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 # vim: ts=4 et sw=4 sts=4
 
@@ -117,7 +117,7 @@ urlpatterns += [
     url(
         r'^feed/(?P<pk>\d+)/$',
         FeedDetailView.as_view(),
-        name="feed-view"
+        name="feed-detail"
     ),
     url(
         r'^feed/(?P<pk>\d+)/update/$',
@@ -155,7 +155,7 @@ urlpatterns += [
     url(
         r'^post/(?P<pk>\d+)/$',
         PostDetailView.as_view(),
-        name="post-view"
+        name="post-detail"
     ),
     url(
         r'^p/$',

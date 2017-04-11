@@ -11,7 +11,6 @@ from .views import OptionsViewSet
 from .views import WebSiteViewSet
 from .views import FeedViewSet
 from .views import PostViewSet
-
 from .views import CategoryViewSet
 
 
@@ -25,5 +24,5 @@ router.register(r'categories', CategoryViewSet)
 
 
 urlpatterns = [
-    url(r'^', include(router.urls, namespace="planet")),
+    url(r'^', include(router.urls)),
 ]

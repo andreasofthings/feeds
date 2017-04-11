@@ -22,7 +22,7 @@
         </h3>
     </div>
     <div class="col-md-8">
-    {% for feed in object.feeds %}
+    {% for feed in object.feeds.all %}
     <p><a href="{{ feed.get_absolute_url }}">{{ feed }}</a></p>
     {% endfor %}
     </div>
@@ -33,5 +33,3 @@
 {% block additional_scripts_end %}
     <script defer src="{{ STATIC_URL }}feeds/site_detail.js"> </script>
 {% endblock %}
-
-

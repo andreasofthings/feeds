@@ -122,7 +122,7 @@ class TestAllViewsLoggedIn(TestCase):
         self.assertEqual(result.status_code, 302)
         self.assertRedirects(
             result,
-            reverse('planet:feed-view', kwargs={'pk': 1})
+            reverse('planet:feed-detail', kwargs={'pk': 1})
         )
 
     def feed_subscription(self):
@@ -221,15 +221,17 @@ class TestAllViewsLoggedIn(TestCase):
         self.client.login(username=self.username, password=self.password)
         self.assertEqual(result.status_code, 302)
 
-    def test_feed_view(self):
+    def test_feed_detail(self):
         """
-        go to feed-view for feed 1
+        go to feed-detail for feed 1
 
         .. todo::
         Requires login or credential.
         """
         feed_id = Feed.objects.all()[0].pk
-        result = self.client.get(reverse('planet:feed-view', args=(feed_id,)))
+        result = self.client.get(
+            reverse('planet:feed-detail', args=(feed_id,))
+        )
         self.assertEqual(result.status_code, 302)
 
     def test_feed_refresh_view(self):
@@ -324,7 +326,7 @@ class TestFeedViewsWithCredentials(TestCase):
         c.login(username=self.username, password=self.password)
         feeds = Feed.objects.all()
         result = c.get(reverse('planet:feed-refresh', args=(feeds[0].pk,)))
-        expected = reverse('planet:feed-view', args=(feeds[0].pk,))
+        expected = reverse('planet:feed-detail', args=(feeds[0].pk,))
         self.assertEqual(result.status_code, 302)
         self.assertRedirects(result, expected)
 

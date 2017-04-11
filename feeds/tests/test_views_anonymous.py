@@ -163,8 +163,8 @@ class ViewsAnonymousTest(TestCase):
 
     def website_view(self):
         """
-        site-view
-        ---------
+        site-detail
+        -----------
             :url: url(
                 r'^website/(?P<pk>\d+)/$',
                 SiteDetailView.as_view(),
@@ -300,14 +300,14 @@ class ViewsAnonymousTest(TestCase):
         )
         self.assertEqual(result.status_code, 302)
 
-    def feed_view(self):
+    def feed_detail(self):
         """
-        feed-view
-        ---------
+        feed-detail
+        -----------
             :url: url(
                 r'^(?P<pk>\d+)/$',
                 FeedDetailView.as_view(),
-                name="feed-view"
+                name="feed-detail"
             ),
 
             Viewing details for a :py:mod:`feeds.models.Feed` should be
@@ -318,7 +318,7 @@ class ViewsAnonymousTest(TestCase):
             The `fixture` has a feed with the ID 1.
         """
 
-        result = self.client.get(reverse('planet:feed-view', args=(1,)))
+        result = self.client.get(reverse('planet:feed-detail', args=(1,)))
         self.assertEqual(result.status_code, 302)
 
     def feed_update(self):
@@ -387,7 +387,7 @@ class ViewsAnonymousTest(TestCase):
         """
         self.feed_home()
         self.feed_add()
-        self.feed_view()
+        self.feed_detail()
         self.feed_update()
         self.feed_delete()
         self.feed_subscriptions()

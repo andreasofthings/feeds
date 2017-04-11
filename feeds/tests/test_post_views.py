@@ -30,5 +30,5 @@ class TestPostAnonymous(TestCase):
         Test whether a Post can be viewed anonymous.
         """
         p = Post.objects.all()[0].pk
-        result = self.client.get(reverse('planet:post-view', args=(p,)))
+        result = self.client.get(reverse('planet:post-detail', args=(p,)))
         self.assertEquals(result.status_code, 200)

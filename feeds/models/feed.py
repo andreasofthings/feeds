@@ -101,6 +101,7 @@ Coming from `feedparser`:
     """
     website = models.ForeignKey(
         WebSite,
+        related_name="feeds",
         blank=True,
         null=True
     )
@@ -293,6 +294,12 @@ Coming from `feedparser`:
     def __str__(self):
         return u'%s' % (self.name)
 
+    def posts(self):
+        """
+        return all posts for this :WebSite:.
+        """
+        return self.post_set.all()
+
     def post_count(self):
         """
         Return the number of posts in this feed.
@@ -307,7 +314,7 @@ Coming from `feedparser`:
 
     @models.permalink
     def get_absolute_url(self):
-        return ('planet:feed-view', [str(self.id)])
+        return ('planet:feed-detail', [str(self.id)])
 
     def _entry_guid(self, entry):
         """

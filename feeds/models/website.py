@@ -66,12 +66,6 @@ class WebSite(models.Model):
         """
         return ('planet:website-detail', [str(self.id)])
 
-    def feeds(self):
-        """
-        return all feeds for this :WebSite:.
-        """
-        return self.feed_set.all()
-
     def feedcount(self):
         """
         return count of all feeds for this :WebSite:.

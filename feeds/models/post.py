@@ -97,7 +97,7 @@ class Post(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('planet:post-view', [str(self.id)])
+        return ('planet:post-detail', [str(self.id)])
 
     @models.permalink
     def get_trackable_url(self):
