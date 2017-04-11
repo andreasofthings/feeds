@@ -17,11 +17,11 @@ from .views import CategoryViewSet
 
 router = routers.DefaultRouter()
 # register job endpoint in the router
-router.register(r'options', OptionsViewSet)
-router.register(r'websites', WebSiteViewSet)
-router.register(r'feeds', FeedViewSet)
-router.register(r'posts', PostViewSet)
-router.register(r'categories', CategoryViewSet)
+router.register(r'options', OptionsViewSet, base_name="planet")
+router.register(r'websites', WebSiteViewSet, base_name="planet")
+router.register(r'feeds', FeedViewSet, base_name="planet")
+router.register(r'posts', PostViewSet, base_name="planet")
+router.register(r'categories', CategoryViewSet, base_name="planet")
 
 
 urlpatterns = [
