@@ -132,3 +132,20 @@ FEEDS_POST_UPDATE_TWITTER = False
 FEEDS_POST_UPDATE_LINKEDIN = False
 FEEDS_POST_UPDATE_FACEBOOK = False
 FEEDS_POST_UPDATE_GOOGLEPLUS = False
+
+# REST Framework
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissions'
+    ],
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100,
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework_yaml.renderers.YAMLRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+}

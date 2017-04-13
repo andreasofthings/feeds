@@ -50,10 +50,7 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
     )
 
     class Meta:
-        model = Feed
-        fields = (
-            'pk',
-            'url',
+        """
             'get_absolute_url',
             'feed_url',
             'name',
@@ -67,6 +64,12 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
             'copyright',
             'author',
             'webmaster',
+        """
+        model = Feed
+        fields = (
+            'pk',
+            'url',
+            'name',
             'posts',
         )
 

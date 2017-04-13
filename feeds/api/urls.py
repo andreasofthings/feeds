@@ -1,9 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
+
+"""
+Feeds API urls.
+API for :mod:`feeds`
+"""
 from django.conf.urls import url, include
-
-"""
-# API for :mod:`feeds`
-
-"""
 
 from rest_framework import routers
 

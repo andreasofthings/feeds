@@ -43,7 +43,7 @@ class OptionsViewSet(viewsets.GenericViewSet):
         """
         Return Users Options.
         """
-        queryset = Options.objects.all()
+        queryset = Options.objects.filter(user=request.user)
         result = OptionsSerializer(queryset, many=True)
         return Response(result.data)
 
@@ -109,27 +109,8 @@ class CategoryViewSet(mixins.ListModelMixin,
     serializer_class = CategorySerializer
 
 
-class UserSubscriptionsViewSet(viewsets.ModelViewSet):
+class UserSubscriptionsViewSet(viewsets.GenericViewSet):
     serializer_class = SubscriptionSerializer
     throttle_class = (SubscriptionThrottle,)
     queryset = Subscription.objects.all()
-
-    def get_permissions(self):
-        if self.request.method in permissions.SAFE_METHODS:
-            return (permissions.AllowAny(),)
-
-        if self.request.method == 'POST':
-            return (permissions.AllowAny(),)
-
-        return (permissions.IsAuthenticated(), IsSubscriptionOwner(),)
-
-    def get(self, request, format=None):
-        """
-        Return a list of all user subscriptions, all Feeds if anonymous.
-        """
-        if request.user.is_authenticated():
-            subscriptions = Options.objects.filter(user=request.user)
-            result = subscriptions.feed_subscription.all()
-        else:
-            result = Feed.objects.all()
-        return Response(SubscriptionSerializer(result, many=True).data)
+    permissions = (IsSubscriptionOwner, )
