@@ -31,6 +31,8 @@ from .views import PostDetailView, PostTrackableView
 
 
 from .rss import RssFeed
+from .syndication import LatestEntriesFeed
+
 
 # from feeds.api.views import UserSubscriptions
 from .sitemap import PostSitemap, FeedSitemap
@@ -186,6 +188,14 @@ urlpatterns += [
         r'^t/(?P<pk>\d+)/$',
         PostTrackableView.as_view(),
         name="post-trackable-view"
+    ),
+]
+
+urlpatterns += [
+    url(
+        r'^rss/$',
+        LatestEntriesFeed(),
+        name="rss-feed"
     ),
 ]
 
