@@ -16,4 +16,4 @@ class LatestEntriesFeed(Feed):
 
     # item_link is only needed if NewsItem has no get_absolute_url method.
     def item_link(self, item):
-        return reverse('post-detail', args=[item.pk])
+        return reverse('feeds:post-detail', args=[item.pk])
