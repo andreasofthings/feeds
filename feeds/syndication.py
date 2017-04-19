@@ -9,7 +9,7 @@ class LatestEntriesFeed(Feed):
     description = "Latest entries."
 
     def items(self):
-        return Post.objects.order_by('-pub_date')[:5]
+        return Post.objects.order_by('-published')[:5]
 
     def item_title(self, item):
         return item.title
