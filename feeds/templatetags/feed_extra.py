@@ -47,9 +47,9 @@ class RecentPostNode(template.Node):
                 self.feed, type(self.feed)
             )
         try:
-            recent = Post.objects.filter(
+            recent = Post.objects.latest().filter(
                 feed=feed
-            ).order_by('-published')[:self.max_posts]
+            )[:self.max_posts]
         except Post.DoesNotExist:
             recent = Post.objects.none()
         context[self.var_name] = recent

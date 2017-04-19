@@ -40,3 +40,9 @@ class PostManager(models.Manager):
         now = timezone.now()
         edge = now - ttl
         return self.filter(published__lte=edge)
+
+    def latest(self):
+        """
+        Get all Posts orderd by `published`.
+        """
+        return self.order_by('-published')
