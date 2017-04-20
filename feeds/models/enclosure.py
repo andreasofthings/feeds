@@ -44,4 +44,4 @@ class Enclosure(models.Model):
         """
         return type of object and containing post
         """
-        return _(u'%s [for %s]' % (self.enclosure_type, self.post))
+        return u'%s [for %s]' % (self.enclosure_type, self.post)
