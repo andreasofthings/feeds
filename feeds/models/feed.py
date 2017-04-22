@@ -411,7 +411,7 @@ Coming from `feedparser`:
         if 'category' in entry and len(entry.category) > 0:
             for category in entry.category:
                 cat, created = p.categories.get_or_create(
-                    name=category
+                    name=category,
                 )
 
         if 'enclosures' in entry and len(entry.enclosures) > 0:

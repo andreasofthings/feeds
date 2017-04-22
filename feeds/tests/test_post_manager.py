@@ -42,6 +42,12 @@ class ManagerTest(TestCase):
         p = Post.objects.older_than(timedelta(days=1))
         self.assertEqual(len(p), 4)
 
+    def test_post_category(self):
+        p = Post.objects.get(pk=1)
+        cat, created = p.categories.get_or_create(
+            name="category"
+        )
+
     def tearDown(self):
         """
         Clean up environment after model tests

@@ -47,7 +47,7 @@ setup(
     ],
     install_requires=[
         'celery>=4.0.2',
-        'django>=1.9.0,<1.11.0',
+        'django>=1.9.0',
         'django-formtools',
         'django-crispy-forms>=1.6.0',
         'django-el-pagination>=3.0.1',
