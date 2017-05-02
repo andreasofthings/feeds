@@ -412,6 +412,7 @@ Coming from `feedparser`:
             for category in entry.category:
                 cat, created = p.categories.get_or_create(
                     name=category,
+                    slug=slugify(category)
                 )
 
         if 'enclosures' in entry and len(entry.enclosures) > 0:
