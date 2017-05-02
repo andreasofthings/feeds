@@ -143,9 +143,4 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 100,
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework_yaml.renderers.YAMLRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ),
 }

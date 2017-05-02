@@ -3,6 +3,10 @@
 {% load el_pagination_tags %}
 {% load static from staticfiles %}
 
+{% block css %}
+<link href="{% static "feeds/post_list_page.css" %}" rel="stylesheet">
+{% endblock %}
+
 {% block breadcrumb %}
       <ul class="breadcrumb">
         <li><a href="/">Home</a> <span class="divider"></span></li>
