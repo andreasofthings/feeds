@@ -1,0 +1,12 @@
+category
+celery
+crispy_forms
+django
+django-crispy_forms
+django-el_pagination
+django-formtools
+django-haystack
+django-star_ratings
+feedparser
+star_ratings
+whoosh
