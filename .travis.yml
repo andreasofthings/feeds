@@ -21,8 +21,6 @@ addons:
 
 install:
    # Install the dependencies the app itself has
- - pip install -r requirements.txt
- - pip install elasticsearch
  - pip install git+https://github.com/aneumeier/feeds.git#latest
  - pip install coveralls
 before_script:
@@ -31,7 +29,7 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
 # Tell Travis how to run the test script itself
 script:
-  - coverage run --source=feeds feedtest.py -m py.test
+  - coverage run --source=feeds runtest.py -m py.test
 after_success:
   - coveralls
 notifications:
