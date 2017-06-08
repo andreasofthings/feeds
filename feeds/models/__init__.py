@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+from .category import Category, Tag
 from .enclosure import Enclosure
 from .feed import Feed
 from .post import Post, TaggedPost
@@ -9,6 +10,7 @@ from .stats import PostReadCount, FeedStats, FeedEntryStats
 from .website import WebSite
 
 __all__ = [
+    'Category',
     'Enclosure',
     'Feed',
     'FeedStats',
@@ -18,6 +20,7 @@ __all__ = [
     'Post',
     'PostReadCount',
     'Subscription',
+    'Tag',
     'TaggedPost',
     'WebSite',
 ]

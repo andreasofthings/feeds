@@ -23,7 +23,7 @@ from django.utils.translation import ugettext_lazy as _
 from .feed import Feed
 from ..managers import PostManager
 
-from category.models import Tag, Category
+from .category import Tag, Category
 
 
 logger = logging.getLogger(__name__)

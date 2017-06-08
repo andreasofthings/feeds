@@ -55,7 +55,6 @@ class ApiTest(APITestCase):
         log.debug("test_options_anonymous")
         self.client.logout()
         user = auth.get_user(self.client)
-        print("User is anonymous: %s" % (user.is_anonymous()))
         response = self.client.get('/feeds/api/options/', format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 

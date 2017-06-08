@@ -1,6 +1,5 @@
 from haystack import indexes
-from .models import Feed, Post
-from category.models import Category, Tag
+from .models import Feed, Post, Category, Tag
 
 
 class FeedIndex(indexes.SearchIndex):

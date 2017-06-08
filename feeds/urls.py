@@ -193,6 +193,29 @@ urlpatterns += [
 
 urlpatterns += [
     url(
+        r'^c/$',
+        HomeView.as_view(),
+        name="category-home"
+    ),
+    url(
+        r'^c/(?P<pk>\d+)/$',
+        HomeView.as_view(),
+        name="category-view"
+    ),
+    url(
+        r'^tag/$',
+        HomeView.as_view(),
+        name="tag-home"
+    ),
+    url(
+        r'^tag/(?P<pk>\d+)/$',
+        HomeView.as_view(),
+        name="tag-view"
+    ),
+]
+
+urlpatterns += [
+    url(
         r'^rss/$',
         LatestEntriesFeed(),
         name="rss-feed"

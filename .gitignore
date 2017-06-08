@@ -9,6 +9,7 @@ log/*
 build/*
 docs/build/*
 feeds.egg-info/*
+feeds/migrations/old/*
 .coverage
 .ropeproject
 feeds/.ropeproject

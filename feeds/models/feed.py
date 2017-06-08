@@ -33,7 +33,7 @@ import feedparser
 from feedparser import CharacterEncodingOverride
 
 from .website import WebSite
-from category.models import Category
+from .category import Category
 
 from .. import USER_AGENT
 from .. import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
@@ -384,9 +384,6 @@ Coming from `feedparser`:
             published_parsed = \
                 timezone.make_aware(published_parsed)
 
-        if timezone.is_naive(published_parsed):
-            logger.error("WHAT THE FUCK, DJANGO.TOOLS")
-
         p, created = self.posts.from_feedparser(
             feed=self,
             title=entry.title,
@@ -409,11 +406,13 @@ Coming from `feedparser`:
         p.summary = entry.get('summary', '')
 
         if 'category' in entry and len(entry.category) > 0:
-            for category in entry.category:
-                cat, created = p.categories.get_or_create(
-                    name=category,
-                    slug=slugify(category)
-                )
+            s = slugify(entry.category)
+            logger.debug("Category: %s - Slug: %s" % (entry.category, s))
+            cat, created = Category.objects.get_or_create(
+                name=entry.category,
+                slug=s
+            )
+            p.categories.add(cat)
 
         if 'enclosures' in entry and len(entry.enclosures) > 0:
             for enclosure in entry.enclosures:
@@ -550,7 +549,7 @@ Coming from `feedparser`:
 
         if self.last_checked is not None:
             if self.last_checked > fiveminutesago:
-                logger.error(
+                logger.debug(
                     "tried feed %s too quick. aborting. (%s, %s, %s)",
                     self.feed_url,
                     self.last_checked,
