@@ -6,7 +6,6 @@ django-formtools
 django-haystack
 django-star_ratings
 feedparser
-django-star_ratings
 # Please see setup.py.
 # These requirements are for testing.
 pyyaml
