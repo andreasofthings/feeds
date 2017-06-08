@@ -36,7 +36,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
-    'celery.contrib.sphinx'
+#    'celery.contrib.sphinx'
 ]
 
 intersphinx_mapping = {
