@@ -20,6 +20,8 @@ addons:
   firefox: "47.0"
 
 install:
+   # install test requirements.
+ - pip install -r tests/requirements.txt
    # Install the dependencies the app itself has
  - pip install git+https://github.com/aneumeier/feeds.git#latest
  - pip install coveralls
