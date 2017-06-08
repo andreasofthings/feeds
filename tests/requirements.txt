@@ -1,15 +1,14 @@
-celery
-crispy_forms
-django
-django-crispy_forms
-django-el_pagination
-django-formtools
-django-haystack
-django-star_ratings
-feedparser
-star_ratings
-whoosh
+# celery
+# django
+# django-crispy_forms
+# django-el_pagination
+# django-formtools
+# django-haystack
+# django-star_ratings
+# feedparser
+# star_ratings
 # Please see setup.py.
 # These requirements are for testing.
+whoosh
 psycopg2
 selenium>=2.52.0,<3.0.0
