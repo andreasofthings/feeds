@@ -60,7 +60,6 @@ setup(
         'tweepy>=3.5.0',
         'facebook-sdk',
         'timestring>=1.6.2',
-        'category>=0.9.0',
     ],
     dependency_links=[
     ],
