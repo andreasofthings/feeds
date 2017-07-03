@@ -17,5 +17,8 @@ if __name__ == '__main__':
         django.setup()
     from django.test.runner import DiscoverRunner
     failures = DiscoverRunner().run_tests(("feeds",), verbosity=9)
+    """
+    coverage report --include=feeds/* --omit=feeds/tests/*
+    """
     if failures:
         sys.exit(failures)
