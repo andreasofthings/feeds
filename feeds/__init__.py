@@ -43,7 +43,7 @@ feeds (feedburner like), displaying all with Chartjs_.
 
 default_app_config = 'feeds.apps.FeedsConfig'
 
-version_info = (1, 0, 0, 'revised')
+version_info = (1, 0, 0)
 __version__ = ".".join(map(str, version_info))
 SERVER_SOFTWARE = "feeds/%s" % __version__
 
