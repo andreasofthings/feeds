@@ -12,12 +12,15 @@ from django.test import TestCase, Client
 from feeds.models import Feed
 from feeds.models import Enclosure
 from feeds import FEED_OK, FEED_SAME, FEED_ERRHTTP, FEED_ERRPARSE
+import logging
 
 import warnings
 warnings.filterwarnings(
     'error', r"DateTimeField .* received a naive datetime",
     RuntimeWarning, r'django\.db\.models\.fields',
 )
+
+log = logging.getLogger(__name__)
 
 
 class ModelTest(TestCase):
@@ -69,9 +72,6 @@ class ModelTest(TestCase):
         Test a :py:mod:`feeds:models.Feed`
         """
         feeds = Feed.objects.filter(is_active=True)
-        for feed in feeds:
-            print(feed)
-        print(feeds[0])
         # 1 ==
         self.assertEquals(feeds[1].refresh(), FEED_OK)
         self.assertEquals(feeds[1].refresh(), FEED_SAME)

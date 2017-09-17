@@ -1,0 +1,14 @@
+celery
+django
+django-crispy_forms
+django-el_pagination
+django-formtools
+django-haystack
+django-star_ratings
+feedparser
+# Please see setup.py.
+# These requirements are for testing.
+pyyaml
+whoosh
+psycopg2
+selenium>=2.52.0,<3.0.0

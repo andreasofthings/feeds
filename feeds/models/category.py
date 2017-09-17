@@ -1,3 +1,10 @@
+#! /usr/bin/env python3.6
+# -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
+
+"""
+"""
+
 from __future__ import unicode_literals
 from django.utils.encoding import python_2_unicode_compatible
 
@@ -105,7 +112,7 @@ class Tag(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('category:tag-view', [str(self.slug)])
+        return ('planet:tag-view', [str(self.slug)])
 
 
 class CategoryManager(models.Manager):
@@ -180,4 +187,4 @@ class Category(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('category:category-view', [str(self.slug)])
+        return ('planet:category-view', [str(self.slug)])

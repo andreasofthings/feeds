@@ -7,9 +7,7 @@ Serializers for the Feeds API
 """
 
 from rest_framework import serializers
-from feeds.models.category import Category
-
-from ..models import Options, WebSite, Feed, Post, Subscription
+from ..models import Options, WebSite, Feed, Post, Subscription, Category
 
 
 class OptionsSerializer(serializers.ModelSerializer):

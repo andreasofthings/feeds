@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.6
 # -*- coding: utf-8 -*-
 
 """
@@ -40,9 +40,9 @@ from feeds import CRON_OK, CRON_ERR
 from .models import Feed, Post, TaggedPost
 from .models import FeedStats
 
-from category.models import Tag
+from .models import Tag
 
-from social.get import tweets, facebook, linkedin
+# from social.get import tweets, facebook, linkedin
 
 
 logger = logging.getLogger(__name__)
@@ -162,7 +162,7 @@ def post_update_linkedin(entry_id):
 
     if getattr(settings, 'FEEDS_POST_UPDATE_LINKEDIN', False):
         post = Post.objects.get(pk=entry_id)
-        (post.linkedin, ) = linkedin(post)
+        # (post.linkedin, ) = linkedin(post)
         post.save()
         logger.debug(
             "stop: counting linkedin. got %s",

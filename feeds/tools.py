@@ -14,6 +14,9 @@ except:
     from html.parser import HTMLParser as HTMLParser
 
 
+from typing import TypeVar, Generic, Iterable, Iterator, List
+
+
 class feedFinder(HTMLParser):
     """
     feedFinder

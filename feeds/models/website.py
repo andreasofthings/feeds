@@ -36,6 +36,9 @@ class WebSite(models.Model):
     slug = models.SlugField(null=True)
     """Human readble URL component"""
 
+    commercial = models.BooleanField(default=True)
+    """Indicate, whether this is a commercial site."""
+
     objects = WebSiteManager()
     """
     Overwrite the inherited manager

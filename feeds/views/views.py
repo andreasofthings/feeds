@@ -207,6 +207,9 @@ class WebSiteListView(PaginatedListView):
     model = WebSite
     template_name = "feeds/website_list.html"
 
+    def get_queryset(self):
+        return WebSite.objects.order_by('website_url')
+
 
 class WebSiteCreateView(PermissionRequiredMixin, CreateView):
     """
@@ -265,7 +268,7 @@ class FeedListView(LoginRequiredMixin, PaginatedListView):
     """
     model = Feed
     context_object_name = "feeds"
-    queryset = Feed.objects.all()
+    queryset = Feed.objects.order_by('name')
 
 
 class FeedDetailView(LoginRequiredMixin, DetailView):
@@ -366,7 +369,7 @@ class FeedSubscriptionsView(LoginRequiredMixin, PaginatedListView):
         if created:
             user.save()
         queryset = Feed.objects.filter(feed_subscription__user=user)
-        return queryset
+        return queryset.order_by('name')
 
 
 class PostListView(AjaxListView):

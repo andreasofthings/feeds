@@ -44,6 +44,7 @@ class EnclosureAdmin(admin.ModelAdmin):
 
 
 def refresh_feed(modeladmin, request, queryset):
+    short_description = ""
     queryset.refresh()
 refresh_feed.short_description = "Refresh selected feeds"
 

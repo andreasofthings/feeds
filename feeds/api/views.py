@@ -9,6 +9,7 @@ Feeds API views.
 
 from rest_framework.response import Response
 from rest_framework import mixins, viewsets, permissions
+from rest_framework.generics import RetrieveAPIView
 
 from ..models import WebSite, Feed, Post, Options, Subscription, Category
 
@@ -18,7 +19,7 @@ from .serializers import FeedSerializer
 from .serializers import PostSerializer
 from .serializers import CategorySerializer
 from .serializers import SubscriptionSerializer
-from .permission import IsSubscriptionOwner
+from .permission import IsOwner
 
 from .throttle import OptionsThrottle
 from .throttle import WebSiteThrottle
@@ -31,13 +32,13 @@ import logging
 log = logging.getLogger(__name__)
 
 
-class OptionsViewSet(viewsets.GenericViewSet):
+class OptionsView(RetrieveAPIView):
     throttle_class = (OptionsThrottle, )
     serializer_class = OptionsSerializer
     queryset = Options.objects.all()
     permissions = (permissions.IsAuthenticated, )
 
-    def list(self, request, format=None):
+    def retrieve(self, request, username=None, *args, **kwargs):
         """
         Return Users Options.
         """
@@ -111,4 +112,4 @@ class UserSubscriptionsViewSet(viewsets.GenericViewSet):
     serializer_class = SubscriptionSerializer
     throttle_class = (SubscriptionThrottle,)
     queryset = Subscription.objects.all()
-    permissions = (IsSubscriptionOwner, )
+    permissions = (IsOwner, )
