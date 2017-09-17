@@ -29,6 +29,14 @@ from .views import FeedSubscriptionsView
 from .views import PostListView, PostSubscriptionView
 from .views import PostDetailView, PostTrackableView
 
+from .views import CategoryListView
+from .views import CategoryCreateView
+from .views import CategoryDetailView
+from .views import CategoryUpdateView
+from .views import TagListView
+from .views import TagCreateView
+from .views import TagDetailView
+from .views import TagUpdateView
 
 from .rss import RssFeed
 from .syndication import LatestEntriesFeed
@@ -136,6 +144,41 @@ urlpatterns += [
         FeedRefreshView.as_view(),
         name="feed-refresh"
     ),
+]
+
+urlpatterns += [
+    url(
+        r'^category/$',
+        CategoryListView.as_view(),
+        name="category-home"
+        ),
+    url(
+        r'^category/page/(?P<page>\w+)/$',
+        CategoryListView.as_view(),
+        name="category-home-paginated"
+    ),
+    url(
+        r'^category/add/$',
+        CategoryCreateView.as_view(),
+        name="category-add"
+    ),
+    url(r'^category/id/(?P<pk>\d+)/$',
+        CategoryDetailView.as_view(), name="category-detail"),
+    url(r'^category/name/(?P<slug>[-\w]+)/$',
+        CategoryDetailView.as_view(), name="category-detail"),
+    url(
+        r'^category/(?P<pk>\d+)/update$',
+        CategoryUpdateView.as_view(),
+        name="category-update"
+    ),
+    url(
+        r'^category/(?P<slug>\w+)/update$',
+        CategoryUpdateView.as_view(),
+        name="category-update"
+    ),
+]
+
+urlpatterns += [
 ]
 
 urlpatterns += [

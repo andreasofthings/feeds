@@ -56,7 +56,7 @@ setup(
         'django-haystack>=2.3.1',
         'python-django-social',
         'feedparser>=5.1.2',
-        'requests>=2.6',
+        'requests>=2.18',
         'tweepy>=3.5.0',
         'facebook-sdk',
         'timestring>=1.6.2',

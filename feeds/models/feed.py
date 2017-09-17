@@ -33,7 +33,7 @@ import feedparser
 from feedparser import CharacterEncodingOverride
 
 from .website import WebSite
-from category.models import Category
+from .category import Category
 
 from .. import USER_AGENT
 from .. import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC

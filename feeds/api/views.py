@@ -10,7 +10,7 @@ Feeds API views.
 from rest_framework.response import Response
 from rest_framework import mixins, viewsets, permissions
 
-from ..models import WebSite, Feed, Post, Options, Subscription
+from ..models import WebSite, Feed, Post, Options, Subscription, Category
 
 from .serializers import OptionsSerializer
 from .serializers import WebSiteSerializer
@@ -19,8 +19,6 @@ from .serializers import PostSerializer
 from .serializers import CategorySerializer
 from .serializers import SubscriptionSerializer
 from .permission import IsSubscriptionOwner
-
-from category.models import Category
 
 from .throttle import OptionsThrottle
 from .throttle import WebSiteThrottle

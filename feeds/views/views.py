@@ -3,7 +3,7 @@
 # vim: ts=4 et sw=4 sts=4
 
 """
-:mod:`feeds.views`
+:mod:`feeds.views.views`
 
 Views for :py:mod:`feeds`
 =========
@@ -32,16 +32,16 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
-from .models import Options
-from .forms import OptionsForm
-from .forms import OPMLForm
+from ..forms import OptionsForm
+from ..forms import OPMLForm
 
-from .models import WebSite, Feed, Post, Subscription, PostReadCount
-from .forms import FeedCreateForm
-from .forms import FeedUpdateForm
-from .forms import WebSiteCreateForm, WebSiteFeedAddForm, WebSiteUpdateForm
-from .tools import getFeedsFromSite
-from .baseviews import PaginatedListView
+from ..models import WebSite, Feed, Post, Subscription, PostReadCount, Options
+from ..forms import FeedCreateForm
+from ..forms import FeedUpdateForm
+from ..forms import WebSiteCreateForm, WebSiteFeedAddForm, WebSiteUpdateForm
+from ..tools import getFeedsFromSite
+
+from ..baseviews import PaginatedListView
 
 from formtools.wizard.views import SessionWizardView
 
