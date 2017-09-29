@@ -10,45 +10,52 @@
 
 {% block appmenu %}
 <div class="row">
-    <ul class="navbar navbar-light bg-light nav-tabs justify-content-between" role="tablist">
-      <li><a href="{% url "planet:home" %}">Home</a></li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+  <nav class="navbar navbar-light bg-light nav-tabs justify-content-between">
+    <a class="navbar-brand" href="{% url "planet:home" %}">Home</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="feedMenuOptions">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
             Websites<span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu" role="menu">
-            <li><a href="{% url "planet:website-home" %}">Home</a></li>
-            <li><a href="{% url "planet:website-submit" %}">Submit</a></li>
-        </ul>
-      </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{% url "planet:website-home" %}">Home</a>
+            <a class="dropdown-item" href="{% url "planet:website-submit" %}">Submit</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
             Feeds<span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu" role="menu">
-            <li><a href="{% url "planet:feed-home" %}">Home</a></li>
-            <li><a href="{% url "planet:feed-subscriptions" %}">Subscriptions</a></li>
-        </ul>
-      </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{% url "planet:feed-home" %}">Home</a>
+            <a class="dropdown-item" href="{% url "planet:feed-subscriptions" %}">Subscriptions</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
             Posts<span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu" role="menu">
-            <li><a href="{% url "planet:post-home" %}">Home</a></li>
-            <li><a href="{% url "planet:post-subscription-home" %}">Subscriptions</a></li>
-        </ul>
-      </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{% url "planet:post-home" %}">Home</a>
+            <a class="dropdown-item" href="{% url "planet:post-subscription-home" %}">Subscriptions</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
             Categories<span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu" role="menu">
-            <li><a href="{% url "planet:category-home"%}">Categories</a></li>
-        </ul>
-          <li><a href="{% url "planet:options"%}">Options</a></li>
-       </li>
-    </ul>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a href="{% url "planet:category-home"%}">Categories</a>
+          </div>
+        </li>
+        <li class="nav-link"><a href="{% url "planet:options"%}">Options</a></li>
+      </ul>
+    </div>
+  </nav>
 </div>
 {% endblock %}
 
