@@ -1,5 +1,15 @@
 {%extends 'feeds/index.html'%}
 
+{%block breadcrumb %}
+          <nav class="breadcrumb">
+            <a class="breadcrumb-item" href="/">Home</a>
+            <a class="breadcrumb-item" href="{% url "planet:home" %}">Feeds</a>
+            <a class="breadcrumb-item" href="{% url "planet:feed-detail" object.id %}">{{ feed }}</a>
+            <a class="breadcrumb-item" href="{% url "planet:feed-delete" object.id %}">Delete</a>
+            <span class="breadcrumb-item active">You are here</span>
+          </nav>
+{%endblock%}
+
 {%block content%}
 <div class="row">
   <form method="POST">{% csrf_token %}

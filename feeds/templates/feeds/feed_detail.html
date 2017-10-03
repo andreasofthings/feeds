@@ -12,12 +12,12 @@ Feed: {{ feed }}
 {% endblock %}
 
 {%block breadcrumb %}
-          <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider"></span></li>
-            <li><a href="{% url "planet:feed-home" %}">Feeds</a> <span class="divider"></span></li>
-            <li><a href="{% url "planet:feed-detail" object.id %}">{{ feed }}</a> <span class="divider"></span></li>
-            <li class="active">You are here</li>
-          </ul>
+          <nav class="breadcrumb">
+            <a class="breadcrumb-item" href="/">Home</a>
+            <a class="breadcrumb-item" href="{% url "planet:home" %}">Feeds</a>
+            <a class="breadcrumb-item" href="{% url "planet:feed-detail" object.id %}">{{ feed }}</a>
+            <span class="breadcrumb-item active">You are here</span>
+          </nav>
 {%endblock%}
 
 {%block content%}

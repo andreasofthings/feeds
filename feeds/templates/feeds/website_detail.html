@@ -1,13 +1,13 @@
 {%extends 'feeds/index.html'%}
 
 {%block breadcrumb %}
-          <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider"></span></li>
-            <li><a href="{% url "planet:feed-home" %}">Feeds</a> <span class="divider"></span></li>
-            <li><a href="{% url "planet:website-home" %}">Site</a> <span class="divider"></span></li>
-            {% if object %}<li><a href="{% url "planet:website-detail" object.pk %}">{{ object }}</a> <span class="divider"></span></li>{% endif %}
-            <li class="active">You are here</li>
-          </ul>
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="/">Home</a>
+  <a class="breadcrumb-item" href="{% url "planet:home" %}">Feeds</a>
+  <a class="breadcrumb-item" href="{% url "planet:website-home" %}">Websites</a>
+  <a class="breadcrumb-item" href="{% url "planet:website-detail" object.pk %}">{{ object }}</a>
+  <span class="breadcrumb-item active">You are here</span>
+</nav>
 {%endblock%}
 
 {%block content%}

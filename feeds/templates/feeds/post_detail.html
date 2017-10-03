@@ -2,17 +2,16 @@
 {% load static from staticfiles %}
 {% load feed_extra %}
 {% load more_like_this %}
-{% load ratings %}
 
 
 {%block breadcrumb %}
-          <ul class="breadcrumb">
-            <li><a href="/">Home</a> <span class="divider"></span></li>
-            <li><a href="{% url "planet:feed-home" %}">Feeds</a> <span class="divider"></span></li>
-            <li><a href="{% url "planet:feed-detail" object.feed.id %}">{{ object.feed.name }}</a> <span class="divider"></span></li>
-            <li><a href="{% url "planet:post-detail" object.id %}">{{ object.published }}</a> <span class="divider"></span></li>
-            <li class="active">You are here</li>
-          </ul>
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="/">Home</a>
+  <a class="breadcrumb-item" href="{% url "planet:home" %}">Feeds</a>
+  <a class="breadcrumb-item" href="{% url "planet:feed-detail" object.feed.id %}">{{ object.feed.name }}</a>
+  <a class="breadcrumb-item" href="{% url "planet:post-detail" object.id %}">{{ object.published }}</a>
+<span class="breadcrumb-item active">You are here</span>
+</nav>
 {%endblock%}
 
 {% block title %}
@@ -49,7 +48,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        {% ratings object 16 16 %}
+        <!-- rating -->
       </div>
     </div>
     <div class="row">

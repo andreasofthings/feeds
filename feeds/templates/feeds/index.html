@@ -2,9 +2,9 @@
 
 {%block breadcrumb %}
           <nav class="breadcrumb">
-            <a class="breadcrumb-item" href="/">Home</a> <span class="divider"></span>
-            <a class="breadtcrumb-item" href="{% url "planet:home" %}">Feeds</a> <span class="divider"></span>
-            <span class="active">You are here</span>
+            <a class="breadcrumb-item" href="/">Home</a>
+            <a class="breadcrumb-item" href="{% url "planet:home" %}">Feeds</a>
+            <span class="breadcrumb-item active">You are here</span>
           </nav>
 {%endblock%}
 
@@ -15,7 +15,7 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#feedsMainMenu" aria-controls="feedsMainMenu" aria-expanded="true" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="feedsMainMenu">
+    <div class="navbar-collapse" id="feedsMainMenu">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
@@ -31,17 +31,11 @@
             Feeds<span class="caret"></span>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="{% url "planet:feed-home" %}">Home</a>
-            <a class="dropdown-item" href="{% url "planet:feed-subscriptions" %}">Subscriptions</a>
-          </div>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-            Posts<span class="caret"></span>
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="{% url "planet:post-home" %}">Home</a>
-            <a class="dropdown-item" href="{% url "planet:post-subscription-home" %}">Subscriptions</a>
+            <a class="dropdown-item" href="{% url "planet:feed-home" %}">Feeds</a>
+            <a class="dropdown-item" href="{% url "planet:feed-subscriptions" %}">Feed Subscriptions</a>
+            <a class="dropdown-item" href="{% url "planet:post-home" %}">Posts</a>
+            <a class="dropdown-item" href="{% url "planet:post-subscription-home" %}">Subscribed Posts</a>
+
           </div>
         </li>
         <li class="nav-item dropdown">
