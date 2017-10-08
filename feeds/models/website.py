@@ -73,7 +73,7 @@ class WebSite(models.Model):
         """
         return count of all feeds for this :WebSite:.
         """
-        return len(self.feeds())
+        return self.feeds.count()
 
     def natural_key(self):
         return (self.slug,)

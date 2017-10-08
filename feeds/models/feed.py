@@ -26,7 +26,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import timezone
 
 import feedparser
@@ -103,7 +103,8 @@ Coming from `feedparser`:
         WebSite,
         related_name="feeds",
         blank=True,
-        null=True
+        null=True,
+        on_delete=models.DO_NOTHING,
     )
     feed_url = models.URLField(
         _('feed url'),

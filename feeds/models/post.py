@@ -46,6 +46,7 @@ class Post(models.Model):
         related_name="posts",
         null=False,
         blank=False,
+        on_delete=models.DO_NOTHING,
     )
     title = models.CharField(max_length=512)
     link = models.URLField(_('link'), )
@@ -142,11 +143,13 @@ class TaggedPost(models.Model):
     tag = models.ForeignKey(
         Tag,
         verbose_name=_('tag'),
-        related_name='post_tags'
+        related_name='post_tags',
+        on_delete=models.DO_NOTHING,
     )
     post = models.ForeignKey(
         Post,
-        verbose_name=_('post')
+        verbose_name=_('post'),
+        on_delete=models.DO_NOTHING,
     )
 
     class Meta:

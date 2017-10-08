@@ -28,7 +28,8 @@ logger = logging.getLogger(__name__)
 class Options(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        help_text=_("User")
+        help_text=_("User"),
+        on_delete=models.DO_NOTHING,
     )
     number_initially_displayed = models.IntegerField(
         default=10,

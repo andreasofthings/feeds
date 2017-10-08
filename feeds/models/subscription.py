@@ -34,12 +34,14 @@ class Subscription(models.Model):
     user = models.ForeignKey(
         Options,
         verbose_name=_('User Subscription'),
-        related_name='user_subscription'
+        related_name='user_subscription',
+        on_delete=models.DO_NOTHING,
     )
     feed = models.ForeignKey(
         Feed,
         verbose_name=_('Feed Subscription'),
-        related_name='feed_subscription'
+        related_name='feed_subscription',
+        on_delete=models.DO_NOTHING,
     )
 
     objects = SubscriptionManager()

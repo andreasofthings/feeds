@@ -28,7 +28,11 @@ class Enclosure(models.Model):
     potential enclosure of a :mod:`feeds.models.Post`
     """
 
-    post = models.ForeignKey(Post, related_name="enclosure")
+    post = models.ForeignKey(
+        Post,
+        related_name="enclosure",
+        on_delete=models.DO_NOTHING,
+    )
     """reference to the post the enclosure belongs to."""
 
     href = models.URLField()

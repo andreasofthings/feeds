@@ -28,7 +28,8 @@ class FeedPostCount(models.Model):
         Feed,
         verbose_name=_('feed'),
         null=False,
-        blank=False
+        blank=False,
+        on_delete=models.DO_NOTHING,
     )
     entry_new = models.IntegerField(default=0)
     entry_updated = models.IntegerField(default=0)
@@ -58,7 +59,7 @@ class FeedEntryStats(models.Model):
     """
     These are stats for one particulat :py:mod:`feeds.models.Feed` in the list.
     """
-    feed = models.ForeignKey(Feed)
+    feed = models.ForeignKey(Feed, on_delete=models.DO_NOTHING,)
     collected = models.DateTimeField(auto_now_add=True)
     entry_new = models.IntegerField(default=0)
     entry_same = models.IntegerField(default=0)
@@ -85,5 +86,5 @@ class PostReadCount(models.Model):
     Need to count and cleanup elsewhere.
     """
     objects = PostReadCountManager()
-    post = models.ForeignKey(Post)
+    post = models.ForeignKey(Post, on_delete=models.DO_NOTHING,)
     created = models.DateTimeField(auto_now=True)

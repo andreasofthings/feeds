@@ -148,7 +148,8 @@ class Category(models.Model):
         help_text='Short descriptive unique name for use in urls.',
     )
 
-    parent = models.ForeignKey('self', null=True, blank=True)
+    parent = models.ForeignKey('self', null=True, blank=True,
+    on_delete=models.DO_NOTHING,)
 
     class Meta:
         """
