@@ -11,7 +11,6 @@
 <nav class="breadcrumb">
   <a class="breadcrumb-item" href="/">Home</a>
   <a class="breadcrumb-item" href="{% url "planet:home" %}">Feeds</a>
-  <a class="breadcrumb-item" href="{% url "planet:feed-detail" object.feed.id %}">{{ object.feed.name }}</a>
   <a class="breadcrumb-item" href="{% url "planet:post-home" %}">Posts</a>
   <span class="breadcrumb-item active">You are here</span>
 </nav>
