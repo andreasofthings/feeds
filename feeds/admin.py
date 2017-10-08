@@ -1,15 +1,33 @@
 from django.contrib import admin
 
+from .models.files import FileModel
 from .models.website import WebSite
 from .models.enclosure import Enclosure
 from .models.feed import Feed
-from .models.post import Post
 from .models.stats import FeedPostCount
-from .models.files import FileModel
+from .models.post import Post
+from .models.rating import Rating
 from .models.options import Options
 from .models.subscription import Subscription
 
+
 from .forms import FeedAdminForm
+
+
+class PostInline(admin.TabularInline):
+    """
+    Inline View of Posts, meant to display all `Posts` per `Feed`
+    """
+    model = Post
+    fields = ('title', )
+    ordering = ('-published',)
+    readonly_fields = ('title', )
+    can_delete = False
+
+
+class SubscriptionInline(admin.TabularInline):
+    model = Subscription
+    fields = ('feed', )
 
 
 class FeedInline(admin.TabularInline):
@@ -20,21 +38,24 @@ class FeedInline(admin.TabularInline):
     fields = ('name', 'feed_url', 'slug', )
 
 
-class PostInline(admin.TabularInline):
+class RatingInline(admin.TabularInline):
+    model = Rating
+
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
     """
-    Inline View of Posts, meant to display all `Posts` per `Feed`
+    Post admin options
     """
-    model = Post
-    fields = ('title', 'tweets', 'shares', 'likes')
-    ordering = ('-published',)
-    readonly_fields = ('title', 'tweets', 'shares', 'likes')
-    can_delete = False
-
-
-class SubscriptionInline(admin.TabularInline):
-    model = Subscription
-    fields = ('feed', )
-
+    list_display = (
+        'title',
+        'published',
+        'updated',
+    )
+    list_filter = ('feed', )
+    inlines = [
+        RatingInline,
+    ]
 
 @admin.register(Enclosure)
 class EnclosureAdmin(admin.ModelAdmin):
@@ -122,26 +143,6 @@ class OptionsAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
-    """
-    Post admin options
-    """
-    list_display = (
-        'title',
-        'published',
-        'updated',
-        'tweets',
-        'blogs',
-        'plus1',
-        'likes',
-        'shares',
-        'pageviews',
-        'score',
-        'was_announced',
-        'updated_social',
-    )
-    list_filter = ('was_announced', 'feed', )
 
 
 @admin.register(Subscription)

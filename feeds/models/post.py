@@ -76,23 +76,8 @@ class Post(models.Model):
         related_name="categories"
     )
 
-    # Social
-    tweets = models.IntegerField(default=0)
-    blogs = models.IntegerField(default=0)
-    plus1 = models.IntegerField(default=0)
-    likes = models.IntegerField(default=0)
-    linkedin = models.IntegerField(default=0)
-    shares = models.IntegerField(default=0)
-    pageviews = models.IntegerField(default=0)
-    score = models.IntegerField(default=0)
-    updated_social = models.BooleanField(default=False)
-
-    # republishing
-    was_announced = models.BooleanField(default=False)
-    was_recommended = models.BooleanField(default=False)
-
     # management
-    has_errors = models.BooleanField(default=True)
+    has_errors = models.BooleanField(default=False)
 
     objects = PostManager()
 
