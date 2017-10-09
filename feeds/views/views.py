@@ -233,6 +233,11 @@ class WebSiteDetailView(DetailView):
     model = WebSite
     template_name = "feeds/website_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(WebSiteDetailView, self).get_context_data(**kwargs)
+        context['feeds'] = getFeedsFromSite(self.object)
+        return context
+
 
 class WebSiteUpdateView(PermissionRequiredMixin, UpdateView):
     """

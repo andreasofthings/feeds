@@ -12,18 +12,23 @@
 
 {%block content%}
 <div class="row">
-    <div class="col-md-4">
-        <h3>
-            {{object}}
+    <div class="col-4 col-md-4">
+        <h4>{{object}}</h4>
             {% if user.is_authenticated %}
               {% if perms.feeds.change_site %}<a href="{{object.get_absolute_url}}update" class="btn btn-mini site-tooltip" title="edit site"><i class="icon-edit"></i></a>{% endif %}
               {% if perms.feeds.delete_site %}<a href="{{object.get_absolute_url}}delete" class="btn btn-mini site-tooltip" title="delete site"><i class="icon-trash"></i></a>{% endif %}
             {% endif %}
-        </h3>
     </div>
-    <div class="col-md-8">
+    <div class="col-4 col-md-4">
+      <h4>Registered Feeds</h4>
     {% for feed in object.feeds.all %}
-    <p><a href="{{ feed.get_absolute_url }}">{{ feed }}</a></p>
+      <p><a href="{{ feed.get_absolute_url }}">{{ feed }}</a></p>
+    {% endfor %}
+    </div>
+    <div class="col-4 col-md-4">
+      <h4>Available Feeds</h4>
+    {% for feed in feeds %}
+      <p><a href="{{ feed.1 }}">{{ feed.0 }}</a></p>
     {% endfor %}
     </div>
 </div>

@@ -6,6 +6,8 @@
 helper functions for angryplanet.feeds
 """
 
+from django.core.cache import cache
+
 import requests
 
 try:
@@ -45,11 +47,10 @@ def getFeedsFromSite(site):
     """
     parser = feedFinder()
     result = []
-    html = requests.get(site)
+    html = cache.get_or_set(site, requests.get(site), 10600)
     parser.feed(html.text)
     for link in parser.links:
         if "type" in link.keys():
             if "application/rss" in link['type']:
                 result.append((link['title'], link['href']))
     return result
-
