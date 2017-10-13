@@ -25,6 +25,8 @@ class feedFinder(HTMLParser):
     ==========
 
     custom HTMLParser to find all relevant feeds from a website.
+
+    Used in `:py:feeds.tools.getFeedsFromSite`
     """
     _links = []
 
@@ -46,11 +48,17 @@ def getFeedsFromSite(site):
     Fetches the site, parses it, finds embedded links.
     """
     parser = feedFinder()
-    result = []
     html = cache.get_or_set(site, requests.get(site), 10600)
     parser.feed(html.text)
+    result = []
     for link in parser.links:
         if "type" in link.keys():
             if "application/rss" in link['type']:
-                result.append((link['title'], link['href']))
+                result.append(
+                #{
+                #    'title': link.get('title'),
+                #    'href': link.get('href'),
+                #}
+                (link.get('href')),
+                )
     return result
