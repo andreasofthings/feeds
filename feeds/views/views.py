@@ -384,7 +384,7 @@ class FeedSubscriptionsView(LoginRequiredMixin, PaginatedListView):
         return queryset.order_by('name')
 
 
-class PostListView(AjaxListView):
+class PostListView(LoginRequiredMixin, PaginatedListView):
     """
     List Posts from all Feeds.
 
@@ -392,7 +392,7 @@ class PostListView(AjaxListView):
     nice, too. The pagination bar looks really ugly.
     """
     model = Post
-    # paginate_by = 50
+    paginate_by = 50
 
     def get_queryset(self):
         """

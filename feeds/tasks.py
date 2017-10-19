@@ -109,8 +109,8 @@ def post_update_twitter(entry_id):
         post = Post.objects.get(pk=entry_id)
         # (post.tweets, ) = api.search(post.link)
         post.save()
-        logger.debug("stop: counting tweets. got %s", post.tweets)
-        return (post.tweets, )
+        logger.debug("stop: counting tweets. got %s", post.rating.tweets)
+        return (post.rating.tweets, )
     return (0, )
 
 
@@ -187,7 +187,7 @@ def tsum(numbers, post):
         logger.error(numbers)
         return 0
 
-    post.score = sum(merged)
+    post.rating.score = sum(merged)
     post.save()
 
 

@@ -16,18 +16,70 @@
 </nav>
 {% endblock %}
 
+<div class="row">
+    <div class="col-md-12">
+{% include "feeds/partials/paginator.html"%}
+    </div>
+</div>
 
 {% block content %}
-{% include page_template %}
+{% for node in object_list %}
+
+<div class="row">
+    <div class="col-md-2">
+      <div class="row">
+          <div class="col-md-12">
+            <a href="{{ node.feed.get_absolute_url }}" alt="{{node.feed.title}}">
+              {% if node.feed.image_url %}
+              <img src="{{ node.feed.image_url }}" class="feed-logo">
+              {% else %}
+              <img src="{% static "feeds/icons/rss-480px.png" %}" width="32" height="32">
+              {% endif %}
+            </a>
+          </div>
+        </div>
+      <div class="row">
+        <div class="col-md-12">
+          <small ># {{ node.score }}</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-10">
+        <div class="row">
+            <div class="col-md-12">
+                <h6>
+                  {% if node.author %}
+                    <small> {{ node.author }} @ </small>
+                  {% endif %}
+                  <a href="{{ node.feed.get_absolute_url }}" alt="{{node.feed.title}}">
+                    {{node.feed.title}}
+                  </a>
+                  <small data-toggle="tooltip" data-placement="top" title="{{ node.published }}">
+                      {{ node.published|naturaltime }}
+                   </small>
+                </h6>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h4>
+                    <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# include page_template #}
 {% endblock %}
 
 
 {% block js %}
-<script src={% static "el-pagination/js/el-pagination.js" %}></script>
-<script>
+<!-- script src={% static "el-pagination/js/el-pagination.js" %}></script -->
+<!--script>
     $.endlessPaginate({
         paginateOnScroll: true,
         paginateOnScrollChunkSize: 5
     });
-</script>
+    </script -->
 {% endblock %}
