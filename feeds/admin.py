@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models.files import FileModel
 from .models.website import WebSite
+from .models.category import Category, Tag
 from .models.enclosure import Enclosure
 from .models.feed import Feed
 from .models.stats import FeedPostCount
@@ -12,6 +13,10 @@ from .models.subscription import Subscription
 
 
 from .forms import FeedAdminForm
+
+
+admin.site.register(Category)
+admin.site.register(Tag)
 
 
 class PostInline(admin.TabularInline):
@@ -57,6 +62,7 @@ class PostAdmin(admin.ModelAdmin):
         RatingInline,
     ]
 
+
 @admin.register(Enclosure)
 class EnclosureAdmin(admin.ModelAdmin):
     """
@@ -65,7 +71,6 @@ class EnclosureAdmin(admin.ModelAdmin):
 
 
 def refresh_feed(modeladmin, request, queryset):
-    short_description = ""
     queryset.refresh()
 refresh_feed.short_description = "Refresh selected feeds"
 
@@ -141,8 +146,6 @@ class OptionsAdmin(admin.ModelAdmin):
     inlines = [
         SubscriptionInline,
     ]
-
-
 
 
 @admin.register(Subscription)

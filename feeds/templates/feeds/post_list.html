@@ -17,13 +17,14 @@
 </nav>
 {% endblock %}
 
+{% block content %}
+
 <div class="row">
     <div class="col-md-12">
 {% include "feeds/partials/paginator.html"%}
     </div>
 </div>
 
-{% block content %}
 {% for node in object_list %}
 
 <div class="row">
