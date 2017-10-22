@@ -279,7 +279,6 @@ class FeedListView(LoginRequiredMixin, PaginatedListView):
 
     """
     model = Feed
-    context_object_name = "feeds"
     queryset = Feed.objects.order_by('name')
 
 
@@ -393,6 +392,7 @@ class PostListView(LoginRequiredMixin, PaginatedListView):
     """
     model = Post
     paginate_by = 50
+    queryset = Post.objects.order_by('published')
 
     def get_queryset(self):
         """

@@ -34,7 +34,7 @@
                 <th>Subscribers</th>
                 <th>Options</th>
             </tr>
-            {% for feed in feeds %}
+            {% for feed in object_list %}
             <tr>
                 <td><a href="{{feed.get_absolute_url}}">{{ feed }}</a></td>
                 <td>{% for cat in feed.category.all %}<a href="{{cat.get_absolute_url}}">{{cat}}</a>{% endfor %}</td>

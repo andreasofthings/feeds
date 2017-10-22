@@ -32,7 +32,7 @@
           <div class="col-md-12">
             <a href="{{ node.feed.get_absolute_url }}" alt="{{node.feed.title}}">
               {% if node.feed.image_url %}
-              <img src="{{ node.feed.image_url }}" class="feed-logo">
+              <img src="{{ node.feed.image_url }}" width="32" height="32" class="feed-logo">
               {% else %}
               <img src="{% static "feeds/icons/rss-480px.png" %}" width="32" height="32">
               {% endif %}
