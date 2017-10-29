@@ -1,7 +1,7 @@
 - model: feeds.Feed
   pk: 1
   fields:
-    "feed_url": 'https://nomorecubes.net/feed/rss'
+    "feed_url": 'http://nomorecubes.net/feed/rss'
     "name": 'No more cubes.'
     "is_active": True
 - model: feeds.Feed

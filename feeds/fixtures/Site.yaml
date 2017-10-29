@@ -1,7 +1,7 @@
 - model: feeds.WebSite
   pk: 1
   fields:
-    "website_url": 'https://nomorecubes.net/'
+    "website_url": 'http://nomorecubes.net/'
     "slug": "nomorecubes"
 - model: feeds.WebSite
   pk: 2

@@ -16,7 +16,6 @@
     "guid": "http://www.wurst.de/1234"
     "published": "2000-01-01 00:00:00Z"
     "updated": "2001-01-01 00:00Z"
-    "score": 1
 - model: feeds.Post
   pk: 3
   fields:

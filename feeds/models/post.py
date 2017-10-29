@@ -81,6 +81,14 @@ class Post(models.Model):
 
     objects = PostManager()
 
+    @property
+    def score(self):
+        """
+        .. todo::
+            implement this depending on `:py:feeds.models.rating`
+        """
+        return 0
+
     @models.permalink
     def get_absolute_url(self):
         return ('planet:post-detail', [str(self.id)])

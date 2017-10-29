@@ -1,6 +1,6 @@
 {%extends 'feeds/index.html'%}
 {% load feed_extra %}
-{% load el_pagination_tags %}
+{# load el_pagination_tags #}
 {% load static from staticfiles %}
 
 {% block additional_scripts_start %}
@@ -46,15 +46,15 @@ Feed: {{ feed }}
 </div>
 <div class="row">
   <div class="col-md-12">
-    {% paginate posts as post_list %}
+    {# paginate posts as post_list #}
     <ul>
-    {% for post in post_list %}
+    {% for post in posts %}
     <li><h5>
         {% if post.author %}{{ post.author }} wrote: {% endif %}
         <a href="{{ post.get_absolute_url }}">{{ post }}</a>
       <small>{{ post.published }}</small></h5></li>
     {% endfor %}
-    {% show_pages %}
+    {# show_pages #}
     </ul>
   </div>
 </div>

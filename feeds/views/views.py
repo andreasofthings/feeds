@@ -45,7 +45,7 @@ from ..baseviews import PaginatedListView
 
 from formtools.wizard.views import SessionWizardView
 
-from el_pagination.views import AjaxListView
+# from el_pagination.views import AjaxListView
 
 logger = logging.getLogger(__name__)
 
@@ -406,7 +406,7 @@ class PostListView(LoginRequiredMixin, PaginatedListView):
         return Post.objects.older_than(timedelta(0)).order_by('-published')
 
 
-class PostSubscriptionView(LoginRequiredMixin, AjaxListView):
+class PostSubscriptionView(LoginRequiredMixin, PaginatedListView):
     """
     List Posts from subscribed Feeds.
 
