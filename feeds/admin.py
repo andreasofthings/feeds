@@ -54,6 +54,7 @@ class PostAdmin(admin.ModelAdmin):
     """
     list_display = (
         'title',
+        'feed',
         'published',
         'updated',
     )
@@ -116,6 +117,7 @@ class FeedAdmin(admin.ModelAdmin):
     form = FeedAdminForm
     list_display = (
         'name',
+        'website',
         'is_active',
         'announce_posts',
         'post_count',
@@ -127,6 +129,7 @@ class FeedAdmin(admin.ModelAdmin):
     )
     list_display_links = (
         'name',
+        'website',
     )
     list_editable = (
         'announce_posts',
