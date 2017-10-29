@@ -156,6 +156,7 @@ class Category(models.Model):
         Django Meta.
         """
         ordering = ('name',)
+        unique_together = ('name', 'slug', )
         verbose_name = 'category'
         verbose_name_plural = 'categories'
 
