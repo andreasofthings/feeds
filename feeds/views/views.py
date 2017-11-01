@@ -242,7 +242,7 @@ class WebSiteDetailView(DetailView):
                         )
                     ]
         context['new_feeds'] = set(all_feeds) - set(existing)
-        context['existing'] = existing
+        context['existing'] = Feed.objects.filter(feed_url__in=existing)
         return context
 
 

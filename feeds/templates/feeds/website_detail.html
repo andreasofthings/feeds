@@ -21,13 +21,13 @@
     </div>
     <div class="col-4 col-md-4">
       <h4>Registered Feeds</h4>
-    {% for feed in existing %}
-      <p><a href="{{ feed }}">{{ feed }}</a></p>
+    {% for feed in existing %} {# List of `Feed` objects. #}
+      <p><a href="{{ feed.get_absolute_url }}">{{ feed.name }}</a></p>
     {% endfor %}
     </div>
     <div class="col-4 col-md-4">
       <h4>Available Feeds</h4>
-    {% for feed in new_feeds %}
+    {% for feed in new_feeds %} {# list of feeds #}
       <p><a href="{{ feed }}">{{ feed }}</a></p>
     {% endfor %}
     </div>
