@@ -73,8 +73,14 @@ class PostSitemap(Sitemap):
         return "yearly"
 
     def priority(self, obj):
+        """
+        Datamodel changed
+
+        .. todo::
+        Fix to use ratings.score
+        """
         posts = Post.objects.all()
-        maximum = float(posts.aggregate(Max('score'))['score__max'])
+        maximum = 100 # float(posts.aggregate(Max('rating__score'))['score__max'])
         if maximum > 0:
             priority = float(obj.rating)/float(maximum)
         else:

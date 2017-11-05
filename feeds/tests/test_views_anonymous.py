@@ -33,7 +33,7 @@ class ViewsAnonymousTest(TestCase):
         Set up environment.
         """
         from feeds.models import WebSite
-        site = WebSite(website_url="https://angry-planet.com/")
+        site = WebSite(website_url="http://angry-planet.com/")
         site.save()
         self.site_id = site.pk
         """Test WebSite."""
