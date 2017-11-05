@@ -82,7 +82,8 @@ class PostSitemap(Sitemap):
         posts = Post.objects.all()
         maximum = 100 # float(posts.aggregate(Max('rating__score'))['score__max'])
         if maximum > 0:
-            priority = float(obj.rating)/float(maximum)
+            priority = float(50)/float(maximum)
+            # priority = float(obj.rating)/float(maximum)
         else:
             priority = 0
 

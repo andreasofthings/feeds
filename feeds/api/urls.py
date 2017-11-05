@@ -31,8 +31,8 @@ router.register(r'subscriptions', UserSubscriptionsViewSet)
 schema_view = get_schema_view(title="Feeds API")
 
 urlpatterns = [
+    url(r'^$', schema_view),
     url(r'^', include(router.urls)),
-    url('^$', schema_view),
     url(r'^options/', OptionsView.as_view()),
     url(r'^options/(?P<username>\w+)', OptionsView.as_view())
 ]
