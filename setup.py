@@ -48,12 +48,11 @@ setup(
     ],
     install_requires=[
         'celery>=4.1.0',
+        'coreapi',
         'django>=1.11.0',
         'django-formtools',
         'django-crispy-forms>=1.6.0',
-        'django-el-pagination>=3.0.1',
         'djangorestframework>=3.5.0',
-        'django-star-ratings>=0.5.6',
         'django-haystack>=2.3.1',
         # 'python-django-social',
         'feedparser>=5.1.2',
