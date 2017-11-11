@@ -81,6 +81,10 @@ class Post(models.Model):
 
     objects = PostManager()
 
+    class Meta:
+        # show newest on top
+        ordering = ['-published', ]
+
     @property
     def score(self):
         """
