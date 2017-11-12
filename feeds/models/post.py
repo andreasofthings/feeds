@@ -79,6 +79,10 @@ class Post(models.Model):
     # management
     has_errors = models.BooleanField(default=False)
 
+    # republishing
+    was_announced = models.BooleanField(default=False)
+    was_recommended = models.BooleanField(default=False)
+
     objects = PostManager()
 
     class Meta:
@@ -91,7 +95,7 @@ class Post(models.Model):
         .. todo::
             implement this depending on `:py:feeds.models.rating`
         """
-        return 0
+        return self.ratings.order('-updated')[0]
 
     @models.permalink
     def get_absolute_url(self):
@@ -114,6 +118,7 @@ class Post(models.Model):
         """
         Classify this individual post and return the result.
         """
+        self.rating
         return
 
     def save(self, *args, **kwargs):

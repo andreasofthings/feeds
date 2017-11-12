@@ -5,23 +5,25 @@
 """
 """
 import logging
+import datetime
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 
 from .post import Post
 
+
+@python_2_unicode_compatible
 class Rating(models.Model):
-    post = models.OneToOneField(
+    post = models.ForeignKey(
         Post,
+        related_name='ratings',
         on_delete=models.CASCADE,
-        primary_key=True,
     )
-    # republishing
-    was_announced = models.BooleanField(default=False)
-    was_recommended = models.BooleanField(default=False)
 
     # Social
-    updated_social = models.DateTimeField(null=True, blank=True, default=False)
+    updated = models.DateTimeField(
+        auto_now_add=True,
+    )
 
     tweets = models.IntegerField(default=0)
     blogs = models.IntegerField(default=0)
@@ -36,7 +38,6 @@ class Rating(models.Model):
 
     # all together
     score = models.IntegerField(default=0)
-
 
     def __str__(self):
         return "%s (%s)" % (self.post, self.score)
