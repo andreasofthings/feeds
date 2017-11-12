@@ -11,14 +11,12 @@ from django.db import models
 from .post import Post
 
 class Rating(models.Model):
-    post = models.OneToOneField(
+    post = models.ForeignKey(
         Post,
+        related_name='ratings',
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    # republishing
-    was_announced = models.BooleanField(default=False)
-    was_recommended = models.BooleanField(default=False)
 
     # Social
     updated_social = models.DateTimeField(null=True, blank=True, default=False)
@@ -36,7 +34,6 @@ class Rating(models.Model):
 
     # all together
     score = models.IntegerField(default=0)
-
 
     def __str__(self):
         return "%s (%s)" % (self.post, self.score)

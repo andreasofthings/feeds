@@ -81,6 +81,10 @@ class Post(models.Model):
 
     objects = PostManager()
 
+    # republishing
+    was_announced = models.BooleanField(default=False)
+    was_recommended = models.BooleanField(default=False)
+
     @property
     def score(self):
         """
@@ -110,6 +114,7 @@ class Post(models.Model):
         """
         Classify this individual post and return the result.
         """
+        self.rating
         return
 
     def save(self, *args, **kwargs):
