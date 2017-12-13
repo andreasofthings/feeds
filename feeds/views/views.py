@@ -19,7 +19,7 @@ import logging
 from datetime import timedelta
 
 from django import forms
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic import DetailView

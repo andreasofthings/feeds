@@ -55,6 +55,7 @@ sitemaps = {
     'posts': PostSitemap,
 }
 
+app_name = "feeds"
 
 urlpatterns = [
     url(r'^$', HomeView.as_view(), name="home"),
