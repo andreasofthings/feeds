@@ -4,7 +4,7 @@
 """
 """
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.generic import CreateView, UpdateView
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
