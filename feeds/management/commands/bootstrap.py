@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 import requests
 import yaml
-
+from time import sleep
 latest = \
     "https://raw.githubusercontent.com/aneumeier/feeds/master/feeds/directory/Websites.yaml"
 
@@ -13,7 +13,15 @@ class Command(BaseCommand):
         parser.add_argument('site', nargs='+', type=str)
 
     def handle(self, *args, **options):
-        sitetext = requests.get(latest).text
+        from feeds.tools import getFeedsFromSite
+        sitetext = requests.get(latest, verify=None).text
         sitelist = yaml.load(sitetext)
-        for i in sitelist:
-            print(i)
+        for site in sitelist['Websites']:
+            try:
+                feeds = getFeedsFromSite(site)
+            except requests.exceptions.SSLError:
+                continue
+            print(site)
+            for feed in feeds:
+                print(feed)
+            sleep(2)
