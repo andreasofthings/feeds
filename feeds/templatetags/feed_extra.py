@@ -159,7 +159,7 @@ class FeedControlsNode(template.Node):
 
         result = view_button
         is_subscribed = False
-        if user is not AnonymousUser and user.is_authenticated():
+        if user is not AnonymousUser and user.is_authenticated:
             try:
                 opt = Options.objects.get(user=user)
                 is_subscribed = \
