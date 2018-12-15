@@ -23,7 +23,6 @@ urlpatterns = [
         include(
             'feeds.urls',
             namespace="planet",
-            app_name="planet"
         )
         ),
     url(r'^feedapi/', include('feeds.api.urls')),
@@ -54,5 +53,5 @@ urlpatterns = [
         },
         name='sitemaps'
         ),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
 ]

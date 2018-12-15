@@ -307,7 +307,6 @@ Coming from `feedparser`:
         """
         return self.feed_subscription.count()
 
-    @models.permalink
     def get_absolute_url(self):
         """
         Absolute URL for this object.

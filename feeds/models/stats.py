@@ -37,7 +37,6 @@ class FeedPostCount(models.Model):
     entry_err = models.IntegerField(default=0)
     created = models.IntegerField()
 
-    @models.permalink
     def get_absolute_url(self):
         return ('planet:feed-post-count-view', [str(self.id)])
 

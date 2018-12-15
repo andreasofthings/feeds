@@ -97,11 +97,9 @@ class Post(models.Model):
         """
         return self.ratings.order('-updated')[0]
 
-    @models.permalink
     def get_absolute_url(self):
         return ('planet:post-detail', [str(self.id)])
 
-    @models.permalink
     def get_trackable_url(self):
         """
         Get an URL for this particular object,
