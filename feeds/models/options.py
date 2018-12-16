@@ -46,6 +46,7 @@ class Options(models.Model):
     subscriptions = models.ManyToManyField(Feed, through='Subscription')
 
     class Meta:
+        app_label = "feeds"
         verbose_name_plural = "options"
 
     def __str__(self):

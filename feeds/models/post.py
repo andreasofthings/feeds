@@ -86,7 +86,10 @@ class Post(models.Model):
     objects = PostManager()
 
     class Meta:
-        # show newest on top
+        """
+        Django Meta
+        """
+        app_label = "feeds"
         ordering = ['-published', ]
 
     @property
@@ -156,6 +159,7 @@ class TaggedPost(models.Model):
 
     class Meta:
         # Enforce unique tag association per object
+        app_label = "feeds"
         unique_together = (('tag', 'post', ),)
         verbose_name = _('tagged item')
         verbose_name_plural = _('tagged node')

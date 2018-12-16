@@ -37,6 +37,12 @@ class FeedPostCount(models.Model):
     entry_err = models.IntegerField(default=0)
     created = models.IntegerField()
 
+    class Meta:
+        """
+        Django Meta
+        """
+        app_label = "feeds"
+
     @models.permalink
     def get_absolute_url(self):
         return ('planet:feed-post-count-view', [str(self.id)])
@@ -66,6 +72,12 @@ class FeedEntryStats(models.Model):
     entry_updated = models.IntegerField(default=0)
     entry_err = models.IntegerField(default=0)
 
+    class Meta:
+        """
+        Django Meta
+        """
+        app_label = "feeds"
+
 
 class FeedStats(models.Model):
     """
@@ -78,6 +90,12 @@ class FeedStats(models.Model):
     feed_errhttp = models.IntegerField(default=0)
     feed_errexc = models.IntegerField(default=0)
 
+    class Meta:
+        """
+        Django Meta
+        """
+        app_label = "feeds"
+
 
 class PostReadCount(models.Model):
     """
@@ -88,3 +106,9 @@ class PostReadCount(models.Model):
     objects = PostReadCountManager()
     post = models.ForeignKey(Post, on_delete=models.DO_NOTHING,)
     created = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        """
+        Django Meta
+        """
+        app_label = "feeds"

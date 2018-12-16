@@ -44,6 +44,12 @@ class Enclosure(models.Model):
     enclosure_type = models.CharField(max_length=32)
     """type of the enclosed file, for example 'image/jpeg'."""
 
+    class Meta:
+        """
+        Django Meta
+        """
+        app_label = "feeds"
+
     def __str__(self):
         """
         return type of object and containing post

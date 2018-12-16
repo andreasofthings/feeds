@@ -47,6 +47,10 @@ class Subscription(models.Model):
     objects = SubscriptionManager()
 
     class Meta:
+        """
+        Django Meta
+        """
+        app_label = "feeds"
         unique_together = (("user", "feed"),)
 
     def __str__(self):

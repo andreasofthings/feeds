@@ -61,8 +61,9 @@ setup(
         'facebook-sdk',
         'timestring>=1.6.2',
     ],
-    dependency_links=[
-    ],
+    dependency_links=[],
+    setup_requires = ['pytest-runner'],
+    tests_require=['pytest', ],
     # cmdclass={
     #    'install': InstallCommand,
     # },

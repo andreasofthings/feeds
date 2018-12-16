@@ -283,6 +283,7 @@ Coming from `feedparser`:
            can_refresh_feed: User with this credential
            is allowed to refresh a feed.
         """
+        app_label = "feeds"
         verbose_name = _('feed')
         verbose_name_plural = _('feeds')
         ordering = ('name', 'feed_url',)
