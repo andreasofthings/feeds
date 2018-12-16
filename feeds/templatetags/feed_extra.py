@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 from django import template
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.models import AnonymousUser, Group
 
 from ..models import Feed, Post, Subscription, Options
@@ -159,7 +159,7 @@ class FeedControlsNode(template.Node):
 
         result = view_button
         is_subscribed = False
-        if user is not AnonymousUser and user.is_authenticated():
+        if user is not AnonymousUser and user.is_authenticated:
             try:
                 opt = Options.objects.get(user=user)
                 is_subscribed = \

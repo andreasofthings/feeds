@@ -38,6 +38,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='rating',
             name='post',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, primary_key=True, related_name='ratings', serialize=False, to='feeds.Post'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ratings', serialize=False, to='feeds.Post'),
         ),
     ]

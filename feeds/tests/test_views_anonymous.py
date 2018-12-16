@@ -6,7 +6,7 @@
 """
 
 from django.test import TestCase, Client, RequestFactory
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 class ViewsAnonymousTest(TestCase):
@@ -33,7 +33,7 @@ class ViewsAnonymousTest(TestCase):
         Set up environment.
         """
         from feeds.models import WebSite
-        site = WebSite(website_url="http://angry-planet.com/")
+        site = WebSite(website_url="http://pramari.de/")
         site.save()
         self.site_id = site.pk
         """Test WebSite."""

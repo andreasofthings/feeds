@@ -6,7 +6,7 @@
 """
 
 from django.test import LiveServerTestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from selenium.webdriver.chrome.webdriver import WebDriver
 

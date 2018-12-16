@@ -43,7 +43,6 @@ class FeedPostCount(models.Model):
         """
         app_label = "feeds"
 
-    @models.permalink
     def get_absolute_url(self):
         return ('planet:feed-post-count-view', [str(self.id)])
 

@@ -112,7 +112,6 @@ class Tag(models.Model):
     def natural_key(self):
         return u''.join(self.slug)
 
-    @models.permalink
     def get_absolute_url(self):
         return ('planet:tag-view', [str(self.slug)])
 
@@ -190,6 +189,5 @@ class Category(models.Model):
     def natural_key(self):
         return u''.join(self.slug)
 
-    @models.permalink
     def get_absolute_url(self):
         return ('planet:category-view', [str(self.slug)])

@@ -6,7 +6,7 @@
 """
 
 from django.test import TestCase, Client
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User, Permission
 
@@ -178,22 +178,23 @@ class TestAllViewsLoggedIn(TestCase):
 
     def test_feed_add(self):
         """
-        Go to feed-add.
-        This should require the proper credentials.
+        Go to feed-add, not logged in.
+        This should require logged in requests, and redirect to login first.
         """
         result = self.client.get(reverse('planet:feed-add'), follow=False)
         self.assertEqual(result.status_code, 302)
+        self.assertRedirects(result, '/accounts/login/?next=/feeds/add/')
 
-    def test_feed_add_no_credentials(self):
+    def test_feed_add_logged_in_no_permission(self):
         """
-        go to feed-add
+        Go to feed-add, logged in test-user.
+        This should require permission and respond with "403".
         """
         self.client.login(username=self.username, password=self.password)
-        result = self.client.get(reverse('planet:feed-add'), follow=False)
-        self.assertEqual(result.status_code, 302)
-        # self.assertRedirects(result, '/accounts/login')
+        result = self.client.get(reverse('planet:feed-add'), follow=True)
+        self.assertEqual(result.status_code, 403)
 
-    def test_feed_add_logged_in_valid_credentials(self):
+    def test_feed_add_logged_in_valid_permission(self):
         """
         go to feed-add
         """
@@ -210,7 +211,7 @@ class TestAllViewsLoggedIn(TestCase):
         'AttributeError: 'module' object has no
         attribute 'CRISPY_TEMPLATE_PACK'.
         """
-        # result = self.client.get(reverse('planet:feed-add'), follow=False)
+        result = self.client.get(reverse('planet:feed-add'), follow=False)
         # self.assertEqual(result.status_code, 200)
 
     def test_feed_add_post_anonymous(self):

@@ -58,9 +58,18 @@ class WebSite(models.Model):
         """
         Since 'slug' is not a required field for userinput,
         set it before saving.
+
+        .. todo::
+            This is a bit of magic, that should rather not happen.
+            It strips http:// https:// and www, if present.
         """
         if not self.slug:
-            self.slug = slugify(self.website_url)
+            def remove_prefix(s, prefix):
+                return s[len(prefix):] if s.startswith(prefix) else s
+            slug = remove_prefix(slugify(self.website_url), "https")
+            slug = remove_prefix(slugify(self.website_url), "http")
+            slug = remove_prefix(slugify(self.website_url), "www")
+            self.slug = slug
         return super(WebSite, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -69,7 +78,6 @@ class WebSite(models.Model):
         """
         return u"%s" % (self.website_url)
 
-    @models.permalink
     def get_absolute_url(self):
         """
         Absolute URL for this object.

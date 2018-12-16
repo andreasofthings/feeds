@@ -54,8 +54,8 @@ class TaskTest(TestCase):
         This will go through all of the feeds in the fixture.
         """
         from feeds.tasks import cronjob
-        test_result = cronjob.delay()
-        self.assertEqual(test_result.get(), CRON_OK)
+        test_result = cronjob()
+        self.assertEqual(test_result, CRON_OK)
 
     def test_purge(self):
         """
