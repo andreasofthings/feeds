@@ -562,7 +562,13 @@ Coming from `feedparser`:
 
         try:
             parsed = self.parse()
-        except FeedErrorHTTP as e:
+        except FeedErrorHTTP as err:
+            logger.error(
+                "{} returned error: {}".format(
+                    self.feed_url,
+                    err
+                )
+            )
             self.errors = self.errors+1
             self.save()  # touch timestamp
             return FEED_ERRHTTP
