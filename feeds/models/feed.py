@@ -313,7 +313,7 @@ Coming from `feedparser`:
 
         .. todo:: should use 'slug' instead of 'id'
         """
-        return ('planet:feed-detail', [str(self.id)])
+        return reverse('planet:feed-detail', args=[str(self.id)])
 
     def _entry_guid(self, entry):
         """
@@ -537,6 +537,7 @@ Coming from `feedparser`:
             raise FeedSame
 
         logger.debug("-- end --")
+        logger.debug("-- end --")
         return fpf
 
     def refresh(self):
@@ -561,12 +562,12 @@ Coming from `feedparser`:
         try:
             parsed = self.parse()
         except FeedErrorHTTP as e:
-            self.errors = self.errors + 1
+            self.errors = self.errors+1
             self.save()  # touch timestamp
             return FEED_ERRHTTP
         except FeedErrorParse as e:
             logger.error("Feed %s raised FeedErrorParse: %s", self.name, e)
-            self.errors = self.errors + 1
+            self.errors = self.errors+1
             self.save()  # touch timestamp
             return FEED_ERRPARSE
         except FeedSame:
