@@ -164,7 +164,7 @@ class WebSiteAdmin(admin.ModelAdmin):
     """
     WebSite Admin Class
     """
-    list_display = ('website_url', 'slug', 'feedcount')
+    list_display = ('name', 'website_url', 'slug', 'feedcount')
     inlines = [
         FeedInline,
     ]

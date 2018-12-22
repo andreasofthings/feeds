@@ -33,6 +33,9 @@ class WebSite(models.Model):
     )
     """URL of the `Site`."""
 
+    name = models.CharField(max_length=128)
+    """Name of the website."""
+
     slug = models.SlugField(null=True)
     """Human readble URL component"""
 
