@@ -85,7 +85,7 @@ class WebSite(models.Model):
 
         .. todo:: should use 'slug' instead of 'id'
         """
-        return reverse('planet:website-detail', [str(self.id)])
+        return reverse('planet:website-detail', args=[str(self.id)])
 
     def feedcount(self):
         """
