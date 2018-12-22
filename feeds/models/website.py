@@ -19,6 +19,7 @@ import logging
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
+from django.urls import reverse
 
 from ..managers import WebSiteManager
 
@@ -87,7 +88,7 @@ class WebSite(models.Model):
 
         .. todo:: should use 'slug' instead of 'id'
         """
-        return ('planet:website-detail', [str(self.id)])
+        return reverse('planet:website-detail', args=[str(self.id)])
 
     def feedcount(self):
         """
