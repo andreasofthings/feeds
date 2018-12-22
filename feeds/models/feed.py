@@ -283,6 +283,7 @@ Coming from `feedparser`:
            can_refresh_feed: User with this credential
            is allowed to refresh a feed.
         """
+        app_label = "feeds"
         verbose_name = _('feed')
         verbose_name_plural = _('feeds')
         ordering = ('name', 'feed_url',)
@@ -561,7 +562,13 @@ Coming from `feedparser`:
 
         try:
             parsed = self.parse()
-        except FeedErrorHTTP as e:
+        except FeedErrorHTTP as err:
+            logger.error(
+                "{} returned error: {}".format(
+                    self.feed_url,
+                    err
+                )
+            )
             self.errors = self.errors+1
             self.save()  # touch timestamp
             return FEED_ERRHTTP

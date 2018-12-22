@@ -39,5 +39,11 @@ class Rating(models.Model):
     # all together
     score = models.IntegerField(default=0)
 
+    class Meta:
+        """
+        Django Meta
+        """
+        app_label = "feeds"
+
     def __str__(self):
         return "%s (%s)" % (self.post, self.score)

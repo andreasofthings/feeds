@@ -37,6 +37,7 @@ class Tag(models.Model):
     A tag.
     """
 
+
     objects = TagManager()
     """
     Overwrite the inherited manager with the
@@ -83,6 +84,7 @@ class Tag(models.Model):
         """
         Django Meta.
         """
+        app_label = "feeds"
         ordering = ('name',)
         verbose_name = _('tag')
         verbose_name_plural = _('tags')
@@ -154,6 +156,7 @@ class Category(models.Model):
         """
         Django Meta.
         """
+        app_label = "feeds"
         ordering = ('name',)
         unique_together = ('name', 'slug', )
         verbose_name = 'category'

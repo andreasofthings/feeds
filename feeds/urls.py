@@ -180,9 +180,6 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-]
-
-urlpatterns += [
     url(
         r'^feed/(?P<pk>\d+)/subscribe/$',
         FeedSubscribeView.as_view(),

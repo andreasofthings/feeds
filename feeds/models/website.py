@@ -46,6 +46,15 @@ class WebSite(models.Model):
     with the custom :mod:`feeds.models.WebSiteManager`
     """
 
+    class Meta:
+        """
+        Django Meta.
+        """
+        app_label = "feeds"
+        ordering = ('website_url',)
+        verbose_name = _('website')
+        verbose_name_plural = _('websites')
+
     def save(self, *args, **kwargs):
         """
         Since 'slug' is not a required field for userinput,
