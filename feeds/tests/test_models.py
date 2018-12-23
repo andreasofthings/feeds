@@ -59,12 +59,7 @@ class ModelTest(TestCase):
         from feeds.models import WebSite
         s = WebSite(website_url="https://pramari.de/")
         s.save()
-        # self.assertContains( s.get_absolute_url(), s.pk)
-        """
-        .. todo:: self.assertContains won't work
-        for what is being tested here.
-        """
-        self.assertEqual(str(s), "https://pramari.de/")
+        self.assertEqual(str(s.website_url), "https://pramari.de/")
         """Assert the __str__ representation equals the site-name."""
 
     def test_feed_ok(self):
