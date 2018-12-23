@@ -88,7 +88,7 @@ class FeedControlsNode(template.Node):
     """
 
     button = """
-    <a href="%s" class="btn btn-xs" role="button"
+    <a href="%s" class="btn btn-sm" role="button"
     data-toggle="tooltip" data-placement="top" title="%s">
     <span class="glyphicon glyphicon-%s"></span>
     </a>
