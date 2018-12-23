@@ -54,6 +54,9 @@ class ModelTest(TestCase):
         """
         Create a :py:mod:`feeds.models.WebSite` Object and verify
         it functions properly.
+
+        .. todo:
+            A better Test for the WebSite model.
         """
 
         from feeds.models import WebSite
@@ -64,7 +67,8 @@ class ModelTest(TestCase):
 
     def test_feed_ok(self):
         """
-        Test a :py:mod:`feeds:models.Feed` with RSS as an input, that can be found and does parse well.
+        Test a :py:mod:`feeds:models.Feed` with RSS as an input, that
+        can be found and does parse well.
         """
         feeds = Feed.objects.filter(pk=1).filter(is_active=True)
         # 0 == "feed_url": 'https://nomorecubes.net/feed/rss'
