@@ -235,7 +235,7 @@ class WebSiteDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(WebSiteDetailView, self).get_context_data(**kwargs)
-        all_feeds = getFeedsFromSite(self.object)
+        all_feeds = getFeedsFromSite(self.object.website_url)
         existing = [feed.feed_url for feed in Feed.objects.filter(
                         feed_url__in=all_feeds).filter(
                         website=self.object.pk
