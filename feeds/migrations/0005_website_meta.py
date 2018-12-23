@@ -17,6 +17,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='website',
             name='name',
-            field=models.CharField(max_length=128),
+            field=models.CharField(max_length=128, default=''),
         ),
     ]
