@@ -80,7 +80,7 @@ class WebSite(models.Model):
         """
         String representation of :Site:
         """
-        return u"%s" % (self.website_url)
+        return u"%s" % (self.name)
 
     def get_absolute_url(self):
         """

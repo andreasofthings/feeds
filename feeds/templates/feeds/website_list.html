@@ -31,8 +31,10 @@
                     <td><a href="{{o.get_absolute_url}}">{{ o }}</a></td>
                     <td>
                         {% if user.is_authenticated %}
-                            {% if perms.feeds.change_site %}<a href="{{o.get_absolute_url}}update" class="btn btn-mini"><i class="icon-edit"></i></a>{% endif %}
-                            {% if perms.feeds.delete_site %}<a href="{{o.get_absolute_url}}delete" class="btn btn-mini"><i class="icon-trash"></i></a>{% endif %}
+                            {% if perms.feeds.change_site %}
+                              <a href="{{o.get_absolute_url}}update" class="btn btn-sm"><i class="icon-edit"></i></a>
+                            {% endif %}
+                            {% if perms.feeds.delete_site %}<a href="{{o.get_absolute_url}}delete" class="btn btn-sm"><i class="icon-trash"></i></a>{% endif %}
                       {% endif %}
                     </td>
                 </tr>
