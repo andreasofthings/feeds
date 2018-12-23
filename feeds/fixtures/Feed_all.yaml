@@ -867,8 +867,17 @@
   pk: 146
   fields:
     "feed_url": 'http://nomorecubes.net/fehler/'
-    "name": "Ist egal, dieser Feed liefert 404"
-    "short_name": "egal"
-    "slug": "egal"
+    "name": "This feed will give a 404 error."
+    "short_name": "nomorecubes-404-error"
+    "slug": "nomorecubes-404-error"
+    "website": 1
+    "is_active": True
+- model: feeds.Feed
+  pk: 147
+  fields:
+    "feed_url": ' https://www.heise.de/newsticker/heise-atom.xml'
+    "name": "This feed will give a parse error."
+    "short_name": "heise-parse-error"
+    "slug": "heise-parse-error"
     "website": 1
     "is_active": True

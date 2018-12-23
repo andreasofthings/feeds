@@ -67,15 +67,31 @@ class ModelTest(TestCase):
         self.assertEqual(str(s), "https://pramari.de/")
         """Assert the __str__ representation equals the site-name."""
 
-    def test_feed(self):
+    def test_feed_ok(self):
         """
-        Test a :py:mod:`feeds:models.Feed`
+        Test a :py:mod:`feeds:models.Feed` with RSS as an input, that can be found and does parse well.
         """
-        feeds = Feed.objects.filter(is_active=True)
-        # 1 ==
-        self.assertEquals(feeds[1].refresh(), FEED_OK)
-        self.assertEquals(feeds[1].refresh(), FEED_SAME)
+        feeds = Feed.objects.filter(pk=1).filter(is_active=True)
         # 0 == "feed_url": 'https://nomorecubes.net/feed/rss'
+        self.assertEquals(feeds[0].refresh(), FEED_OK)
+        self.assertEquals(feeds[0].refresh(), FEED_SAME)
+
+    def test_feed_404(self):
+        """
+        Test a :py:mod:`feeds:models.Feed` with a 404 as an input,
+        that cannot be found and doesn't parse well.
+        """
+        feeds = Feed.objects.filter(pk=146).filter(is_active=True)
+        # 0 == "feed_url": 'https://nomorecubes.net/error'
+        self.assertEquals(feeds[0].refresh(), FEED_ERRPARSE)
+
+    def test_feed_errorparse(self):
+        """
+        Test a :py:mod:`feeds:models.Feed` with a working feed as an
+        input, that can be found but doesn't parse well.
+        """
+        feeds = Feed.objects.filter(pk=147).filter(is_active=True)
+        # 0 == "feed_url": ' https://www.heise.de/newsticker/heise-atom.xml'
         self.assertEquals(feeds[0].refresh(), FEED_ERRPARSE)
 
     def test_enclosure(self):

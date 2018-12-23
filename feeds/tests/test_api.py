@@ -66,7 +66,6 @@ class ApiTest(APITestCase):
         user = User.objects.get(username='andreas')
         self.client.force_authenticate(user=user)
         response = self.client.get('/feeds/api/options/', format='json')
-        print(response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.logout()
 

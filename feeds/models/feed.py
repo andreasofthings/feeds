@@ -39,7 +39,7 @@ from .. import USER_AGENT
 from .. import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 from .. import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME
 from ..managers import FeedManager
-from ..feedexceptions import FeedErrorHTTP, FeedErrorParse, FeedSame
+from ..exceptions import FeedsBaseException, FeedsHTTPError, FeedsParseError, FeedsSameError
 
 logger = logging.getLogger(__name__)
 
@@ -505,39 +505,41 @@ Coming from `feedparser`:
                 agent=USER_AGENT,
                 etag=self.etag
             )
-        except Exception as e:
-            logger.error(
-                'Feedparser Error: (%s) cannot be parsed: %s',
-                self.feed_url,
-                str(e)
+        except Exception as err:
+            raise FeedsBaseException(
+                "Feedparser Error: {} cannot be parsed.".format(self.feed_url),
+                err
             )
-            raise e
 
-        if 'status' not in fpf or fpf.status >= 400:
-            raise FeedErrorHTTP
+        if 'status' not in fpf:
+            raise FeedsParseError(
+                "Parsed Feed {} didn't provide `status`".format(self.name)
+            )
+
+        if fpf.status >= 400:
+            raise FeedsHTTPError(
+                "Feed {} responded HTTP Client Error (4xx)".format(self.name),
+                None
+            )
 
         if 'bozo' in fpf and fpf.bozo == 1:
-            logger.error(
-                "[%d] !BOZO! Feed '%s' is not well formed: %s",
-                self.id,
-                self.name,
-                fpf.bozo_exception
-            )
             if type(fpf.bozo_exception) is CharacterEncodingOverride:
                 logger.error("CharacterEncodingOverride, trying to continue")
-                pass
             else:
-                raise FeedErrorParse(fpf.bozo_exception)
+                raise FeedsParseError(
+                    "[{} !BOZO! Feed '{}' is not well formed: {}".format(
+                        self.id,
+                        self.name,
+                        fpf.bozo_exception
+                    )
+                )
 
         if fpf.status == 304:
-            logger.debug(
-                "[%d] Feed did not change: %s",
-                self.id,
-                self.name
+            raise FeedsSameError(
+                "[{}] Feed did not change: {}".format(self.id, self.name),
+                Exception("Error")
             )
-            raise FeedSame
 
-        logger.debug("-- end --")
         logger.debug("-- end --")
         return fpf
 
@@ -562,9 +564,9 @@ Coming from `feedparser`:
 
         try:
             parsed = self.parse()
-        except FeedErrorHTTP as err:
+        except FeedsHTTPError as err:
             logger.error(
-                "{} returned error: {}".format(
+                "{} raised error: {}".format(
                     self.feed_url,
                     err
                 )
@@ -572,12 +574,12 @@ Coming from `feedparser`:
             self.errors = self.errors+1
             self.save()  # touch timestamp
             return FEED_ERRHTTP
-        except FeedErrorParse as e:
+        except FeedsParseError as e:
             logger.error("Feed %s raised FeedErrorParse: %s", self.name, e)
             self.errors = self.errors+1
             self.save()  # touch timestamp
             return FEED_ERRPARSE
-        except FeedSame:
+        except FeedsSameError:
             self.save()  # touch timestamp
             return FEED_SAME
 
@@ -603,7 +605,6 @@ Coming from `feedparser`:
             )
         except Exception as e:
             logger.debug("-- end (ERR) --")
-            traceback.print_exc(file=sys.stdout)
             return FEED_ERREXC
 
         logger.debug("Feed '%s' returned %s", self.title, result)
