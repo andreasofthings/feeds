@@ -512,6 +512,7 @@ Coming from `feedparser`:
             )
 
         if 'status' not in fpf:
+            logger.error("No 'status' found in 'fpf'. Found instead", fpf.keys())
             raise FeedsParseError(
                 "Parsed Feed {} didn't provide `status`".format(self.name)
             )

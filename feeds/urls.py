@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 # vim: ts=4 et sw=4 sts=4
 
-from django.conf.urls import url, include
+from django.urls import include, path
+from django.conf.urls import url
 
 from .views import HomeView
 from .views import OptionsView
@@ -58,11 +59,11 @@ sitemaps = {
 app_name = "feeds"
 
 urlpatterns = [
-    url(r'^$', HomeView.as_view(), name="home"),
-    url(r'^options$', OptionsView.as_view(), name="options"),
-    url(r'^opml$', OPMLView.as_view(), name="opml"),
-    url(r'^api/', include('feeds.api.urls')),
-    url(r'^search/', include('haystack.urls')),
+    path('', HomeView.as_view(), name="home"),
+    path('options', OptionsView.as_view(), name="options"),
+    path('opml', OPMLView.as_view(), name="opml"),
+    path('api', include('feeds.api.urls')),
+    path('search', include('haystack.urls')),
     url(
         r'^sitemap\.xml$',
         cache_page(86400)(sitemap_index),
@@ -177,6 +178,16 @@ urlpatterns += [
         CategoryUpdateView.as_view(),
         name="category-update"
     ),
+    url(
+        r'^tag/$',
+        HomeView.as_view(),
+        name="tag-home"
+    ),
+    url(
+        r'^tag/(?P<pk>\d+)/$',
+        HomeView.as_view(),
+        name="tag-view"
+    ),
 ]
 
 urlpatterns += [
@@ -232,28 +243,6 @@ urlpatterns += [
     ),
 ]
 
-urlpatterns += [
-    url(
-        r'^c/$',
-        HomeView.as_view(),
-        name="category-home"
-    ),
-    url(
-        r'^c/(?P<pk>\d+)/$',
-        HomeView.as_view(),
-        name="category-view"
-    ),
-    url(
-        r'^tag/$',
-        HomeView.as_view(),
-        name="tag-home"
-    ),
-    url(
-        r'^tag/(?P<pk>\d+)/$',
-        HomeView.as_view(),
-        name="tag-view"
-    ),
-]
 
 urlpatterns += [
     url(

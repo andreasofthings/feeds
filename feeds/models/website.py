@@ -74,6 +74,8 @@ class WebSite(models.Model):
             slug = remove_prefix(slugify(self.website_url), "http")
             slug = remove_prefix(slugify(self.website_url), "www")
             self.slug = slug
+        if not self.name:
+            self.name = self.slug
         return super(WebSite, self).save(*args, **kwargs)
 
     def __str__(self):

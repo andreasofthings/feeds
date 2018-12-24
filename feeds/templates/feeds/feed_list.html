@@ -14,7 +14,10 @@
 
 <div class="row">
     <div class="col-md-12">
-        <a href="{% url "planet:feed-add" %}" class="btn btn-xs btn-default active" role="button" data-toggle="tooltip" data-placement="bottom" title="{% trans "Add a new Feed."%}"><span class="glyphicon glyphicon-plus-sign"></span>{% trans "Add Feed" %}</a>
+        <a href="{% url "planet:feed-add" %}" class="btn btn-sm btn-default" role="button" data-toggle="tooltip" data-placement="bottom" title="{% trans "Add a new Feed."%}">
+          <span class="fas fa-plus-circle"></span>
+          {% trans "Add Feed" %}
+        </a>
     </div>
 </div>
 

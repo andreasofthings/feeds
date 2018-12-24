@@ -13,6 +13,15 @@
 {% block content %}
 <div class="row">
     <div class="col-md-12">
+        <a href="{% url "planet:category-add" %}" class="btn btn-sm btn-default" role="button" data-toggle="tooltip" data-placement="bottom" title="{% trans "Add a new Category."%}">
+          <span class="fas fa-plus-circle"></span>
+          {% trans "Add Category" %}
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
         <table class="table table-striped table-condensed">
             <tr>
                 <th>Category</th>
@@ -23,7 +32,7 @@
             {% for o in object_list %}
             <tr>
                 <td><a href="{{ o.get_absolute_url }}">{{ o }}</a></td>
-                <td>{{o.feeds.count}}</td>
+                <td>{{o.category_feeds.count}}</td>
                 <td>Todo.</td>
                 <td>
                     <a href="{{o.get_absolute_url}}" class="btn btn-xs" role="button" data-toggle="tooltip" data-placement="top" title="{% trans "View Category" %}"><span class="glyphicon glyphicon-zoom-in"></span></a>

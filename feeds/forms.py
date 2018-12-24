@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
+from django.urls import reverse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
 from crispy_forms.layout import Field
@@ -9,6 +10,7 @@ from crispy_forms.layout import Fieldset
 from crispy_forms.layout import ButtonHolder
 from crispy_forms.layout import Submit
 from crispy_forms.layout import Button
+from crispy_forms.layout import Div
 from crispy_forms.bootstrap import FormActions
 
 from .models import Category
@@ -210,13 +212,13 @@ class CategoryCreateForm(forms.ModelForm):
                 'parent',
             ),
             ButtonHolder(
-                Submit('submit', 'Submit', css_class='btn-small'),
-                Button('cancel', 'Cancel', css_class='btn-small')
+                Submit('submit', 'Submit', css_class='btn-sm'),
+                Button('cancel', 'Cancel', css_class='btn-sm')
             )
         )
         self.helper.form_method = 'post'
         self.helper.form_class = 'form-inline'
-        self.helper.form_action = 'planet:category-add'
+        self.helper.form_action = reverse('planet:category-add')
         super(CategoryCreateForm, self).__init__(*args, **kwargs)
 
 

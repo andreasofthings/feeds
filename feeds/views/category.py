@@ -24,6 +24,16 @@ class CategoryListView(ListView):
     paginate_by = 10
 
 
+class CategoryCreateView(LoginRequiredMixin, CreateView):
+    """
+    ToDo:
+    make this more nice & userfriendly
+    """
+    form_class = CategoryCreateForm
+    model = Category
+    initial = {'is_Active': False}
+
+
 class CategoryDetailView(LoginRequiredMixin, DetailView):
     """
     Show details for a particular Category
@@ -44,19 +54,9 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         if 'slug' in self.kwargs:
-            return reverse('category:category-view', self.kwargs['slug'])
+            return reverse('category:category-detail', args=[self.kwargs['slug']])
         else:
             return reverse('category:category-home')
-
-
-class CategoryCreateView(LoginRequiredMixin, CreateView):
-    """
-    ToDo:
-    make this more nice & userfriendly
-    """
-    form_class = CategoryCreateForm
-    model = Category
-    initial = {'is_Active': False}
 
 
 class TagListView(ListView):

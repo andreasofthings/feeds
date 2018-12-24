@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 from django.utils.encoding import python_2_unicode_compatible
 
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -36,7 +37,6 @@ class Tag(models.Model):
     """
     A tag.
     """
-
 
     objects = TagManager()
     """
@@ -190,4 +190,4 @@ class Category(models.Model):
         return u''.join(self.slug)
 
     def get_absolute_url(self):
-        return ('planet:category-view', [str(self.slug)])
+        return reverse('planet:category-detail', args=[str(self.slug)])

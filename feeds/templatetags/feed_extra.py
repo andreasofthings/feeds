@@ -90,7 +90,7 @@ class FeedControlsNode(template.Node):
     button = """
     <a href="%s" class="btn btn-sm" role="button"
     data-toggle="tooltip" data-placement="top" title="%s">
-    <span class="glyphicon glyphicon-%s"></span>
+    <span class="fas fa-%s"></span>
     </a>
     """
 
@@ -125,21 +125,25 @@ class FeedControlsNode(template.Node):
 
         absolute_url = feed.get_absolute_url()
 
-        view_button = self.button % (absolute_url, _('View Feed'), 'zoom-in')
+        view_button = self.button % (
+            absolute_url,
+            _('View Feed'),
+            'search'
+        )
         subscribe_button = self.button % (
             reverse('planet:feed-subscribe', kwargs={'pk': feed.pk}),
             _('Subscribe to Feed'),
-            'ok-circle'
+            'check-circle'
         )
         unsubscribe_button = self.button % (
             reverse('planet:feed-unsubscribe', kwargs={'pk': feed.pk}),
             _('Unsubscribe from Feed'),
-            'remove-circle'
+            'minus-circle'
         )
         refresh_button = self.button % (
             reverse('planet:feed-refresh', kwargs={'pk': feed.pk}),
             _('Refresh Feed'),
-            'refresh'
+            'sync'
         )
         update_button = self.button % (
             reverse('planet:feed-update', kwargs={'pk': feed.pk}),
@@ -149,7 +153,7 @@ class FeedControlsNode(template.Node):
         delete_button = self.button % (
             reverse('planet:feed-delete', kwargs={'pk': feed.pk}),
             _('Delete Feed'),
-            'trash'
+            'trash-alt'
         )
         options_dialog = self.button % (
             reverse('planet:options'),
