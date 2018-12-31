@@ -18,7 +18,7 @@ class TestSubscriptions(TestCase):
     """
 
     fixtures = [
-        'Site.yaml',
+        'WebSite.yaml',
         'Feed_all.yaml',
         'Users.yaml',
         'Options.yaml',

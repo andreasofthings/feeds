@@ -17,7 +17,7 @@ class TestPostAnonymous(TestCase):
     """
 
     fixtures = [
-        'Site.yaml',
+        'WebSite.yaml',
         'Feed_all.yaml',
         'Posts.yaml',
     ]

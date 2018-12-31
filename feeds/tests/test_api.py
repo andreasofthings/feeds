@@ -32,7 +32,7 @@ class ApiTest(APITestCase):
     fixtures = [
         "Users.yaml",
         "Options.yaml",
-        "Site.yaml",
+        "WebSite.yaml",
         "Feed_all.yaml",
         "Posts.yaml",
         "Subscriptions.yaml",

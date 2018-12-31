@@ -24,7 +24,7 @@ class ViewsAnonymousTest(TestCase):
     """
 
     fixtures = [
-        'Site.yaml',
+        'WebSite.yaml',
         'Feed_all.yaml',
     ]
 

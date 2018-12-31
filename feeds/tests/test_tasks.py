@@ -29,7 +29,7 @@ class TaskTest(TestCase):
     """
 
     fixtures = [
-        'Site.yaml',
+        'WebSite.yaml',
         'Feed_basic.yaml',
         'Posts.yaml',
     ]

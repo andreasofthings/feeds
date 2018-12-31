@@ -14,7 +14,7 @@ from feeds.models import Feed
 class TestRSS(TestCase):
 
     fixtures = [
-        "Site.yaml",
+        "WebSite.yaml",
         "Feed_all.yaml",
     ]
 

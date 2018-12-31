@@ -35,14 +35,14 @@ class WebSite(models.Model):
     @property
     def website_url(self):
         from urllib.parse import urlunparse
-        return urlunparse(
+        return urlunparse((
             self.scheme,
             self.netloc,
             self.path,
             self.params,
             self.query,
             self.fragment
-        )
+            ))
     """URL of the `Site`."""
 
     name = models.CharField(max_length=128)
@@ -58,7 +58,7 @@ class WebSite(models.Model):
         default='https',
     )
     netloc = models.CharField(max_length=512)
-    path = models.CharField(max_length=512, default='/')
+    path = models.CharField(max_length=512, default='/', blank=False)
     params = models.CharField(max_length=256, blank=True, null=True)
     query = models.CharField(max_length=256, blank=True, null=True)
     fragment = models.CharField(max_length=256, blank=True, null=True)
@@ -94,12 +94,14 @@ class WebSite(models.Model):
             This is a bit of magic, that should rather not happen.
             It strips http:// https:// and www, if present.
         """
+        if self.path == "":
+            self.path = "/"
         if not self.slug:
             def remove_prefix(s, prefix):
                 return s[len(prefix):] if s.startswith(prefix) else s
-            slug = remove_prefix(slugify(self.website_url), "https")
-            slug = remove_prefix(slugify(self.website_url), "http")
-            slug = remove_prefix(slugify(self.website_url), "www")
+            slug = remove_prefix(slugify(self.netloc + self.path), "https")
+            slug = remove_prefix(slug, "http")
+            slug = remove_prefix(slug, "www")
             self.slug = slug
         if not self.name:
             self.name = self.slug

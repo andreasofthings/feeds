@@ -19,7 +19,7 @@ class TestAllViewsLoggedIn(TestCase):
     """
 
     fixtures = [
-        'Site.yaml',
+        'WebSite.yaml',
         'Feed_all.yaml',
     ]
 
@@ -267,7 +267,7 @@ class TestFeedViewsWithCredentials(TestCase):
     """
 
     fixtures = [
-        'Site.yaml',
+        'WebSite.yaml',
         'Feed_all.yaml',
     ]
 

@@ -39,7 +39,7 @@ class ModelTest(TestCase):
     """
     fixtures = [
         "Feed_all.yaml",
-        "Site.yaml",
+        "WebSite.yaml",
         "Posts.yaml",
         "Enclosures.yaml",
     ]

@@ -16,7 +16,7 @@ class ManagementTest(TestCase):
     Test Manager Command
     """
     fixtures = [
-        "Site.yaml",
+        "WebSite.yaml",
         "Feed_all.yaml",
     ]
 

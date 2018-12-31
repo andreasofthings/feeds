@@ -7,7 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
-    help = "bootstrap a site"
+    help = "bootstrap feedlist"
 
     def handle(self, *args, **options):
         from feeds.tools import getFeedsFromSite

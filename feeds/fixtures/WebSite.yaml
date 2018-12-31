@@ -12,3 +12,6 @@
   pk: 3
   fields:
     "website_url": "http://www.metaebene.me"
+- model: feeds.WebSite
+  pk: 4
+  fields: {name: Heise, scheme: https, netloc: '', path: website_url, params: '', query: '', fragment: '', slug: heisede, commercial: true}
