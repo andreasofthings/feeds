@@ -208,7 +208,7 @@ class WebSiteListView(PaginatedListView):
     template_name = "feeds/website_list.html"
 
     def get_queryset(self):
-        return WebSite.objects.order_by('website_url')
+        return WebSite.objects.order_by('netloc')
 
 
 class WebSiteCreateView(PermissionRequiredMixin, CreateView):

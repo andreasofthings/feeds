@@ -47,13 +47,13 @@ logger = logging.getLogger(__name__)
 @python_2_unicode_compatible
 class Feed(models.Model):
     """
-Model that contains information about any feed, including:
+    Model that contains information about any feed, including:
 
     - metadata for processing
     - results from social updates
     - calculated values
 
-Coming from `feedparser`:
+    Coming from `feedparser`:
 
     - bozo
     - bozo_exception

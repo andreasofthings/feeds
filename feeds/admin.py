@@ -72,7 +72,8 @@ class EnclosureAdmin(admin.ModelAdmin):
 
 
 def refresh_feed(modeladmin, request, queryset):
-    queryset.refresh()
+    for feed in queryset:
+        feed.refresh()
 refresh_feed.short_description = "Refresh selected feeds"
 
 
@@ -87,7 +88,7 @@ deactivate_feed.short_description = "Deactivate selected feeds"
 
 
 def reset_feed_errors(modeladmin, request, queryset):
-    queryset.update(errors=0)
+    queryset.update(errors=0, is_active=True)
 reset_feed_errors.short_description = "Reset Feed-errors."
 
 
@@ -164,7 +165,7 @@ class WebSiteAdmin(admin.ModelAdmin):
     """
     WebSite Admin Class
     """
-    list_display = ('name', 'website_url', 'slug', 'feedcount')
+    list_display = ('name', 'netloc', 'path', 'slug', 'feedcount')
     inlines = [
         FeedInline,
     ]

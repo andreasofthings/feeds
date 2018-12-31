@@ -28,14 +28,40 @@ logger = logging.getLogger(__name__)
 
 @python_2_unicode_compatible
 class WebSite(models.Model):
-    website_url = models.URLField(
-        unique=True,
-        help_text=_("URL of the Website.")
-    )
+    # website_url = models.URLField(
+    #    unique=True,
+    #    help_text=_("URL of the Website.")
+    # )
+    @property
+    def website_url(self):
+        from urllib.parse import urlunparse
+        return urlunparse(
+            self.scheme,
+            self.netloc,
+            self.path,
+            self.params,
+            self.query,
+            self.fragment
+        )
     """URL of the `Site`."""
 
     name = models.CharField(max_length=128)
     """Name of the website."""
+
+    SCHEMES = (
+        ('http', 'HTTP'),
+        ('https', 'HTTPS'),
+    )
+    scheme = models.CharField(
+        max_length=5,
+        choices=SCHEMES,
+        default='https',
+    )
+    netloc = models.CharField(max_length=512)
+    path = models.CharField(max_length=512, default='/')
+    params = models.CharField(max_length=256, blank=True, null=True)
+    query = models.CharField(max_length=256, blank=True, null=True)
+    fragment = models.CharField(max_length=256, blank=True, null=True)
 
     slug = models.SlugField(null=True)
     """Human readble URL component"""
@@ -54,9 +80,10 @@ class WebSite(models.Model):
         Django Meta.
         """
         app_label = "feeds"
-        ordering = ('website_url',)
+        ordering = ('netloc',)
         verbose_name = _('website')
         verbose_name_plural = _('websites')
+        unique_together = ('netloc', 'path')
 
     def save(self, *args, **kwargs):
         """

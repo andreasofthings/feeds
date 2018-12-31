@@ -8,15 +8,41 @@ helper functions for angryplanet.feeds
 
 from django.core.cache import cache
 
+import logging
 import requests
+import yaml
+
 
 try:
     from HTMLParser import HTMLParser as HTMLParser
-except:
+except ImportError:
     from html.parser import HTMLParser as HTMLParser
 
 
 # from typing import TypeVar, Generic, Iterable, Iterator, List
+
+logger = logging.getLogger(__name__)
+
+
+def URLlist():
+    """
+    Yield all URLs contained in `url`(.yaml)
+
+    See: https://github.com/aneumeier/blogsdirectory/
+
+    .. todo::
+        Sort and filter dupes.
+    """
+    from urllib.parse import urlparse
+    from urllib.request import urlopen
+
+    latest = \
+    "https://raw.githubusercontent.com/aneumeier/blogsdirectory/master/urls.yaml"
+
+    with urlopen(latest) as urls:
+        urlreader = yaml.load(urls)
+        for url in urlreader['Websites']:
+            yield urlparse(url).geturl()
 
 
 class feedFinder(HTMLParser):
@@ -31,8 +57,8 @@ class feedFinder(HTMLParser):
     _links = []
 
     def handle_starttag(self, tag, attrs):
+        attr = {}
         if "link" in tag:
-            attr = {}
             for k, v in attrs:
                 attr[k] = v
             self._links.append(attr)
@@ -47,18 +73,26 @@ def getFeedsFromSite(site):
     Takes 'site' in form of an URL as an Argument.
     Fetches the site, parses it, finds embedded links.
     """
+    from urllib.parse import urlparse
     parser = feedFinder()
+    sitecomponents = urlparse(site)
+
     html = cache.get_or_set(site, requests.get(site), 10600)
+    html = requests.get(site)
     parser.feed(html.text)
     result = []
-    for link in parser.links:
-        if "type" in link.keys():
-            if "application/rss" in link['type']:
-                result.append(
-                #{
-                #    'title': link.get('title'),
-                #    'href': link.get('href'),
-                #}
-                (link.get('href')),
-                )
+
+    linklist = list(filter(lambda x: "type" in x, parser.links))
+    logger.info("parsed %s links with 'type'", len(linklist))
+    logger.info("result has %s entries right now", len(result))
+    logger.info("html.text now has %s byte", len(html.text))
+
+    for link in linklist:
+        if "application/rss" in link['type']:
+            feed = link.get('href')
+            # feedcomponents = urlparse(feed)
+            feed = site + feed if sitecomponents.netloc is "" else feed
+            result.append(feed)
+
+    logger.info("result has %s entries now", len(result))
     return result

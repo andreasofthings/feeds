@@ -14,6 +14,7 @@ class FeedManager(models.Manager):
     """
     Manager object for :py:mod:`feeds.models.Feed`
     """
+
     def get_by_natural_key(self, name):
         """
         Get Feed by natural key, to allow

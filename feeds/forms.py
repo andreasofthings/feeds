@@ -110,7 +110,7 @@ class WebSiteUpdateForm(forms.ModelForm):
     """
     class Meta:
         model = WebSite
-        fields = ('website_url', )
+        fields = ('netloc', 'path')
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
