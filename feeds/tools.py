@@ -56,6 +56,10 @@ class feedFinder(HTMLParser):
     """
     _links = []
 
+    def __init__(self):
+        self._links = []
+        HTMLParser.__init__(self)
+
     def handle_starttag(self, tag, attrs):
         attr = {}
         if "link" in tag:
@@ -78,21 +82,20 @@ def getFeedsFromSite(site):
     sitecomponents = urlparse(site)
 
     html = cache.get_or_set(site, requests.get(site), 10600)
+
     html = requests.get(site)
     parser.feed(html.text)
     result = []
 
-    linklist = list(filter(lambda x: "type" in x, parser.links))
-    logger.info("parsed %s links with 'type'", len(linklist))
-    logger.info("result has %s entries right now", len(result))
-    logger.info("html.text now has %s byte", len(html.text))
+    links = list(filter(lambda x: "type" in x, parser.links))
+    rsslist = list(filter(lambda x: "application/rss" in x['type'], links))
 
-    for link in linklist:
-        if "application/rss" in link['type']:
-            feed = link.get('href')
-            # feedcomponents = urlparse(feed)
-            feed = site + feed if sitecomponents.netloc is "" else feed
-            result.append(feed)
+    for link in rsslist:
+        feed = link.get('href')
+        feedcomponents = urlparse(feed)
+        if feedcomponents.netloc is ("" or None):
+            feed = sitecomponents.netloc + feedcomponents.path
+        result.append(feed)
 
-    logger.info("result has %s entries now", len(result))
+        logger.info("appended %s to result", feed)
     return result
