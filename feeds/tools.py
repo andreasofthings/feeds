@@ -82,8 +82,6 @@ def getFeedsFromSite(site):
     sitecomponents = urlparse(site)
 
     html = cache.get_or_set(site, requests.get(site), 10600)
-
-    html = requests.get(site)
     parser.feed(html.text)
     result = []
 

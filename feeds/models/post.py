@@ -98,7 +98,7 @@ class Post(models.Model):
         .. todo::
             implement this depending on `:py:feeds.models.rating`
         """
-        return self.ratings.order('-updated')[0]
+        return self.ratings.order_by('-updated')[0]
 
     def get_absolute_url(self):
         return ('planet:post-detail', [str(self.id)])
