@@ -4,10 +4,9 @@ from time import sleep
 import logging
 
 from feeds.tools import getFeedsFromSite
-from feeds.models import WebSite
+from feeds.models import WebSite, Feed
 
 logger = logging.getLogger(__name__)
-print(__name__)
 
 
 class Command(BaseCommand):
@@ -24,8 +23,8 @@ class Command(BaseCommand):
                 allfeeds = getFeedsFromSite(site.website_url)
             except requests.exceptions.SSLError as e:
                 logger.error("SSLError: %s", e)
-            logger.info("Found %s feeds in %s", len(allfeeds), site)
             for feed in allfeeds:
+                Feed.objects.create(website=site, url=feed)
                 # logger.info("Feed: %s", feed)
                 pass
             sleep(0.5)
