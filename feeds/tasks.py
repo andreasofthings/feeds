@@ -57,10 +57,9 @@ def dummy(x=10, *args, **kwargs):
     """
     from time import sleep
 
-    if 'invocation_time' in kwargs:
+    if "invocation_time" in kwargs:
         logger.debug(
-            "task was delayed for %s",
-            (datetime.now() - kwargs['invocation_time'])
+            "task was delayed for %s", (datetime.now() - kwargs["invocation_time"])
         )
     logger.debug("Started to sleep for %ss", x)
     sleep(x)
@@ -76,23 +75,24 @@ def twitter_post(post_id):
     logger.debug("twittering new post")
 
     from twitter import Api
+
     post = Post.objects.get(pk=post_id)
     user = User.objects.get(id=15)
     user_auth = user.social_auth.filter(provider="twitter")
     message = """%s on %s http://angry-planet.com%s""" % (
         post.title,
         post.feed.title,
-        post.get_absolute_url()
+        post.get_absolute_url(),
     )
     for account in user_auth:
-        access_token = urlparse.parse_qs(account.extra_data['access_token'])
-        oauth_token = access_token['oauth_token'][0]
-        oauth_access = access_token['oauth_token_secret'][0]
+        access_token = urlparse.parse_qs(account.extra_data["access_token"])
+        oauth_token = access_token["oauth_token"][0]
+        oauth_access = access_token["oauth_token_secret"][0]
         twitter = Api(
             consumer_key=settings.TWITTER_CONSUMER_KEY,
             consumer_secret=settings.TWITTER_CONSUMER_SECRET,
             access_token_key=oauth_token,
-            access_token_secret=oauth_access
+            access_token_secret=oauth_access,
         )
         result = twitter.PostUpdate(message)
         logger.debug("twitter said: %s", result)
@@ -105,13 +105,13 @@ def post_update_twitter(entry_id):
     count tweets
     """
 
-    if getattr(settings, 'FEEDS_POST_UPDATE_TWITTER', False):
+    if getattr(settings, "FEEDS_POST_UPDATE_TWITTER", False):
         post = Post.objects.get(pk=entry_id)
         # (post.tweets, ) = api.search(post.link)
         post.save()
         logger.debug("stop: counting tweets. got %s", post.rating.tweets)
-        return (post.rating.tweets, )
-    return (0, )
+        return (post.rating.tweets,)
+    return (0,)
 
 
 @shared_task(time_limit=10)
@@ -124,27 +124,24 @@ def post_update_facebook(entry_id):
         logger.error("Provided an invalid post_id")
         return result
 
-    if getattr(settings, 'FEEDS_POST_UPDATE_FACEBOOK', False):
+    if getattr(settings, "FEEDS_POST_UPDATE_FACEBOOK", False):
         post = Post.objects.get(pk=entry_id)
 
-        facebook_count = \
-            'http://graph.facebook.com/?ids=%s'
+        facebook_count = "http://graph.facebook.com/?ids=%s"
         query = facebook_count % (post.link)
         resp = requests.get(query)
 
         if resp.status_code in (200, 304):
             js = json.loads(resp.text)
-            (post.shares, post.likes, ) = (
-                js.get('shares', 0),
-                js.get('likes', 0),
+            (post.shares, post.likes) = (
+                js.get("shares", 0),
+                js.get("likes", 0),
                 # js.get('comments', 0),
             )
         post.save()
 
         logger.debug(
-            "stop: counting tweets. got %s shares and %s likes",
-            post.shares,
-            post.likes
+            "stop: counting tweets. got %s shares and %s likes", post.shares, post.likes
         )
         return (post.shares, post.likes)
     return result
@@ -155,20 +152,17 @@ def post_update_linkedin(entry_id):
     """
     count linkedin
     """
-    result = (-1, )
+    result = (-1,)
     if not entry_id:
         logger.error("Provided an invalid post_id")
         return result
 
-    if getattr(settings, 'FEEDS_POST_UPDATE_LINKEDIN', False):
+    if getattr(settings, "FEEDS_POST_UPDATE_LINKEDIN", False):
         post = Post.objects.get(pk=entry_id)
         # (post.linkedin, ) = linkedin(post)
         post.save()
-        logger.debug(
-            "stop: counting linkedin. got %s",
-            post.linkedin
-        )
-        return (post.linkedin, )
+        logger.debug("stop: counting linkedin. got %s", post.linkedin)
+        return (post.linkedin,)
     return result
 
 
@@ -180,6 +174,7 @@ def tsum(numbers, post):
     This is a callback function and should never be invoked directly.
     """
     import itertools
+
     try:
         merged = list(itertools.chain.from_iterable(numbers))
     except TypeError as e:
@@ -196,7 +191,7 @@ def post_update_social(post_id):
 
     logger.debug("start: social scoring")
 
-    if getattr(settings, 'FEEDS_POST_UPDATE_SOCIAL', False):
+    if getattr(settings, "FEEDS_POST_UPDATE_SOCIAL", False):
         try:
             p = Post.objects.get(pk=post_id)
         except Post.DoesNotExist:
@@ -205,11 +200,11 @@ def post_update_social(post_id):
 
         header = []
 
-        f = (post_update_twitter.subtask((p.id, )))
+        f = post_update_twitter.subtask((p.id,))
         header.append(f)
-        f = (post_update_facebook.subtask((p.id, )))
+        f = post_update_facebook.subtask((p.id,))
         header.append(f)
-        f = (post_update_linkedin.subtask((p.id, )))
+        f = post_update_linkedin.subtask((p.id,))
         header.append(f)
 
         callback = tsum.s(p)
@@ -241,8 +236,7 @@ def entry_tags(post_id, tags):
         new_tags = 0
         for tag in tags:
             t, created = Tag.objects.get_or_create(
-                name=str(tag.term),
-                slug=slugify(tag.term)
+                name=str(tag.term), slug=slugify(tag.term)
             )
             if created:
                 logger.info("created new tag '%s'", t)
@@ -270,12 +264,13 @@ def aggregate_stats(result_list):
     """
     logger.debug("-- started --")
     from collections import Counter
+
     result = {
         FEED_OK: 0,
         FEED_SAME: 0,
         FEED_ERRPARSE: 0,
         FEED_ERRHTTP: 0,
-        FEED_ERREXC: 0
+        FEED_ERREXC: 0,
     }
     result.update(Counter(result_list))
     """Add upp all fields in the `result_list`-argument."""
@@ -302,7 +297,9 @@ def feed_refresh(pk):
     """
     Wrap Feed.refresh() to allow async execution in Celery.
     """
-    return Feed.objects.get(pk=pk).refresh()
+    f = Feed.objects.get(pk=pk)
+    logger.debug("Task: refreshing %s", f)
+    return f.refresh()
 
 
 @shared_task
@@ -338,22 +335,13 @@ def cronjob():
     logger.debug("-- started --")
     result = {}
     max_feeds = 5
-    qs = Feed.objects.filter(
-        is_active=True
-        ).filter(
-            errors__lte=3
-        )
-    feeds = qs.filter(
-        last_checked__isnull=True
-        )
+    qs = Feed.objects.filter(is_active=True).filter(errors__lte=3)
+    feeds = qs.filter(last_checked__isnull=True)
     if not feeds.exists():
-        feeds = qs.order_by(
-            'last_checked'
-            )
+        feeds = qs.order_by("last_checked")
     try:
         result = chord(
-            (feed_refresh.s(i.id) for i in feeds[:max_feeds]),
-            aggregate_stats.s()
+            (feed_refresh.s(i.id) for i in feeds[:max_feeds]), aggregate_stats.s()
         )()
     except SoftTimeLimitExceeded as timeout:
         logger.info("SoftTimeLimitExceeded: %s", timeout)
