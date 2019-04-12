@@ -7,7 +7,8 @@ Feed-Aggregator models.
 =======================
 
 Stores as much as possible coming out of the feed.
-
+For working with user models:
+    - https://wsvincent.com/django-referencing-the-user-model/
 .. moduleauthor:: Andreas Neumeier <andreas@neumeier.org>
 """
 
@@ -15,8 +16,8 @@ import logging
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 from django.utils.encoding import python_2_unicode_compatible
+from django.contrib.auth import get_user_model
 
 from ..managers import OptionsManager
 from .feed import Feed
@@ -27,9 +28,9 @@ logger = logging.getLogger(__name__)
 @python_2_unicode_compatible
 class Options(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        get_user_model(),  # settings.AUTH_USER_MODEL,
         help_text=_("User"),
-        on_delete=models.DO_NOTHING,
+        on_delete=models.CASCADE,
     )
     number_initially_displayed = models.IntegerField(
         default=10,
