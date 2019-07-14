@@ -1,6 +1,8 @@
 #! /usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
+from urllib.parse import urlparse
+
 from django import forms
 from django.urls import reverse
 from crispy_forms.helper import FormHelper
@@ -12,6 +14,7 @@ from crispy_forms.layout import Submit
 from crispy_forms.layout import Button
 from crispy_forms.layout import Div
 from crispy_forms.bootstrap import FormActions
+from django.core.exceptions import ValidationError
 
 from .models import Category
 from .models import Tag
@@ -79,6 +82,22 @@ class WebSiteCreateForm(forms.ModelForm):
 
     website_url = WebSiteField()
 
+    def save(self, commit=True):
+        data = self.cleaned_data
+        try:
+            scheme, netloc, path, params, query, fragment = \
+                urlparse(data['website_url'])
+        except ValidationError as e:
+            raise ValidationError(e)
+
+        self.instance.scheme = scheme
+        self.instance.netloc = netloc
+        self.instance.path = path
+        self.instance.params = params
+        self.instance.query = query
+        self.instance.fragment = fragment
+        return super(WebSiteCreateForm, self).save(commit)
+
     class Meta:
         model = WebSite
         fields = ('website_url', )
@@ -98,6 +117,29 @@ class WebSiteCreateForm(forms.ModelForm):
         super(WebSiteCreateForm, self).__init__(*args, **kwargs)
 
 
+class FeedAddForm(forms.ModelForm):
+    class Meta:
+        model = Feed
+        fields = ("feed_url", )
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_class = "field_inline"
+        self.helper.form_action = 'planet:feed-add'
+        self.helper.layout = Layout(
+            FormActions(
+                Submit(
+                    'submit',
+                    'Add',
+                    css_class=
+                    'btn btn-sm btn-outline-secondary'
+                    ),
+            )
+        )
+        super(FeedAddForm, self).__init__(*args, **kwargs)
+
+
 class WebSiteFeedAddForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -110,19 +152,22 @@ class WebSiteUpdateForm(forms.ModelForm):
     """
     class Meta:
         model = WebSite
-        fields = ('netloc', 'path')
+        exclude = ('website_url', )
+        fields = ('scheme', 'netloc', 'path')
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.form_action = 'planet:website-update'
+        """
         self.helper.layout = Layout(
-            Field('website_url'),
+            # Field('website_url'),
             FormActions(
                 Submit('submit', 'Submit', css_class='btn-small'),
                 Button('cancel', 'Cancel', css_class='btn-small')
             )
         )
+        """
         super(WebSiteUpdateForm, self).__init__(*args, **kwargs)
 
 

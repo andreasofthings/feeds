@@ -1,4 +1,5 @@
 {%extends 'feeds/index.html'%}
+{% load crispy_forms_tags %}
 
 {%block breadcrumb %}
 <nav class="breadcrumb">
@@ -12,23 +13,23 @@
 
 {%block content%}
 <div class="row">
-    <div class="col-4 col-md-4">
-        <h4>{{object}}</h4>
+    <div class="col-md">
+        <h4>{{object.name}}</h4>
             {% if user.is_authenticated %}
               {% if perms.feeds.change_site %}<a href="{{object.get_absolute_url}}update" class="btn btn-mini site-tooltip" title="edit site"><i class="fas fa-edit"></i></a>{% endif %}
               {% if perms.feeds.delete_site %}<a href="{{object.get_absolute_url}}delete" class="btn btn-mini site-tooltip" title="delete site"><i class="fas fa-trash-alt"></i></a>{% endif %}
             {% endif %}
     </div>
-    <div class="col-4 col-md-4">
+    <div class="col-md">
       <h4>Registered Feeds</h4>
     {% for feed in existing %} {# List of `Feed` objects. #}
       <p><a href="{{ feed.get_absolute_url }}">{{ feed.name }}</a></p>
     {% endfor %}
     </div>
-    <div class="col-4 col-md-4">
+    <div class="col-md">
       <h4>Available Feeds</h4>
     {% for feed in new_feeds %} {# list of feeds #}
-      <p><a href="{{ feed }}">{{ feed }}</a></p>
+      <p>{% crispy feed %}</p>
     {% endfor %}
     </div>
 </div>

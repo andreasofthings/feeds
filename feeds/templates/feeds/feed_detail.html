@@ -21,31 +21,28 @@ Feed: {{ feed }}
 
 {%block content%}
 <div class="row">
-  <div class="col-md-8">
-    <h3> {{object}}
+  <div class="col-md">
+    <h3>
+      <a href="{{object.feed_url}}">
+        <img src="{% static "feeds/icons/rss-480px.png" %}" width="16" height="16">
+      </a>
+      {{object}}
     </h3>
   </div>
-  <div class="col-md-4">
+  <div class="col-md">
     <small> {% feed_controls object %} </small>
   </div>
 </div>
 <div class="row">
-  <div class="col-md-2">
-    <a href="{{object.feed_url}}">
-      <img src="{% static "feeds/icons/rss-480px.png" %}" width="16" height="16">
-    </a>
+  <div class="col-md">
   </div>
-  <div class="col-md-4">
+  <div class="col-md">
     <p>Refreshed: {{object.last_checked}}</p>
     <p>Errors: {{object.errors}}</p>
   </div>
-  <div class="col-md-6">
-    <canvas id="chart"  width="600" height="240"></canvas>
-  </div>
 </div>
 <div class="row">
-
-  <div class="col-md-12">
+  <div class="col-md">
     {# paginate posts as post_list #}
     <ul>
     {% for post in posts %}

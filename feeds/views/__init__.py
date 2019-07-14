@@ -10,16 +10,17 @@ from .category import TagDetailView
 from .category import TagCreateView
 from .category import TagUpdateView
 
+from .website import WebSiteListView
+from .website import WebSiteCreateView
+from .website import WebSiteDetailView
+from .website import WebSiteUpdateView
+from .website import WebSiteDeleteView
+from .website import WebSiteSubmitForms
+from .website import WebSiteSubmitWizardView
+
 from .views import HomeView
 from .views import OptionsView
 from .views import OPMLView
-from .views import WebSiteListView
-from .views import WebSiteCreateView
-from .views import WebSiteDetailView
-from .views import WebSiteUpdateView
-from .views import WebSiteDeleteView
-from .views import WebSiteSubmitForms
-from .views import WebSiteSubmitWizardView
 from .views import FeedCreateView
 from .views import FeedListView
 from .views import FeedDetailView

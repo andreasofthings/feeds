@@ -109,9 +109,9 @@ class WebSite(models.Model):
 
     def __str__(self):
         """
-        String representation of :Site:
+        String representation of :WebSite:
         """
-        return u"%s" % (self.name)
+        return u"%s" % (self.website_url)
 
     def get_absolute_url(self):
         """
