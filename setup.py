@@ -58,6 +58,7 @@ setup(
         'feedparser>=5.1.2',
         'requests>=2.18',
         'timestring>=1.6.2',
+        'django-el-pagination',
     ],
     dependency_links=[],
     setup_requires = ['pytest-runner'],
