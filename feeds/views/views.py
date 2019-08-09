@@ -40,8 +40,6 @@ from ..forms import FeedUpdateForm
 from ..baseviews import PaginatedListView
 
 
-# from el_pagination.views import AjaxListView
-
 logger = logging.getLogger(__name__)
 
 
@@ -55,6 +53,7 @@ class HomeView(TemplateView):
 
     It does not have any functionality.
     """
+
     template_name = "feeds/home.html"
 
 
@@ -75,12 +74,13 @@ class OptionsView(LoginRequiredMixin, UpdateView):
 
     .. codeauthor:: Andreas Neumeier
     """
+
     model = Options
     template_name = "feeds/options.html"
     form_class = OptionsForm
 
     def get_success_url(self):
-        return reverse('planet:options')
+        return reverse("planet:options")
 
     def get_object(self, queryset=None):
         obj, created = Options.objects.get_or_create(user=self.request.user)
@@ -96,15 +96,12 @@ class OptionsView(LoginRequiredMixin, UpdateView):
 
 
 def opmlImport(opml, count=0):
-    for node in opml.iter('outline'):
-        name = node.attrib.get('text')
-        url = node.attrib.get('xmlUrl')
+    for node in opml.iter("outline"):
+        name = node.attrib.get("text")
+        url = node.attrib.get("xmlUrl")
         if name and url:
-            logger.debug('  %s :: %s', name, url)
-            f, c = Feed.objects.get_or_create(
-                feed_url=url,
-                name=name,
-            )
+            logger.debug("  %s :: %s", name, url)
+            f, c = Feed.objects.get_or_create(feed_url=url, name=name)
             if c:
                 f.save()
     return True
@@ -118,6 +115,7 @@ class OPMLView(FormView):
               OPML is plain text format, but since uploaded by individuals,
               that should reflect in user/ownership.
     """
+
     form_class = OPMLForm
     template_name = "feeds/opml.html"
 
@@ -126,7 +124,8 @@ class OPMLView(FormView):
 
     def form_valid(self, form):
         from xml.etree import ElementTree
-        tree = ElementTree.parse(self.request.FILES['opml'])
+
+        tree = ElementTree.parse(self.request.FILES["opml"])
         opmlImport(tree)
         return super(OPMLView, self).form_valid(form)
 
@@ -137,10 +136,11 @@ class FeedCreateView(PermissionRequiredMixin, CreateView):
 
     Required login and credentials.
     """
+
     permission_required = "feeds.add_feed"
     form_class = FeedCreateForm
     model = Feed
-    initial = {'is_Active': False}
+    initial = {"is_Active": False}
 
 
 class FeedListView(LoginRequiredMixin, PaginatedListView):
@@ -148,8 +148,9 @@ class FeedListView(LoginRequiredMixin, PaginatedListView):
     List all registered feeds
 
     """
+
     model = Feed
-    queryset = Feed.objects.order_by('name')
+    queryset = Feed.objects.order_by("name")
 
 
 class FeedDetailView(LoginRequiredMixin, DetailView):
@@ -159,12 +160,13 @@ class FeedDetailView(LoginRequiredMixin, DetailView):
     .. todo:: The view for `Feed Details` shall include stats for the
               particular `Feed`. It is a plain Class Based View right now.
     """
+
     model = Feed
     queryset = Feed.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(FeedDetailView, self).get_context_data(**kwargs)
-        context['posts'] = self.object.posts.order_by('-published')
+        context["posts"] = self.object.posts.order_by("-published")
         return context
 
 
@@ -172,39 +174,44 @@ class FeedUpdateView(LoginRequiredMixin, UpdateView):
     """
     Update a particular feed
     """
+
     form_class = FeedUpdateForm
     model = Feed
 
     def get_success_url(self):
-        return reverse('planet:feed-detail', args=(self.kwargs['pk'],))
+        return reverse("planet:feed-detail", args=(self.kwargs["pk"],))
 
 
 class FeedDeleteView(LoginRequiredMixin, DeleteView):
     """
     Delete a particular feed
     """
+
     model = Feed
 
     def get_success_url(self):
-        return reverse('planet:feed-home')
+        return reverse("planet:feed-home")
 
 
 class FeedRefreshView(LoginRequiredMixin, RedirectView):
     """
     Refresh a particular feed
     """
+
     permanent = False
 
     def get_redirect_url(self, pk):
         from feeds.tasks import feed_refresh
+
         feed_refresh(pk)
-        return reverse('planet:feed-detail', args=(pk,))
+        return reverse("planet:feed-detail", args=(pk,))
 
 
 class FeedSubscribeView(LoginRequiredMixin, RedirectView):
     """
     Subscribe user to a feed
     """
+
     permanent = False
 
     def get_redirect_url(self, pk):
@@ -213,13 +220,14 @@ class FeedSubscribeView(LoginRequiredMixin, RedirectView):
         s, created = Subscription.objects.get_or_create(user=user, feed=feed)
         if created:
             s.save()
-        return reverse('planet:feed-detail', args=(pk,))
+        return reverse("planet:feed-detail", args=(pk,))
 
 
 class FeedUnSubscribeView(LoginRequiredMixin, RedirectView):
     """
     UnSubscribe user to a feed
     """
+
     permanent = False
 
     def get_redirect_url(self, pk):
@@ -227,7 +235,7 @@ class FeedUnSubscribeView(LoginRequiredMixin, RedirectView):
         feed = Feed.objects.get(pk=pk)
         s = Subscription.objects.get(user=user, feed=feed)
         s.delete()
-        return reverse('planet:feed-detail', args=(pk,))
+        return reverse("planet:feed-detail", args=(pk,))
 
 
 class FeedSubscriptionsView(LoginRequiredMixin, PaginatedListView):
@@ -241,6 +249,7 @@ class FeedSubscriptionsView(LoginRequiredMixin, PaginatedListView):
       - :py:mod:`feeds.views.FeedSubscribeView`
       - :py:mod:`feeds.views.FeedUnsubscribeView`
     """
+
     model = Feed
     context_object_name = "feeds"
     template_name = "feeds/feed_list.html"
@@ -250,7 +259,7 @@ class FeedSubscriptionsView(LoginRequiredMixin, PaginatedListView):
         if created:
             user.save()
         queryset = Feed.objects.filter(feed_subscription__user=user)
-        return queryset.order_by('name')
+        return queryset.order_by("name")
 
 
 class PostListView(LoginRequiredMixin, PaginatedListView):
@@ -260,9 +269,10 @@ class PostListView(LoginRequiredMixin, PaginatedListView):
     .. todo: Pagination does not work properly. Some sort of limit would be
     nice, too. The pagination bar looks really ugly.
     """
+
     model = Post
     paginate_by = 50
-    queryset = Post.objects.order_by('published')
+    queryset = Post.objects.order_by("published")
 
     def get_queryset(self):
         """
@@ -273,7 +283,7 @@ class PostListView(LoginRequiredMixin, PaginatedListView):
         :py:module:`PostManager.older_than` provides this functionality and
         exposes it as the :py:module:`Post.objects` Manager.
         """
-        return Post.objects.older_than(timedelta(0)).order_by('-published')
+        return Post.objects.older_than(timedelta(0)).order_by("-published")
 
 
 class PostSubscriptionView(LoginRequiredMixin, PaginatedListView):
@@ -289,6 +299,7 @@ class PostSubscriptionView(LoginRequiredMixin, PaginatedListView):
 
     .. reverse-url: 'planet:post-subscription-home'
     """
+
     model = Post
     paginate_by = 50
 
@@ -296,7 +307,7 @@ class PostSubscriptionView(LoginRequiredMixin, PaginatedListView):
         user = Options.objects.get(user=self.request.user)
         user_subscriptions = Subscription.objects.feeds(user)
         subscriptions = Post.objects.filter(feed_id__in=user_subscriptions)
-        return subscriptions.order_by('-published')
+        return subscriptions.order_by("-published")
 
 
 class PostDetailView(DetailView):
@@ -305,11 +316,10 @@ class PostDetailView(DetailView):
 
     Requires login and permissions.
     """
+
     user_agent = "google"
     model = Post
-    permissions = {
-        "any": ("feeds.delete_post", "feeds.change_post", "feeds.add_post",)
-    }
+    permissions = {"any": ("feeds.delete_post", "feeds.change_post", "feeds.add_post")}
 
 
 class PostTrackableView(RedirectView):

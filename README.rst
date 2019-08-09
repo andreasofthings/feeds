@@ -13,7 +13,6 @@ Feeds
   :alt: Documentation Status
 
 
-
 .. image:: https://badge.fury.io/py/feeds.svg
     :target: https://badge.fury.io/py/feeds
 
@@ -83,11 +82,10 @@ Quick start
       'crispy_forms',
       'category',
       'haystack',
-      'el_pagination',
       )
 
 
-  `feeds` uses crispy_forms_, category_, haystack_ and el_pagination_ in it's
+  `feeds` uses crispy_forms_, category_, haystack_ in it's
   default templates.
 
 4. Run `python manage.py syncdb` to create the feeds models.
@@ -114,6 +112,5 @@ Quick start
 .. _haystack: https://django-haystack.readthedocs.io/en/v2.4.1/
 .. _category: https://github.com/aneumeier/category
 .. _crispy_forms: http://django-crispy-forms.readthedocs.io/en/latest/
-.. _el_pagination: http://django-el-pagination.readthedocs.io/en/latest/
 .. _PEP8: https://www.python.org/dev/peps/pep-0008/
 .. _PEP263: https://www.python.org/dev/peps/pep-0263/

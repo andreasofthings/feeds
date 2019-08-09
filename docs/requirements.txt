@@ -1,7 +1,6 @@
 celery
 django
 django-crispy_forms
-django-el_pagination
 django-formtools
 django-haystack
 feedparser
