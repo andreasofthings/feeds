@@ -14,11 +14,9 @@ Stores as much as possible coming out of the feed.
 from __future__ import unicode_literals
 from django.utils.encoding import python_2_unicode_compatible
 
-import sys
 import time
 import logging
 import datetime
-import traceback
 
 from collections import Counter
 
@@ -30,7 +28,6 @@ from django.urls import reverse
 from django.utils import timezone
 
 import feedparser
-from feedparser import CharacterEncodingOverride
 
 from .website import WebSite
 from .category import Category
@@ -39,7 +36,8 @@ from .. import USER_AGENT
 from .. import FEED_OK, FEED_SAME, FEED_ERRPARSE, FEED_ERRHTTP, FEED_ERREXC
 from .. import ENTRY_NEW, ENTRY_UPDATED, ENTRY_SAME
 from ..managers import FeedManager
-from ..exceptions import FeedsBaseException, FeedsHTTPError, FeedsParseError, FeedsSameError
+from ..exceptions import FeedsBaseException, FeedsHTTPError
+from ..exceptions import FeedsParseError, FeedsSameError
 
 logger = logging.getLogger(__name__)
 
@@ -512,7 +510,7 @@ class Feed(models.Model):
             )
 
         if 'status' not in fpf:
-            logger.error("No 'status' found in 'fpf'. Found instead", fpf.keys())
+            logger.error("No 'status' 'fpf'. Found %s instead.", fpf.keys())
             raise FeedsParseError(
                 "Parsed Feed {} didn't provide `status`".format(self.name)
             )
@@ -524,7 +522,7 @@ class Feed(models.Model):
             )
 
         if 'bozo' in fpf and fpf.bozo == 1:
-            if type(fpf.bozo_exception) is CharacterEncodingOverride:
+            if type(fpf.bozo_exception) is feedparser.CharacterEncodingOverride:
                 logger.error("CharacterEncodingOverride, trying to continue")
             else:
                 raise FeedsParseError(
