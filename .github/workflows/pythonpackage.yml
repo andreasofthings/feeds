@@ -1,8 +1,6 @@
 name: feeds Python package
 
 on: push
-  branches:
-  - master
 
 jobs:
   build:
