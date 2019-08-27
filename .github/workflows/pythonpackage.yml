@@ -1,4 +1,4 @@
-name: `feeds` Python package
+name: feeds Python package
 
 on: [push]
   branches:
