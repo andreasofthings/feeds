@@ -1,6 +1,6 @@
 name: feeds Python package
 
-on: [push]
+on: push
   branches:
   - master
 
