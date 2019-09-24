@@ -20,7 +20,7 @@ from ..models import WebSite, Feed, Post, Options, Subscription, Category
 
 from .serializers import OptionsSerializer
 from .serializers import WebSiteSerializer
-from .serializers import FeedSerializer
+from .serializers import FeedSerializer, FeedURLSerializer
 from .serializers import PostSerializer
 from .serializers import CategorySerializer
 from .serializers import SubscriptionSerializer
@@ -71,7 +71,7 @@ class CronView(views.APIView):
         if request:
             for feed in Feed.objects.all():
                 # actually, rather serialize the real object than some mock.
-                f = FeedSerializer(feed)
+                f = FeedURLSerializer(feed, context={'request': request})
                 log.debug("sending task feed: %s", feed)
                 if settings.GOOGLE_APP_ENGINE:
                     from google.cloud import datastore

@@ -40,6 +40,14 @@ class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
             'feeds',
         )
 
+class FeedURLSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feed
+        fields = (
+            'pk',
+            'url',
+            'name',
+
 
 class FeedSerializer(serializers.HyperlinkedModelSerializer):
     posts = serializers.PrimaryKeyRelatedField(
