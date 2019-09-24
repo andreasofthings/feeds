@@ -232,7 +232,7 @@ def entry_tags(post_id, tags):
 
     logger.debug("start: entry tagging post '%s' (%s)", p.title, post_id)
 
-    if tags is not "" and isinstance(tags, types.ListType):
+    if tags != "" and isinstance(tags, types.ListType):
         new_tags = 0
         for tag in tags:
             t, created = Tag.objects.get_or_create(
