@@ -71,7 +71,11 @@ class CronView(views.APIView):
         if request:
             for feed in Feed.objects.all():
                 # actually, rather serialize the real object than some mock.
-                f = FeedURLSerializer(feed, context={'request': request})
+                f = FeedURLSerializer(
+                    feed,
+                    view_name='planet:feed-detail',
+                    context={'request': request}
+                )
                 log.debug("sending task feed: %s", feed)
                 if settings.GOOGLE_APP_ENGINE:
                     from google.cloud import datastore
