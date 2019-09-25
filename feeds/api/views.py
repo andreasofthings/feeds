@@ -16,6 +16,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.conf import settings
 
+import feedparser
 from ..models import WebSite, Feed, Post, Options, Subscription, Category
 
 from .serializers import OptionsSerializer
@@ -72,8 +73,7 @@ class CronView(views.APIView):
             for feed in Feed.objects.all():
                 # actually, rather serialize the real object than some mock.
                 f = FeedURLSerializer(
-                    feed,
-                    view_name='planet:feed-detail',
+                    feed.feed_url,
                     context={'request': request}
                 )
                 log.debug("sending task feed: %s", feed)
@@ -89,27 +89,103 @@ class CronView(views.APIView):
                     parent = client.queue_path(project, location, queue)
                     task = {
                         # "http_request": {  # Specify the type of request.
-                        "app_engine_http_request": {  # Specify the type of request.
+                        "app_engine_http_request": {  # Specify the requesttype.
                             "http_method": "POST",
-                            "relative_uri": "/feeds/cron/feed/",
+                            "relative_uri": "/feeds/api/cron/feed",
                             "body": renderers.JSONRenderer().render(f.data),
                             "headers": {"content-type": "application/json"},
                         },
-                        "schedule_time": timestamp_pb2.Timestamp().FromDatetime(
+                        "schedule_time":
+                        timestamp_pb2.Timestamp().FromDatetime(
                             datetime.datetime.utcnow() +
-                            datetime.timedelta(seconds=self.delay
-                            )
+                            datetime.timedelta(seconds=self.delay)
                         ),
                     }
-                    # task["app_engine_http_request"]["content-type"] = "application/json"
+                    # task["app_engine_http_request"]["content-type"] = \
+                    # "application/json"
                     log.debug("emitted task `%s` for obj", task)
                     self.delay += 10
-                    return client.create_task(parent, task)
+                    task = client.create_task(parent, task)
                 else:
-                    return None
-
-
+                    return response.Response(
+                        "No change!",
+                        status=status.HTTP_200_OK
+                    )
         return response.Response("OK!", status=status.HTTP_200_OK)
+
+
+class CronFeedView(views.APIView):
+    """
+    CronFeedView.
+
+    View Class relating to `Feed` operations.
+
+    Tests:
+
+    """
+
+    # queryset = get_user_model().objects.all()
+    # parser_classes = (FeedTaskParser,)
+
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = FeedSerializer
+
+    def get(self, request):
+        """
+        HTTP GET /postfeed/feed/.
+
+        Return OK on case of HTTP GET
+        """
+        if request:
+            return response.Response("GET OK!", status=status.HTTP_200_OK)
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        """
+        Avoid CSRF Protection for Cloud-Tasks.
+
+        ToDo::
+            Actually verify headers for GCP initiated requests.
+            See:
+            https://cloud.google.com/tasks/docs/creating-appengine-handlers
+        """
+        return super().dispatch(*args, **kwargs)
+
+    def post(self, request, format=None):
+        """
+        POST /postfeed/feed
+
+        Receive serialized `FeedURL`, process all parsable `Entry`s.
+        """
+        log.debug("received: %s", request.data)
+        serialized = FeedURLSerializer(
+            data=request.data,
+            context={'request': request}
+        )
+        if serialized.is_valid():
+            feed_url = serialized.data.get("feed_url", None)
+            feed = Feed.objects.get(feed_url=feed_url)
+            if not feed_url:
+                return response.Response(
+                    "NO CONTENT", status=status.HTTP_204_NO_CONTENT
+                )
+            for entry in feedparser.parse(feed_url).entries:
+                # parsed_entry = EntryFromFeedparser(feed.pk, entry)
+                # parsed_entry.save()
+                continue
+                # serialized_e = EntrySerializer(parsed_entry)
+                # storeSerializedEntry(serialized_e)
+                # j = JSONRenderer().render(serialized_e.data)
+                # storeEntryFromJSON(json.dumps(entry))
+                # emitTask("entry", JSONRenderer().render(serializedE.data), 1)
+            return response.Response(
+                "POST OK!",
+                status=status.HTTP_201_CREATED
+            )
+        else:
+            log.error("invalid de-serialized: %s", serialized.data)
+            log.error("de-serialized errors: %s", serialized.errors)
+            return response.Response("POST OK!", status=status.HTTP_200_OK)
 
 
 class OptionsView(RetrieveAPIView):

@@ -28,7 +28,7 @@ class OptionsSerializer(serializers.ModelSerializer):
 class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
     feeds = serializers.PrimaryKeyRelatedField(
         many=True,
-        read_only=True
+        read_only=True,
     )
 
     class Meta:
@@ -40,13 +40,13 @@ class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
             'feeds',
         )
 
-class FeedURLSerializer(serializers.ModelSerializer):
+
+class FeedURLSerializer(serializers.Serializer):
     class Meta:
-        model = Feed
         fields = (
-            'pk',
-            'url',
+            'feed_url',
             'name',
+        )
 
 
 class FeedSerializer(serializers.HyperlinkedModelSerializer):
@@ -75,9 +75,13 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'pk',
             'url',
+            'feed_url',
             'name',
             'posts',
         )
+        extra_kwargs = {
+            'url': {'view_name': 'planet:feed-detail', }
+        }
 
 
 class PostSerializer(serializers.ModelSerializer):

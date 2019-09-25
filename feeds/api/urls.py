@@ -12,6 +12,7 @@ from rest_framework import routers
 from rest_framework.schemas import get_schema_view
 
 from .views import CronView
+from .views import CronFeedView
 from .views import OptionsView
 from .views import WebSiteViewSet
 from .views import FeedViewSet
@@ -28,12 +29,17 @@ router.register(r'posts', PostViewSet)
 router.register(r'categories', CategoryViewSet)
 router.register(r'subscriptions', UserSubscriptionsViewSet)
 
-schema_view = get_schema_view(title="Feeds API")
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('schema', schema_view),
+    path('schema', get_schema_view(
+        title="Feeds API",
+        description="API for feeds.",
+        version="1.0.0",
+        url='https://www.pramari.de/feeds/api/'),
+        name='openapi-schema'),
     path('cron', CronView.as_view()),
+    path('cron/feed', CronFeedView.as_view()),
     path('options/', OptionsView.as_view()),
     path('options/<slug:username>/', OptionsView.as_view())
 ]
