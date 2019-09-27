@@ -41,11 +41,12 @@ class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class FeedURLSerializer(serializers.Serializer):
+class FeedPKSerializer(serializers.Serializer):
+    pk = serializers.IntegerField(min_value=0)
+
     class Meta:
         fields = (
-            'feed_url',
-            'name',
+            'pk',
         )
 
 

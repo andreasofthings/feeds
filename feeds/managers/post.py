@@ -22,11 +22,6 @@ class PostManager(models.Manager):
         """
         return self.filter(feeds_subscriptions__user=user)
 
-    def from_feedparser(self, *args, **kwargs):
-        """
-        Actual logic to create a new post from feedparser goes here.
-        """
-        return self.get_or_create(*args, **kwargs)
 
     def older_than(self, ttl):
         """

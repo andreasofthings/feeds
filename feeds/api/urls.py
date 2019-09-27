@@ -35,7 +35,6 @@ urlpatterns = [
     path('schema', get_schema_view(
         title="Feeds API",
         description="API for feeds.",
-        version="1.0.0",
         url='https://www.pramari.de/feeds/api/'),
         name='openapi-schema'),
     path('cron', CronView.as_view()),

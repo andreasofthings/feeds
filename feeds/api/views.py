@@ -21,7 +21,7 @@ from ..models import WebSite, Feed, Post, Options, Subscription, Category
 
 from .serializers import OptionsSerializer
 from .serializers import WebSiteSerializer
-from .serializers import FeedSerializer, FeedURLSerializer
+from .serializers import FeedSerializer, FeedPKSerializer
 from .serializers import PostSerializer
 from .serializers import CategorySerializer
 from .serializers import SubscriptionSerializer
@@ -35,7 +35,7 @@ from .throttle import SubscriptionThrottle
 
 import logging
 
-log = logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 
 
 class CronView(views.APIView):
@@ -72,13 +72,12 @@ class CronView(views.APIView):
         if request:
             for feed in Feed.objects.all():
                 # actually, rather serialize the real object than some mock.
-                f = FeedURLSerializer(
-                    feed.feed_url,
+                f = FeedPKSerializer(
+                    feed,
                     context={'request': request}
                 )
-                log.debug("sending task feed: %s", feed)
+                LOG.debug("sending task feed: %s", feed)
                 if settings.GOOGLE_APP_ENGINE:
-                    from google.cloud import datastore
                     from google.protobuf import timestamp_pb2
                     from google.cloud import tasks as tasks
 
@@ -103,7 +102,7 @@ class CronView(views.APIView):
                     }
                     # task["app_engine_http_request"]["content-type"] = \
                     # "application/json"
-                    log.debug("emitted task `%s` for obj", task)
+                    LOG.debug("emitted task `%s` for obj", task)
                     self.delay += 10
                     task = client.create_task(parent, task)
                 else:
@@ -157,22 +156,22 @@ class CronFeedView(views.APIView):
 
         Receive serialized `FeedURL`, process all parsable `Entry`s.
         """
-        log.debug("received: %s", request.data)
-        serialized = FeedURLSerializer(
+        serialized = FeedPKSerializer(
             data=request.data,
             context={'request': request}
         )
         if serialized.is_valid():
-            feed_url = serialized.data.get("feed_url", None)
-            feed = Feed.objects.get(feed_url=feed_url)
-            if not feed_url:
+            pk = serialized.data.get("pk", None)
+            if not pk:
                 return response.Response(
                     "NO CONTENT", status=status.HTTP_204_NO_CONTENT
                 )
-            for entry in feedparser.parse(feed_url).entries:
+            feed = Feed.objects.get(pk=pk)
+            for entry in feedparser.parse(feed.feed_url).entries:
+                post, created = Post.fromFeedparser(feed, entry)
+                post.save()
                 # parsed_entry = EntryFromFeedparser(feed.pk, entry)
                 # parsed_entry.save()
-                continue
                 # serialized_e = EntrySerializer(parsed_entry)
                 # storeSerializedEntry(serialized_e)
                 # j = JSONRenderer().render(serialized_e.data)
@@ -183,8 +182,8 @@ class CronFeedView(views.APIView):
                 status=status.HTTP_201_CREATED
             )
         else:
-            log.error("invalid de-serialized: %s", serialized.data)
-            log.error("de-serialized errors: %s", serialized.errors)
+            LOG.error("invalid de-serialized: %s", serialized.data)
+            LOG.error("de-serialized errors: %s", serialized.errors)
             return response.Response("POST OK!", status=status.HTTP_200_OK)
 
 
