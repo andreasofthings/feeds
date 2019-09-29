@@ -357,6 +357,15 @@ class Feed(models.Model):
         return entry.get('id', guid)
 
     def _guids(self, entries):
+        """
+        List GUIDs.
+
+        Build a list of `guids` from a list of `entry`.
+
+        Args:
+          entries (list): A list of `entries`, as coming from `feedparser`.
+
+        """
         guids = []
         for entry in entries:
             guids.append(self._entry_guid(entry))
@@ -389,11 +398,11 @@ class Feed(models.Model):
         """
         Create Posts from `feedparser`.
 
-        Receive Entry, postdict
-        ..arguments:
-            entry: actual Entry
-            postdict: ?
-        entry has these keys:
+        Args:
+            entry (dict):
+            postdict (dict):
+
+        entry can have these keys:
         - 'summary_detail'
         - 'published'
         - 'published_parsed'
@@ -412,35 +421,26 @@ class Feed(models.Model):
         """
         result = ENTRY_SAME
 
-        now = timezone.now()
-        created_parsed = entry.get('created_parsed', now)
-        published_parsed = entry.get('published_parsed', created_parsed)
-
-        if isinstance(published_parsed, time.struct_time):
-            published_parsed = \
-                datetime.datetime.fromtimestamp(
-                    time.mktime(published_parsed)
+        if self._entry_guid(entry) in postdict.keys():
+            logger.debug("update: %s", entry.title)
+            p = self.posts.filter(guid__is=self._entry_guid(entry))
+        else:
+            logger.debug("insert: %s", entry.title)
+            p, created = self.posts.fromFeedparser(
+                feed=self,
+                entry=entry,
+                guid=self._entry_guid(entry),
+                # published=published_parsed,
                 )
-
-        if timezone.is_naive(published_parsed):
-            published_parsed = \
-                timezone.make_aware(published_parsed)
-
-        p, created = self.posts.fromFeedparser(  # fromFeedparser(
-            feed=self,
-            entry=entry,
-            # guid=self._entry_guid(entry),
-            # published=published_parsed,
-        )
-        if created:
-            result = ENTRY_NEW
-            p.save()
-            logger.debug(
-                "'%s' is a new entry for feed %s (%s)",
-                entry.title,
-                self.id,
-                p.id
-            )
+            if created:
+                result = ENTRY_NEW
+                p.save()
+                logger.debug(
+                    "'%s' is a new entry for feed %s (%s)",
+                    entry.title,
+                    self.id,
+                    p.id
+                )
 
         if 'category' in entry and len(entry.category) > 0:
             s = slugify(entry.category)
@@ -470,14 +470,7 @@ class Feed(models.Model):
             p.id
         )
 
-        if hasattr(entry, 'link'):
-            if p.link is not entry.link:
-                p.link = entry.link
-                if not created:
-                    result = ENTRY_UPDATED
-
         logger.debug("stop: entry")
-        p.save()
         return result
 
     def update(self, parsed):

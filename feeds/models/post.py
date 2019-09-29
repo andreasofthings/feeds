@@ -89,6 +89,7 @@ class Post(models.Model):
         """
         Django Meta
         """
+
         app_label = "feeds"
         ordering = ['-published', ]
 
@@ -101,7 +102,9 @@ class Post(models.Model):
         return self.ratings.order_by('-updated')[0]
 
     def get_absolute_url(self):
-        return ('planet:post-detail', [str(self.id)])
+        """return the absolute url for this `Post`."""
+        from django.urls import reverse
+        return reverse('planet:post-detail', args=[str(self.id)])
 
     def get_trackable_url(self):
         """
@@ -149,7 +152,11 @@ class TaggedPost(models.Model):
     )
 
     class Meta:
-        # Enforce unique tag association per object
+        """
+        Meta Information TaggedPost.
+
+        Enforce unique tag association per object
+        """
         app_label = "feeds"
         unique_together = (('tag', 'post', ),)
         verbose_name = _('tagged item')

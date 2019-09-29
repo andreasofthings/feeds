@@ -32,8 +32,7 @@ class PostManager(models.Manager):
         """
         feed = kwargs['feed']
         entry = kwargs['entry']
-        print(feed)
-        print(entry)
+        guid = kwargs['guid']
 
         published = entry.get("published_parsed", None)
         if published:
@@ -42,19 +41,24 @@ class PostManager(models.Manager):
             published = converted
         else:
             published = datetime.datetime.now()
+
         post, created = self.get_or_create(
             feed=feed,
-            guidislink=entry.get("guidislink", False),
-            guid=entry.get("id", None),
-            link=entry.get("link", None),
-            title=entry.get("title", None),
-            summary=entry.get("summary", None),
-            published=published,
-            #  language=entry.get("language", "en"),
-            author=entry.get("author", ""),
-            author_email=entry.get("author_email", ""),
-            # tags=entry.get("tags", []),
+            guid=guid,
+            published=published
         )
+
+
+        if created:
+            post.guidislink = entry.get("guidislink", post.guidislink)
+            post.link = entry.get("link", post.link)
+            post.title = entry.get("title", None)
+            post.summary = entry.get("summary", None)
+            post.published = published
+            #  language=entry.get("language", "en"),
+            post.author = entry.get("author", "")
+            post.author_email = entry.get("author_email", "")
+            # tags=entry.get("tags", []),
         # for tag in entry.get("tags", []):
         #    t, created = post.objects.
         return post, created
