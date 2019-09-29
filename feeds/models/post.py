@@ -14,8 +14,6 @@ Stores as much as possible coming out of the feed.
 from __future__ import unicode_literals
 
 import logging
-import time
-import datetime
 from django.utils.encoding import python_2_unicode_compatible
 
 from django.db import models
@@ -93,38 +91,6 @@ class Post(models.Model):
         """
         app_label = "feeds"
         ordering = ['-published', ]
-
-    @classmethod
-    def fromFeedparser(self, feed, entry):
-        """
-        Post.fromFeedparser(entry).
-
-        Actual logic to create a new post from feedparser.
-        """
-        logger.error("guidislink=%s", entry.get("guidislink", False))
-        published = entry.get("published_parsed", None)
-        if published:
-            timestamp = time.mktime(tuple(map(int, published)))
-            converted = datetime.datetime.fromtimestamp(timestamp)
-            published = converted
-        else:
-            published = datetime.datetime.now()
-        post = self.objects.get_or_create(
-            feed=feed,
-            guidislink=entry.get("guidislink", False),
-            guid=entry.get("id", None),
-            link=entry.get("link", None),
-            title=entry.get("title", None),
-            summary=entry.get("summary", None),
-            published=published,
-            #  language=entry.get("language", "en"),
-            author=entry.get("author", ""),
-            author_email=entry.get("author_email", ""),
-            # tags=entry.get("tags", []),
-        )
-        for tag in entry.get("tags", []):
-            t, created = Tag
-        return post
 
     @property
     def score(self):

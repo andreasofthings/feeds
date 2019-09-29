@@ -17,6 +17,8 @@ from django.utils.encoding import python_2_unicode_compatible
 import time
 import logging
 import datetime
+import sys
+import traceback
 
 from collections import Counter
 
@@ -268,6 +270,9 @@ class Feed(models.Model):
 
     def save(self, *args, **kwargs):
         """
+        Save.
+
+        Override default save method to enforce failure count update.
         """
         if self.errors > getattr(settings, 'FEEDS_ERROR_THRESHOLD', 3):
             self.is_active = False
@@ -276,11 +281,13 @@ class Feed(models.Model):
     class Meta:
         """
         Metadata for Feed Model.
+
         Permissions contain:
         :fields:
            can_refresh_feed: User with this credential
            is allowed to refresh a feed.
         """
+
         app_label = "feeds"
         verbose_name = _('feed')
         verbose_name_plural = _('feeds')
@@ -292,16 +299,25 @@ class Feed(models.Model):
         )
 
     def __str__(self):
+        """
+        Representation.
+
+        Give a readable representation for this `Feed`.
+        """
         return u'%s' % (self.name)
 
     def post_count(self):
         """
+        Count Posts.
+
         Return the number of posts in this feed.
         """
         return self.posts.count()
 
     def subscriber_count(self):
         """
+        Count Subscribers.
+
         Return the number of subscribers for this feed.
         """
         return self.feed_subscription.count()
@@ -316,9 +332,22 @@ class Feed(models.Model):
 
     def _entry_guid(self, entry):
         """
-        Get an individual guid for an entry
+        Get GUID.
+
+        Try to find a valid GUID in an `entry`.
+
+        Args:
+            entry (Feedparser.EntryDict): A Feedparser representation
+              of a Feed Entry.
+
+        Returns:
+            str: An GUID.
+
         """
         guid = ""
+
+        if entry.guidislink:
+            pass
 
         if entry.link:
             guid = entry.link
@@ -335,8 +364,20 @@ class Feed(models.Model):
 
     def _postdict(self, uids):
         """
-        fetch posts that we have on file already and return a dictionary
+        List `uids`.
+
+        Fetch posts that we have on file already and return a dictionary
         with all uids/posts as key/value pairs.
+
+        Args:
+            uids (list): List of UIDs
+
+        Returns:
+            dict: all queried posts with their UID as a key.
+
+        Raises:
+            Exception: description
+
         """
         return dict(
             [(post.guid, post) for post in self.posts.filter(
@@ -344,8 +385,10 @@ class Feed(models.Model):
             )]
         )
 
-    def from_feedparser(self, entry, postdict):
+    def fromFeedparser(self, entry, postdict):
         """
+        Create Posts from `feedparser`.
+
         Receive Entry, postdict
         ..arguments:
             entry: actual Entry
@@ -383,11 +426,11 @@ class Feed(models.Model):
             published_parsed = \
                 timezone.make_aware(published_parsed)
 
-        p, created = self.posts.from_feedparser(
+        p, created = self.posts.fromFeedparser(  # fromFeedparser(
             feed=self,
-            title=entry.title,
-            guid=self._entry_guid(entry),
-            published=published_parsed,
+            entry=entry,
+            # guid=self._entry_guid(entry),
+            # published=published_parsed,
         )
         if created:
             result = ENTRY_NEW
@@ -398,11 +441,6 @@ class Feed(models.Model):
                 self.id,
                 p.id
             )
-        p.content = entry.get('content', '')
-        """.. todo:: get other content instead."""
-        p.author = entry.get('author', '')
-        p.author_email = entry.get('author_email', '')
-        p.summary = entry.get('summary', '')
 
         if 'category' in entry and len(entry.category) > 0:
             s = slugify(entry.category)
@@ -444,52 +482,33 @@ class Feed(models.Model):
 
     def update(self, parsed):
         """
-        Update `feed` with values from `parsed`
+        Feed.update.
+
+        Update `feed` with values retrieved from `feedparser` through `parsed`.
         """
-        if not self.name and 'title' in parsed.feed:
-            self.name = parsed.feed.title[:100]
-        if not self.short_name and 'title' in parsed.feed:
-            self.short_name = parsed.feed.title[:50]
-        if not self.link and hasattr(parsed.feed, 'link'):
-            self.link = parsed.feed.link
-        if hasattr(parsed.feed, 'language'):
-            self.language = parsed.feed.language[:7]
+        if not self.name:
+            self.name = parsed.feed.get('title', self.name)
+        if not self.short_name:
+            self.short_name = parsed.feed.get('title', self.name)[:50]
+        if not self.slug:
+            self.slug = slugify(self.name)
         if hasattr(parsed.feed, 'image'):
             if hasattr(parsed.feed.image, 'url'):
                 self.image_url = parsed.feed.image.url
-        if not self.slug:
-            self.slug = slugify(self.name)
 
-        self.etag = parsed.get('etag', '')
+        updated = parsed.feed.get("updated_parsed", None)
+        if updated:
+            timestamp = time.mktime(tuple(map(int, updated)))
+            converted = datetime.datetime.fromtimestamp(timestamp)
+            updated = converted
+        else:
+            updated = datetime.datetime.now()
+        self.last_modified = updated
+
         self.pubdate = parsed.feed.get('pubDate', '')
-
-        """
-        .. todo:: Same as above. A trainwreck.
-        """
-        try:
-            updated = parsed.feed.get('updated', timezone.now())
-            updated_parsed = parsed.feed.get('updated_parsed', updated)
-
-            if isinstance(updated_parsed, time.struct_time):
-                updated_parsed = \
-                    datetime.datetime.fromtimestamp(
-                        time.mktime(updated_parsed)
-                    )
-
-            if timezone.is_naive(updated_parsed):
-                updated_parsed = \
-                    timezone.make_aware(updated_parsed)
-
-            self.last_modified = updated_parsed
-
-        except ValueError as e:
-            """
-            .. todo:: Proper Exceptionhandling
-            """
-            logger.error(e)
-            logger.error(parsed.feed.updated)
-
-        self.title = parsed.feed.get('title', '')[0:200]
+        self.link = parsed.feed.get('link', self.link)
+        self.language = parsed.feed.get('language', self.language)
+        self.title = parsed.feed.get('title', '')[:200]
         self.tagline = parsed.feed.get('subtitle', '')[:64]
         self.copyright = parsed.feed.get('copyright', '')[:64]
         self.author = parsed.feed.get('author', '')[:64]
@@ -497,89 +516,100 @@ class Feed(models.Model):
         self.webmaster = parsed.feed.get('webmaster', '')[:64]
 
     def parse(self):
+        """
+        Wrap `feedparser.parse`.
+
+        Wrap `feedparser.parse` to handle all exceptions.
+        """
         try:
-            fpf = feedparser.parse(
+            parsed = feedparser.parse(
                 self.feed_url,
                 agent=USER_AGENT,
                 etag=self.etag
             )
-        except Exception as err:
+        except Exception as error:
+            self.errors = self.errors+1
+            self.save()  # touch timestamp
             raise FeedsBaseException(
                 "Feedparser Error: {} cannot be parsed.".format(self.feed_url),
-                err
+                error
             )
 
-        if 'status' not in fpf:
-            logger.error("No 'status' 'fpf'. Found %s instead.", fpf.keys())
+        if 'status' not in parsed:
+            self.errors = self.errors+1
+            self.save()  # touch timestamp
             raise FeedsParseError(
                 "Parsed Feed {} didn't provide `status`".format(self.name)
             )
 
-        if fpf.status >= 400:
+        if parsed.status >= 400:
+            self.errors = self.errors+1
+            self.save()  # touch timestamp
             raise FeedsHTTPError(
                 "Feed {} responded HTTP Client Error (4xx)".format(self.name),
                 None
             )
 
-        if 'bozo' in fpf and fpf.bozo == 1:
-            if type(fpf.bozo_exception) is feedparser.CharacterEncodingOverride:
+        if 'bozo' in parsed and parsed.bozo == 1:
+            self.errors = self.errors+1
+            self.save()  # touch timestamp
+            if type(parsed.bozo_exception) is \
+                    feedparser.CharacterEncodingOverride:
                 logger.error("CharacterEncodingOverride, trying to continue")
             else:
                 raise FeedsParseError(
                     "[{} !BOZO! Feed '{}' is not well formed: {}".format(
                         self.id,
                         self.name,
-                        fpf.bozo_exception
+                        parsed.bozo_exception
                     )
                 )
 
-        if fpf.status == 304:
+        if parsed.status == 304:
             raise FeedsSameError(
-                "[{}] Feed did not change: {}".format(self.id, self.name),
-                Exception("Error")
+                "[{}] Feed did not change: {}".format(self.id, self.name)
             )
 
+        self.etag = parsed.get('etag', self.etag)
+        self.save()
         logger.debug("-- end --")
-        return fpf
+        return parsed
 
-    def refresh(self):
+    def refresh(self, force=False):
         """
-        Refresh feed.
+        Refresh `Feed`.
+
+        Fetch posts for this feed, considering all we know about that source.
+        We Ratelimit refreshing feeds.
+
+        Args:
+            force (boolean): Overrule rate limits.
+
+        Returns:
+            enum: The resulting status of refreshing this feed.
+
         """
         logger.debug("-- start --")
-        now = timezone.now()
-        fiveminutesago = now - datetime.timedelta(seconds=300)
+        fiveminutesago = timezone.now() - datetime.timedelta(seconds=300)
 
-        if self.last_checked is not None:
+        if self.last_checked is not None and force is False:
             if self.last_checked > fiveminutesago:
                 logger.debug(
                     "tried feed %s too quick. aborting. (%s, %s, %s)",
                     self.feed_url,
                     self.last_checked,
                     self.last_checked + datetime.timedelta(seconds=300),
-                    now
+                    timezone.now()
                 )
                 return FEED_SAME
 
         try:
             parsed = self.parse()
-        except FeedsHTTPError as err:
-            logger.error(
-                "{} raised error: {}".format(
-                    self.feed_url,
-                    err
-                )
-            )
-            self.errors = self.errors+1
-            self.save()  # touch timestamp
+        except FeedsHTTPError:
             return FEED_ERRHTTP
-        except FeedsParseError as e:
-            logger.error("Feed %s raised FeedErrorParse: %s", self.name, e)
-            self.errors = self.errors+1
-            self.save()  # touch timestamp
+        except FeedsParseError:
             return FEED_ERRPARSE
         except FeedsSameError:
-            self.save()  # touch timestamp
             return FEED_SAME
 
         try:
@@ -587,6 +617,9 @@ class Feed(models.Model):
         finally:
             """
             Make sure timestamp is touched
+
+            .. todo::
+                make sure this is necessary.
             """
             self.save()
 
@@ -595,15 +628,16 @@ class Feed(models.Model):
         try:
             result = Counter(
                 (
-                    self.from_feedparser(entry, postdict)
+                    self.fromFeedparser(entry, postdict)
                     for
                     entry
                     in
                     parsed.entries
                 )
             )
-        except Exception as e:
-            logger.debug("-- end (ERR) --")
+        except Exception as error:
+            logger.debug("-- end (ERR) %s --", error)
+            traceback.print_exc(file=sys.stdout)
             return FEED_ERREXC
 
         logger.debug("Feed '%s' returned %s", self.title, result)
