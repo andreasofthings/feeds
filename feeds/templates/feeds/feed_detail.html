@@ -1,9 +1,10 @@
 {%extends 'feeds/index.html'%}
+{% load humanize %}
 {% load feed_extra %}
 {% load static from staticfiles %}
 
-{% block additional_scripts_start %}
-  <link rel="stylesheet" type="text/css" hrf="{{ STATIC_URL }}jqplot/jquery.jqplot.min.css" />
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static "feeds/feed_detail.css" %}"/>
 {% endblock %}
 
 {% block title %}
@@ -37,19 +38,27 @@ Feed: {{ feed }}
   <div class="col-md">
   </div>
   <div class="col-md">
-    <p>Refreshed: {{object.last_checked}}</p>
-    <p>Errors: {{object.errors}}</p>
+    <p><div class="badge badge-primary">Refreshed</div> {{ object.last_checked|naturaltime }}</p>
+    <p><div class="badge badge-primary">Errors</div> {{object.errors }}</p>
   </div>
 </div>
 <div class="row">
   <div class="col-md">
     {# paginate posts as post_list #}
-    <ul>
+    <ul class="timeline">
     {% for post in posts %}
-    <li><h5>
-        {% if post.author %}{{ post.author }} wrote: {% endif %}
-        <a href="{{ post.get_absolute_url }}">{{ post }}</a>
-      <small>{{ post.published }}</small></h5></li>
+      <li>
+        <p>
+          {% if post.author %}{{ post.author }} wrote: {% endif %}
+          <a href="{{ post.get_absolute_url }}">{{ post }}</a>
+          <small class="float-right">{{ post.published }}</small>
+        </p>
+        <p>
+          {% for tag in e.tags %}
+            <span class="badge badge-info">{{ tag.term }}</span>
+          {% endfor %}
+        </p>
+      </li>
     {% endfor %}
     {# show_pages #}
     </ul>
