@@ -123,7 +123,8 @@ class Post(models.Model):
             # tags=entry.get("tags", []),
         )
         for tag in entry.get("tags", []):
-            t, created = Tag
+            t, created = Tag.objects.get_or_create()
+            r, created = self.tags.get_or_create()
         return post
 
     @property
