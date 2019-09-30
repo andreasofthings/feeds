@@ -423,7 +423,7 @@ class Feed(models.Model):
 
         if self._entry_guid(entry) in postdict.keys():
             logger.debug("update: %s", entry.title)
-            p = self.posts.filter(guid__is=self._entry_guid(entry))
+            p = self.posts.filter(guid__eq=self._entry_guid(entry))
         else:
             logger.debug("insert: %s", entry.title)
             p, created = self.posts.fromFeedparser(

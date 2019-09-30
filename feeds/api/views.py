@@ -18,7 +18,6 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.conf import settings
 
-import feedparser
 from ..models import WebSite, Feed, Post, Options, Subscription, Category
 
 from .serializers import OptionsSerializer
@@ -169,19 +168,7 @@ class CronFeedView(views.APIView):
                     "NO CONTENT", status=status.HTTP_204_NO_CONTENT
                 )
             feed = Feed.objects.get(pk=pk)
-            for entry in feedparser.parse(feed.feed_url).entries:
-                post, created = Post.objects.fromFeedparser(
-                    feed=feed,
-                    entry=entry
-                    )
-                post.save()
-                # parsed_entry = EntryFromFeedparser(feed.pk, entry)
-                # parsed_entry.save()
-                # serialized_e = EntrySerializer(parsed_entry)
-                # storeSerializedEntry(serialized_e)
-                # j = JSONRenderer().render(serialized_e.data)
-                # storeEntryFromJSON(json.dumps(entry))
-                # emitTask("entry", JSONRenderer().render(serializedE.data), 1)
+            feed.refresh()
             return response.Response(
                 "POST OK!",
                 status=status.HTTP_201_CREATED
