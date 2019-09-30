@@ -166,7 +166,7 @@ class ViewsAnonymousTest(TestCase):
         site-detail
         -----------
             :url: url(
-                r'^website/(?P<pk>\d+)/$',
+                r'^website/(?P<pk>\\d+)/$',
                 SiteDetailView.as_view(),
                 name="website-detail"
                 )
@@ -185,7 +185,7 @@ class ViewsAnonymousTest(TestCase):
         site-update
         -----------
             :url: url(
-                    r'^website/(?P<pk>\d+)/update/$',
+                    r'^website/(?P<pk>\\d+)/update/$',
                     SiteUpdateView.as_view(),
                     name="website-update"
                 )
@@ -213,7 +213,7 @@ class ViewsAnonymousTest(TestCase):
         site-delete
         -----------
             :url: url(
-                r'^website/(?P<pk>\d+)/delete/$',
+                r'^website/(?P<pk>\\d+)/delete/$',
                 SiteDeleteView.as_view(),
                 name="website-delete"
                 )
@@ -305,7 +305,7 @@ class ViewsAnonymousTest(TestCase):
         feed-detail
         -----------
             :url: url(
-                r'^(?P<pk>\d+)/$',
+                r'^(?P<pk>\\d+)/$',
                 FeedDetailView.as_view(),
                 name="feed-detail"
             ),
@@ -327,7 +327,7 @@ class ViewsAnonymousTest(TestCase):
         -----------
             :url:
                 url(
-                  r'^(?P<pk>\d+)/update/$',
+                  r'^(?P<pk>\\d+)/update/$',
                   FeedUpdateView.as_view(),
                   name="feed-update"
                   )
@@ -353,7 +353,7 @@ class ViewsAnonymousTest(TestCase):
         feed-delete
         -----------
             :url: url(
-            r'^(?P<pk>\d+)/delete/$',
+            r'^(?P<pk>\\d+)/delete/$',
             FeedDeleteView.as_view(),
             name="feed-delete"
             ),
@@ -382,7 +382,7 @@ class ViewsAnonymousTest(TestCase):
         Test Feed Views:
 
         .. todo::
-            url(r'^(?P<pk>\d+)/refresh/$',
+            url(r'^(?P<pk>\\d+)/refresh/$',
             FeedRefreshView.as_view(), name="feed-refresh"),
         """
         self.feed_home()

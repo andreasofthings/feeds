@@ -3,7 +3,9 @@
 # vim: ts=4 et sw=4 sts=4
 
 """
-Feeds API views.
+Feeds API.
+
+All views related to Feeds API exist here.
 """
 
 import datetime
@@ -88,7 +90,7 @@ class CronView(views.APIView):
                     parent = client.queue_path(project, location, queue)
                     task = {
                         # "http_request": {  # Specify the type of request.
-                        "app_engine_http_request": {  # Specify the requesttype.
+                        "app_engine_http_request": {  # Specify the requesttype
                             "http_method": "POST",
                             "relative_uri": "/feeds/api/cron/feed",
                             "body": renderers.JSONRenderer().render(f.data),
@@ -96,7 +98,7 @@ class CronView(views.APIView):
                         },
                         "schedule_time":
                         timestamp_pb2.Timestamp().FromDatetime(
-                            datetime.datetime.utcnow() +
+                            datetime.datetime.utcnow() + \
                             datetime.timedelta(seconds=self.delay)
                         ),
                     }
@@ -152,7 +154,7 @@ class CronFeedView(views.APIView):
 
     def post(self, request, format=None):
         """
-        POST /postfeed/feed
+        POST /postfeed/feed.
 
         Receive serialized `FeedURL`, process all parsable `Entry`s.
         """
@@ -168,7 +170,10 @@ class CronFeedView(views.APIView):
                 )
             feed = Feed.objects.get(pk=pk)
             for entry in feedparser.parse(feed.feed_url).entries:
-                post, created = Post.fromFeedparser(feed, entry)
+                post, created = Post.objects.fromFeedparser(
+                    feed=feed,
+                    entry=entry
+                    )
                 post.save()
                 # parsed_entry = EntryFromFeedparser(feed.pk, entry)
                 # parsed_entry.save()
@@ -188,6 +193,13 @@ class CronFeedView(views.APIView):
 
 
 class OptionsView(RetrieveAPIView):
+    """
+    APIView Options.
+
+    Provide an API to retrieve User Options.
+
+    """
+
     throttle_class = (OptionsThrottle, )
     serializer_class = OptionsSerializer
     queryset = Options.objects.all()
@@ -195,6 +207,8 @@ class OptionsView(RetrieveAPIView):
 
     def retrieve(self, request, username=None, *args, **kwargs):
         """
+        Get.
+
         Return Users Options.
         """
         queryset = Options.objects.filter(user=request.user)
@@ -209,6 +223,8 @@ class WebSiteViewSet(mixins.ListModelMixin,
                      mixins.DestroyModelMixin,
                      viewsets.GenericViewSet):
     """
+    WebSiteViewSet.
+
     API endpoint that allows WebSites to be listed.
     """
 
@@ -224,6 +240,8 @@ class FeedViewSet(mixins.ListModelMixin,
                   mixins.DestroyModelMixin,
                   viewsets.GenericViewSet):
     """
+    View Feeds.
+
     API endpoint that allows feeds to be listed.
     """
 

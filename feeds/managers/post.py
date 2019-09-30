@@ -8,6 +8,8 @@ PostManager
 """
 
 from django.db import models
+import time
+import datetime
 
 
 class PostManager(models.Manager):
@@ -21,6 +23,45 @@ class PostManager(models.Manager):
         subscriptions. At the time, the queryset below likely breaks.
         """
         return self.filter(feeds_subscriptions__user=user)
+
+    def fromFeedparser(self, *args, **kwargs):
+        """
+        Create a `Post` object from a Feedparser Entry.
+
+        Actual logic to create a new post from feedparser goes here.
+        """
+        feed = kwargs['feed']
+        entry = kwargs['entry']
+        guid = kwargs['guid']
+
+        published = entry.get("published_parsed", None)
+        if published:
+            timestamp = time.mktime(tuple(map(int, published)))
+            converted = datetime.datetime.fromtimestamp(timestamp)
+            published = converted
+        else:
+            published = datetime.datetime.now()
+
+        post, created = self.get_or_create(
+            feed=feed,
+            guid=guid,
+            published=published
+        )
+
+
+        if created:
+            post.guidislink = entry.get("guidislink", post.guidislink)
+            post.link = entry.get("link", post.link)
+            post.title = entry.get("title", None)
+            post.summary = entry.get("summary", None)
+            post.published = published
+            #  language=entry.get("language", "en"),
+            post.author = entry.get("author", "")
+            post.author_email = entry.get("author_email", "")
+            # tags=entry.get("tags", []),
+        # for tag in entry.get("tags", []):
+        #    t, created = post.objects.
+        return post, created
 
 
     def older_than(self, ttl):
@@ -38,6 +79,8 @@ class PostManager(models.Manager):
 
     def latest(self):
         """
+        Filter Posts.
+
         Get all Posts orderd by `published`.
         """
         return self.order_by('-published')
