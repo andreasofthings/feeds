@@ -126,6 +126,18 @@ class CategoryManager(models.Manager):
         """
         return self.get(slug=slug)
 
+    def fromFeedparser(self, *args, **kwargs):
+        entry = kwargs['entry']
+        if 'category' in entry and len(entry.category) > 0:
+            cat, created = self.get_or_create(
+                name=entry.category,
+                slug=slugify(entry.category)
+            )
+            logger.debug("Category: %s - Slug: %s" % (cat, cat.slug))
+            self.categories.add(cat)
+
+        raise NotImplemented
+
 
 @python_2_unicode_compatible
 class Category(models.Model):

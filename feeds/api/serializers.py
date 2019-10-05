@@ -26,12 +26,11 @@ class OptionsSerializer(serializers.ModelSerializer):
 
 
 class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
-    feeds = serializers.PrimaryKeyRelatedField(
-        many=True,
-        read_only=True,
-    )
+    """Serialize WebSite Models."""
 
     class Meta:
+        """Serializer Meta."""
+
         model = WebSite
         fields = (
             'pk',
@@ -39,12 +38,23 @@ class WebSiteSerializer(serializers.HyperlinkedModelSerializer):
             'slug',
             'feeds',
         )
+        extra_kwargs = {
+            'url': {'view_name': 'planet:website-detail', },
+            'feeds': {
+                'lookup_field': 'pk',
+                'view_name': 'planet:feed-detail'
+            }
+        }
 
 
 class FeedPKSerializer(serializers.Serializer):
+    """Serializer for Feed PK."""
+
     pk = serializers.IntegerField(min_value=0)
 
     class Meta:
+        """Meta for FeedPKSerializer."""
+
         fields = (
             'pk',
         )
@@ -81,11 +91,12 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
             'posts',
         )
         extra_kwargs = {
-            'url': {'view_name': 'planet:feed-detail', }
+            'url': {'view_name': 'planet:feed-detail', },
+            'posts': {'lookup_field': 'guid' }
         }
 
 
-class PostSerializer(serializers.ModelSerializer):
+class PostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Post
         fields = (
@@ -95,6 +106,10 @@ class PostSerializer(serializers.ModelSerializer):
             'link',
             'published',
         )
+        extra_kwargs = {
+            'url': {'view_name': 'planet:post-detail', }
+        }
+
 
 
 class CategorySerializer(serializers.ModelSerializer):

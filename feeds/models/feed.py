@@ -241,7 +241,7 @@ class Feed(models.Model):
     # http://feedparser.org/docs/http-etag.html
     etag = models.CharField(
         _('etag'),
-        max_length=50,
+        max_length=256,
         blank=True
     )
 
@@ -356,6 +356,7 @@ class Feed(models.Model):
 
         return entry.get('id', guid)
 
+
     def _guids(self, entries):
         """
         List GUIDs.
@@ -366,6 +367,7 @@ class Feed(models.Model):
           entries (list): A list of `entries`, as coming from `feedparser`.
 
         """
+
         guids = []
         for entry in entries:
             guids.append(self._entry_guid(entry))
@@ -381,6 +383,7 @@ class Feed(models.Model):
         Args:
             uids (list): List of UIDs
 
+
         Returns:
             dict: all queried posts with their UID as a key.
 
@@ -388,6 +391,7 @@ class Feed(models.Model):
             Exception: description
 
         """
+
         return dict(
             [(post.guid, post) for post in self.posts.filter(
                 guid__in=uids
@@ -399,8 +403,10 @@ class Feed(models.Model):
         Create Posts from `feedparser`.
 
         Args:
+
             entry (dict):
             postdict (dict):
+
 
         entry can have these keys:
         - 'summary_detail'
@@ -442,6 +448,7 @@ class Feed(models.Model):
                     p.id
                 )
 
+                """
         if 'category' in entry and len(entry.category) > 0:
             s = slugify(entry.category)
             logger.debug("Category: %s - Slug: %s" % (entry.category, s))
@@ -450,6 +457,7 @@ class Feed(models.Model):
                 slug=s
             )
             p.categories.add(cat)
+            """
 
         if 'enclosures' in entry and len(entry.enclosures) > 0:
             for enclosure in entry.enclosures:

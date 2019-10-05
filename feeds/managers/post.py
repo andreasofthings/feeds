@@ -61,6 +61,7 @@ class PostManager(models.Manager):
             # tags=entry.get("tags", []),
         # for tag in entry.get("tags", []):
         #    t, created = post.objects.
+        # categories, cat_created = self.categories.objects.fromFeedparser(entry)
         return post, created
 
 

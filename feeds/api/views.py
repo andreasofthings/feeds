@@ -203,16 +203,17 @@ class OptionsView(RetrieveAPIView):
         return response.Response(result.data)
 
 
-class WebSiteViewSet(mixins.ListModelMixin,
-                     mixins.CreateModelMixin,
-                     mixins.RetrieveModelMixin,
-                     mixins.UpdateModelMixin,
-                     mixins.DestroyModelMixin,
-                     viewsets.GenericViewSet):
+class WebSiteViewSet(viewsets.ModelViewSet):
     """
     WebSiteViewSet.
 
     API endpoint that allows WebSites to be listed.
+
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
     """
 
     throttle_class = (WebSiteThrottle,)
