@@ -470,7 +470,6 @@ class Feed(models.Model):
                 if created:
                     e.save()
 
-        p.save()
         logger.debug(
             """Saved '%s', new entry for feed '%s' (FeedID: %s, PostID %s)""",
             p.title,

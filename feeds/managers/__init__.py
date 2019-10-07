@@ -12,6 +12,7 @@ from .category import CategoryManager
 from .feed import FeedManager
 from .post import PostManager
 from .subscription import SubscriptionManager
+from .tag import TagManager
 from .option import OptionsManager
 from .website import WebSiteManager
 
@@ -22,6 +23,7 @@ __all__ = [
     'PostManager',
     'PostReadCountManager',
     'SubscriptionManager',
+    'TagManager',
     'WebSiteManager',
 ]
 

@@ -17,22 +17,10 @@ from django.contrib.contenttypes.models import ContentType
 
 import logging
 
-from ..managers import CategoryManager 
+from ..managers import CategoryManager
+from ..managers import TagManager
 
 logger = logging.getLogger(__name__)
-
-
-class TagManager(models.Manager):
-    """
-    Manager for `Tag` objects.
-    """
-
-    def get_by_natural_key(self, slug):
-        """
-        get Tag by natural key, to allow serialization by key rather than `pk`
-        """
-        return self.get(slug=slug)
-
 
 @python_2_unicode_compatible
 class Tag(models.Model):

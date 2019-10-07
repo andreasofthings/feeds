@@ -48,7 +48,6 @@ class PostManager(models.Manager):
             published=published
         )
 
-
         if created:
             post.guidislink = entry.get("guidislink", post.guidislink)
             post.link = entry.get("link", post.link)
@@ -59,10 +58,15 @@ class PostManager(models.Manager):
             post.author = entry.get("author", "")
             post.author_email = entry.get("author_email", "")
             # tags=entry.get("tags", []),
-        # for tag in entry.get("tags", []):
-        #    t, created = post.objects.
-        categories, cat_created = self.categories.fromFeedparser(
-            post=self,
+
+        for tag in entry.get("tags", []):
+            t, created = post.tags.fromFeedparser(
+            post=post,
+            tag=tag
+        )
+
+        categories, cat_created = post.categories.fromFeedparser(
+            post=post,
             entry=entry
         )
         return post, created
