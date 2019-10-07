@@ -92,7 +92,10 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
         )
         extra_kwargs = {
             'url': {'view_name': 'planet:feed-detail', },
-            'posts': {'lookup_field': 'guid' }
+            'posts': {
+                'lookup_field': 'pk',
+                'view_name': 'planet:post-detail',
+            }
         }
 
 
@@ -105,21 +108,47 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
             'title',
             'link',
             'published',
+            'categories',
         )
         extra_kwargs = {
-            'url': {'view_name': 'planet:post-detail', }
+            'url': {'view_name': 'planet:post-detail', },
+            'categories': {
+                'lookup_field': 'pk',
+                'view_name': 'planet:category-detail'
+                },
+            'feed': {
+                'lookup_field': 'pk',
+                'view_name': 'planet:feed-detail'
+            }
         }
 
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    """
+    Serialize Category.
+
+    """
+
     class Meta:
+        """Meta CatgeorySerializer."""
+
         model = Category
         fields = ('name', 'url', )
+        extra_kwargs = {
+            'url': {'view_name': 'planet:category-detail', },
+        }
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
+    """
+    Seriaize Subscriptions.
+
+    """
+
     class Meta:
+        """Meta UserSubscriptionsSerializer."""
+
         model = Subscription
         fields = (
             'pk',

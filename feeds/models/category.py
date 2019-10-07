@@ -17,6 +17,8 @@ from django.contrib.contenttypes.models import ContentType
 
 import logging
 
+from ..managers import CategoryManager 
+
 logger = logging.getLogger(__name__)
 
 
@@ -114,29 +116,6 @@ class Tag(models.Model):
 
     def get_absolute_url(self):
         return ('planet:tag-view', [str(self.slug)])
-
-
-class CategoryManager(models.Manager):
-    """
-    Manager for Category
-    """
-    def get_by_natural_key(self, slug):
-        """
-        Get Category by natural kea to allow serialization
-        """
-        return self.get(slug=slug)
-
-    def fromFeedparser(self, *args, **kwargs):
-        entry = kwargs['entry']
-        if 'category' in entry and len(entry.category) > 0:
-            cat, created = self.get_or_create(
-                name=entry.category,
-                slug=slugify(entry.category)
-            )
-            logger.debug("Category: %s - Slug: %s" % (cat, cat.slug))
-            self.categories.add(cat)
-
-        raise NotImplemented
 
 
 @python_2_unicode_compatible

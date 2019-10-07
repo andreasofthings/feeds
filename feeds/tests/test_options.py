@@ -8,10 +8,12 @@
 from django.test import TestCase, Client, RequestFactory
 from django.urls import reverse
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from feeds.views import OptionsView
 from feeds.models import Options
+
+User = get_user_model()
 
 
 class OptionsViewsTest(TestCase):
@@ -43,7 +45,7 @@ class OptionsViewsTest(TestCase):
         """
         client = Client()
         response = client.get(reverse('planet:options'))
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
         self.assertRedirects(
             response,
             '/accounts/login/?next=%s' % (reverse('planet:options'))
@@ -56,7 +58,7 @@ class OptionsViewsTest(TestCase):
         request = self.factory.get(reverse('planet:options'))
         request.user = self.user
         response = OptionsView.as_view()(request)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_options_post(self):
         """
@@ -73,7 +75,7 @@ class OptionsViewsTest(TestCase):
                 'submit': "Submit",
             },
         )
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
         self.assertNumQueries(1)
 
         request = self.factory.get(
@@ -85,7 +87,7 @@ class OptionsViewsTest(TestCase):
         request.user = self.user
         response = OptionsView.as_view()(request)
 
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertNumQueries(1)
 
         """

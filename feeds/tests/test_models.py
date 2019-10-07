@@ -72,8 +72,8 @@ class ModelTest(TestCase):
         """
         feeds = Feed.objects.filter(pk=1).filter(is_active=True)
         # 0 == "feed_url": 'https://nomorecubes.net/feed/rss'
-        self.assertEquals(feeds[0].refresh(), FEED_OK)
-        self.assertEquals(feeds[0].refresh(), FEED_SAME)
+        self.assertEqual(feeds[0].refresh(), FEED_OK)
+        self.assertEqual(feeds[0].refresh(), FEED_SAME)
 
     def test_feed_404(self):
         """
@@ -82,7 +82,7 @@ class ModelTest(TestCase):
         """
         feeds = Feed.objects.filter(pk=146).filter(is_active=True)
         # 0 == "feed_url": 'https://nomorecubes.net/error'
-        self.assertEquals(feeds[0].refresh(), FEED_ERRPARSE)
+        self.assertEqual(feeds[0].refresh(), FEED_ERRPARSE)
 
     def test_feed_errorparse(self):
         """
@@ -91,7 +91,7 @@ class ModelTest(TestCase):
         """
         feeds = Feed.objects.filter(pk=147).filter(is_active=True)
         # 0 == "feed_url": ' https://www.heise.de/newsticker/heise-atom.xml'
-        self.assertEquals(feeds[0].refresh(), FEED_ERRPARSE)
+        self.assertEqual(feeds[0].refresh(), FEED_ERRPARSE)
 
     def test_enclosure(self):
         """

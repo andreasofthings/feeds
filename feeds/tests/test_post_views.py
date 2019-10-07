@@ -31,4 +31,4 @@ class TestPostAnonymous(TestCase):
         """
         p = Post.objects.all()[0].pk
         result = self.client.get(reverse('planet:post-detail', args=(p,)))
-        self.assertEquals(result.status_code, 200)
+        self.assertEqual(result.status_code, 200)

@@ -275,7 +275,7 @@ class CategoryViewSet(mixins.ListModelMixin,
     serializer_class = CategorySerializer
 
 
-class UserSubscriptionsViewSet(viewsets.GenericViewSet):
+class SubscriptionsViewSet(viewsets.ModelViewSet):
     """
     UserSubscriptionsViewSet.
 

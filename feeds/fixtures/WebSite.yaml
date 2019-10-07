@@ -1,17 +1,24 @@
 - model: feeds.WebSite
   pk: 1
   fields:
-    "website_url": 'http://nomorecubes.net/'
-    "slug": "nomorecubes"
+    scheme: 'http'
+    netloc: 'nomorecubes.net'
+    path: '/'
+    slug: 'nomorecubes'
 - model: feeds.WebSite
   pk: 2
   fields:
-    "website_url": "http://www.wrint.de"
-    "slug": "WRINT"
+    scheme: 'http'
+    netloc: 'www.wrint.de'
+    path: '/'
+    slug: 'WRINT'
 - model: feeds.WebSite
   pk: 3
   fields:
-    "website_url": "http://www.metaebene.me"
+    scheme: 'http'
+    netloc: 'www.metaebene.de'
+    path: '/'
+    slug: 'metaebene'
 - model: feeds.WebSite
   pk: 4
   fields: {name: Heise, scheme: https, netloc: '', path: website_url, params: '', query: '', fragment: '', slug: heisede, commercial: true}

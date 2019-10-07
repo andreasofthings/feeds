@@ -18,7 +18,7 @@ from .views import WebSiteViewSet
 from .views import FeedViewSet
 from .views import PostViewSet
 from .views import CategoryViewSet
-from .views import UserSubscriptionsViewSet
+from .views import SubscriptionsViewSet
 
 
 router = routers.DefaultRouter()
@@ -27,7 +27,7 @@ router.register(r'websites', WebSiteViewSet)
 router.register(r'feeds', FeedViewSet)
 router.register(r'posts', PostViewSet)
 router.register(r'categories', CategoryViewSet)
-router.register(r'subscriptions', UserSubscriptionsViewSet)
+router.register(r'subscriptions', SubscriptionsViewSet)
 
 
 urlpatterns = [
