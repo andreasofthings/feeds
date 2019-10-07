@@ -4,10 +4,11 @@ from django import forms
 from django.views.generic import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.views.generic import DeleteView
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.utils.translation import ugettext as _
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 from ..baseviews import PaginatedListView
@@ -25,7 +26,7 @@ WebSiteSubmitForms = [
     ]
 
 
-class WebSiteSubmitWizardView(SessionWizardView):
+class WebSiteSubmitWizardView(LoginRequiredMixin, SessionWizardView):
     """
     Wizard that walks people through when adding a site with feeds
     """
@@ -77,7 +78,7 @@ class WebSiteSubmitWizardView(SessionWizardView):
         return HttpResponseRedirect(reverse('planet:website-home'))
 
 
-class WebSiteListView(PaginatedListView):
+class WebSiteListView(LoginRequiredMixin, PaginatedListView):
     """
     Lists all sites in the database.
 

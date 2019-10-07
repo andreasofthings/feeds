@@ -430,10 +430,10 @@ class Feed(models.Model):
 
         if self._entry_guid(entry) in postdict.keys():
             logger.debug("update: %s", entry.title)
-            p = self.posts.filter(guid__exact=self._entry_guid(entry))
+            post = self.posts.get(guid__exact=self._entry_guid(entry))
         else:
             logger.debug("insert: %s", entry.title)
-            p, created = self.posts.fromFeedparser(
+            post, created = self.posts.fromFeedparser(
                 feed=self,
                 entry=entry,
                 guid=self._entry_guid(entry),
@@ -441,41 +441,27 @@ class Feed(models.Model):
                 )
             if created:
                 result = ENTRY_NEW
-                p.save()
                 logger.debug(
                     "'%s' is a new entry for feed %s (%s)",
                     entry.title,
                     self.id,
-                    p.id
+                    post.id
                 )
 
-                """
-        if 'category' in entry and len(entry.category) > 0:
-            s = slugify(entry.category)
-            logger.debug("Category: %s - Slug: %s" % (entry.category, s))
-            cat, created = Category.objects.get_or_create(
-                name=entry.category,
-                slug=s
-            )
-            p.categories.add(cat)
-            """
-
-        if 'enclosures' in entry and len(entry.enclosures) > 0:
+        if 'enclosures' in entry and entry.enclosures:
             for enclosure in entry.enclosures:
-                e, created = p.enclosure.get_or_create(
+                encl, created = post.enclosure.get_or_create(
                     href=enclosure['href'],
                     length=enclosure['length'],
                     enclosure_type=enclosure['type'],
                 )
-                if created:
-                    e.save()
 
         logger.debug(
             """Saved '%s', new entry for feed '%s' (FeedID: %s, PostID %s)""",
-            p.title,
+            post.title,
             self.title,
             self.id,
-            p.id
+            post.id
         )
 
         logger.debug("stop: entry")

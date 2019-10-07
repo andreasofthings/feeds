@@ -21,7 +21,7 @@ from feeds.models import Feed, Post
 logger = logging.getLogger(__name__)
 
 
-class TaskTest(TestCase):
+class TaskTestNot(TestCase):
     """
     Test Tasks
 
