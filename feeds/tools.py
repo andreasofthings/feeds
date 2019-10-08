@@ -95,5 +95,5 @@ def getFeedsFromSite(site):
             feed = sitecomponents.netloc + feedcomponents.path
         result.append(feed)
 
-        logger.info("appended %s to result", feed)
+        logger.debug("appended %s to result", feed)
     return result

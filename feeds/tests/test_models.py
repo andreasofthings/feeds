@@ -60,7 +60,7 @@ class ModelTest(TestCase):
         """
 
         from feeds.models import WebSite
-        s = WebSite(website_url="https://pramari.de/")
+        s = WebSite(scheme="https", netloc="pramari.de")
         s.save()
         self.assertEqual(str(s.website_url), "https://pramari.de/")
         """Assert the __str__ representation equals the site-name."""

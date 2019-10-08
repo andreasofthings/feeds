@@ -111,13 +111,12 @@ class ApiTest(APITestCase):
         .. todo:: Should require authentication.
         """
         response = self.client.get('/feeds/api/subscriptions/', format='json')
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         response = self.client.get(
             '/feeds/api/subscriptions/1/',
             format='json'
         )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        """.. todo:: This use case needs refinement."""
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def tearDown(self):
         """

@@ -63,8 +63,14 @@ class TestAllViewsLoggedIn(TestCase):
         .. todo::
         Requires login or credential.
         """
-        result = self.client.get(reverse('planet:website-home'))
-        self.assertEqual(result.status_code, 200)
+        response = self.client.get(reverse('planet:website-home'))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response, '/accounts/login/?next=/feeds/website/',
+            status_code=302,
+            target_status_code=200,
+            fetch_redirect_response=True
+        )
 
     def website_add(self):
         """.. todo:: todo"""
@@ -320,7 +326,7 @@ class TestFeedViewsWithCredentials(TestCase):
                 ),
             {'feed_url': "http://spiegel.de/index.rss"}
             )
-        self.assertEquals(result.status_code, 302)
+        self.assertEqual(result.status_code, 302)
         self.assertRedirects(result, reverse('planet:feed-detail', args=(60,)))
 
     def test_feed_refresh_view(self):

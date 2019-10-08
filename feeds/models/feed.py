@@ -484,7 +484,10 @@ class Feed(models.Model):
         updated = parsed.feed.get("updated_parsed", None)
         if updated:
             timestamp = time.mktime(tuple(map(int, updated)))
-            converted = datetime.datetime.fromtimestamp(timestamp)
+            converted = datetime.datetime.fromtimestamp(
+                timestamp,
+                tz=timezone.utc
+            )
             updated = converted
         else:
             updated = timezone.now()
@@ -531,8 +534,7 @@ class Feed(models.Model):
             self.errors = self.errors+1
             self.save()  # touch timestamp
             raise FeedsHTTPError(
-                "Feed {} responded HTTP Client Error (4xx)".format(self.name),
-                None
+                "Feed {} responded HTTP Client Error (4xx)".format(self.name)
             )
 
         if 'bozo' in parsed and parsed.bozo == 1:

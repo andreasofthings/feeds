@@ -862,7 +862,6 @@
     "feed_url": 'http://www.wrint.de/feed/'
     "name": "Wer redet ist nicht tot"
     "is_active": False
-    "category": [5,]
 - model: feeds.Feed
   pk: 146
   fields:

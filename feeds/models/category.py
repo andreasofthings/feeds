@@ -80,16 +80,13 @@ class Tag(models.Model):
         verbose_name_plural = _('tags')
 
     @classmethod
-    def create(cls, name, slug=None):
+    def create(cls, name):
         tag = cls(name=name)
-        if not slug or slug == "":
-            tag.slug = slugify(tag.name)
-        tag.save()
         logger.debug("Tag name, slug: %s, %s" % (tag.name, tag.slug))
         return tag
 
     def save(self, *args, **kwargs):
-        if not self.slug or self.slug == "":
+        if not self.slug:
             self.slug = slugify(self.name)
         super(Tag, self).save(*args, **kwargs)
 

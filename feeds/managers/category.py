@@ -14,13 +14,29 @@ class CategoryManager(models.Manager):
 
     def forPost(self, *args, **kwargs):
         post = kwargs['post']
-        categories = kwargs['categories']
-        logger.error("Category: %s", categories)
-        for category in categories:
-            c, created = self.get_or_create(
-                post=post,
-                category=category
+        tags = kwargs['tags']
+        """List {'term': 'Harm Reduction', 'scheme': None, 'label': None}"""
+        for tag in tags:
+            t, created = self.get_or_create(
+                name=tag['term'],
+                slug=slugify(tag['term'])
             )
+            post.tags.add(t)
+        # logger.error("Tag: %s - %s", t, created)
+        return
+
+    def forPost(self, *args, **kwargs):
+        post = kwargs['post']
+        categories = kwargs['categories']
+        print(type(categories))
+
+        for category in categories:
+            print(category)
+            c, created = self.get_or_create(
+                name=category,
+                slug=slugify(category)
+            )
+            post.categories.add(c)
 
     def get_by_natural_key(self, slug):
         """

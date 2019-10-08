@@ -1,5 +1,6 @@
 import logging
 from django.db import models
+from django.utils.text import slugify
 
 logger = logging.getLogger(__name__)
 
@@ -14,13 +15,13 @@ class TagManager(models.Manager):
     def forPost(self, *args, **kwargs):
         post = kwargs['post']
         tags = kwargs['tags']
-        logger.error("Tags: %s", tags)
         """List {'term': 'Harm Reduction', 'scheme': None, 'label': None}"""
         for tag in tags:
             t, created = self.get_or_create(
-                post=post,
-                tag=tags['term']
+                name=tag['term'],
+                slug=slugify(tag['term'])
             )
+            post.tags.add(t)
         return
 
     def get_by_natural_key(self, slug):

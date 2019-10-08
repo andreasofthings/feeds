@@ -11,6 +11,7 @@ import logging
 from django.db import models
 import time
 import datetime
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +41,10 @@ class PostManager(models.Manager):
         published = entry.get("published_parsed", None)
         if published:
             timestamp = time.mktime(tuple(map(int, published)))
-            converted = datetime.datetime.fromtimestamp(timestamp)
+            converted = datetime.datetime.fromtimestamp(
+                timestamp,
+                tz=timezone.utc
+            )
             published = converted
         else:
             published = datetime.datetime.now()
@@ -73,7 +77,9 @@ class PostManager(models.Manager):
             logger.error("Tags error: %s", e)
 
         try:
-            category = entry.get("category", [])
+            category = []
+            category.append(entry.get("category", []))
+
             if category:
                 post.categories.forPost(
                     post=post,

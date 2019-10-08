@@ -33,7 +33,7 @@ class ViewsAnonymousTest(TestCase):
         Set up environment.
         """
         from feeds.models import WebSite
-        site = WebSite(website_url="http://pramari.de/")
+        site = WebSite(scheme="https", netloc="pramari.de")
         site.save()
         self.site_id = site.pk
         """Test WebSite."""
@@ -108,10 +108,15 @@ class ViewsAnonymousTest(TestCase):
                     name="website-home"
                     ),
 
-            Should return 200
+            Should redirect to login.
         """
-        result = self.client.get(reverse('planet:website-home'))
-        self.assertEqual(result.status_code, 200)
+        response = self.client.get(reverse('planet:website-home'))
+        self.assertRedirects(
+            response, '/accounts/login/?next=/feeds/website/',
+            status_code=302,
+            target_status_code=200,
+            fetch_redirect_response=True
+        )
 
     def website_submit(self):
         """
