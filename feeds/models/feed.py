@@ -487,7 +487,7 @@ class Feed(models.Model):
             converted = datetime.datetime.fromtimestamp(timestamp)
             updated = converted
         else:
-            updated = datetime.datetime.now()
+            updated = timezone.now()
         self.last_modified = updated
 
         self.pubdate = parsed.feed.get('pubDate', '')

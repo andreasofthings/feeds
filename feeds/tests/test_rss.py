@@ -29,4 +29,4 @@ class TestRSS(TestCase):
                 }
             )
         )
-        self.assertEquals(r.status_code, 200)
+        self.assertEqual(r.status_code, 200)
