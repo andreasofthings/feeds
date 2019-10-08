@@ -1,5 +1,9 @@
+import logging
 from django.db import models
 from django.utils.text import slugify
+
+logger = logging.getLogger(__name__)
+
 
 class CategoryManager(models.Manager):
     """
@@ -7,6 +11,16 @@ class CategoryManager(models.Manager):
 
     .
     """
+
+    def forPost(self, *args, **kwargs):
+        post = kwargs['post']
+        categories = kwargs['categories']
+        logger.error("Category: %s", categories)
+        for category in categories:
+            c, created = self.get_or_create(
+                post=post,
+                category=category
+            )
 
     def get_by_natural_key(self, slug):
         """
@@ -17,15 +31,3 @@ class CategoryManager(models.Manager):
         """
 
         return self.get(slug=slug)
-
-    def fromFeedparser(self, *args, **kwargs):
-        post = kwargs['post']
-        entry = kwargs['entry']
-        if 'category' in entry and len(entry.category) > 0:
-            for category in entry.category:
-                category, created = self.get_or_create(
-                    post=post,
-                    name=entry.category,
-                    slug=slugify(entry.category)
-                )
-            return

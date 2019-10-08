@@ -7,9 +7,12 @@ PostManager
 ===========
 """
 
+import logging
 from django.db import models
 import time
 import datetime
+
+logger = logging.getLogger(__name__)
 
 
 class PostManager(models.Manager):
@@ -49,32 +52,41 @@ class PostManager(models.Manager):
         )
 
         if created:
-            post.guidislink = entry.get("guidislink", post.guidislink)
+            post.guidislink = entry.get("guidislink", False)
             post.link = entry.get("link", post.link)
             post.title = entry.get("title", None)
             post.summary = entry.get("summary", None)
             post.published = published
-            #  language=entry.get("language", "en"),
+            post.language = entry.get("language", "en"),
             post.author = entry.get("author", "")
             post.author_email = entry.get("author_email", "")
-            # tags=entry.get("tags", []),
+            post.save()
 
-        for tag in entry.get("tags", []):
-            t, created = post.tags.fromFeedparser(
-            post=post,
-            tag=tag
-        )
+        try:
+            tags = entry.get("tags", [])
+            if tags:
+                post.tags.forPost(
+                    post=post,
+                    tags=tags
+                )
+        except Exception as e:
+            logger.error("Tags error: %s", e)
 
-        categories, cat_created = post.categories.fromFeedparser(
-            post=post,
-            entry=entry
-        )
+        try:
+            category = entry.get("category", [])
+            if category:
+                post.categories.forPost(
+                    post=post,
+                    categories=category
+                )
+        except Exception as e:
+            logger.error("Category error: %s", e)
+
         return post, created
-
 
     def older_than(self, ttl):
         """
-        Get all Posts older than `ttl`.
+        Get all Posts older than ttl.
 
         `ttl`is in the form of `datetime.timedelta(days=31)``
 

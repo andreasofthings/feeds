@@ -347,16 +347,14 @@ class Feed(models.Model):
         """
         guid = ""
 
-        if entry.guidislink:
-            pass
+        guidislink = entry.get('guidislink', False)
 
-        if entry.link:
-            guid = entry.link
+        if entry.link and guidislink:
+            return entry.link
         elif entry.title:
             guid = entry.title
 
         return entry.get('id', guid)
-
 
     def _guids(self, entries):
         """

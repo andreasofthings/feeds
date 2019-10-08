@@ -18,13 +18,14 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.conf import settings
 
-from ..models import WebSite, Feed, Post, Options, Subscription, Category
+from ..models import WebSite, Feed, Post, Options, Subscription, Category, Tag
 
 from .serializers import OptionsSerializer
 from .serializers import WebSiteSerializer
 from .serializers import FeedSerializer, FeedPKSerializer
 from .serializers import PostSerializer
 from .serializers import CategorySerializer
+from .serializers import TagSerializer
 from .serializers import SubscriptionSerializer
 from .permission import IsOwner
 
@@ -273,6 +274,18 @@ class CategoryViewSet(mixins.ListModelMixin,
     throttle_class = (FeedThrottle,)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    """
+    TagViewSet.
+
+    API endpoint that allows categories to be listed.
+    """
+
+    throttle_class = (FeedThrottle,)
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
 
 
 class SubscriptionsViewSet(viewsets.ModelViewSet):

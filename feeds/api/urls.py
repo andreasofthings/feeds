@@ -18,15 +18,33 @@ from .views import WebSiteViewSet
 from .views import FeedViewSet
 from .views import PostViewSet
 from .views import CategoryViewSet
+from .views import TagViewSet
 from .views import SubscriptionsViewSet
 
 
 router = routers.DefaultRouter()
 # register job endpoint in the router
-router.register(r'websites', WebSiteViewSet)
-router.register(r'feeds', FeedViewSet)
-router.register(r'posts', PostViewSet)
+router.register(
+    prefix=r'websites',
+    viewset=WebSiteViewSet,
+    basename='website-api'
+)
+router.register(
+    prefix=r'feeds',
+    viewset=FeedViewSet,
+    basename='feed-api'
+)
+router.register(
+    prefix=r'posts',
+    viewset=PostViewSet,
+    basename='post-api'
+)
 router.register(r'categories', CategoryViewSet)
+router.register(
+    prefix=r'tags',
+    viewset=TagViewSet,
+    basename="tag-api",
+)
 router.register(r'subscriptions', SubscriptionsViewSet)
 
 
