@@ -8,7 +8,8 @@
 # star_ratings
 # Please see setup.py.
 # These requirements are for testing.
+coveralls
 pyyaml
 whoosh
-psycopg2
-selenium>=2.52.0,<3.0.0
+# psycopg2
+# selenium>=2.52.0,<3.0.0
