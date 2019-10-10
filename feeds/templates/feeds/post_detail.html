@@ -29,27 +29,22 @@
     <h2><a href="{{object.link}}" itemprop="headline">{{ object.title }}</a></h2>
     <p>via: <a href="{{object.feed.link}}" itemprop="url">{{object.feed.name}}</a></p>
     {% if object.tags %}
-    <p>
-    <meta itemprop="keywords">
-    {% for t in object.tags.all %}<a href="{{ t.get_absolute_url }}">{{t}}</a>
-    {% endfor %}
+    <p><meta itemprop="keywords">
+      {% for t in object.tags.all %}
+        <span class="badge badge-info"><a href="{{ t.get_absolute_url }}">{{t}}</a></span>
+      {% endfor %}
     </meta></p>
     {% endif %}
     <!-- {# node.summary|safe #} -->
   </div>
-  <div class="col-md-5">
-    <div class="row">
-      <div class="col-md-12">
-      {# social object #}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <!-- rating -->
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
+  <div class="col-md-5"a>
+    <p>{% if object.categories %}
+      {% for c in object.categories.all %}
+      <span class="badge badge-info"><a
+            href="{{c.get_absolute_url}}">{{c}}</a></span>
+      {% endfor %}
+    {% endif %}</p>
+    <p>
         {% more_like_this object as related_content limit 5 %}
         {% if related_content %}
         <h2>Related</h2>
@@ -59,8 +54,7 @@
           {% endfor %}
         </ul>
         {% endif %}
-      </div>
-    </div>
+    </p>
   </div>
 </div> <!-- itemscope -->
 <hr>

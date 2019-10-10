@@ -106,12 +106,17 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
             'link',
             'published',
             'categories',
+            'tags',
         )
         extra_kwargs = {
             'url': {'view_name': 'planet:post-api-detail', },
             'categories': {
                 'lookup_field': 'pk',
-                'view_name': 'planet:category-detail'
+                'view_name': 'planet:category-api-detail'
+                },
+            'tags': {
+                'lookup_field': 'pk',
+                'view_name': 'planet:tag-api-detail'
                 },
             'feed': {
                 'lookup_field': 'pk',
@@ -130,9 +135,10 @@ class CategorySerializer(serializers.ModelSerializer):
         """Meta CatgeorySerializer."""
 
         model = Category
-        fields = ('name', 'url', )
+        fields = ('name', 'url', 'category_feeds', 'categories', )
         extra_kwargs = {
-            'url': {'view_name': 'planet:category-detail', },
+            'url': {'view_name': 'planet:category-api-detail', },
+            # 'category_feeds': {'view_name': 'planet:feed-api-detail', },
         }
 
 

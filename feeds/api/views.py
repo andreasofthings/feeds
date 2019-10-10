@@ -168,8 +168,7 @@ class CronFeedView(views.APIView):
                 return response.Response(
                     "NO CONTENT", status=status.HTTP_204_NO_CONTENT
                 )
-            feed = Feed.objects.get(pk=pk)
-            feed.refresh()
+            Feed.objects.get(pk=pk).refresh()
             return response.Response(
                 "POST OK!",
                 status=status.HTTP_201_CREATED

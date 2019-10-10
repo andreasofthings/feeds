@@ -449,9 +449,9 @@ class Feed(models.Model):
         if 'enclosures' in entry and entry.enclosures:
             for enclosure in entry.enclosures:
                 encl, created = post.enclosure.get_or_create(
-                    href=enclosure['href'],
-                    length=enclosure['length'],
-                    enclosure_type=enclosure['type'],
+                    href=enclosure.get('href', '#'),
+                    length=enclosure.get('length', 0),
+                    enclosure_type=enclosure.get('type', ''),
                 )
 
         logger.debug(
@@ -476,6 +476,7 @@ class Feed(models.Model):
         if not self.short_name:
             self.short_name = parsed.feed.get('title', self.name)[:50]
         if not self.slug:
+            logger.error("Feed %s has no slug yet.", self.name)
             self.slug = slugify(self.name)
         if hasattr(parsed.feed, 'image'):
             if hasattr(parsed.feed.image, 'url'):

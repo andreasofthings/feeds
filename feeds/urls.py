@@ -164,9 +164,9 @@ urlpatterns += [
         CategoryCreateView.as_view(),
         name="category-add"
     ),
-    url(r'^category/id/(?P<pk>\d+)/$',
+    url(r'^category/(?P<pk>\d+)/$',
         CategoryDetailView.as_view(), name="category-detail"),
-    url(r'^category/name/(?P<slug>[-\w]+)/$',
+    url(r'^category/(?P<slug>[-\w]+)/$',
         CategoryDetailView.as_view(), name="category-detail"),
     url(
         r'^category/(?P<pk>\d+)/update$',
@@ -186,7 +186,12 @@ urlpatterns += [
     url(
         r'^tag/(?P<pk>\d+)/$',
         HomeView.as_view(),
-        name="tag-view"
+        name="tag-detail"
+    ),
+    url(
+        r'^tag/(?P<slug>\w+)/$',
+        HomeView.as_view(),
+        name="tag-detail"
     ),
 ]
 

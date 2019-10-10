@@ -22,6 +22,7 @@ from ..managers import TagManager
 
 logger = logging.getLogger(__name__)
 
+
 @python_2_unicode_compatible
 class Tag(models.Model):
     """
@@ -100,7 +101,7 @@ class Tag(models.Model):
         return u''.join(self.slug)
 
     def get_absolute_url(self):
-        return ('planet:tag-view', [str(self.slug)])
+        return reverse('planet:tag-detail', args=[str(self.slug),])
 
 
 @python_2_unicode_compatible
@@ -125,8 +126,12 @@ class Category(models.Model):
         help_text='Short descriptive unique name for use in urls.',
     )
 
-    parent = models.ForeignKey('self', null=True, blank=True,
-    on_delete=models.DO_NOTHING,)
+    parent = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+    )
 
     class Meta:
         """
