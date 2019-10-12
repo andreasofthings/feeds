@@ -28,10 +28,8 @@ class CategoryManager(models.Manager):
     def forPost(self, *args, **kwargs):
         post = kwargs['post']
         categories = kwargs['categories']
-        print(type(categories))
 
         for category in categories:
-            print(category)
             c, created = self.get_or_create(
                 name=category,
                 slug=slugify(category)

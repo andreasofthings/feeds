@@ -200,7 +200,6 @@ class FeedRefreshView(LoginRequiredMixin, RedirectView):
     permanent = False
 
     def get_redirect_url(self, pk):
-        # from feeds.tasks import feed_refresh
         f = Feed.objects.get(pk=pk)
         f.refresh()
         return reverse("planet:feed-detail", args=(pk,))
