@@ -155,62 +155,68 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    url(
-        r'^category/$',
+    path(
+        'category',
         CategoryListView.as_view(),
         name="category-home"
         ),
-    url(
-        r'^category/page/(?P<page>\w+)/$',
+    path(
+        'category/page/<int:page>/',
         CategoryListView.as_view(),
         name="category-home-paginated"
     ),
-    url(
-        r'^category/add/$',
+    path(
+        'category/add',
         CategoryCreateView.as_view(),
         name="category-add"
     ),
-    url(r'^category/(?P<pk>\d+)/$',
-        CategoryDetailView.as_view(), name="category-detail"),
-    url(r'^category/(?P<slug>[-\w]+)/$',
-        CategoryDetailView.as_view(), name="category-detail"),
-    url(
-        r'^category/(?P<pk>\d+)/update$',
+    path(
+        'category/<int:pk>',
+        CategoryDetailView.as_view(),
+        name="category-detail"
+    ),
+    path(
+        'category/<slug:slug>',
+        CategoryDetailView.as_view(),
+        name="category-detail"
+    ),
+    path(
+        r'category/<int:pk>/update',
         CategoryUpdateView.as_view(),
         name="category-update"
     ),
-    url(
-        r'^category/(?P<slug>\w+)/update$',
+    path(
+        'category/<slug:slug>/update',
         CategoryUpdateView.as_view(),
         name="category-update"
     ),
-    url(
-        r'^tag/$',
+    path(
+        'tag',
         TagListView.as_view(),
         name="tag-home"
     ),
     path(
-        'tag/create/',
+        'tag/create',
         TagCreateView.as_view(),
         name="tag-create"
     ),
     path(
-        'tag/(?P<pk>\d+)/',
+        'tag/<int:pk>\d+)/',
         TagDetailView.as_view(),
         name="tag-detail"
     ),
     path(
-        r'^tag/(?P<slug>\w+)/$',
+        'tag/<slug:slug>',
         TagDetailView.as_view(),
         name="tag-detail"
     ),
     path(
-        'tag/(?P<pk>\d+)',
+        'tag/<int:pk>',
         TagUpdateView.as_view(),
         name="tag-update"
     ),
     path(
-        r'^tag/(?P<slug>\w+)',
+        'tag/<slug:slug>',
         TagUpdateView.as_view(),
         name="tag-update"
     ),
