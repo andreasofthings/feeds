@@ -2,6 +2,12 @@
 # -*- coding: utf-8 -*-
 # vim: ts=4 et sw=4 sts=4
 
+"""
+URLs.
+
+URLs for `feeds`
+"""
+
 from django.urls import include, path
 from django.conf.urls import url
 
@@ -180,18 +186,33 @@ urlpatterns += [
     ),
     url(
         r'^tag/$',
-        HomeView.as_view(),
+        TagListView.as_view(),
         name="tag-home"
     ),
-    url(
-        r'^tag/(?P<pk>\d+)/$',
-        HomeView.as_view(),
+    path(
+        'tag/create/',
+        TagCreateView.as_view(),
+        name="tag-create"
+    ),
+    path(
+        'tag/(?P<pk>\d+)/',
+        TagDetailView.as_view(),
         name="tag-detail"
     ),
-    url(
+    path(
         r'^tag/(?P<slug>\w+)/$',
-        HomeView.as_view(),
+        TagDetailView.as_view(),
         name="tag-detail"
+    ),
+    path(
+        'tag/(?P<pk>\d+)',
+        TagUpdateView.as_view(),
+        name="tag-update"
+    ),
+    path(
+        r'^tag/(?P<slug>\w+)',
+        TagUpdateView.as_view(),
+        name="tag-update"
     ),
 ]
 

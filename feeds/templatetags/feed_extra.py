@@ -300,7 +300,7 @@ class Top5Node(template.Node):
         if "daily" in interval:
             self.interval = datetime.now() - timedelta(days=1)
         else:
-            raise NotImplemented
+            raise NotImplementedError
         self.var_name = var_name
 
     def render(self, context):
