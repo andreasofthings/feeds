@@ -32,8 +32,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Install test dependencies
       run: |
-        pip install pytest
-    - name: Test with pytest
+        pip install -r tests/requirements.txt
+    - name: Test with py.test
       run: |
-        pip install pytest
-        pytest
+        coverage run --source=feeds runtest.py -m py.test

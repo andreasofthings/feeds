@@ -50,7 +50,7 @@ class Post(models.Model):
     title = models.CharField(max_length=512)
     link = models.URLField(_('link'), )
     summary = models.TextField(_('description'), blank=True)
-    author = models.CharField(_('author'), max_length=50, blank=True)
+    author = models.CharField(_('author'), max_length=255, blank=True)
     author_email = models.EmailField(_('author email'), blank=True)
     comments = models.URLField(_('comments'), blank=True)
     # enclosure , see there
@@ -143,12 +143,12 @@ class TaggedPost(models.Model):
         Tag,
         verbose_name=_('tag'),
         related_name='post_tags',
-        on_delete=models.DO_NOTHING,
+        on_delete=models.CASCADE,
     )
     post = models.ForeignKey(
         Post,
         verbose_name=_('post'),
-        on_delete=models.DO_NOTHING,
+        on_delete=models.CASCADE,
     )
 
     class Meta:

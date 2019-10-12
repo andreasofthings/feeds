@@ -39,7 +39,11 @@ router.register(
     viewset=PostViewSet,
     basename='post-api'
 )
-router.register(r'categories', CategoryViewSet)
+router.register(
+    prefix=r'categories',
+    viewset=CategoryViewSet,
+    basename='category-api',
+)
 router.register(
     prefix=r'tags',
     viewset=TagViewSet,
