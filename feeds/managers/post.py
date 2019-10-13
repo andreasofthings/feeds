@@ -18,9 +18,15 @@ logger = logging.getLogger(__name__)
 
 class PostManager(models.Manager):
     """
+    Manage Post Objects.
+
+    Manager for `Post` Objects.
     """
+
     def subscribed(self, user):
         """
+        Subscribe List.
+
         Get only Posts for subscribed feeds.
         .. todo: This returns a queryset of all Posts, ordered by their
         published date. It should be limited by the requesting users feed-
@@ -89,6 +95,15 @@ class PostManager(models.Manager):
             logger.error("Category error: %s", e)
 
         return post, created
+
+    def today(self):
+        """
+        Get all Posts for today.
+
+        .. todo::
+            Potential timezone / naive datetime problem.
+        """
+        return self.filter(published__date=datetime.datetime.today())
 
     def older_than(self, ttl):
         """

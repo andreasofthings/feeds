@@ -33,7 +33,8 @@ from .views import FeedUnSubscribeView
 
 from .views import FeedSubscriptionsView
 
-from .views import PostListView, PostSubscriptionView
+from .views import PostListView, PostTodayView
+from .views import PostSubscriptionView
 from .views import PostDetailView, PostTrackableView
 
 from .views import CategoryListView
@@ -238,13 +239,21 @@ urlpatterns += [
         FeedSubscriptionsView.as_view(),
         name="feed-subscriptions"
     ),
-    url(
-        r'^post/(?P<pk>\d+)/$',
+]
+
+urlpatterns += [
+    path(
+        'post/<int:pk>',
         PostDetailView.as_view(),
         name="post-detail"
     ),
-    url(
-        r'^p/$',
+    path(
+        'post/today',
+        PostTodayView.as_view(),
+        name="post-today"
+    ),
+    path(
+        'p',
         PostListView.as_view(),
         name="post-home"
     ),
@@ -264,11 +273,6 @@ urlpatterns += [
         name="post-subscription-home-paginated"
     ),
     url(
-        r'^f/(?P<feed_id>\d+)/$',
-        RssFeed(),
-        name="rss"
-    ),
-    url(
         r'^t/(?P<pk>\d+)/$',
         PostTrackableView.as_view(),
         name="post-trackable-view"
@@ -277,6 +281,11 @@ urlpatterns += [
 
 
 urlpatterns += [
+    path(
+        'f/<int:feed_id>',
+        RssFeed(),
+        name="rss"
+    ),
     url(
         r'^rss/$',
         LatestEntriesFeed(),
