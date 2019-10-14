@@ -2,6 +2,7 @@ import logging
 from django.db import models
 from django.utils.text import slugify
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -17,11 +18,18 @@ class TagManager(models.Manager):
         tags = kwargs['tags']
         """List {'term': 'Harm Reduction', 'scheme': None, 'label': None}"""
         for tag in tags:
-            t, created = self.get_or_create(
-                name=tag['term'],
-                slug=slugify(tag['term'])
-            )
-            post.tags.add(t)
+            term = tag['term']
+            try:
+                t, created = self.get_or_create(
+                    name=term,
+                    slug=slugify(term)
+                )
+            except Exception as e:
+                import sys, traceback
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                traceback.print_exc(limit=2, file=sys.stdout)
+            finally:
+                post.tags.add(t)
         return
 
     def get_by_natural_key(self, slug):
