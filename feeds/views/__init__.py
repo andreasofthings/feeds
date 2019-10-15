@@ -30,7 +30,9 @@ from .views import FeedRefreshView
 from .views import FeedSubscribeView
 from .views import FeedUnSubscribeView
 from .views import FeedSubscriptionsView
+
 from .views import PostListView
+from .views import PostTodayView
 from .views import PostSubscriptionView
 from .views import PostDetailView
 from .views import PostTrackableView
@@ -57,6 +59,7 @@ __all__ = [
     'FeedUnSubscribeView',
     'FeedSubscriptionsView',
     'PostListView',
+    'PostTodayView',
     'PostSubscriptionView',
     'PostDetailView',
     'PostTrackableView',

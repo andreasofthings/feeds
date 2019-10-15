@@ -31,7 +31,7 @@ class Enclosure(models.Model):
     post = models.ForeignKey(
         Post,
         related_name="enclosure",
-        on_delete=models.DO_NOTHING,
+        on_delete=models.CASCADE,
     )
     """reference to the post the enclosure belongs to."""
 

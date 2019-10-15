@@ -32,9 +32,9 @@
           <div class="col-md-12">
             <a href="{{ node.feed.get_absolute_url }}" alt="{{node.feed.title}}">
               {% if node.feed.image_url %}
-              <img src="{{ node.feed.image_url }}" width="32" height="32" class="feed-logo">
+              <img src="{{ node.feed.image_url }}" width="50%" class="feed-logo">
               {% else %}
-              <img src="{% static "feeds/icons/rss-480px.png" %}" width="32" height="32">
+              <img src="{% static "feeds/icons/rss-480px.png" %}" width="50%">
               {% endif %}
             </a>
           </div>
@@ -48,24 +48,20 @@
     <div class="col-md-10">
         <div class="row">
             <div class="col-md-12">
-                <h6>
-                  {% if node.author %}
-                    <small> {{ node.author }} @ </small>
-                  {% endif %}
-                  <a href="{{ node.feed.get_absolute_url }}" alt="{{node.feed.title}}">
-                    {{node.feed.title}}
-                  </a>
-                  <small data-toggle="tooltip" data-placement="top" title="{{ node.published }}">
-                      {{ node.published|naturaltime }}
-                   </small>
-                </h6>
+                {% if node.author %}
+                  <small> {{ node.author }} @ </small>
+                {% endif %}
+                <a href="{{ node.feed.get_absolute_url }}" alt="{{node.feed.title}}">
+                  {{node.feed.title}}
+                </a>
+                <small data-toggle="tooltip" data-placement="top" title="{{ node.published }}">
+                    {{ node.published|naturaltime }}
+                 </small>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h4>
                     <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
-                </h4>
             </div>
         </div>
     </div>

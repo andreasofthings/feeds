@@ -20,6 +20,10 @@ import logging
 from ..managers import CategoryManager
 from ..managers import TagManager
 
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -45,8 +49,8 @@ class Tag(models.Model):
 
     slug = models.SlugField(
         max_length=255,
-        db_index=True,
         unique=True,
+        db_index=True,
         help_text='Short descriptive unique name for use in urls.',
     )
     """
@@ -80,25 +84,14 @@ class Tag(models.Model):
         verbose_name = _('tag')
         verbose_name_plural = _('tags')
 
-    @classmethod
-    def create(cls, name):
-        tag = cls(name=name)
-        logger.debug("Tag name, slug: %s, %s" % (tag.name, tag.slug))
-        return tag
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super(Tag, self).save(*args, **kwargs)
-
     def __str__(self):
         """
         Human readable representation of the object.
         """
-        return u''.join(self.name)
+        return self.name
 
     def natural_key(self):
-        return u''.join(self.slug)
+        return self.slug
 
     def get_absolute_url(self):
         return reverse('planet:tag-detail', args=[str(self.slug),])
@@ -172,3 +165,9 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse('planet:category-detail', args=[str(self.slug)])
+
+
+@receiver(pre_save, sender=Tag)
+def make_slug(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = slugify(instance.name)

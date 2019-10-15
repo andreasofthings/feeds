@@ -21,8 +21,11 @@ admin.site.register(Tag)
 
 class PostInline(admin.TabularInline):
     """
+    Post Admin.
+
     Inline View of Posts, meant to display all `Posts` per `Feed`
     """
+
     model = Post
     fields = ('title', )
     ordering = ('-published',)
@@ -31,6 +34,12 @@ class PostInline(admin.TabularInline):
 
 
 class SubscriptionInline(admin.TabularInline):
+    """
+    Subscription Inline.
+
+    Admin View of Subscription.
+    """
+
     model = Subscription
     fields = ('feed', )
 
@@ -67,7 +76,11 @@ class PostAdmin(admin.ModelAdmin):
 @admin.register(Enclosure)
 class EnclosureAdmin(admin.ModelAdmin):
     """
+    Admin Enclosure.
+
+    Admin View for Enclosures.
     """
+
     list_display = ('post', 'enclosure_type', 'length', 'href')
 
 

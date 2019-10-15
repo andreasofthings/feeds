@@ -21,6 +21,7 @@ from datetime import timedelta
 from django.urls import reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
+from django.views.generic import ListView
 from django.views.generic import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.views.generic import DeleteView, RedirectView
@@ -36,8 +37,9 @@ from ..forms import OPMLForm
 from ..models import Feed, Post, Subscription, PostReadCount, Options
 from ..forms import FeedCreateForm
 from ..forms import FeedUpdateForm
+from ..mixins import PaginateListMixin
 
-from ..baseviews import PaginatedListView
+# from ..baseviews import PaginatedListView
 
 
 logger = logging.getLogger(__name__)
@@ -145,7 +147,7 @@ class FeedCreateView(PermissionRequiredMixin, AccessMixin, CreateView):
     initial = {"is_Active": False}
 
 
-class FeedListView(LoginRequiredMixin, PaginatedListView):
+class FeedListView(LoginRequiredMixin, PaginateListMixin, ListView):
     """
     List all registered feeds
 
@@ -203,7 +205,6 @@ class FeedRefreshView(LoginRequiredMixin, RedirectView):
     permanent = False
 
     def get_redirect_url(self, pk):
-        # from feeds.tasks import feed_refresh
         f = Feed.objects.get(pk=pk)
         f.refresh()
         return reverse("planet:feed-detail", args=(pk,))
@@ -240,7 +241,7 @@ class FeedUnSubscribeView(LoginRequiredMixin, RedirectView):
         return reverse("planet:feed-detail", args=(pk,))
 
 
-class FeedSubscriptionsView(LoginRequiredMixin, PaginatedListView):
+class FeedSubscriptionsView(LoginRequiredMixin, PaginateListMixin, ListView):
     """
     List all Feeds one users subscribed to.
 
@@ -257,6 +258,11 @@ class FeedSubscriptionsView(LoginRequiredMixin, PaginatedListView):
     template_name = "feeds/feed_list.html"
 
     def get_queryset(self):
+        """
+        Return Queryset.
+
+        Custom Queryset.
+        """
         user, created = Options.objects.get_or_create(user=self.request.user)
         if created:
             user.save()
@@ -264,7 +270,7 @@ class FeedSubscriptionsView(LoginRequiredMixin, PaginatedListView):
         return queryset.order_by("name")
 
 
-class PostListView(LoginRequiredMixin, PaginatedListView):
+class PostListView(PaginateListMixin, LoginRequiredMixin, ListView):
     """
     List Posts from all Feeds.
 
@@ -274,21 +280,38 @@ class PostListView(LoginRequiredMixin, PaginatedListView):
 
     model = Post
     paginate_by = 50
-    queryset = Post.objects.order_by("published")
 
     def get_queryset(self):
         """
+        Return Queryset.
+
         Apparently some feeds give posts that only have a timestamp 'published'
         from the future. We prevent displaying these by filtering for older
         than today/now.
 
         :py:module:`PostManager.older_than` provides this functionality and
         exposes it as the :py:module:`Post.objects` Manager.
+
+        .. todo::
+          Is this redundant?
         """
         return Post.objects.older_than(timedelta(0)).order_by("-published")
 
 
-class PostSubscriptionView(LoginRequiredMixin, PaginatedListView):
+class PostTodayView(PaginateListMixin, LoginRequiredMixin, ListView):
+    """
+    List Posts from all Feeds.
+
+    .. todo: Pagination does not work properly. Some sort of limit would be
+    nice, too. The pagination bar looks really ugly.
+    """
+
+    model = Post
+    queryset = Post.objects.today()
+    paginate_by = 50
+
+
+class PostSubscriptionView(PaginateListMixin, LoginRequiredMixin, ListView):
     """
     List Posts from subscribed Feeds.
 
@@ -306,6 +329,11 @@ class PostSubscriptionView(LoginRequiredMixin, PaginatedListView):
     paginate_by = 50
 
     def get_queryset(self):
+        """
+        Return Queryset.
+
+        return custom queryset.
+        """
         user = Options.objects.get(user=self.request.user)
         user_subscriptions = Subscription.objects.feeds(user)
         subscriptions = Post.objects.filter(feed_id__in=user_subscriptions)
@@ -321,7 +349,12 @@ class PostDetailView(DetailView):
 
     user_agent = "google"
     model = Post
-    permissions = {"any": ("feeds.delete_post", "feeds.change_post", "feeds.add_post")}
+    permissions = {
+        "any": (
+            "feeds.delete_post",
+            "feeds.change_post",
+            "feeds.add_post")
+        }
 
 
 class PostTrackableView(RedirectView):

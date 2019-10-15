@@ -2,6 +2,12 @@
 # -*- coding: utf-8 -*-
 # vim: ts=4 et sw=4 sts=4
 
+"""
+URLs.
+
+URLs for `feeds`
+"""
+
 from django.urls import include, path
 from django.conf.urls import url
 
@@ -27,7 +33,8 @@ from .views import FeedUnSubscribeView
 
 from .views import FeedSubscriptionsView
 
-from .views import PostListView, PostSubscriptionView
+from .views import PostListView, PostTodayView
+from .views import PostSubscriptionView
 from .views import PostDetailView, PostTrackableView
 
 from .views import CategoryListView
@@ -149,49 +156,70 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    url(
-        r'^category/$',
+    path(
+        'category',
         CategoryListView.as_view(),
         name="category-home"
         ),
-    url(
-        r'^category/page/(?P<page>\w+)/$',
+    path(
+        'category/page/<int:page>/',
         CategoryListView.as_view(),
         name="category-home-paginated"
     ),
-    url(
-        r'^category/add/$',
+    path(
+        'category/add',
         CategoryCreateView.as_view(),
         name="category-add"
     ),
-    url(r'^category/(?P<pk>\d+)/$',
-        CategoryDetailView.as_view(), name="category-detail"),
-    url(r'^category/(?P<slug>[-\w]+)/$',
-        CategoryDetailView.as_view(), name="category-detail"),
-    url(
-        r'^category/(?P<pk>\d+)/update$',
+    path(
+        'category/<int:pk>',
+        CategoryDetailView.as_view(),
+        name="category-detail"
+    ),
+    path(
+        'category/<slug:slug>',
+        CategoryDetailView.as_view(),
+        name="category-detail"
+    ),
+    path(
+        r'category/<int:pk>/update',
         CategoryUpdateView.as_view(),
         name="category-update"
     ),
-    url(
-        r'^category/(?P<slug>\w+)/update$',
+    path(
+        'category/<slug:slug>/update',
         CategoryUpdateView.as_view(),
         name="category-update"
     ),
-    url(
-        r'^tag/$',
-        HomeView.as_view(),
+    path(
+        'tag',
+        TagListView.as_view(),
         name="tag-home"
     ),
-    url(
-        r'^tag/(?P<pk>\d+)/$',
-        HomeView.as_view(),
+    path(
+        'tag/create',
+        TagCreateView.as_view(),
+        name="tag-create"
+    ),
+    path(
+        'tag/<int:pk>\d+)/',
+        TagDetailView.as_view(),
         name="tag-detail"
     ),
-    url(
-        r'^tag/(?P<slug>\w+)/$',
-        HomeView.as_view(),
+    path(
+        'tag/<slug:slug>',
+        TagDetailView.as_view(),
         name="tag-detail"
+    ),
+    path(
+        'tag/<int:pk>',
+        TagUpdateView.as_view(),
+        name="tag-update"
+    ),
+    path(
+        'tag/<slug:slug>',
+        TagUpdateView.as_view(),
+        name="tag-update"
     ),
 ]
 
@@ -211,13 +239,21 @@ urlpatterns += [
         FeedSubscriptionsView.as_view(),
         name="feed-subscriptions"
     ),
-    url(
-        r'^post/(?P<pk>\d+)/$',
+]
+
+urlpatterns += [
+    path(
+        'post/<int:pk>',
         PostDetailView.as_view(),
         name="post-detail"
     ),
-    url(
-        r'^p/$',
+    path(
+        'post/today',
+        PostTodayView.as_view(),
+        name="post-today"
+    ),
+    path(
+        'p',
         PostListView.as_view(),
         name="post-home"
     ),
@@ -237,11 +273,6 @@ urlpatterns += [
         name="post-subscription-home-paginated"
     ),
     url(
-        r'^f/(?P<feed_id>\d+)/$',
-        RssFeed(),
-        name="rss"
-    ),
-    url(
         r'^t/(?P<pk>\d+)/$',
         PostTrackableView.as_view(),
         name="post-trackable-view"
@@ -250,6 +281,11 @@ urlpatterns += [
 
 
 urlpatterns += [
+    path(
+        'f/<int:feed_id>',
+        RssFeed(),
+        name="rss"
+    ),
     url(
         r'^rss/$',
         LatestEntriesFeed(),

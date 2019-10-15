@@ -37,7 +37,7 @@ def URLlist():
     from urllib.request import urlopen
 
     latest = \
-    "https://raw.githubusercontent.com/aneumeier/blogsdirectory/master/urls.yaml"
+    "https://raw.githubusercontent.com/andreasofthings/directory/master/urls.yaml"
 
     with urlopen(latest) as urls:
         urlreader = yaml.load(urls)
@@ -74,9 +74,10 @@ class feedFinder(HTMLParser):
 
 def getFeedsFromSite(site):
     """
-    Takes 'site' in form of an URL as an Argument.
+    Take 'site' in form of an URL as an Argument.
     Fetches the site, parses it, finds embedded links.
     """
+
     from urllib.parse import urlparse
     parser = feedFinder()
     sitecomponents = urlparse(site)

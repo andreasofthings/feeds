@@ -5,8 +5,8 @@ Feeds
 .. image:: https://travis-ci.org/andreasofthings/feeds.svg?branch=master
     :target: https://travis-ci.org/andreasofthings/feeds
 
-.. image:: https://coveralls.io/repos/aneumeier/feeds/badge.png
-   :target: https://coveralls.io/r/aneumeier/feeds
+.. image:: https://coveralls.io/repos/andreasofthings/feeds/badge.png
+   :target: https://coveralls.io/r/andreasofthings/feeds
 
 .. image:: https://readthedocs.org/projects/feeds/badge/?version=latest
   :target: https://readthedocs.org/projects/feeds/?badge=latest

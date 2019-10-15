@@ -7,6 +7,8 @@ PostManager
 ===========
 """
 
+import sys, traceback
+
 import logging
 from django.db import models
 import time
@@ -18,9 +20,15 @@ logger = logging.getLogger(__name__)
 
 class PostManager(models.Manager):
     """
+    Manage Post Objects.
+
+    Manager for `Post` Objects.
     """
+
     def subscribed(self, user):
         """
+        Subscribe List.
+
         Get only Posts for subscribed feeds.
         .. todo: This returns a queryset of all Posts, ordered by their
         published date. It should be limited by the requesting users feed-
@@ -74,6 +82,9 @@ class PostManager(models.Manager):
                     tags=tags
                 )
         except Exception as e:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            traceback.print_exc(limit=2, file=sys.stdout)
+
             logger.error("Tags error: %s", e)
 
         try:
@@ -89,6 +100,15 @@ class PostManager(models.Manager):
             logger.error("Category error: %s", e)
 
         return post, created
+
+    def today(self):
+        """
+        Get all Posts for today.
+
+        .. todo::
+            Potential timezone / naive datetime problem.
+        """
+        return self.filter(published__date=datetime.datetime.today())
 
     def older_than(self, ttl):
         """

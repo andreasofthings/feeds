@@ -1,7 +1,7 @@
 import logging
 
 from django import forms
-from django.views.generic import DetailView
+from django.views.generic import ListView, DetailView
 from django.views.generic import CreateView, UpdateView
 from django.views.generic import DeleteView
 from django.utils.translation import ugettext as _
@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
-from ..baseviews import PaginatedListView
+from ..mixins import PaginateListMixin
 from ..models import WebSite, Feed
 from ..forms import WebSiteCreateForm, WebSiteFeedAddForm
 from ..forms import WebSiteUpdateForm, FeedAddForm
@@ -25,6 +25,8 @@ WebSiteSubmitForms = [
     ('Feeds', WebSiteFeedAddForm),
     ]
 
+
+logger = logging.getLogger(__name__)
 
 class WebSiteSubmitWizardView(LoginRequiredMixin, SessionWizardView):
     """
@@ -78,7 +80,7 @@ class WebSiteSubmitWizardView(LoginRequiredMixin, SessionWizardView):
         return HttpResponseRedirect(reverse('planet:website-home'))
 
 
-class WebSiteListView(LoginRequiredMixin, PaginatedListView):
+class WebSiteListView(LoginRequiredMixin, PaginateListMixin, ListView):
     """
     Lists all sites in the database.
 
@@ -88,6 +90,7 @@ class WebSiteListView(LoginRequiredMixin, PaginatedListView):
 
     .. codeauthor:: Andreas Neumeier <andreas@neumeier.org>
     """
+
     model = WebSite
     template_name = "feeds/website_list.html"
 
@@ -143,8 +146,11 @@ class WebSiteDetailView(DetailView):
 
 class WebSiteUpdateView(PermissionRequiredMixin, UpdateView):
     """
-    View to update an existing site.
+    Update WebSite.
+
+    Update an existing `WebSite`.
     """
+
     permission_required = "feeds.change_site"
     form_class = WebSiteUpdateForm
     model = WebSite
