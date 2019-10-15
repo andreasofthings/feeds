@@ -26,6 +26,7 @@ from django.views.generic import CreateView, UpdateView
 from django.views.generic import DeleteView, RedirectView
 from django.shortcuts import get_object_or_404
 
+from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
@@ -129,7 +130,7 @@ class OPMLView(FormView):
         return super(OPMLView, self).form_valid(form)
 
 
-class FeedCreateView(PermissionRequiredMixin, CreateView):
+class FeedCreateView(PermissionRequiredMixin, AccessMixin, CreateView):
     """
     View to create a new feed.
 
@@ -137,6 +138,8 @@ class FeedCreateView(PermissionRequiredMixin, CreateView):
     """
 
     permission_required = "feeds.add_feed"
+    permission_denied_message = "You cannot add new Feeds. Please contact the team to ask for permission."
+    raise_exception = True
     form_class = FeedCreateForm
     model = Feed
     initial = {"is_Active": False}
