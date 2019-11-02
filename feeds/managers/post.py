@@ -82,9 +82,6 @@ class PostManager(models.Manager):
                     tags=tags
                 )
         except Exception as e:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            traceback.print_exc(limit=2, file=sys.stdout)
-
             logger.error("Tags error: %s", e)
 
         try:
