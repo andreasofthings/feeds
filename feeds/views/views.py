@@ -140,7 +140,16 @@ class FeedCreateView(PermissionRequiredMixin, AccessMixin, CreateView):
     """
 
     permission_required = "feeds.add_feed"
-    permission_denied_message = "You cannot add new Feeds. Please contact the team to ask for permission."
+
+    def get_permission_denied_message(self):
+        from django.contrib import messages
+        messages.append(
+            self.request,
+            messages.INFO,
+            _("You don't have the permission to add new Feeds.")
+        )
+        return "You cannot add new Feeds."
+
     raise_exception = True
     form_class = FeedCreateForm
     model = Feed

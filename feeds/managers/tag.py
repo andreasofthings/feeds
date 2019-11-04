@@ -24,12 +24,11 @@ class TagManager(models.Manager):
                     name=term,
                     slug=slugify(term)
                 )
+                post.tags.add(t)
             except Exception as e:
                 import sys, traceback
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 traceback.print_exc(limit=2, file=sys.stdout)
-            finally:
-                post.tags.add(t)
         return
 
     def get_by_natural_key(self, slug):
