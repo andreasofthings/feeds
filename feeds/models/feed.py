@@ -428,11 +428,9 @@ class Feed(models.Model):
 
         if self._entry_guid(entry) in postdict.keys():
             logger.debug("update: %s", entry.title)
-            print(entry)
             post = self.posts.get(guid__exact=self._entry_guid(entry))
         else:
             logger.debug("insert: %s", entry.title)
-            print(entry)
             post, created = self.posts.fromFeedparser(
                 feed=self,
                 entry=entry,
