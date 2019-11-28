@@ -30,6 +30,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.utils.translation import ugettext_lazy as _
 
 from ..forms import OptionsForm
 from ..forms import OPMLForm
