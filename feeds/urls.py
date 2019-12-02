@@ -70,7 +70,7 @@ urlpatterns = [
     path('options', OptionsView.as_view(), name="options"),
     path('opml', OPMLView.as_view(), name="opml"),
     path('api/', include('feeds.api.urls')),
-    path('search', include('haystack.urls')),
+    # path('search', include('haystack.urls')),
     url(
         r'^sitemap\.xml$',
         cache_page(86400)(sitemap_index),
