@@ -1,9 +1,5 @@
-#! /usr/bin/env python
-# -*- coding: utf-8 -*-
-# vim: ts=4 et sw=4 sts=4
-
 """
-:mod:`feeds.views.views`
+:mod:`feeds.views.views`.
 
 Views for :py:mod:`feeds`
 =========
@@ -13,6 +9,9 @@ Frontend to managing and reading :py:mod:`feeds.models.Feed`,
 :py:mod:`feeds.models.Post` and :py:mod:`feeds.models.Subscriptions`.
 
 """
+# -*- coding: utf-8 -*-
+# vim: ts=4 et sw=4 sts=4
+
 
 import logging
 
@@ -30,6 +29,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.utils.translation import ugettext as _
 
 from ..forms import OptionsForm
 from ..forms import OPMLForm
@@ -47,8 +47,7 @@ logger = logging.getLogger(__name__)
 
 class HomeView(TemplateView):
     """
-    Marketing Page
-    ==============
+    Marketing Page.
 
     The HomeView will print out a marketing page, where new users are supposed
     to come to first. It is often referred to as the `landingpage`.
@@ -61,8 +60,7 @@ class HomeView(TemplateView):
 
 class OptionsView(LoginRequiredMixin, UpdateView):
     """
-    Options Page
-    ============
+    Options Page.
 
     The `OptionsView` will allow individual users to manage settings/options
     related to their account and viewing experience.
@@ -82,15 +80,18 @@ class OptionsView(LoginRequiredMixin, UpdateView):
     form_class = OptionsForm
 
     def get_success_url(self):
+        """Get success url."""
         return reverse("planet:options")
 
     def get_object(self, queryset=None):
+        """Get object."""
         obj, created = Options.objects.get_or_create(user=self.request.user)
         if created:
             obj.save()
         return obj
 
     def form_valid(self, form):
+        """Validate Form."""
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.save()
@@ -122,9 +123,11 @@ class OPMLView(FormView):
     template_name = "feeds/opml.html"
 
     def get_success_url(self):
+        """Get success url."""
         return reverse("planet:home")
 
     def form_valid(self, form):
+        """Form Valid."""
         from xml.etree import ElementTree
 
         tree = ElementTree.parse(self.request.FILES["opml"])
@@ -134,7 +137,7 @@ class OPMLView(FormView):
 
 class FeedCreateView(PermissionRequiredMixin, AccessMixin, CreateView):
     """
-    View to create a new feed.
+    Create a new feed.
 
     Required login and credentials.
     """
@@ -142,8 +145,9 @@ class FeedCreateView(PermissionRequiredMixin, AccessMixin, CreateView):
     permission_required = "feeds.add_feed"
 
     def get_permission_denied_message(self):
+        """Get permission_denied message."""
         from django.contrib import messages
-        messages.append(
+        messages.add_message(
             self.request,
             messages.INFO,
             _("You don't have the permission to add new Feeds.")
@@ -157,10 +161,7 @@ class FeedCreateView(PermissionRequiredMixin, AccessMixin, CreateView):
 
 
 class FeedListView(LoginRequiredMixin, PaginateListMixin, ListView):
-    """
-    List all registered feeds
-
-    """
+    """List all registered feeds."""
 
     model = Feed
     queryset = Feed.objects.order_by("name")
@@ -178,55 +179,52 @@ class FeedDetailView(LoginRequiredMixin, DetailView):
     queryset = Feed.objects.all()
 
     def get_context_data(self, **kwargs):
+        """Get context data."""
         context = super(FeedDetailView, self).get_context_data(**kwargs)
         context["posts"] = self.object.posts.order_by("-published")
         return context
 
 
 class FeedUpdateView(LoginRequiredMixin, UpdateView):
-    """
-    Update a particular feed
-    """
+    """Update a particular feed."""
 
     form_class = FeedUpdateForm
     model = Feed
 
     def get_success_url(self):
+        """Get success url."""
         return reverse("planet:feed-detail", args=(self.kwargs["pk"],))
 
 
 class FeedDeleteView(LoginRequiredMixin, DeleteView):
-    """
-    Delete a particular feed
-    """
+    """Delete a particular feed."""
 
     model = Feed
 
     def get_success_url(self):
+        """Get success url."""
         return reverse("planet:feed-home")
 
 
 class FeedRefreshView(LoginRequiredMixin, RedirectView):
-    """
-    Refresh a particular feed
-    """
+    """Refresh a particular feed."""
 
     permanent = False
 
     def get_redirect_url(self, pk):
+        """Refresh Feed and return redirect url."""
         f = Feed.objects.get(pk=pk)
         f.refresh()
         return reverse("planet:feed-detail", args=(pk,))
 
 
 class FeedSubscribeView(LoginRequiredMixin, RedirectView):
-    """
-    Subscribe user to a feed
-    """
+    """Subscribe user to a feed."""
 
     permanent = False
 
     def get_redirect_url(self, pk):
+        """Subscribe User and redirect."""
         user = Options.objects.get(user=self.request.user)
         feed = Feed.objects.get(pk=pk)
         s, created = Subscription.objects.get_or_create(user=user, feed=feed)
@@ -236,13 +234,12 @@ class FeedSubscribeView(LoginRequiredMixin, RedirectView):
 
 
 class FeedUnSubscribeView(LoginRequiredMixin, RedirectView):
-    """
-    UnSubscribe user to a feed
-    """
+    """UnSubscribe user to a feed."""
 
     permanent = False
 
     def get_redirect_url(self, pk):
+        """Unsubscribe User and redirect."""
         user = Options.objects.get(user=self.request.user)
         feed = Feed.objects.get(pk=pk)
         s = Subscription.objects.get(user=user, feed=feed)
@@ -252,14 +249,14 @@ class FeedUnSubscribeView(LoginRequiredMixin, RedirectView):
 
 class FeedSubscriptionsView(LoginRequiredMixin, PaginateListMixin, ListView):
     """
-    List all Feeds one users subscribed to.
+    List all Feeds one user subscribed.
 
     .. reverse-url: 'planet:feed-subscriptions'
 
     See also:
-
       - :py:mod:`feeds.views.FeedSubscribeView`
       - :py:mod:`feeds.views.FeedUnsubscribeView`
+
     """
 
     model = Feed
