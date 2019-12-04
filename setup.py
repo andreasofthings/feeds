@@ -46,9 +46,9 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
     install_requires=[
-        'django>=2.2.1, <3.0.0',
+        'django>=3.0.0',
         'coreapi',
-        'django-formtools',
+        'django-formtools>=2.2',
         'django-crispy-forms>=1.6.0',
         'djangorestframework>=3.8.0',
         'django-haystack>=2.6.0',
