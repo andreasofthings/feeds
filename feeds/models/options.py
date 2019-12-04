@@ -16,7 +16,6 @@ import logging
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.utils.encoding import python_2_unicode_compatible
 from django.contrib.auth import get_user_model
 
 from ..managers import OptionsManager
@@ -25,7 +24,6 @@ from .feed import Feed
 logger = logging.getLogger(__name__)
 
 
-@python_2_unicode_compatible
 class Options(models.Model):
     user = models.ForeignKey(
         get_user_model(),  # settings.AUTH_USER_MODEL,

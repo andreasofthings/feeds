@@ -6,13 +6,11 @@
 """
 import logging
 import datetime
-from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 
 from .post import Post
 
 
-@python_2_unicode_compatible
 class Rating(models.Model):
     post = models.ForeignKey(
         Post,

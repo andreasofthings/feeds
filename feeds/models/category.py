@@ -6,7 +6,6 @@
 """
 
 from __future__ import unicode_literals
-from django.utils.encoding import python_2_unicode_compatible
 
 from django.db import models
 from django.urls import reverse
@@ -27,7 +26,6 @@ from django.dispatch import receiver
 logger = logging.getLogger(__name__)
 
 
-@python_2_unicode_compatible
 class Tag(models.Model):
     """
     A tag.
@@ -97,7 +95,6 @@ class Tag(models.Model):
         return reverse('planet:tag-detail', args=[str(self.slug),])
 
 
-@python_2_unicode_compatible
 class Category(models.Model):
     """
     Category model to be used for categorization of content. Categories are

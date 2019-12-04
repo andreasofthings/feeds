@@ -12,7 +12,6 @@ Stores as much as possible coming out of the feed.
 """
 
 from __future__ import unicode_literals
-from django.utils.encoding import python_2_unicode_compatible
 
 import time
 import logging
@@ -44,7 +43,6 @@ from ..exceptions import FeedsParseError, FeedsSameError
 logger = logging.getLogger(__name__)
 
 
-@python_2_unicode_compatible
 class Feed(models.Model):
     """
     Model that contains information about any feed, including:

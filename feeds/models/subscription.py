@@ -12,7 +12,6 @@ Stores as much as possible coming out of the feed.
 """
 
 from __future__ import unicode_literals
-from django.utils.encoding import python_2_unicode_compatible
 
 import logging
 
@@ -26,7 +25,6 @@ from ..managers import SubscriptionManager
 logger = logging.getLogger(__name__)
 
 
-@python_2_unicode_compatible
 class Subscription(models.Model):
     """
     User Feed Subscription
