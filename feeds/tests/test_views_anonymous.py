@@ -303,7 +303,7 @@ class ViewsAnonymousTest(TestCase):
             result,
             '/accounts/login/?next=%s' % (reverse('planet:feed-add'))
         )
-        self.assertEqual(result.status_code, 302)
+        self.assertEqual(result.status_code, 403)
 
     def feed_detail(self):
         """

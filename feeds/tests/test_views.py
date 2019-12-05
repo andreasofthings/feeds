@@ -217,16 +217,22 @@ class TestAllViewsLoggedIn(TestCase):
         'AttributeError: 'module' object has no
         attribute 'CRISPY_TEMPLATE_PACK'.
         """
-        result = self.client.get(reverse('planet:feed-add'), follow=False)
-        # self.assertEqual(result.status_code, 200)
+        result = self.client.get(
+            reverse('planet:feed-add'),
+            follow=False
+        )
+        self.assertEqual(result.status_code, 200)
 
     def test_feed_add_post_anonymous(self):
         """
         go to feed-add, anonymous client
         """
         result = self.client.post(reverse('planet:feed-add'))
-        self.client.login(username=self.username, password=self.password)
-        self.assertEqual(result.status_code, 302)
+        self.client.login(
+            username=self.username,
+            password=self.password
+        )
+        self.assertEqual(result.status_code, 403)
 
     def test_feed_detail(self):
         """
