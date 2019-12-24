@@ -59,7 +59,8 @@ setup(
         'django_haystack',
     ],
     dependency_links=[
-        'git+git://github.com/django-haystack/django-haystack.git@master#egg=django-haystack',
+        'git+git://github.com/andreasofthings/django-haystack.git@master#egg=django-haystack',
+        # 'git+git://github.com/django-haystack/django-haystack.git@master#egg=django-haystack',
     ],
     setup_requires=['pytest-runner'],
     tests_require=['py.test', ],
