@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models.files import FileModel
 from .models.website import WebSite
 from .models.category import Category, Tag
+from .models.editorcategory import EditorCategory
 from .models.enclosure import Enclosure
 from .models.feed import Feed
 from .models.stats import FeedPostCount
@@ -15,6 +16,7 @@ from .models.subscription import Subscription
 from .forms import FeedAdminForm
 
 
+admin.site.register(EditorCategory)
 admin.site.register(Category)
 admin.site.register(Tag)
 
