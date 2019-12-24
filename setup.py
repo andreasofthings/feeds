@@ -58,7 +58,9 @@ setup(
         'requests>=2.18',
         # 'timestring>=1.6.2',
     ],
-    dependency_links=[],
+    dependency_links=[
+        'git+git://github.com/django-haystack/django-haystack.git@master#egg=django-haystack',
+    ],
     setup_requires=['pytest-runner'],
     tests_require=['py.test', ],
     # cmdclass={
