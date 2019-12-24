@@ -54,11 +54,9 @@ setup(
         'django-formtools>=2.2',
         'django-crispy-forms>=1.6.0',
         'djangorestframework>=3.8.0',
-        # 'python-django-social',
-        'feedparser>=5.1.2',
         'pyyaml',
-        'requests>=2.18',
-        # 'timestring>=1.6.2',
+        # 'requests>=2.18',
+        'django_haystack',
     ],
     dependency_links=[
         'git+git://github.com/django-haystack/django-haystack.git@master#egg=django-haystack',
