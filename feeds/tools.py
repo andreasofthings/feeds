@@ -24,8 +24,6 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-
-
 def URLlist():
     """
     Yield all URLs contained in `url`(.yaml)
