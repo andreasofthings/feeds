@@ -1,25 +1,28 @@
+"""
+Install feeds.
+
+setup.py for the `feeds` package.
+"""
+
 import os
 from setuptools import setup
 from setuptools.command.install import install
 from feeds import __version__
 
-README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
+README = open(
+        os.path.join(os.path.dirname(__file__), 'README.rst')
+    ).read()
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 
 class InstallCommand(install):
-    """Customized setuptools install command - prints a friendly greeting."""
+    """Customized setuptools install command."""
+
     def run(self):
-        """
-        Run installation first.
-        """
+        """Run installation first."""
         install.run(self)
-        # from django.contrib.auth.models import Group
-        # g, created = Group.objects.get_or_create(name="Feeds")
-        # if created:
-        #     g.save()
 
 
 setup(
