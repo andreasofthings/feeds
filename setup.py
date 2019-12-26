@@ -54,6 +54,7 @@ setup(
         'django-formtools>=2.2',
         'django-crispy-forms>=1.6.0',
         'djangorestframework>=3.8.0',
+        'feedparser',
         'pyyaml',
         # 'requests>=2.18',
         'django_haystack',
