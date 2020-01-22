@@ -9,6 +9,7 @@ Managers
 
 from django.db import models
 from .category import CategoryManager
+from .editorcategory import EditorCategoryManager
 from .feed import FeedManager
 from .post import PostManager
 from .subscription import SubscriptionManager
@@ -18,6 +19,7 @@ from .website import WebSiteManager
 
 __all__ = [
     'CategoryManager',
+    'EditorCategoryManager',
     'FeedManager',
     'OptionsManager',
     'PostManager',

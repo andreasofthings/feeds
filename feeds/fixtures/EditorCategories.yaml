@@ -1,0 +1,30 @@
+- model: feeds.EditorCategory
+  pk: 1
+  fields:
+    "name": "Business"
+    "slug": "business"
+- model: feeds.EditorCategory
+  pk: 2
+  fields:
+    "name": "News"
+    "slug": "news"
+- model: feeds.EditorCategory
+  pk: 3
+  fields:
+    "name": "Sports"
+    "slug": "sports"
+- model: feeds.EditorCategory
+  pk: 4
+  fields:
+    "name": "Culture"
+    "slug": "culture"
+- model: feeds.EditorCategory
+  pk: 5
+  fields:
+    "name": "Podcast"
+    "slug": "podcast"
+- model: feeds.EditorCategory
+  pk: 6
+  fields:
+    "name": "High-Tech"
+    "slug": "high-tech"

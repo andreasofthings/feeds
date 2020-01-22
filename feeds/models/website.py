@@ -20,6 +20,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 
+from ..models import EditorCategory
 from ..managers import WebSiteManager
 
 logger = logging.getLogger(__name__)
@@ -72,6 +73,11 @@ class WebSite(models.Model):
     Overwrite the inherited manager
     with the custom :mod:`feeds.models.WebSiteManager`
     """
+
+    category = models.ManyToManyField(
+        EditorCategory,
+        related_name='website_category'
+    )
 
     class Meta:
         """

@@ -1,6 +1,7 @@
 #! /usr/bin/python
 
 from .category import Category, Tag
+from .editorcategory import EditorCategory
 from .enclosure import Enclosure
 from .feed import Feed
 from .post import Post, TaggedPost
@@ -13,6 +14,7 @@ from .website import WebSite
 
 __all__ = [
     'Category',
+    'EditorCategory',
     'Enclosure',
     'Feed',
     'FeedStats',

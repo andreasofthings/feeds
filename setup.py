@@ -1,25 +1,28 @@
+"""
+Install feeds.
+
+setup.py for the `feeds` package.
+"""
+
 import os
 from setuptools import setup
 from setuptools.command.install import install
 from feeds import __version__
 
-README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
+README = open(
+        os.path.join(os.path.dirname(__file__), 'README.rst')
+    ).read()
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 
 class InstallCommand(install):
-    """Customized setuptools install command - prints a friendly greeting."""
+    """Customized setuptools install command."""
+
     def run(self):
-        """
-        Run installation first.
-        """
+        """Run installation first."""
         install.run(self)
-        # from django.contrib.auth.models import Group
-        # g, created = Group.objects.get_or_create(name="Feeds")
-        # if created:
-        #     g.save()
 
 
 setup(
@@ -51,14 +54,15 @@ setup(
         'django-formtools>=2.2',
         'django-crispy-forms>=1.6.0',
         'djangorestframework>=3.8.0',
-        'django-haystack>=2.6.0',
-        # 'python-django-social',
-        'feedparser>=5.1.2',
+        'feedparser',
         'pyyaml',
-        'requests>=2.18',
-        # 'timestring>=1.6.2',
+        # 'requests>=2.18',
+        'django_haystack',
     ],
-    dependency_links=[],
+    dependency_links=[
+        'git+git://github.com/andreasofthings/django-haystack.git@master#egg=django-haystack',
+        # 'git+git://github.com/django-haystack/django-haystack.git@master#egg=django-haystack',
+    ],
     setup_requires=['pytest-runner'],
     tests_require=['py.test', ],
     # cmdclass={
