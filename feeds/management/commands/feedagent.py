@@ -11,10 +11,11 @@ class Command(BaseCommand):
     help = "feedagent to run refresh as a daemon"
 
     def handle(self, *args, **options):
+        feed = Feed.objects.order_by('-last_checked')[0]
+        logging.error(f"Count {Feed.objects.count()}")
         while True:
-            feed = Feed.objects.order_by('-last_checked')[0]
             f = feedparser.parse(feed.feed_url)
             print(f.feed)
-            logging.info("refreshing feed '%s' (%s)", feed.title, feed.name)
-            logging.info("feed detail '%s' (%s)", f.feed.title, f.feed.url)
+            logging.info(f"refreshing feed {feed.title} {feed.name}")
+            # logging.info(f"feed detail {f.feed.title}, {f.feed.feed_url}")
             time.sleep(60)

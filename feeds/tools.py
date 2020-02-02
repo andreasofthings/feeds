@@ -30,6 +30,10 @@ def URLlist():
 
     See: https://github.com/aneumeier/blogsdirectory/
 
+    .. deprecated:: 1.0
+        Don't use this anymore. A new implementation is in
+        `feeds/management/commands/bootstrap-website.py`
+
     .. todo::
         Sort and filter dupes.
     """
@@ -78,7 +82,7 @@ def getFeedsFromSite(site):
     Fetches the site, parses it, finds embedded links.
     """
 
-    from urllib.parse import urlparse
+    from urllib.parse import urlparse, urlunparse
     parser = feedFinder()
     sitecomponents = urlparse(site)
 
@@ -92,8 +96,16 @@ def getFeedsFromSite(site):
     for link in rsslist:
         feed = link.get('href')
         feedcomponents = urlparse(feed)
-        if feedcomponents.netloc is ("" or None):
-            feed = sitecomponents.netloc + feedcomponents.path
+        if feedcomponents.netloc in ("", None) or \
+            feedcomponents.scheme in ("", None):
+            feed = urlunparse((
+            sitecomponents.scheme,
+            sitecomponents.netloc,
+            feedcomponents.path,
+            feedcomponents.params,
+            feedcomponents.query,
+            feedcomponents.fragment)
+            )
         result.append(feed)
 
         logger.debug("appended %s to result", feed)

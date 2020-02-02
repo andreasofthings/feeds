@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('feeds', '0009_auto_20190927_0735_squashed_0014_auto_20191012_0850'),
+        ('feeds', '0009_sqash_migrations_09_14'),
     ]
 
     operations = [
