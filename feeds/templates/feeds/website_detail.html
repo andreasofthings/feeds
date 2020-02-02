@@ -19,6 +19,9 @@
               {% if perms.feeds.change_site %}<a href="{{object.get_absolute_url}}update" class="btn btn-mini site-tooltip" title="edit site"><i class="fas fa-edit"></i></a>{% endif %}
               {% if perms.feeds.delete_site %}<a href="{{object.get_absolute_url}}delete" class="btn btn-mini site-tooltip" title="delete site"><i class="fas fa-trash-alt"></i></a>{% endif %}
             {% endif %}
+            {% if user.is_staff %}
+            <a href="{% url "admin:planet_website_change" object.id %}" class="btn btn-mini site-tooltip" title="admin"><i class="fas fa-edit"></i></a>
+            {% endif %}
     </div>
     <div class="col-md">
       <h4>Registered Feeds</h4>
