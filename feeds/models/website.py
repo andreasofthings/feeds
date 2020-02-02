@@ -44,7 +44,7 @@ class WebSite(models.Model):
             ))
     """URL of the `Site`."""
 
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, default="")
     """Name of the website."""
 
     SCHEMES = (
@@ -58,11 +58,11 @@ class WebSite(models.Model):
     )
     netloc = models.CharField(max_length=512)
     path = models.CharField(max_length=512, default='/', blank=False)
-    params = models.CharField(max_length=256, blank=True, null=True)
-    query = models.CharField(max_length=256, blank=True, null=True)
-    fragment = models.CharField(max_length=256, blank=True, null=True)
+    params = models.CharField(max_length=256, blank=True, null=True, default="")
+    query = models.CharField(max_length=256, blank=True, null=True, default="")
+    fragment = models.CharField(max_length=256, blank=True, null=True, default="")
 
-    slug = models.SlugField(null=True)
+    slug = models.SlugField(null=True, default='')
     """Human readble URL component"""
 
     commercial = models.BooleanField(default=True)
@@ -76,7 +76,8 @@ class WebSite(models.Model):
 
     category = models.ManyToManyField(
         EditorCategory,
-        related_name='website_category'
+        related_name='website_category',
+        default=None
     )
 
     class Meta:
@@ -98,18 +99,21 @@ class WebSite(models.Model):
             This is a bit of magic, that should rather not happen.
             It strips http:// https:// and www, if present.
         """
-        if self.path == "":
-            self.path = "/"
+        if not self.path:  self.path = "/"
+
         if not self.slug:
             def remove_prefix(s, prefix):
                 return s[len(prefix):] if s.startswith(prefix) else s
-            slug = remove_prefix(slugify(self.netloc + self.path), "https")
-            slug = remove_prefix(slug, "http")
-            slug = remove_prefix(slug, "www")
-            self.slug = slug
+            self.slug = slugify(self.netloc + self.path)
+            self.slug = remove_prefix(self.slug, "https")
+            self.slug = remove_prefix(self.slug, "http")
+            self.slug = remove_prefix(self.slug, "www")
+
         if not self.name:
             self.name = self.slug
-        return super(WebSite, self).save(*args, **kwargs)
+
+        #  return super(WebSite, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         """

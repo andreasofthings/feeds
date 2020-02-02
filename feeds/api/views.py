@@ -20,13 +20,13 @@ from django.conf import settings
 
 from ..models import WebSite, Feed, Post, Options, Subscription, Category, Tag
 
-from .serializers import OptionsSerializer
-from .serializers import WebSiteSerializer
-from .serializers import FeedSerializer, FeedPKSerializer
-from .serializers import PostSerializer
-from .serializers import CategorySerializer
-from .serializers import TagSerializer
-from .serializers import SubscriptionSerializer
+from ..serializers import OptionsSerializer
+from ..serializers import WebSiteSerializer
+from ..serializers import FeedSerializer, FeedPKSerializer
+from ..serializers import PostSerializer
+from ..serializers import CategorySerializer
+from ..serializers import TagSerializer
+from ..serializers import SubscriptionSerializer
 from .permission import IsOwner
 
 from .throttle import OptionsThrottle

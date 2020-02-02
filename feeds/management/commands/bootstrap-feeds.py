@@ -21,10 +21,21 @@ class Command(BaseCommand):
             try:
                 logger.info("Trying to get Feeds from Site: %s", site)
                 allfeeds = getFeedsFromSite(site.website_url)
+                logger.info(f"found {allfeeds}")
+
             except requests.exceptions.SSLError as e:
-                logger.error("SSLError: %s", e)
-            for feed in allfeeds:
-                Feed.objects.create(website=site, url=feed)
+                logger.error(f"SSLError for {site.name}: {e}")
+            except requests.exceptions.ConnectionError as e:
+                logger.error(f"ConnectionError for {site.name}: {e}")
+            for url in allfeeds:
+                try:
+                    f = Feed.objects.get(feed_url=url)
+                except Feed.DoesNotExist:
+                    logger.error(f"{url} for {site} is not yet in DB.")
+                    f = Feed.objects.create_feed(site, url)
+                f.website = site
+                f.save()
+
                 # logger.info("Feed: %s", feed)
-                pass
+                # continue
             sleep(0.5)
