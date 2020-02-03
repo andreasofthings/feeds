@@ -72,7 +72,7 @@ class CronView(views.APIView):
         Run Cronjobs when triggered by external GET.
         """
         if request:
-            for feed in Feed.objects.all():
+            for feed in Feed.objects.order_by('-last_checked'):
                 # actually, rather serialize the real object than some mock.
                 f = FeedPKSerializer(
                     feed,

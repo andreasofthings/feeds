@@ -135,7 +135,11 @@ class OPMLView(FormView):
         return super(OPMLView, self).form_valid(form)
 
 
-class FeedCreateView(PermissionRequiredMixin, AccessMixin, CreateView):
+class FeedCreateView(
+                    LoginRequiredMixin,
+                    PermissionRequiredMixin,
+                    AccessMixin,
+                    CreateView):
     """
     Create a new feed.
 

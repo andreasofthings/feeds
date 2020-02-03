@@ -57,7 +57,7 @@ setup(
         'feedparser',
         'pyyaml',
         # 'requests>=2.18',
-        'django_haystack',
+        # 'django_haystack',
     ],
     dependency_links=[
         'git+git://github.com/andreasofthings/django-haystack.git@master#egg=django-haystack',

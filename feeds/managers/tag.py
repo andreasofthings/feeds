@@ -2,6 +2,7 @@ import logging
 from django.db import models
 from django.utils.text import slugify
 
+import feeds
 
 logger = logging.getLogger(__name__)
 
@@ -20,16 +21,20 @@ class TagManager(models.Manager):
         for tag in tags:
             term = tag['term']
             try:
-                t, created = self.get_or_create(
+                t = self.get(
                     name=term,
-                    slug=slugify(term)
+                    slug=slugify(term),
                 )
-                post.tags.add(t)
-            except Exception as e:
-                import sys, traceback
-                exc_type, exc_value, exc_traceback = sys.exc_info()
-                traceback.print_exc(limit=2, file=sys.stdout)
-        return
+            except feeds.models.category.Tag.DoesNotExist as e:
+                t = self.create(name=term, slug=slugify(term))
+                t.save()
+                logger.error(f"Tag '{term}' did not exist, created {t}({t.id}).")
+            # except Exception as e:
+                # import sys, traceback
+                # exc_type, exc_value, exc_traceback = sys.exc_info()
+                # traceback.print_exc(limit=2, file=sys.stdout)
+        post.tags.add(t)
+        post.save()
 
     def get_by_natural_key(self, slug):
         """

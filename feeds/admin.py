@@ -133,13 +133,14 @@ class FeedAdmin(admin.ModelAdmin):
     form = FeedAdminForm
     list_display = (
         'name',
-        'website',
-        'is_active',
-        'announce_posts',
-        'post_count',
-        'errors',
         'slug',
         'title',
+        'website',
+        'feed_url',
+        'is_active',
+        'post_count',
+        'announce_posts',
+        'errors',
         'last_modified',
         'last_checked',
     )

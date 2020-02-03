@@ -291,7 +291,7 @@ class ViewsAnonymousTest(TestCase):
         result = self.client.get(reverse('planet:feed-subscriptions'))
         self.assertEqual(result.status_code, 302)
 
-    def feed_add(self):
+    def feed_create(self):
         """
         feed-add
         --------
@@ -391,7 +391,7 @@ class ViewsAnonymousTest(TestCase):
             FeedRefreshView.as_view(), name="feed-refresh"),
         """
         self.feed_home()
-        self.feed_add()
+        self.feed_create()
         self.feed_detail()
         self.feed_update()
         self.feed_delete()
