@@ -56,7 +56,7 @@ setup(
         'djangorestframework>=3.8.0',
         'feedparser',
         'pyyaml',
-        # 'requests>=2.18',
+        'requests>=2.18',
         'django_haystack',
     ],
     dependency_links=[

@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.humanize',
     'crispy_forms',
-    'haystack',
+    # 'haystack',
     'tests',
     'feeds',
 )
