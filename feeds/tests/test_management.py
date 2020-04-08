@@ -6,12 +6,12 @@
 Test Management Command
 """
 
-from django.test import TestCase
+from django.test import TransactionTestCase
 from django.core.management import call_command
 from django.core.management.base import CommandError
 
 
-class ManagementTest(TestCase):
+class ManagementTest(TransactionTestCase):
     """
     Test Manager Command
     """
