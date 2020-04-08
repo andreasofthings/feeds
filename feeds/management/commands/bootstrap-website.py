@@ -53,5 +53,5 @@ class Command(BaseCommand):
             try:
                 w = WebSite.objects.get(netloc=netloc, path=path)
             except ObjectDoesNotExist:
-                w = WebSiteobjects.create_website(url, name)
+                w = WebSite.objects.create_website(url, name)
             w.save()
