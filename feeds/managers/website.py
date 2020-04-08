@@ -9,7 +9,7 @@ WebSiteManager
 
 import logging
 from urllib.parse import urlparse
-
+from django.utils.text import slugify
 from django.db import models
 
 logger = logging.getLogger(__name__)
