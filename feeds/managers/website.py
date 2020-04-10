@@ -45,7 +45,7 @@ class WebSiteManager(models.Manager):
         if not slug:
             def remove_prefix(s, prefix):
                 return s[len(prefix):] if s.startswith(prefix) else s
-            slug = slugify(netloc + website.path)
+            slug = slugify(netloc + path)
             slug = remove_prefix(slug, "https")
             slug = remove_prefix(slug, "http")
             slug = remove_prefix(slug, "www")
