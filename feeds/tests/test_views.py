@@ -200,6 +200,7 @@ class TestAllViewsLoggedIn(TestCase):
         result = self.client.get(reverse('planet:feed-add'), follow=True)
         self.assertEqual(result.status_code, 403)
 
+
     def test_feed_add_logged_in_valid_permission(self):
         """
         go to feed-add
@@ -232,7 +233,8 @@ class TestAllViewsLoggedIn(TestCase):
             username=self.username,
             password=self.password
         )
-        self.assertEqual(result.status_code, 403)
+        self.assertEqual(result.status_code, 302)
+        self.assertRedirects(result, '/accounts/login/?next=/feeds/add/')
 
     def test_feed_detail(self):
         """

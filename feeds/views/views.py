@@ -135,11 +135,7 @@ class OPMLView(FormView):
         return super(OPMLView, self).form_valid(form)
 
 
-class FeedCreateView(
-                    LoginRequiredMixin,
-                    PermissionRequiredMixin,
-                    AccessMixin,
-                    CreateView):
+class FeedCreateView(PermissionRequiredMixin, AccessMixin, CreateView):
     """
     Create a new feed.
 
@@ -158,7 +154,7 @@ class FeedCreateView(
         )
         return "You cannot add new Feeds."
 
-    raise_exception = True
+    raise_exception = False
     form_class = FeedCreateForm
     model = Feed
     initial = {"is_Active": False}

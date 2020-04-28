@@ -84,17 +84,14 @@ class PostManager(models.Manager):
         except Exception as e:
             logger.error("Tags error: %s", e)
 
-        try:
-            category = []
-            category.append(entry.get("category", []))
+        category = []
+        category.append(entry.get("category", []))
 
-            if category:
-                post.categories.forPost(
-                    post=post,
-                    categories=category
-                )
-        except Exception as e:
-            logger.error("Category error: %s", e)
+        if category:
+            post.categories.forPost(
+                post=post,
+                categories=category
+            )
 
         return post, created
 

@@ -28,7 +28,7 @@ class TagManager(models.Manager):
             except feeds.models.category.Tag.DoesNotExist as e:
                 t = self.create(name=term, slug=slugify(term))
                 t.save()
-                logger.error(f"Tag '{term}' did not exist, created {t}({t.id}).")
+                logger.info(f"Tag '{term}' did not exist, created {t}({t.id}).")
             # except Exception as e:
                 # import sys, traceback
                 # exc_type, exc_value, exc_traceback = sys.exc_info()

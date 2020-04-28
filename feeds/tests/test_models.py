@@ -7,7 +7,7 @@ Tests for the "feeds" app.
 ==========================
 """
 
-from django.test import TestCase, Client
+from django.test import TransactionTestCase, Client
 
 from feeds.models import Feed
 from feeds.models import Enclosure
@@ -23,7 +23,7 @@ warnings.filterwarnings(
 log = logging.getLogger(__name__)
 
 
-class ModelTest(TestCase):
+class ModelTest(TransactionTestCase):
     """
     Test Models and their Managers
 

@@ -5,11 +5,11 @@
 """
 """
 
-from django.test import TestCase, Client
+from django.test import TransactionTestCase, Client
 from feeds.models import Feed
 
 
-class SitemapTest(TestCase):
+class SitemapTest(TransactionTestCase):
     """
     Test sitemaps.
     """
