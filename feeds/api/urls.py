@@ -10,6 +10,7 @@ from django.urls import path, include
 
 from rest_framework import routers
 from rest_framework.schemas import get_schema_view
+from rest_framework.renderers import JSONOpenAPIRenderer
 
 from .views import CronView
 from .views import CronFeedView
@@ -51,14 +52,16 @@ router.register(
 )
 router.register(r'subscriptions', SubscriptionsViewSet)
 
+coreapi_schema = get_schema_view(
+    title="Feeds API",
+    description="API for feeds.",
+    url='https://www.pramari.de/feeds/api/',
+    renderer_classes=[JSONOpenAPIRenderer]
+)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('schema', get_schema_view(
-        title="Feeds API",
-        description="API for feeds.",
-        url='https://www.pramari.de/feeds/api/'),
-        name='openapi-schema'),
+    path('schema', coreapi_schema, name='openapi-schema'),
     path('cron', CronView.as_view()),
     path('cron/feed', CronFeedView.as_view()),
     path('options/', OptionsView.as_view()),
