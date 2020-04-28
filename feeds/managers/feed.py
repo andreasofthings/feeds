@@ -19,12 +19,26 @@ class FeedManager(models.Manager):
     Manager object for :py:mod:`feeds.models.Feed`
     """
 
-    @classmethod
-    def create(cls, website, url):
+    # // @classmethod
+    def create_feed(self, website, url):
         """
-        Create a :py:mod:`feeds.model.Feed` object
+        Create a :py:mod:`feeds.model.Feed` object.
+
+        Create a :py:mod:`feeds.model.Feed` object attached to a :py:mod:`feeds.models.WebSite`.
+
+        Args:
+            website (WebSite): The WebSite this Feed is attached to.
+            url (str): The URL of the feed to attach.
+
+        Returns:
+            Feed: the actual Feed Object.
+
+        Raises:
+            requests.exceptions.SSLError: SSL Failed
+
         """
-        feed = cls(website=website, feed_url=url)
+
+        feed = self.create(website=website, feed_url=url)
         feedcontent = cache.get_or_set(url, requests.get(url), 10600)
         parsed = feedparser.parse(feedcontent)
         feed.title = parsed.feed.get('title', '')[0:200]

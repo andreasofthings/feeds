@@ -7,7 +7,12 @@ WebSiteManager
 ==============
 """
 
+import logging
+from urllib.parse import urlparse
+
 from django.db import models
+
+logger = logging.getLogger(__name__)
 
 
 class WebSiteManager(models.Manager):
@@ -18,18 +23,47 @@ class WebSiteManager(models.Manager):
     def __init__(self, *args, **kwargs):
         return super(WebSiteManager, self).__init__(*args, **kwargs)
 
-    def create_website(self, website_url):
-        from urllib.parse import urlparse
-        schema, netloc, path, params, query, fragment = urlparse(website_url)
+    def create_website(self, url, name=None, slug=None):
+        """
+        Create Website.
+
+        Create a new `models.WebSite` from url and name.
+
+        Args:
+            url (str): A URL in a parseable, RFC compliant format.
+            name (str): A human readable name for the website.
+
+        Returns:
+            website: A new Website object.
+
+        """
+
+        scheme, netloc, path, params, query, fragment = \
+            urlparse(url)
+
+        if not path: path = "/"
+        if not slug:
+            def remove_prefix(s, prefix):
+                return s[len(prefix):] if s.startswith(prefix) else s
+            slug = slugify(netloc + website.path)
+            slug = remove_prefix(slug, "https")
+            slug = remove_prefix(slug, "http")
+            slug = remove_prefix(slug, "www")
+
+        if not name:
+            name = slug
+
         website = self.create(
-            scheme=schema,
+            scheme=scheme,
             netloc=netloc,
             path=path,
             params=params,
             query=query,
-            fragment=fragment
+            fragment=fragment,
+            name=name,
+            slug=slug
         )
-        # do something with the book
+
         return website
 
     def get_by_natural_key(self, slug):
