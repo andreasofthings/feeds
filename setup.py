@@ -56,6 +56,7 @@ setup(
         'djangorestframework>=3.8.0',
         'feedparser',
         'pyyaml',
+        'google-cloud-tasks',
         # 'requests>=2.18',
         # 'django_haystack',
     ],
