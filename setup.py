@@ -43,8 +43,8 @@ setup(
         'License :: OSI Approved :: BSD License',    # example license
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
@@ -58,10 +58,10 @@ setup(
         'pyyaml',
         'google-cloud-tasks',
         # 'requests>=2.18',
-        # 'django_haystack',
+        'django_haystack>=3.0',
     ],
     dependency_links=[
-        'git+git://github.com/andreasofthings/django-haystack.git@master#egg=django-haystack',
+        # 'git+git://github.com/andreasofthings/django-haystack.git@master#egg=django-haystack',
         # 'git+git://github.com/django-haystack/django-haystack.git@master#egg=django-haystack',
     ],
     setup_requires=['pytest-runner'],

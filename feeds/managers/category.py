@@ -19,21 +19,22 @@ class CategoryManager(models.Manager):
         categories = kwargs['categories']
 
         for category in categories:
+            slug=slugify(category)
             try:
-                c = self.get(
+                cat = self.get(
                     name=category,
-                    slug=slugify(category),
+                    slug=slug,
                     parent=None
                 )
             except feeds.models.category.Category.DoesNotExist as e:
-                c = self.create(
+                cat, c = self.get_or_create(
                     name=category,
-                    slug=slugify(category),
+                    slug=slug,
                     parent=None,
                 )
-                c.save()
-                logger.info(f"Category '{category}' did not exist, created {c}({c.id}).")
-            post.categories.add(c)
+                cat.save()
+                logger.info(f"Category '{category}' did not exist, created {cat}({cat.id}).")
+            post.categories.add(cat)
 
     def get_by_natural_key(self, slug):
         """
