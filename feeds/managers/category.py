@@ -24,13 +24,13 @@ class CategoryManager(models.Manager):
                 cat = self.get(
                     name=category,
                     slug=slug,
-                    parent=None
+                    # parent=None
                 )
             except feeds.models.category.Category.DoesNotExist as e:
                 cat, c = self.get_or_create(
                     name=category,
                     slug=slug,
-                    parent=None,
+                    # parent=None,
                 )
                 cat.save()
                 logger.info(f"Category '{category}' did not exist, created {cat}({cat.id}).")
