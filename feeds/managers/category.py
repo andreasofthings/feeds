@@ -19,16 +19,17 @@ class CategoryManager(models.Manager):
         categories = kwargs['categories']
 
         for category in categories:
+            slug = slugify(category)
             try:
                 c = self.get(
                     name=category,
-                    slug=slugify(category),
+                    slug=slug,
                     parent=None
                 )
             except feeds.models.category.Category.DoesNotExist as e:
                 c = self.create(
                     name=category,
-                    slug=slugify(category),
+                    slug=slug,
                     parent=None,
                 )
                 c.save()

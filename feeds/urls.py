@@ -71,6 +71,9 @@ urlpatterns = [
     path('opml', OPMLView.as_view(), name="opml"),
     path('api/', include('feeds.api.urls')),
     # path('search', include('haystack.urls')),
+]
+
+urlpatterns += [
     url(
         r'^sitemap\.xml$',
         cache_page(86400)(sitemap_index),
@@ -88,7 +91,9 @@ urlpatterns = [
         },
         name='sitemaps'
     ),
+]
 
+urlpatterns += [
     url(
         r'^website/$',
         WebSiteListView.as_view(),
