@@ -26,6 +26,7 @@ class ViewsAnonymousTest(TestCase):
     fixtures = [
         'WebSite.yaml',
         'Feed_all.yaml',
+        'socialaccount.socialapp.yaml'
     ]
 
     def setUp(self):
@@ -398,6 +399,10 @@ class ViewsAnonymousTest(TestCase):
         self.feed_subscriptions()
 
     def test_sitemap(self):
+        """
+        .. todo::
+            actual lazy urls.
+        """
         client = Client()
-        result = client.get("/sitemap.xml")
+        result = client.get("/feeds/sitemap.xml")
         self.assertEqual(result.status_code, 200)
