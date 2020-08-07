@@ -9,7 +9,9 @@ Subscriptions are realized in :py:mod:`feeds.models.Subscriptions`
 """
 
 from django.test import TestCase
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class TestSubscriptions(TestCase):
     """
@@ -38,7 +40,6 @@ class TestSubscriptions(TestCase):
         """
         from feeds.models.subscription import Subscription
         from feeds.models.options import Options
-        from django.contrib.auth.models import User
         options = Options(user=User.objects.get(pk=1))
         self.assertFalse(Subscription.objects.feeds(options).exists())
 

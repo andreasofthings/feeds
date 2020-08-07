@@ -75,6 +75,7 @@ class ApiTest(APITestCase):
 
         .. todo:: This ain't done yet.
         """
+        self.client.logout()
         response = self.client.get('/feeds/api/websites/', format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 

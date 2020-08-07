@@ -10,5 +10,5 @@
     last_name: ''
     user_permissions: []
     username: andreas
-  model: auth.user
+  model: webapp.user
   pk: 1

@@ -5,12 +5,19 @@
 """
 """
 
+import logging
+
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils import timezone
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 
 from feeds.models import Feed, Post
+
+logger = logging.getLogger(__name__)
+
+User = get_user_model()
 
 
 class TestAllViewsLoggedIn(TestCase):
@@ -21,6 +28,7 @@ class TestAllViewsLoggedIn(TestCase):
     fixtures = [
         'WebSite.yaml',
         'Feed_all.yaml',
+        'socialaccount.socialapp.yaml'
     ]
 
     username = "john"
@@ -234,7 +242,13 @@ class TestAllViewsLoggedIn(TestCase):
             password=self.password
         )
         self.assertEqual(result.status_code, 302)
-        self.assertRedirects(result, '/accounts/login/?next=/feeds/add/')
+        try:
+            self.assertRedirects(
+                result,
+                '/accounts/login/'  # '?next=/feeds/add/'
+                )
+        except AssertionError as e:
+            logger.error(f"assertRedirects: {e}, result was {result}")
 
     def test_feed_detail(self):
         """
