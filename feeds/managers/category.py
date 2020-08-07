@@ -20,6 +20,10 @@ class CategoryManager(models.Manager):
     """
 
     def forPost(self, *args, **kwargs):
+        """
+        for every post.
+
+        """
         post = kwargs['post']
         categories = kwargs['categories']
 
