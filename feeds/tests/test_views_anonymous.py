@@ -26,7 +26,7 @@ class ViewsAnonymousTest(TestCase):
     fixtures = [
         'WebSite.yaml',
         'Feed_all.yaml',
-        'socialaccount.socialapp.yaml'
+        # 'socialaccount.socialapp.yaml'
     ]
 
     def setUp(self):

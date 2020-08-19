@@ -33,7 +33,7 @@ class TagManager(models.Manager):
                 # import sys, traceback
                 # exc_type, exc_value, exc_traceback = sys.exc_info()
                 # traceback.print_exc(limit=2, file=sys.stdout)
-        post.tags.add(t)
+            post.tags.add(t)
         post.save()
 
     def get_by_natural_key(self, slug):

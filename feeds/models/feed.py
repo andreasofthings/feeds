@@ -508,12 +508,20 @@ class Feed(models.Model):
 
         Wrap `feedparser.parse` to handle all exceptions.
         """
+
+        parsed = feedparser.parse(
+            self.feed_url,
+            agent=USER_AGENT,
+            etag=self.etag
+        )
+
         try:
-            parsed = feedparser.parse(
-                self.feed_url,
-                agent=USER_AGENT,
-                etag=self.etag
-            )
+            pass
+            """
+            .. todo::
+              the actual feedparser.parse code goes here.
+              we need to catch less generic errors, though....
+            """
         except Exception as error:
             self.errors = self.errors+1
             self.save()  # touch timestamp

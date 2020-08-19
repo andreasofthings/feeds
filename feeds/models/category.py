@@ -105,14 +105,14 @@ class Category(models.Model):
 
     name = models.CharField(
         max_length=200,
-        unique=True,
+#        unique=True,
         help_text='Short descriptive name for this category.',
     )
 
     slug = models.SlugField(
         max_length=255,
         db_index=True,
-        unique=True,
+#        unique=True,
         help_text='Short descriptive unique name for use in urls.',
     )
 

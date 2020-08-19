@@ -26,7 +26,7 @@ class OptionsViewsTest(TestCase):
     password = "password"
 
     fixtures = [
-        'socialaccount.socialapp.yaml'
+        # 'socialaccount.socialapp.yaml'
     ]
 
     def setUp(self):
