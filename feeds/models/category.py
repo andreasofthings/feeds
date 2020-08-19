@@ -11,102 +11,29 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
 
 import logging
 
-from ..managers import CategoryManager
-from ..managers import TagManager
-
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
+# from ..managers import CategoryManager
 
 
 logger = logging.getLogger(__name__)
 
 
-class Tag(models.Model):
-    """
-    A tag.
-    """
-
-    objects = TagManager()
-    """
-    Overwrite the inherited manager with the
-    custom :mod:`feeds.models.TagManager`
-    """
-
-    name = models.CharField(
-        _('name'),
-        max_length=50,
-        unique=True,
-        db_index=True
-    )
-    """The name of the Tag."""
-
-    slug = models.SlugField(
-        max_length=255,
-        unique=True,
-        db_index=True,
-        help_text='Short descriptive unique name for use in urls.',
-    )
-    """
-    The slug of the Tag.
-    It can be used in any URL referencing this particular Tag.
-    """
-
-    relevant = models.BooleanField(default=False)
-    """
-    Indicates whether this Tag is relevant for further processing.
-    It should be used to allow administrative intervention.
-    """
-
-    touched = models.DateTimeField(auto_now=True)
-    """Keep track of when this Tag was last used."""
-
-    content_type = models.ForeignKey(
-        ContentType,
-        null=True,
-        on_delete=models.CASCADE
-    )
-    object_id = models.PositiveIntegerField(null=True)
-    content_object = GenericForeignKey('content_type', 'object_id')
-
-    class Meta:
-        """
-        Django Meta.
-        """
-        app_label = "feeds"
-        ordering = ('name',)
-        verbose_name = _('tag')
-        verbose_name_plural = _('tags')
-
-    def __str__(self):
-        """
-        Human readable representation of the object.
-        """
-        return self.name
-
-    def natural_key(self):
-        return self.slug
-
-    def get_absolute_url(self):
-        return reverse('planet:tag-detail', args=[str(self.slug),])
-
-
 class Category(models.Model):
     """
-    Category model to be used for categorization of content. Categories are
+    Category model.
+
+    Model to be used for categorization of content. Categories are
     high level constructs to be used for grouping and organizing content,
     thus creating a site's table of contents.
     """
-    objects = CategoryManager()
+    # objects = CategoryManager()
 
     name = models.CharField(
         max_length=200,
-#        unique=True,
-        help_text='Short descriptive name for this category.',
+        # unique=True,
+        help_text=_('Short descriptive name for this category.'),
     )
 
     slug = models.SlugField(
@@ -162,9 +89,3 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse('planet:category-detail', args=[str(self.slug)])
-
-
-@receiver(pre_save, sender=Tag)
-def make_slug(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = slugify(instance.name)
