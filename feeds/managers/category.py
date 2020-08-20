@@ -20,25 +20,34 @@ class CategoryManager(models.Manager):
     """
 
     def forPost(self, *args, **kwargs):
+        """
+        For every post.
+
+        Un-nest `categories` attached to Post. Store them all separately.
+        """
         post = kwargs['post']
         categories = kwargs['categories']
 
+        logger.error(f"Post: {post}")
+        logger.error(f"Categories: {categories}")
+
         for category in categories:
-            slug=slugify(category)
+            slug = slugify(category)
+            logger.error(f"Have to work with {category} (Slug: {slug}) now.")
+            logger.error("Type: {}".format(type(category)))
             try:
                 cat = self.get(
                     name=category,
                     slug=slug,
-                    # parent=None
-                )
-            except feeds.models.category.Category.DoesNotExist as e:
-                cat, c = self.get_or_create(
+                    )
+            except feeds.models.category.Category.DoesNotExist as wtf:
+                cat = self.create(
                     name=category,
                     slug=slug,
-                    # parent=None,
-                )
-                cat.save()
-                logger.info(f"Category '{category}' did not exist, created {cat}({cat.id}).")
+                    )
+                logger.error(f"WTF {wtf}")
+
+            logger.info(f"Category '{category}' did not exist, created {cat}({cat.id}).")
             post.categories.add(cat)
 
     def get_by_natural_key(self, slug):

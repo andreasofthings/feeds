@@ -7,13 +7,15 @@ PostManager
 ===========
 """
 
-import sys, traceback
-
+import sys
 import logging
 from django.db import models
 import time
 import datetime
 from django.utils import timezone
+
+from ..models.category import Category
+from ..models.tag import Tag
 
 logger = logging.getLogger(__name__)
 
@@ -74,24 +76,23 @@ class PostManager(models.Manager):
             post.author_email = entry.get("author_email", "")
             post.save()
 
-        try:
-            tags = entry.get("tags", [])
-            if tags:
-                post.tags.forPost(
-                    post=post,
-                    tags=tags
-                )
-        except Exception as e:
-            logger.error("Tags error: %s", e)
 
-        category = []
-        category.append(entry.get("category", []))
+        tags = entry.get("tags", [])
+        if tags:
+            for tag in tags:
+                t, c = Tag.objects.get_or_create(name=tag['term'])
+                if c:
+                    t.save()
+                post.tags.add(t)
 
+        category = entry.get("category", "")
+        # logger.error(f"Post has the following categories: {categories}")
+        # logger.error("Entry has the following keys: {}".format(entry.keys()))
         if category:
-            post.categories.forPost(
-                post=post,
-                categories=category
-            )
+            cat, c = Category.objects.get_or_create(name=category)
+            if c:
+                cat.save()
+            post.categories.add(cat)
 
         return post, created
 

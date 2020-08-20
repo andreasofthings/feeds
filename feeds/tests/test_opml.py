@@ -8,8 +8,10 @@ Test the recursive opml import.
 
 from feeds.views.views import opmlImport
 from django.test import TestCase, Client
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.urls import reverse
+
+User = get_user_model()
 
 upload_file = 'feeds/tests/data/feedlyshort.opml'
 

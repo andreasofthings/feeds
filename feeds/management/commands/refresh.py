@@ -7,6 +7,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('feeds', nargs='+', type=int)
+        parser.add_argument('--force', type=bool, default=False)
 
     def handle(self, *args, **options):
         for feed_id in options['feeds']:

@@ -1,6 +1,7 @@
 #! /usr/bin/python
 
-from .category import Category, Tag
+from .category import Category
+from .tag import Tag
 from .editorcategory import EditorCategory
 from .enclosure import Enclosure
 from .feed import Feed

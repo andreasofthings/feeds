@@ -198,9 +198,11 @@ class OptionsView(RetrieveAPIView):
 
         Return Users Options.
         """
-        queryset = Options.objects.filter(user=request.user)
-        result = OptionsSerializer(queryset, many=True)
-        return response.Response(result.data)
+        if request.auth:
+            queryset = Options.objects.filter(user=request.user)
+            result = OptionsSerializer(queryset, many=True)
+            return response.Response(result.data)
+        return response.Response(None)
 
 
 class WebSiteViewSet(viewsets.ModelViewSet):

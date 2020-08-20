@@ -25,6 +25,10 @@ class OptionsViewsTest(TestCase):
     realname = "John Lennon"
     password = "password"
 
+    fixtures = [
+        # 'socialaccount.socialapp.yaml'
+    ]
+
     def setUp(self):
         """
         Set up enivironment to test models
