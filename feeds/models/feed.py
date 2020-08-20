@@ -509,11 +509,14 @@ class Feed(models.Model):
         Wrap `feedparser.parse` to handle all exceptions.
         """
 
-        parsed = feedparser.parse(
-            self.feed_url,
-            agent=USER_AGENT,
-            etag=self.etag
-        )
+        try:
+            parsed = feedparser.parse(
+                self.feed_url,
+                agent=USER_AGENT,
+                etag=self.etag
+            )
+        except StopIteration as stopIteration:
+            raise FeedsParseError(f"Feedparser raise StopIteration for {self.feed_url}")
 
         try:
             pass
