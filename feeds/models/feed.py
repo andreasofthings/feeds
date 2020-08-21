@@ -516,7 +516,9 @@ class Feed(models.Model):
                 etag=self.etag
             )
         except StopIteration as stopIteration:
-            raise FeedsParseError(f"Feedparser raise StopIteration for {self.feed_url}")
+            raise FeedsParseError(
+                "Feedparser raise StopIteration for {}".format(self.feed_url)
+            )
 
         try:
             pass
