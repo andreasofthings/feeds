@@ -265,6 +265,13 @@ class Feed(models.Model):
     announce_posts = models.BooleanField(default=False)
     """Whether to socially announce new articles posts"""
 
+    last_k_checked = models.DateTimeField(
+        _('last checked by kubernetes service'),
+        null=True,
+        blank=True,
+        auto_now=True,
+    )
+
     objects = FeedManager()
 
     def save(self, *args, **kwargs):
