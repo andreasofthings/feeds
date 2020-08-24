@@ -54,7 +54,7 @@ setup(
         'django-formtools>=2.2',
         'django-crispy-forms>=1.6.0',
         'djangorestframework>=3.8.0',
-        'feedparser==5.2.1',
+        'feedparser==6.0.0b1',
         'pyyaml',
         'google-cloud',
         'google-cloud-tasks',

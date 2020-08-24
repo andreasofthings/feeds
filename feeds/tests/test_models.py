@@ -93,6 +93,16 @@ class ModelTest(TransactionTestCase):
         # 0 == "feed_url": ' https://www.heise.de/newsticker/heise-atom.xml'
         self.assertEqual(feeds[0].refresh(), FEED_ERRPARSE)
 
+    def test_feed_feedparseerror(self):
+        """
+        Test a :py:mod:`feeds:models.Feed` with a prod-failing  feed as an
+        input, that can be found but doesn't parse well.
+        """
+        url = "https://feeds.feedburner.com/PythonSoftwareFoundationNews"
+        feed = Feed(feed_url=url)
+        # 0 == "feed_url": ' https://www.heise.de/newsticker/heise-atom.xml'
+        self.assertEqual(feed.refresh(), FEED_OK)
+
     def test_enclosure(self):
         """
         Enclosure doesn't have a whole lot of functions.

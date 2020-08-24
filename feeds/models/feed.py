@@ -509,11 +509,17 @@ class Feed(models.Model):
         Wrap `feedparser.parse` to handle all exceptions.
         """
 
-        parsed = feedparser.parse(
-            self.feed_url,
-            agent=USER_AGENT,
-            etag=self.etag
-        )
+        try:
+            parsed = feedparser.parse(
+                self.feed_url,
+                agent=USER_AGENT,
+                etag=self.etag
+                )
+        except StopIteration as feedparser_error:
+            logger.error(f"feedparser has issues with 3.7.7: {feedparser_error}")
+            raise FeedsParseError(
+                "Feed {} couldn't be parsed `status`".format(self.name)
+            )
 
         try:
             pass
