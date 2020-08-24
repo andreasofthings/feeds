@@ -66,7 +66,9 @@
         </div>
     </div>
     <div class="col-md-2">
-      {{ node.tags }}
+      {% for t in object.tags.all %}
+        <h6><span class="badge badge-secondary"><a href="{{ t.get_absolute_url }}">{{t}}</a></span></h6>
+      {% endfor %}
     </div>
 </div>
 {% endfor %}

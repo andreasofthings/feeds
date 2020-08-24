@@ -12,34 +12,34 @@
 
 {%block content%}
 <div class="row">
-    <div class="span4">
-        <h3>
-            {{object}}
-            {% if user.is_authenticated %}
-              {% if perms.feeds.change_tag %}<a href="{{object.get_absolute_url}}update" class="btn btn-mini tag-tooltip" title="edit tag"><i class="icon-edit"></i></a>{% endif %}
-              {% if perms.feeds.delete_tag %}<a href="{{object.get_absolute_url}}delete" class="btn btn-mini tag-tooltip" title="delete tag"><i class="icon-trash"></i></a>{% endif %}
-            {% endif %}
-        </h3>
-    </div>
-    <div class="span7">
-        <table class="table table-condensed table-hover">
-            <tr><td>Article</td><td>Options</td></tr>
-            {% for post in object.posts %}
-            <tr>
-                {% if user.is_authenticated %}
-                    <td><a href="{{ post.get_absolute_url }}">{{ post }}</a></td>
-                {% else %}
-                    <td>{{ post }}</td>
-                {% endif %}
-                <td>
-    {% if user.is_authenticated %}
-      <a href="{{ post.get_absolute_url }}" class="btn btn-mini tag-tooltip" title="Go to Post"><i class="icon-step-forward"></i></a>
-    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
+  <div class="span4">
+    <h3>
+      {{object}}
+        {% if user.is_authenticated %}
+          {% if perms.feeds.change_tag %}<a href="{{object.get_absolute_url}}update" class="btn btn-mini tag-tooltip" title="edit tag"><i class="icon-edit"></i></a>{% endif %}
+          {% if perms.feeds.delete_tag %}<a href="{{object.get_absolute_url}}delete" class="btn btn-mini tag-tooltip" title="delete tag"><i class="icon-trash"></i></a>{% endif %}
+        {% endif %}
+    </h3>
+  </div>
+  <div class="span7">
+    <table class="table table-condensed table-hover">
+      <tr><td>Article</td><td>Options</td></tr>
+      {% for post in object.tag_posts.all %}
+      <tr>
+        {% if user.is_authenticated %}
+          <td><a href="{{ post.get_absolute_url }}">{{ post }}</a></td>
+        {% else %}
+          <td>{{ post }}</td>
+        {% endif %}
+        <td>
+          {% if user.is_authenticated %}
+          <a href="{{ post.get_absolute_url }}" class="btn btn-mini tag-tooltip" title="Go to Post"><i class="icon-step-forward"></i></a>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </table>
+  </div>
 </div>
 {%endblock%}
 
@@ -47,5 +47,3 @@
 {% block additional_scripts_end %}
     <script defer src="{{ STATIC_URL }}feeds/tag_detail.js"> </script>
 {% endblock %}
-
-
