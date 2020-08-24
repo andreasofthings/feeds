@@ -275,7 +275,7 @@ class Feed(models.Model):
         """
         if self.errors > getattr(settings, 'FEEDS_ERROR_THRESHOLD', 3):
             self.is_active = False
-        return super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         """
