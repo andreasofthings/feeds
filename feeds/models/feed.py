@@ -20,6 +20,7 @@ import sys
 import traceback
 
 from collections import Counter
+import urllib
 
 from django.db import models
 from django.conf import settings
@@ -526,6 +527,11 @@ class Feed(models.Model):
             logger.error(f"feedparser has issues with 3.7.7: {feedparser_error}")
             raise FeedsParseError(
                 "Feed {} couldn't be parsed `status`".format(self.name)
+            )
+        except urllib.error.URLError as feedparser_error:
+            logger.error(f"feedparser connection timed out: {feedparser_error}")
+            raise FeedsParseError(
+                "Connection to Feed {} timed out".format(self.name)
             )
 
         try:
