@@ -13,6 +13,7 @@ Stores as much as possible coming out of the feed.
 
 from __future__ import unicode_literals
 
+import ssl
 import time
 import logging
 import datetime
@@ -532,6 +533,11 @@ class Feed(models.Model):
             logger.error(f"feedparser connection timed out: {feedparser_error}")
             raise FeedsParseError(
                 "Connection to Feed {} timed out".format(self.name)
+            )
+        except ssl.SSLCertVerificationError as feedparser_error:
+            logger.error(f"feedparser ssl-verification error: {feedparser_error}")
+            raise FeedsParseError(
+                "Feed {} raised ssl exception.".format(self.name)
             )
 
         try:
