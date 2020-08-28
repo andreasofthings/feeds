@@ -282,8 +282,12 @@ class Feed(models.Model):
 
         Override default save method to enforce failure count update.
         """
-        if self.errors > getattr(settings, 'FEEDS_ERROR_THRESHOLD', 3):
-            self.is_active = False
+        if not self._state.adding and not (
+                self.slug != self._loaded_values['slug']):
+            raise ValueError("Slug is auto-populated.")
+        else:
+            if self.errors > getattr(settings, 'FEEDS_ERROR_THRESHOLD', 3):
+                self.is_active = False
         super().save(*args, **kwargs)
 
     class Meta:
