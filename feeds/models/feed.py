@@ -276,6 +276,13 @@ class Feed(models.Model):
 
     objects = FeedManager()
 
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super().from_db(db, field_names, values)
+        # customization to store the original field values on the instance
+        instance._loaded_values = dict(zip(field_names, values))
+        return instance
+
     def save(self, *args, **kwargs):
         """
         Save.
