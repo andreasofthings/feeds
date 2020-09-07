@@ -6,11 +6,13 @@
 helper functions for angryplanet.feeds
 """
 
-from django.core.cache import cache
-
+from typing import List, Tuple
 import logging
 import requests
 import yaml
+
+from django.core.cache import cache
+
 
 
 try:
@@ -76,18 +78,24 @@ class feedFinder(HTMLParser):
         return self._links
 
 
-def getFeedsFromSite(site):
+TitleAndURL = Tuple[str, str]
+ListOfTitleAndURL = List[TitleAndURL]
+
+def getFeedsFromSite(site: str) -> ListOfTitleAndURL:
     """
+    getFeedsFromSite.
+
     Take 'site' in form of an URL as an Argument.
     Fetches the site, parses it, finds embedded links.
     """
-
     from urllib.parse import urlparse, urlunparse
     parser = feedFinder()
     sitecomponents = urlparse(site)
 
     html = cache.get_or_set(site, requests.get(site), 10600)
     parser.feed(html.text)
+    logger.error(html)
+    logger.error(html.text)
     result = []
 
     links = list(filter(lambda x: "type" in x, parser.links))
@@ -106,7 +114,7 @@ def getFeedsFromSite(site):
             feedcomponents.query,
             feedcomponents.fragment)
             )
-        result.append(feed)
+        result.append(html.get('title', None), feed)
 
         logger.debug("appended %s to result", feed)
     return result
