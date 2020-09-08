@@ -61,6 +61,8 @@ class feedFinder(HTMLParser):
     Used in `:py:feeds.tools.getFeedsFromSite`
     """
     _links = []
+    _title = ""
+    getTitle = False
 
     def __init__(self):
         self._links = []
@@ -72,14 +74,29 @@ class feedFinder(HTMLParser):
             for k, v in attrs:
                 attr[k] = v
             self._links.append(attr)
+        if tag == 'title':
+            self.getTitle = True
+
+    def handle_data(self, data):
+        if self.getTitle:
+            self._title = data
+
+    def handle_endtag(self, tag):
+        if tag == 'title':
+            self.getTitle = False
 
     @property
     def links(self):
         return self._links
 
+    @property
+    def title(self):
+        return self._title
+
 
 TitleAndURL = Tuple[str, str]
 ListOfTitleAndURL = List[TitleAndURL]
+
 
 def getFeedsFromSite(site: str) -> ListOfTitleAndURL:
     """
@@ -94,8 +111,6 @@ def getFeedsFromSite(site: str) -> ListOfTitleAndURL:
 
     html = cache.get_or_set(site, requests.get(site), 10600)
     parser.feed(html.text)
-    logger.error(html)
-    logger.error(html.text)
     result = []
 
     links = list(filter(lambda x: "type" in x, parser.links))
@@ -107,14 +122,14 @@ def getFeedsFromSite(site: str) -> ListOfTitleAndURL:
         if feedcomponents.netloc in ("", None) or \
             feedcomponents.scheme in ("", None):
             feed = urlunparse((
-            sitecomponents.scheme,
-            sitecomponents.netloc,
-            feedcomponents.path,
-            feedcomponents.params,
-            feedcomponents.query,
-            feedcomponents.fragment)
+                sitecomponents.scheme,
+                sitecomponents.netloc,
+                feedcomponents.path,
+                feedcomponents.params,
+                feedcomponents.query,
+                feedcomponents.fragment)
             )
-        result.append(html.get('title', None), feed)
+        result.append((parser.title, feed))
 
         logger.debug("appended %s to result", feed)
     return result

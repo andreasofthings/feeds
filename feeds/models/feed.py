@@ -24,6 +24,7 @@ from collections import Counter
 import urllib
 
 from django.db import models
+from django.db.models import DEFERRED
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils.text import slugify
@@ -276,12 +277,6 @@ class Feed(models.Model):
 
     objects = FeedManager()
 
-    @classmethod
-    def from_db(cls, db, field_names, values):
-        instance = super().from_db(db, field_names, values)
-        # customization to store the original field values on the instance
-        instance._loaded_values = dict(zip(field_names, values))
-        return instance
 
     def save(self, *args, **kwargs):
         """
@@ -289,12 +284,8 @@ class Feed(models.Model):
 
         Override default save method to enforce failure count update.
         """
-        if not self._state.adding and not (
-                self.slug != self._loaded_values['slug']):
-            raise ValueError("Slug is auto-populated.")
-        else:
-            if self.errors > getattr(settings, 'FEEDS_ERROR_THRESHOLD', 3):
-                self.is_active = False
+        if self.errors > getattr(settings, 'FEEDS_ERROR_THRESHOLD', 3):
+            self.is_active = False
         super().save(*args, **kwargs)
 
     class Meta:

@@ -8,6 +8,10 @@
 from django.test import TestCase
 from feeds.models import Tag
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class TestPostModel(TestCase):
     """

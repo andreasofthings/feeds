@@ -12,6 +12,10 @@ from datetime import timedelta
 
 from feeds.models import Post
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class ManagerTest(TestCase):
     """
@@ -28,7 +32,7 @@ class ManagerTest(TestCase):
         """
         Set up enivironment to test models
         """
-        pass
+        logger.debug("setUp Tests for `Post`-Manager.")
 
     def test_post_manager_older_than(self):
         """

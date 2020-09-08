@@ -9,6 +9,9 @@ Test Management Command
 from django.test import TransactionTestCase
 from django.core.management import call_command
 from django.core.management.base import CommandError
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ManagementTest(TransactionTestCase):
@@ -34,6 +37,7 @@ class ManagementTest(TransactionTestCase):
                   runs with no exception, respectivly the correct exception.
                   However, the command does not return anything.
         """
+        logger.debug("Test the `refresh` management command.")
         call_command("refresh", "1")
         with self.assertRaises(CommandError):
             call_command("refresh", "999")

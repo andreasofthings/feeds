@@ -14,13 +14,7 @@ from feeds.models import Enclosure
 from feeds import FEED_OK, FEED_SAME, FEED_ERRHTTP, FEED_ERRPARSE
 import logging
 
-import warnings
-warnings.filterwarnings(
-    'error', r"DateTimeField .* received a naive datetime",
-    RuntimeWarning, r'django\.db\.models\.fields',
-)
-
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class ModelTest(TransactionTestCase):

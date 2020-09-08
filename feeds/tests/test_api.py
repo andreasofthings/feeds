@@ -10,7 +10,7 @@ from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
 import logging
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class ApiTest(APITestCase):
@@ -52,7 +52,7 @@ class ApiTest(APITestCase):
         .. input: None.
         .. expect:: 403 FORBIDDEN
         """
-        log.debug("test_options_anonymous")
+        logger.debug("test_options_anonymous")
         self.client.logout()
         # user = auth.get_user(self.client)
         response = self.client.get('/feeds/api/options/', format='json')

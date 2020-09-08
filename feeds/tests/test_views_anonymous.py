@@ -7,6 +7,9 @@
 
 from django.test import TestCase, Client, RequestFactory
 from django.urls import reverse
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ViewsAnonymousTest(TestCase):
