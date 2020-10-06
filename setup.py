@@ -58,7 +58,7 @@ setup(
         'pyyaml',
         'google-cloud',
         'google-cloud-tasks',
-        'google-cloud-bigquery<2.0.0',
+        # 'google-cloud-bigquery<2.0.0',
         # 'requests>=2.18',
         'django_haystack>=3.0b1',
     ],
