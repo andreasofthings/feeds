@@ -14,13 +14,7 @@ from feeds.models import Enclosure
 from feeds import FEED_OK, FEED_SAME, FEED_ERRHTTP, FEED_ERRPARSE
 import logging
 
-import warnings
-warnings.filterwarnings(
-    'error', r"DateTimeField .* received a naive datetime",
-    RuntimeWarning, r'django\.db\.models\.fields',
-)
-
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class ModelTest(TransactionTestCase):
@@ -92,6 +86,16 @@ class ModelTest(TransactionTestCase):
         feeds = Feed.objects.filter(pk=147).filter(is_active=True)
         # 0 == "feed_url": ' https://www.heise.de/newsticker/heise-atom.xml'
         self.assertEqual(feeds[0].refresh(), FEED_ERRPARSE)
+
+    def test_feed_feedparseerror(self):
+        """
+        Test a :py:mod:`feeds:models.Feed` with a prod-failing  feed as an
+        input, that can be found but doesn't parse well.
+        """
+        url = "https://feeds.feedburner.com/PythonSoftwareFoundationNews"
+        feed = Feed(feed_url=url)
+        # 0 == "feed_url": ' https://www.heise.de/newsticker/heise-atom.xml'
+        self.assertEqual(feed.refresh(), FEED_OK)
 
     def test_enclosure(self):
         """

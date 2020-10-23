@@ -106,7 +106,7 @@ class CronView(views.APIView):
                     # "application/json"
                     LOG.debug("emitted task `%s` for obj", task)
                     self.delay += 10
-                    task = client.create_task(parent, task)
+                    task = client.create_task(parent=parent, task=task)
                 else:
                     return response.Response(
                         "No change!",

@@ -43,8 +43,9 @@ class WebSiteSubmitWizardView(LoginRequiredMixin, SessionWizardView):
         if step == u'Feeds':
             # form = WebSiteFeedAddForm()
             step_0_data = self.storage.get_step_data('WebSite')
-            links = getFeedsFromSite(step_0_data['WebSite-url'])
-            for title, href in links:
+            logger.error(step_0_data)
+            links = getFeedsFromSite(step_0_data['WebSite-website_url'])
+            for href in links:
                 form.fields[href] = forms.BooleanField(
                     initial=False,
                     required=False,

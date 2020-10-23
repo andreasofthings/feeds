@@ -13,7 +13,11 @@ from django.contrib.auth import get_user_model
 from feeds.views import OptionsView
 from feeds.models import Options
 
-User = get_user_model()
+import logging
+
+logger = logging.getLogger(__name__)
+
+User = get_user_model()  # instead of importing, get the custom model.
 
 
 class OptionsViewsTest(TestCase):
@@ -26,7 +30,7 @@ class OptionsViewsTest(TestCase):
     password = "password"
 
     fixtures = [
-        'socialaccount.socialapp.yaml'
+        # 'socialaccount.socialapp.yaml'
     ]
 
     def setUp(self):

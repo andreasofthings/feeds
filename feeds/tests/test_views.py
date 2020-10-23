@@ -28,7 +28,7 @@ class TestAllViewsLoggedIn(TestCase):
     fixtures = [
         'WebSite.yaml',
         'Feed_all.yaml',
-        'socialaccount.socialapp.yaml'
+        # 'socialaccount.socialapp.yaml'
     ]
 
     username = "john"
@@ -245,7 +245,7 @@ class TestAllViewsLoggedIn(TestCase):
         try:
             self.assertRedirects(
                 result,
-                '/accounts/login/'  # '?next=/feeds/add/'
+                '/accounts/login/?next=/feeds/add/'
                 )
         except AssertionError as e:
             logger.error(f"assertRedirects: {e}, result was {result}")

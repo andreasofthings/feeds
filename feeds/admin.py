@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from .models.files import FileModel
 from .models.website import WebSite
-from .models.category import Category, Tag
+from .models.category import Category
+from .models.tag import Tag
 from .models.editorcategory import EditorCategory
 from .models.enclosure import Enclosure
 from .models.feed import Feed

@@ -9,6 +9,9 @@ from django.test import TestCase, Client
 from django.urls import reverse
 
 from feeds.models import Feed
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class TestRSS(TestCase):

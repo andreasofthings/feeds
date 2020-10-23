@@ -11,6 +11,10 @@ from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 User = get_user_model()
 
 upload_file = 'feeds/tests/data/feedlyshort.opml'

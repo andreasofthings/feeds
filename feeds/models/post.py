@@ -21,7 +21,8 @@ from django.utils.translation import ugettext_lazy as _
 from .feed import Feed
 from ..managers import PostManager
 
-from .category import Tag, Category
+from .category import Category
+from .tag import Tag
 
 
 logger = logging.getLogger(__name__)
@@ -29,6 +30,8 @@ logger = logging.getLogger(__name__)
 
 class Post(models.Model):
     """
+    Post model.
+
     Model to hold an actual feed entry
 
     .. required::

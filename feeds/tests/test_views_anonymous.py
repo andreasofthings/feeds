@@ -7,6 +7,9 @@
 
 from django.test import TestCase, Client, RequestFactory
 from django.urls import reverse
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ViewsAnonymousTest(TestCase):
@@ -26,7 +29,7 @@ class ViewsAnonymousTest(TestCase):
     fixtures = [
         'WebSite.yaml',
         'Feed_all.yaml',
-        'socialaccount.socialapp.yaml'
+        # 'socialaccount.socialapp.yaml'
     ]
 
     def setUp(self):

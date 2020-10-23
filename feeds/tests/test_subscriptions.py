@@ -10,8 +10,12 @@ Subscriptions are realized in :py:mod:`feeds.models.Subscriptions`
 
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+import logging
+
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
+
 
 class TestSubscriptions(TestCase):
     """

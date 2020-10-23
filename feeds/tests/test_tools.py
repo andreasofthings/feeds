@@ -7,6 +7,9 @@ Test all tools
 """
 
 from django.test import TestCase
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class TestTools(TestCase):

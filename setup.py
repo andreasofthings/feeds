@@ -49,11 +49,11 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
     install_requires=[
-        'django>=3.0.0',
+        'django~=3.1.0',
         'coreapi',
         'django-formtools>=2.2',
         'django-crispy-forms>=1.6.0',
-        'djangorestframework>=3.12.0',
+        'djangorestframework~=3.12.0',
         'feedparser',
         'pyyaml',
         'google-cloud',

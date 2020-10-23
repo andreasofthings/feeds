@@ -6,11 +6,13 @@
 helper functions for angryplanet.feeds
 """
 
-from django.core.cache import cache
-
+from typing import List, Tuple
 import logging
 import requests
 import yaml
+
+from django.core.cache import cache
+
 
 
 try:
@@ -59,6 +61,8 @@ class feedFinder(HTMLParser):
     Used in `:py:feeds.tools.getFeedsFromSite`
     """
     _links = []
+    _title = ""
+    getTitle = False
 
     def __init__(self):
         self._links = []
@@ -70,18 +74,37 @@ class feedFinder(HTMLParser):
             for k, v in attrs:
                 attr[k] = v
             self._links.append(attr)
+        if tag == 'title':
+            self.getTitle = True
+
+    def handle_data(self, data):
+        if self.getTitle:
+            self._title = data
+
+    def handle_endtag(self, tag):
+        if tag == 'title':
+            self.getTitle = False
 
     @property
     def links(self):
         return self._links
 
+    @property
+    def title(self):
+        return self._title
 
-def getFeedsFromSite(site):
+
+TitleAndURL = Tuple[str, str]
+ListOfTitleAndURL = List[TitleAndURL]
+
+
+def getFeedsFromSite(site: str) -> ListOfTitleAndURL:
     """
+    getFeedsFromSite.
+
     Take 'site' in form of an URL as an Argument.
     Fetches the site, parses it, finds embedded links.
     """
-
     from urllib.parse import urlparse, urlunparse
     parser = feedFinder()
     sitecomponents = urlparse(site)
@@ -99,14 +122,14 @@ def getFeedsFromSite(site):
         if feedcomponents.netloc in ("", None) or \
             feedcomponents.scheme in ("", None):
             feed = urlunparse((
-            sitecomponents.scheme,
-            sitecomponents.netloc,
-            feedcomponents.path,
-            feedcomponents.params,
-            feedcomponents.query,
-            feedcomponents.fragment)
+                sitecomponents.scheme,
+                sitecomponents.netloc,
+                feedcomponents.path,
+                feedcomponents.params,
+                feedcomponents.query,
+                feedcomponents.fragment)
             )
-        result.append(feed)
+        result.append((parser.title, feed))
 
         logger.debug("appended %s to result", feed)
     return result

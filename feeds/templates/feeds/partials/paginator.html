@@ -7,12 +7,12 @@
       {% if page_obj.has_previous %}
         <li class="previous page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link"><span aria-hidden="true">&larr;</span> {% trans "Newer" %}</a></li>
       {% else %}
-        <li class="disabled"><a href="#" class="page-link">{% trans "Newer" %}</a></li>
+        <li class="page-item disabled"><a href="#" class="page-link">{% trans "Newer" %}</a></li>
       {% endif %}
       {% for page in page_obj.paginator.page_range %}
           {% if page == page_obj.number %}
             <li class="active page-item">
-              <a href="#">{{ page }}
+              <a href="#" class="page-link">{{ page }}
                 <span class="sr-only">
                   (current)
                 </span>
@@ -25,7 +25,7 @@
       {% if page_obj.has_next %}
         <li class="page-item"><a href="?page={{page_obj.next_page_number}}" class="page-link">{% trans "Older" %}<span aria-hidden="true">&rarr;</span></a></li>
       {% else %}
-          <li class="disabled"><a href="#" class="page-link">{% trans "Older" %}</a></li>
+          <li class="page-item disabled"><a href="#" class="page-link">{% trans "Older" %}</a></li>
       {% endif %}
   </ul>
   </nav>

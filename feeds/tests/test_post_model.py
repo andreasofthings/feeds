@@ -7,6 +7,9 @@
 
 from django.test import TestCase
 from feeds.models import Post, Feed
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class TestPostModel(TestCase):
