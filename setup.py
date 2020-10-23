@@ -61,6 +61,7 @@ setup(
         # 'google-cloud-bigquery<2.0.0',
         # 'requests>=2.18',
         'django_haystack>=3.0b1',
+        'django-taggit',
     ],
     dependency_links=[
         # 'git+git://github.com/andreasofthings/django-haystack.git@master#egg=django-haystack',
