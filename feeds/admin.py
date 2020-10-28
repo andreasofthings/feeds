@@ -182,7 +182,7 @@ class WebSiteAdmin(admin.ModelAdmin):
     """
     WebSite Admin Class
     """
-    list_display = ('name', 'netloc', 'path', 'slug', 'feedcount', 'commercial',)
+    list_display = ('name', 'netloc', 'path', 'slug', 'feedcount', 'commercial', 'tags')
     inlines = [
         FeedInline,
     ]
