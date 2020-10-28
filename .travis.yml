@@ -38,6 +38,6 @@ after_success:
 notifications:
   webhooks:
     urls:
-      - https://pramari.de/webhook/travis
+      - https://www.pramari.de/webhook/travis/
     on_success: always
     on_failure: never

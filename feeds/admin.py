@@ -182,7 +182,14 @@ class WebSiteAdmin(admin.ModelAdmin):
     """
     WebSite Admin Class
     """
-    list_display = ('name', 'netloc', 'path', 'slug', 'feedcount', 'commercial', 'tags')
+    fieldsets = (
+        (None, {
+            'fields': (
+                'name', 'netloc', 'path', 'slug',
+                'feedcount', 'commercial', 'tags',
+                )
+            }
+        ))
     inlines = [
         FeedInline,
     ]
