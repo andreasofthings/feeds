@@ -189,7 +189,7 @@ class WebSiteAdmin(admin.ModelAdmin):
                 'feedcount', 'commercial', 'tags',
                 )
             }
-        ))
+        ),)
     list_display = (
         'name', 'netloc', 'path', 'slug', 'feedcount', 'commercial',
     )
