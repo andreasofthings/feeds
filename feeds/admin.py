@@ -190,6 +190,9 @@ class WebSiteAdmin(admin.ModelAdmin):
                 )
             }
         ))
+    list_display = (
+        'name', 'netloc', 'path', 'slug', 'feedcount', 'commercial',
+    )
     inlines = [
         FeedInline,
     ]
