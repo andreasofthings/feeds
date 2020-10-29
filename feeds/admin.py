@@ -172,24 +172,30 @@ class OptionsAdmin(admin.ModelAdmin):
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     """
-    Class to admin User/Feed Subscriptions.
+    Admin Class for Subscriptions.
+
+    Unused until further notice.
     """
+
     pass
 
 
 @admin.register(WebSite)
 class WebSiteAdmin(admin.ModelAdmin):
     """
-    WebSite Admin Class
+    WebSite Admin Class.
+
+    Include Relevant Fields in Fieldsets and list_display.
     """
+
     fieldsets = (
         (None, {
             'fields': (
                 'name', 'netloc', 'path', 'slug',
                 'feedcount', 'commercial', 'tags',
                 )
-            }
-        ),)
+            }),
+    )
     list_display = (
         'name', 'netloc', 'path', 'slug', 'feedcount', 'commercial',
     )
