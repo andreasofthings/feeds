@@ -15,7 +15,7 @@ services:
 
 # List the versions of Django you'd like to test against
 env:
-  - DJANGO="Django>=2.0" TRAVIS="True"
+  - DJANGO="Django>=3.0" TRAVIS="True"
 
 addons:
   firefox: "latest"
@@ -38,6 +38,6 @@ after_success:
 notifications:
   webhooks:
     urls:
-      - https://pramari.de/webhook/travis
+      - https://www.pramari.de/webhook/travis/
     on_success: always
     on_failure: never
