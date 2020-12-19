@@ -1,0 +1,59 @@
+{% extends "feeds/index.html" %}
+{% load i18n %}
+{% load humanize %}
+{% load static %}
+
+{% block breadcrumb %}
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="/">Home</a>
+  <a class="breadcrumb-item" href="{% url "planet:home" %}">Feeds</a>
+  <a class="breadcrumb-item" href="{% url "planet:post-home" %}">Posts</a>
+  <a class="breadcrumb-item" href="{% url "planet:post-day-archive" day.year day.month day.day %}">{% trans "Archive" %}</a>
+  <span class="breadcrumb-item active">{{day}}</span>
+</nav>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12">
+    {% if previous_day %}
+        Previous Day: <a href="{% url "planet:post-day-archive" previous_day.year previous_day.month previous_day.day %}">{{ previous_day }}</a>
+    {% endif %}
+    {% if previous_day and next_day %}--{% endif %}
+    {% if next_day %}
+        Next Day: <a href="{% url "planet:post-day-archive" next_day.year next_day.month next_day.day %}">{{ next_day }}</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h1>{{ day }}</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <ul>
+      {% for article in object_list %}
+        <li>
+          {% if article.author %}
+            <small> {{ article.author }} @ </small>
+          {% endif %}
+          <small>
+            <a href="{{ article.feed.get_absolute_url }}" alt="{{article.feed.title}}">
+              {{article.feed.title}}
+            </a>
+          </small>
+          <small data-toggle="tooltip" data-placement="top" title="{{ article.published }}">
+            {{ article.published|naturaltime }}
+          </small>: {{ article.title }}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% endblock %}
