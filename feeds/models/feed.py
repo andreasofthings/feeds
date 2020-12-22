@@ -434,6 +434,20 @@ class Feed(models.Model):
             Either ENTRY_NEW, ENTRY_UPDATE
         """
         result = ENTRY_SAME
+        try:
+            """
+            Only a temp solution to test this in live operations.
+            It will fail on travis/CICD.
+            """
+            from newsfeed.models import NewsArticle
+            n = NewsArticle.create(**entry)
+            n.save()
+        except ImportError as error:
+            """
+            Catch the actual error.
+            Deliberately let the other errors suface.
+            """
+            logger.error("Could not import 'NewsArticle': %s" % error)
 
         if self._entry_guid(entry) in postdict.keys():
             logger.debug("update: %s", entry.title)

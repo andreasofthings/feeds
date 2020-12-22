@@ -146,6 +146,10 @@ class TagSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serialize Tag.
 
+    Serializer for Tag Information.
+
+    .. todo::
+        replace with `django-taggit`.
     """
 
     class Meta:
@@ -162,6 +166,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     """
     Seriaize Subscriptions.
 
+    Serializer for Subscription Information.
     """
 
     class Meta:

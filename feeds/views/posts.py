@@ -139,7 +139,11 @@ class PostTrackableView(RedirectView):
         """And return to the actual link."""
 
 
-class PostIndexView(ArchiveIndexView):
+class PostIndexView(
+    PaginateListMixin,
+    LoginRequiredMixin,
+    ArchiveIndexView
+):
     """
     Post Archive.
 
@@ -150,7 +154,11 @@ class PostIndexView(ArchiveIndexView):
     date_field = "published"
 
 
-class PostYearArchiveView(YearArchiveView):
+class PostYearArchiveView(
+    PaginateListMixin,
+    LoginRequiredMixin,
+    YearArchiveView
+):
     """
     Yearly Post Archive.
 
@@ -161,7 +169,11 @@ class PostYearArchiveView(YearArchiveView):
     date_field = "published"
 
 
-class PostMonthArchiveView(MonthArchiveView):
+class PostMonthArchiveView(
+    PaginateListMixin,
+    LoginRequiredMixin,
+    MonthArchiveView
+):
     """
     Monthly Post Archive.
 
@@ -173,7 +185,11 @@ class PostMonthArchiveView(MonthArchiveView):
     month_format = '%m'
 
 
-class PostWeekArchiveView(WeekArchiveView):
+class PostWeekArchiveView(
+    PaginateListMixin,
+    LoginRequiredMixin,
+    WeekArchiveView
+):
     """
     Weekly Post Archive.
 
@@ -185,7 +201,11 @@ class PostWeekArchiveView(WeekArchiveView):
     week_format = "%W"
 
 
-class PostDayArchiveView(DayArchiveView):
+class PostDayArchiveView(
+    PaginateListMixin,
+    LoginRequiredMixin,
+    DayArchiveView
+):
     """
     Daily Post Archive.
 
