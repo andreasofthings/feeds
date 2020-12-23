@@ -49,7 +49,7 @@ class WebSiteSubmitWizardView(LoginRequiredMixin, SessionWizardView):
                 form.fields[href] = forms.BooleanField(
                     initial=False,
                     required=False,
-                    label=title
+                    label=href[0]  # .title
                 )
         return form
 

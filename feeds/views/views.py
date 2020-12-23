@@ -15,7 +15,6 @@ Frontend to managing and reading :py:mod:`feeds.models.Feed`,
 
 import logging
 
-from datetime import timedelta
 
 from django.urls import reverse
 from django.views.generic import TemplateView
@@ -24,7 +23,6 @@ from django.views.generic import ListView
 from django.views.generic import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.views.generic import DeleteView, RedirectView
-from django.shortcuts import get_object_or_404
 
 from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -34,7 +32,7 @@ from django.utils.translation import ugettext_lazy as _
 from ..forms import OptionsForm
 from ..forms import OPMLForm
 
-from ..models import Feed, Post, Subscription, PostReadCount, Options
+from ..models import Feed, Subscription, Options
 from ..forms import FeedCreateForm
 from ..forms import FeedUpdateForm
 from ..mixins import PaginateListMixin
@@ -274,109 +272,3 @@ class FeedSubscriptionsView(LoginRequiredMixin, PaginateListMixin, ListView):
             user.save()
         queryset = Feed.objects.filter(feed_subscription__user=user)
         return queryset.order_by("name")
-
-
-class PostListView(PaginateListMixin, LoginRequiredMixin, ListView):
-    """
-    List Posts from all Feeds.
-
-    .. todo: Pagination does not work properly. Some sort of limit would be
-    nice, too. The pagination bar looks really ugly.
-    """
-
-    model = Post
-    paginate_by = 50
-
-    def get_queryset(self):
-        """
-        Return Queryset.
-
-        Apparently some feeds give posts that only have a timestamp 'published'
-        from the future. We prevent displaying these by filtering for older
-        than today/now.
-
-        :py:module:`PostManager.older_than` provides this functionality and
-        exposes it as the :py:module:`Post.objects` Manager.
-
-        .. todo::
-          Is this redundant?
-        """
-        return Post.objects.older_than(timedelta(0)).order_by("-published")
-
-
-class PostTodayView(PaginateListMixin, LoginRequiredMixin, ListView):
-    """
-    List Posts from all Feeds.
-
-    .. todo: Pagination does not work properly. Some sort of limit would be
-    nice, too. The pagination bar looks really ugly.
-    """
-
-    model = Post
-    queryset = Post.objects.today()
-    paginate_by = 50
-
-
-class PostSubscriptionView(PaginateListMixin, LoginRequiredMixin, ListView):
-    """
-    List Posts from subscribed Feeds.
-
-    .. todo:: At the time being `PostSubscriptionView` is a bare stub.
-              It does not yet have the correct `queryset`, that limits
-              results to posts from actually subscribed feeds, neither
-              does it have a proper tests for the functionality.
-
-              Also, this view is not accessiable through an URL for now.
-
-    .. reverse-url: 'planet:post-subscription-home'
-    """
-
-    model = Post
-    paginate_by = 50
-
-    def get_queryset(self):
-        """
-        Return Queryset.
-
-        return custom queryset.
-        """
-        user = Options.objects.get(user=self.request.user)
-        user_subscriptions = Subscription.objects.feeds(user)
-        subscriptions = Post.objects.filter(feed_id__in=user_subscriptions)
-        return subscriptions.order_by("-published")
-
-
-class PostDetailView(DetailView):
-    """
-    View a post and related metadata.
-
-    Requires login and permissions.
-    """
-
-    user_agent = "google"
-    model = Post
-    permissions = {
-        "any": (
-            "feeds.delete_post",
-            "feeds.change_post",
-            "feeds.add_post")
-        }
-
-
-class PostTrackableView(RedirectView):
-    """
-    PostTrackableView.
-
-    Create a trackable view for a `post` through
-    redirecting to the actual post.
-    """
-
-    permanent = False
-
-    def get_redirect_url(self, pk):
-        """Overwrite get_redirect_url."""
-        post = get_object_or_404(Post, pk=pk)
-        PostReadCount(post=post).save()
-        """Increase Read Counter for this post."""
-        return post.link
-        """And return to the actual link."""

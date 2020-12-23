@@ -46,6 +46,14 @@ from .views import TagCreateView
 from .views import TagDetailView
 from .views import TagUpdateView
 
+from .views import (
+    PostIndexView,
+    PostYearArchiveView,
+    PostMonthArchiveView,
+    PostWeekArchiveView,
+    PostDayArchiveView
+    )
+
 from .rss import RssFeed
 from .syndication import LatestEntriesFeed
 
@@ -207,7 +215,7 @@ urlpatterns += [
         name="tag-create"
     ),
     path(
-        'tag/<int:pk>\d+)/',
+        'tag/<int:pk>',
         TagDetailView.as_view(),
         name="tag-detail"
     ),
@@ -256,6 +264,31 @@ urlpatterns += [
         'post/today',
         PostTodayView.as_view(),
         name="post-today"
+    ),
+    path(
+        'post/archive',
+        PostIndexView.as_view(),
+        name="post-archive"
+    ),
+    path(
+        'post/archive/<int:year>/',
+        PostYearArchiveView.as_view(),
+        name="post-year-archive"
+    ),
+    path(
+        'post/archive/<int:year>/<int:month>/',
+        PostMonthArchiveView.as_view(),
+        name="post-month-archive"
+    ),
+    path(
+        'post/archive/<int:year>/week/<int:week>',
+        PostWeekArchiveView.as_view(),
+        name="post-week-archive"
+    ),
+    path(
+        'post/archive/<int:year>/<int:month>/<int:day>',
+        PostDayArchiveView.as_view(),
+        name="post-day-archive"
     ),
     path(
         'p',

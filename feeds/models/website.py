@@ -20,6 +20,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.text import slugify
 from django.urls import reverse
 
+from taggit.managers import TaggableManager
+
 from ..models import EditorCategory
 from ..managers import WebSiteManager
 
@@ -79,6 +81,8 @@ class WebSite(models.Model):
         related_name='website_category',
         default=None
     )
+
+    tags = TaggableManager()
 
     class Meta:
         """
