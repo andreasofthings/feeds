@@ -87,6 +87,7 @@ class EnclosureAdmin(admin.ModelAdmin):
     list_display = ('post', 'enclosure_type', 'length', 'href')
 
 
+
 def refresh_feed(modeladmin, request, queryset):
     for feed in queryset:
         feed.refresh()
@@ -182,7 +183,7 @@ class WebSiteAdmin(admin.ModelAdmin):
     """
     WebSite Admin Class
     """
-    list_display = ('name', 'netloc', 'path', 'slug', 'feedcount')
+    list_display = ('name', 'scheme', 'netloc', 'path', 'slug', 'feedcount')
     inlines = [
         FeedInline,
     ]
