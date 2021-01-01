@@ -58,7 +58,7 @@ setup(
         'google-cloud',
         'google-cloud-tasks',
         'google-cloud-bigquery',
-        'django_haystack>=3.0',
+        'django_haystack',
         'django-taggit',
     ],
     setup_requires=['pytest-runner'],
