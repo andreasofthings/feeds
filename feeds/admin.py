@@ -187,7 +187,6 @@ class WebSiteAdmin(admin.ModelAdmin):
 
     Include Relevant Fields in Fieldsets and list_display.
     """
-
     fieldsets = (
         (None, {
             'fields': (
