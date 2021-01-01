@@ -50,9 +50,8 @@ setup(
     ],
     install_requires=[
         'django~=3.1.0',
-        'coreapi',
-        'django-formtools>=2.2',
-        'django-crispy-forms>=1.6.0',
+        'django-formtools',
+        'django-crispy-forms',
         'djangorestframework~=3.12.0',
         'feedparser',
         'pyyaml',
@@ -61,10 +60,6 @@ setup(
         'google-cloud-bigquery',
         'django_haystack>=3.0',
         'django-taggit',
-    ],
-    dependency_links=[
-        # 'git+git://github.com/andreasofthings/django-haystack.git@master#egg=django-haystack',
-        # 'git+git://github.com/django-haystack/django-haystack.git@master#egg=django-haystack',
     ],
     setup_requires=['pytest-runner'],
     tests_require=['py.test', ],
