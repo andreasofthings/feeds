@@ -60,6 +60,9 @@ setup(
         'google-cloud-bigquery',
         'django_haystack',
         'django-taggit',
+        'python-dateutil',
+        # pytz
+
     ],
     setup_requires=['pytest-runner'],
     tests_require=['py.test', ],
