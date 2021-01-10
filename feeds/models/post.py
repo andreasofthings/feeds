@@ -50,7 +50,7 @@ class Post(models.Model):
     )
     title = models.CharField(max_length=512)
     link = models.URLField(_('link'), )
-    summary = models.TextField(_('description'), null=True, blank=True)
+    summary = models.TextField(_('summary'), null=True, blank=True)
     author = models.CharField(_('author'), max_length=255, blank=True)
     author_email = models.EmailField(_('author email'), blank=True)
     comments = models.URLField(_('comments'), blank=True)
