@@ -56,7 +56,7 @@ class ApiTest(APITestCase):
         self.client.logout()
         # user = auth.get_user(self.client)
         response = self.client.get('/feeds/api/options/', format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_options_authenticated(self):
         """
@@ -77,21 +77,21 @@ class ApiTest(APITestCase):
         """
         self.client.logout()
         response = self.client.get('/feeds/api/websites/', format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_feeds_list_anonymous(self):
         """
         1. request /feeds/api/feeds, expect a list of all feeds in json.
         """
         response = self.client.get('/feeds/api/feeds/', format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_feeds_detail_anonymous(self):
         """
         1. request /feeds/api/feeds/1, expect details for feed 1 in json.
         """
         response = self.client.get('/feeds/api/feeds/1/', format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_posts_anonymous(self):
         """
@@ -101,9 +101,9 @@ class ApiTest(APITestCase):
         .. todo:: This ain't done yet.
         """
         response = self.client.get('/feeds/api/posts/', format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         response = self.client.get('/feeds/api/posts/2/', format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_subscription_anonymous(self):
         """
@@ -112,12 +112,12 @@ class ApiTest(APITestCase):
         .. todo:: Should require authentication.
         """
         response = self.client.get('/feeds/api/subscriptions/', format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         response = self.client.get(
             '/feeds/api/subscriptions/1/',
             format='json'
         )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def tearDown(self):
         """
