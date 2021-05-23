@@ -190,6 +190,7 @@ class OptionsView(RetrieveAPIView):
     throttle_class = (OptionsThrottle, )
     serializer_class = OptionsSerializer
     queryset = Options.objects.all()
+    permission_classes = [permissions.DjangoModelPermissions,]
     permissions = (permissions.IsAuthenticated, )
 
     def retrieve(self, request, username=None, *args, **kwargs):
@@ -221,6 +222,7 @@ class WebSiteViewSet(viewsets.ModelViewSet):
     throttle_class = (WebSiteThrottle,)
     serializer_class = WebSiteSerializer
     queryset = WebSite.objects.all()
+    permission_classes = [permissions.DjangoModelPermissions,]
 
 
 class FeedViewSet(mixins.ListModelMixin,
@@ -237,6 +239,7 @@ class FeedViewSet(mixins.ListModelMixin,
 
     throttle_class = (FeedThrottle,)
     serializer_class = FeedSerializer
+    permission_classes = [permissions.DjangoModelPermissions,]
     queryset = Feed.objects.all()
 
 
@@ -257,6 +260,7 @@ class PostViewSet(mixins.ListModelMixin,
     max_page_size = 1000
     throttle_class = (PostThrottle,)
     serializer_class = PostSerializer
+    permission_classes = [permissions.DjangoModelPermissions,]
     queryset = Post.objects.all()
 
 
@@ -275,6 +279,7 @@ class CategoryViewSet(mixins.ListModelMixin,
     throttle_class = (FeedThrottle,)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [permissions.DjangoModelPermissions,]
 
 
 class TagViewSet(viewsets.ModelViewSet):
@@ -287,6 +292,7 @@ class TagViewSet(viewsets.ModelViewSet):
     throttle_class = (FeedThrottle,)
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    permission_classes = [permissions.DjangoModelPermissions,]
 
 
 class SubscriptionsViewSet(viewsets.ModelViewSet):
@@ -299,4 +305,5 @@ class SubscriptionsViewSet(viewsets.ModelViewSet):
     serializer_class = SubscriptionSerializer
     throttle_class = (SubscriptionThrottle,)
     queryset = Subscription.objects.all()
+    permission_classes = [permissions.DjangoModelPermissions,]
     permissions = (IsOwner, )
