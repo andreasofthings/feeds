@@ -24,7 +24,6 @@ from collections import Counter
 import urllib
 
 from django.db import models
-from django.db.models import DEFERRED
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils.text import slugify
@@ -276,7 +275,6 @@ class Feed(models.Model):
     )
 
     objects = FeedManager()
-
 
     def save(self, *args, **kwargs):
         """
@@ -541,17 +539,23 @@ class Feed(models.Model):
                 etag=self.etag
                 )
         except StopIteration as feedparser_error:
-            logger.error(f"feedparser has issues with 3.7.7: {feedparser_error}")
+            logger.error(
+                f"feedparser has issues with 3.7.7: {feedparser_error}"
+            )
             raise FeedsParseError(
                 "Feed {} couldn't be parsed `status`".format(self.name)
             )
         except urllib.error.URLError as feedparser_error:
-            logger.error(f"feedparser connection timed out: {feedparser_error}")
+            logger.error(
+                f"feedparser connection timed out: {feedparser_error}"
+            )
             raise FeedsParseError(
                 "Connection to Feed {} timed out".format(self.name)
             )
         except ssl.SSLCertVerificationError as feedparser_error:
-            logger.error(f"feedparser ssl-verification error: {feedparser_error}")
+            logger.error(
+                f"feedparser ssl-verification error: {feedparser_error}"
+            )
             raise FeedsParseError(
                 "Feed {} raised ssl exception.".format(self.name)
             )
