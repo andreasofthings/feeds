@@ -479,7 +479,7 @@ class Feed(models.Model):
         Update `feed` with values retrieved from `feedparser` through `parsed`.
         """
         if not self.name:
-            self.name = parsed.feed.get('title', self.name)
+            self.name = parsed.feed.get('title', "blank")
         if not self.short_name:
             self.short_name = parsed.feed.get('title', self.name)[:50]
         if not self.slug:
